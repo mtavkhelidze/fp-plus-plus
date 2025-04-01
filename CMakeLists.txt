@@ -5,8 +5,6 @@ include(${CMAKE_SOURCE_DIR}/cmake/functions.cmake)
 update_submodules()
 bootstrap_vcpkg()
 
-set(PROJECT_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
-
 project(
     fp++
     VERSION 0.1.0
