@@ -62,6 +62,8 @@
         "vector": "cpp",
         "algorithm": "cpp",
         "iterator": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "source_location": "cpp",
+        "typeindex": "cpp"
     }
 }

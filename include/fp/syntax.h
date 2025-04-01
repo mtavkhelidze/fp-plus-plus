@@ -8,7 +8,19 @@
 #include <concepts>
 #include <functional>
 
+#include "type_classes.h"
+
 namespace fp {
+
+template <Monoid M>
+constexpr M operator+(const M& lhs, const M& rhs) {
+    return lhs.combine(rhs);
+}
+
+template <Eq A>  // Declare A here
+bool operator==(const A& a, const A& b) {
+    return a.equals(b);
+}
 
 /**
  * Function application operator (similar to $ in Haskell).

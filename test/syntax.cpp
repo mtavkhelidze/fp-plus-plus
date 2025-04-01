@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <fp/fp>
+#include <functional>
 
 using namespace fp;
 
@@ -9,7 +10,6 @@ constexpr auto hello = [](std::string name) { return "Hello " + name; };
 constexpr auto add1 = [](int x) { return x + 1; };
 constexpr auto multiply2 = [](int x) { return x * 2; };
 constexpr auto greet = [](std::string name) { return "Hello, " + name; };
-constexpr auto identity = [](auto x) { return x; };
 constexpr auto double_it = [](int x) { return x * 2; };
 constexpr auto int_to_string = [](int x) { return std::to_string(x); };
 constexpr auto make_multiplier = [](int x) {
@@ -61,10 +61,10 @@ TEST(Syntax_Operator_Compose, works_with_multiple_compositions_right_to_left) {
 }
 
 TEST(Syntax_Operator_Compose, works_with_identity_function) {
-    auto actual = add1 <<= identity;
+    auto actual = add1 <<= id;
     EXPECT_EQ(actual(2), add1(2));
 
-    auto actual2 = identity <<= multiply2;
+    auto actual2 = id <<= multiply2;
     EXPECT_EQ(actual2(2), multiply2(2));
 }
 
