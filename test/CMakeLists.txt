@@ -1,6 +1,6 @@
 find_package(GTest REQUIRED)
 
-add_executable(${PROJECT_NAME}_test syntax.cpp)
+add_executable(${PROJECT_NAME}_test syntax.cpp option.cpp)
 target_link_libraries(
     ${PROJECT_NAME}_test PRIVATE GTest::gtest GTest::gtest_main
 )

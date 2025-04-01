@@ -1,6 +1,7 @@
 #ifndef __FP_PLUS_PLUS__
 #define __FP_PLUS_PLUS__
 
+#include "option.h"
 #include "syntax.h"
 
 #endif  // __FP_PLUS_PLUS__
