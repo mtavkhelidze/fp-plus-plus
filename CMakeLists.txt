@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 4.0)
 
 # Housekeeping
 include(${CMAKE_SOURCE_DIR}/cmake/functions.cmake)
