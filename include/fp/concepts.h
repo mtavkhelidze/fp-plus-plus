@@ -1,5 +1,5 @@
-#ifndef __FP_PP_TYPE_CLASSES_H__
-#define __FP_PP_TYPE_CLASSES_H__
+#ifndef __FP_PP_CONCEPTS_H__
+#define __FP_PP_CONCEPTS_H__
 
 #include <concepts>
 namespace fp {
@@ -17,4 +17,4 @@ concept Monoid = requires(M a, M b) {
 
 }  // namespace fp
 
-#endif  // __FP_PP_TYPE_CLASSES_H__
+#endif  // __FP_PP_CONCEPTS_H__
