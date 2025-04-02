@@ -13,13 +13,24 @@
 namespace fp {
 
 template <Monoid M>
-constexpr M operator+(const M& lhs, const M& rhs) {
+inline constexpr M operator+(const M& lhs, const M& rhs) {
     return lhs.combine(rhs);
 }
 
-template <Eq A>  // Declare A here
-bool operator==(const A& a, const A& b) {
+template <Monoid M>
+inline constexpr M& operator+=(M& lhs, const M& rhs) {
+    lhs = lhs + rhs;
+    return lhs;
+}
+
+template <Eq A>
+inline constexpr bool operator==(const A& a, const A& b) {
     return a.equals(b);
+}
+
+template <Eq A>
+inline constexpr bool operator!=(const A& a, const A& b) {
+    return !a.equals(b);
 }
 
 /**

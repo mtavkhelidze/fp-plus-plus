@@ -1,5 +1,5 @@
 #include <exception>
-// keep
+// keep for rapidcheck
 
 #include <gtest/gtest.h>
 #include <rapidcheck.h>
