@@ -5,7 +5,7 @@ target_compile_options(rapidcheck INTERFACE -Wno-deprecated-declarations)
 
 add_executable(${PROJECT_NAME}_test syntax.cpp option.cpp)
 target_link_libraries(
-    ${PROJECT_NAME}_test PRIVATE GTest::gtest GTest::gtest_main
+    ${PROJECT_NAME}_test PRIVATE GTest::gtest GTest::gtest_main GTest::gmock
                                  rapidcheck_gtest
 )
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME}_test)
