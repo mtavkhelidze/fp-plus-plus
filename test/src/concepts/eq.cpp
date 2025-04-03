@@ -2,7 +2,7 @@
 //
 #include <gmock/gmock.h>
 
-#include <fp/fp>
+#include <fp/fp.h>
 
 using ::testing::_;
 using ::testing::Test;

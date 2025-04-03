@@ -10,7 +10,7 @@ C++20 Functional Programming Header-Only Library
 ## Installation
 1. Clone this repository.
 2. Copy the `include/fp` directory into your include path.
-3. Include the library with `#include <fp/fp>`.
+3. Include the library with `#include <fp/fp.h>`.
 4. Compile with a C++20-compliant compiler.
 
 ## Building and Testing

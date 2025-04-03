@@ -5,7 +5,7 @@
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>
 
-#include <fp/fp>
+#include <fp/fp.h>
 
 #include "shorts.h"
 using namespace fp;

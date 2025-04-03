@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <fp/fp>
+#include <fp/fp.h>
 
 using ::testing::Test;
 
