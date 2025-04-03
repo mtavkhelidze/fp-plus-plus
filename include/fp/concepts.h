@@ -1,6 +1,10 @@
 #ifndef __FP_PP_CONCEPTS_H__
 #define __FP_PP_CONCEPTS_H__
 
+#ifndef __FP_PLUS_PLUS__
+#error "This file must be included from "fp/fp.h"
+#endif
+
 #include <concepts>
 
 // Monoid concept
