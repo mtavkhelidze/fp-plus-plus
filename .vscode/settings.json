@@ -65,5 +65,6 @@
         "functional": "cpp",
         "source_location": "cpp",
         "typeindex": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
