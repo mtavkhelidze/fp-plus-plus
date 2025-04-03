@@ -5,26 +5,26 @@
 
 // Monoid concept
 namespace fp {
+template <typename T>
+concept Monoid = requires(T a, T b, T c) {
+    // Identity element must return type T
+    { T::empty() } -> std::same_as<const T>;
+    { T::combine(a, b) } -> std::same_as<const T>;
 
-template <typename M>
-concept Monoid = requires(M a, M b) {
-    { M::empty() } -> std::same_as<const M>;
-    { a.combine(b) } -> std::same_as<const M>;
+    // Combining with the identity should return the same element
+    { T::combine(a, T::empty()) } -> std::same_as<const T>;
+    { T::combine(T::empty(), b) } -> std::same_as<const T>;
+
+    //    Associativity (implicitly checked)
+    { T::combine(T::combine(a, b), c) } -> std::same_as<const T>;
 };
 
 template <Monoid M>
-inline constexpr const M operator+(const M& lhs, const M& rhs) {
-    return lhs.combine(rhs);
-}
-
-template <Monoid M>
-inline constexpr M& operator+=(M& lhs, const M& rhs) {
-    lhs = lhs + rhs;
-    return lhs;
+inline constexpr auto operator<=>(const M& lhs, const M& rhs) {
+    return M::combine(lhs, rhs);
 }
 
 }  // namespace fp
-
 
 namespace fp {
 
