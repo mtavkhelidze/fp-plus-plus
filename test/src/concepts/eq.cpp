@@ -1,11 +1,11 @@
-#include <gtest/gtest.h>
-// do not sort
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
 
 #include <fp/fp>
 
 using ::testing::_;
 using ::testing::Return;
+
 using namespace fp;
 
 // Eq concept

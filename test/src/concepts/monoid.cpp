@@ -1,42 +1,46 @@
 #include <gtest/gtest.h>
-// do not sort
-#include <gmock/gmock.h>
 
 #include <fp/fp>
 
-using ::testing::_;
-using ::testing::Return;
+using ::testing::Test;
+
 using namespace fp;
 
-// Monoid concept
-class TestMonoid {
-  public:
-    const TestMonoid combine(const TestMonoid& other) const {
-        return TestMonoid{};
-    }
-    static const TestMonoid empty() { return TestMonoid(); }
-    // ^^^ Monoid concept
-    //
-    // MOCK_METHOD(const TestMonoid, combine, (const TestMonoid&), (const));
-    // TestMonoid(const TestMonoid&) {};
-    // TestMonoid() {}
-    // TestMonoid(TestMonoid&& other) noexcept {}
+struct MonoidInstance {
+    std::string label;
+    static const MonoidInstance combine(
+      const MonoidInstance& a, const MonoidInstance& b
+    ) {
+        return MonoidInstance{a.label + b.label};
+    };
+    static const MonoidInstance empty() { return MonoidInstance{""}; }
 };
 
-TEST(Syntax_Monoid_Operator_Addition, calls_combine) {
-    auto a = TestMonoid();
-    auto b = TestMonoid();
-
-    // EXPECT_CALL(a, combine(_)).WillOnce(Return(expected));
-    auto actual = a + b;
-
-    // EXPECT_EQ(ectual, expected);
+TEST(MonoidInstance, satisfies_monoid_concept) {
+    static_assert(
+      Monoid<MonoidInstance>,
+      "MonoidInstance does not satisfy the Monoid concept"
+    );
 }
 
-// TEST(SyntaxTest, MonoidPlusEqualsCallsCombine) {
-//     TestMonoid a, b, result;
+class Monoid_Operators_Spaceship : public Test {
+  public:
+    MonoidInstance a{"a"};
+    MonoidInstance b{"b"};
+    MonoidInstance c{"c"};
+};
 
-//     EXPECT_CALL(a, combine(b)).WillOnce(Return(result));
-//     a += b;
-//     EXPECT_EQ(a, result);
-// }
+TEST_F(Monoid_Operators_Spaceship, calls_static_combine) {
+    auto result = a <=> b;
+    EXPECT_EQ(result.label, "ab");
+}
+
+TEST_F(Monoid_Operators_Spaceship, works_when_chained) {
+    auto result = a <=> b <=> c;
+    EXPECT_EQ(result.label, "abc");
+}
+
+TEST_F(Monoid_Operators_Spaceship, respects_associativity) {
+    auto result = a <=> (c <=> b);
+    EXPECT_EQ(result.label, "acb");
+}
