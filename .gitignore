@@ -3,3 +3,4 @@ third_party/
 .DS_Store
 CMakeCache.txt
 vcpkg_installed/
+stash/
