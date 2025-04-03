@@ -25,7 +25,6 @@ inline const Option<A> None() {
     return Option<A>(std::nullopt);
 }
 
-
 // template <typename T>
 // struct is_option : std::false_type {};
 
