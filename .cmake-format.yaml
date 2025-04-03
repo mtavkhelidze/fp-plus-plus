@@ -1,8 +1,8 @@
+autosort: true
+dangle_parens: true
 line_width: 80
-tab_size: 4
-max_subargs_per_line: 1
 separate_ctrl_name_with_space: false
 separate_fn_name_with_space: false
-dangle_parens: true
-dangle_brackets: true
-dangle_braces: true
+tab_size: 4
+endble_sort: true
+max_lines_hwrap: 0

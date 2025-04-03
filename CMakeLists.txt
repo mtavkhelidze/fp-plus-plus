@@ -1,9 +1,16 @@
 cmake_minimum_required(VERSION 4.0)
 
 # Housekeeping
-include(${CMAKE_SOURCE_DIR}/cmake/functions.cmake)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+file(GLOB cmake_files "${CMAKE_SOURCE_DIR}/cmake/*.cmake")
+foreach(file ${cmake_files})
+    include(${file})
+endforeach()
+
+enable_testing()
 update_submodules()
-bootstrap_vcpkg()
+enable_vcpkg()
+# end of housekeeping
 
 project(
     fp++
@@ -16,10 +23,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-enable_testing()
-
-message(STATUS "CMAKE_TOOLCHAIN_FILE: ${VCPKG_TARGET_TRIPLET}")
+message(STATUS "PROJECT_BINARY_DIR: ${PROJECT_BINARY_DIR}")
 
 include_directories(include)
-message(STATUS "PROJECT_BINARY_DIR: ${PROJECT_BINARY_DIR}")
 subdirs(test)
