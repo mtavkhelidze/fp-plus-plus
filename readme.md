@@ -1,16 +1,17 @@
-C++23 Functional Programming Experiments
+C++20 Functional Programming Header-Only Library
 ---
 
 ## Prerequisites
-* You only need fp from the include directory.
-* Use at your own risk. :)
+* You only need the `fp` directory from the `include` directory.
+* There are no dependencies; it just works.
+* For examples of usage, take a look at the `*.cpp` files in the `test` directory.
+* Use it at your own risk. :)
 
 ## Installation
 1. Clone this repository.
-2. Copy `include/fp` directory into your include path.
-3. Use `#include <fp/fp>`
-4. Compile with a C++23-compliant compiler.
-    * C++20 might also work.
+2. Copy the `include/fp` directory into your include path.
+3. Include the library with `#include <fp/fp>`.
+4. Compile with a C++20-compliant compiler.
 
 ## Building and Testing
 
