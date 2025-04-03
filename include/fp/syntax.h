@@ -13,9 +13,13 @@
 namespace fp {
 
 template <Monoid M>
-inline constexpr M operator+(const M& lhs, const M& rhs) {
+inline constexpr const M operator+(const M& lhs, const M& rhs) {
     return lhs.combine(rhs);
 }
+// template <Monoid M>
+// inline constexpr M operator+(M&& lhs, M&& rhs) {
+//     return std::forward<M>(lhs).combine(std::forward<M>(rhs));
+// }
 
 template <Monoid M>
 inline constexpr M& operator+=(M& lhs, const M& rhs) {

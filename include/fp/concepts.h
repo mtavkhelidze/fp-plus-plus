@@ -11,8 +11,8 @@ concept Eq = requires(A a, A b) {
 
 template <typename M>
 concept Monoid = requires(M a, M b) {
-    { M::empty() } -> std::same_as<M>;    // Identity element
-    { a.combine(b) } -> std::same_as<M>;  // Associative combine operation
+    { M::empty() } -> std::same_as<const M>;
+    { a.combine(b) } -> std::same_as<const M>;
 };
 
 }  // namespace fp
