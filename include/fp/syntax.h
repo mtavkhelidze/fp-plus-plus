@@ -5,38 +5,9 @@
 #error "This file must be included from fp/fp"
 #endif
 
-#include <concepts>
 #include <functional>
 
-#include "concepts.h"
-
 namespace fp {
-
-template <Monoid M>
-inline constexpr const M operator+(const M& lhs, const M& rhs) {
-    return lhs.combine(rhs);
-}
-// template <Monoid M>
-// inline constexpr M operator+(M&& lhs, M&& rhs) {
-//     return std::forward<M>(lhs).combine(std::forward<M>(rhs));
-// }
-
-template <Monoid M>
-inline constexpr M& operator+=(M& lhs, const M& rhs) {
-    lhs = lhs + rhs;
-    return lhs;
-}
-
-template <Eq A>
-inline constexpr bool operator==(const A& a, const A& b) {
-    return a.equals(b);
-}
-
-template <Eq A>
-inline constexpr bool operator!=(const A& a, const A& b) {
-    return !a.equals(b);
-}
-
 /**
  * Function application operator (similar to $ in Haskell).
  * This operator applies the function `f` to the argument `a`.

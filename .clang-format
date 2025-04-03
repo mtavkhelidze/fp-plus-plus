@@ -11,6 +11,6 @@ ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ContinuationIndentWidth: 2
 IndentAccessModifiers: false
 IndentWidth: 4
-MaxEmptyLinesToKeep: 2
+MaxEmptyLinesToKeep: 1
 PenaltyBreakBeforeFirstCallParameter: 0
 UseTab: Never
