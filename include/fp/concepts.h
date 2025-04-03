@@ -28,19 +28,19 @@ inline constexpr auto operator<=>(const M& lhs, const M& rhs) {
 
 namespace fp {
 
-template <typename A>
-concept Eq = requires(A a, A b) {
-    { a.equals(b) } -> std::convertible_to<bool>;
+template <typename E>
+concept Eq = requires(E a, E b) {
+    { E::equals(a, b) } -> std::convertible_to<bool>;
 };
 
 template <Eq A>
 inline constexpr bool operator==(const A& a, const A& b) {
-    return a.equals(b);
+    return A::equals(a, b);
 }
 
 template <Eq A>
 inline constexpr bool operator!=(const A& a, const A& b) {
-    return !a.equals(b);
+    return !A::equals(a, b);
 }
 
 }  // namespace fp

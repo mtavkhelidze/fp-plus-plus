@@ -14,36 +14,38 @@ auto addOne = [](auto x) { return x + 1; };
 
 RC_GTEST_PROP(Option_Map, identity_law, (const int val)) {
     auto actual = Some(val).map(id);
-    RC_ASSERT(actual == Some(val));
+    auto expected = Some(val);
+    RC_ASSERT(actual.equals(expected));
 }
 
 RC_GTEST_PROP(Option_Map, composition_law, (const int val)) {
     auto actual = Some(val).map(multiplyByTwo).map(addOne);
     auto expected = Some(val).map(addOne <<= multiplyByTwo);
-    RC_ASSERT(actual == expected);
+    RC_ASSERT(actual.equals(expected));
 }
 
 RC_GTEST_PROP(Option_Map, homomorphism_law, (const int val)) {
     auto actual = Some(val).map(addOne);
     auto expected = Some(addOne &= val);
-    RC_ASSERT(actual == expected);
+    RC_ASSERT(actual.equals(expected));
 }
 
 RC_GTEST_PROP(Option_Map, identity_law_none, ()) {
     auto actual = None<int>().map(id);
-    RC_ASSERT(actual == None<int>());
+    auto expected = None<int>();
+    RC_ASSERT(actual.equals(expected));
 }
 
 RC_GTEST_PROP(Option_Map, composition_law_none, ()) {
     auto actual = None<int>().map(multiplyByTwo).map(addOne);
     auto expected = None<int>().map(addOne <<= multiplyByTwo);
-    RC_ASSERT(actual == expected);
+    RC_ASSERT(actual.equals(expected));
 }
 
 RC_GTEST_PROP(Option_Map, homomorphism_law_none, ()) {
     auto actual = None<int>().map(addOne);
     auto expected = None<int>();
-    RC_ASSERT(actual == expected);
+    RC_ASSERT(actual.equals(expected));
 }
 
 RC_GTEST_PROP(Option_Equals, reflexivity_some, (const int val)) {
