@@ -1,9 +1,8 @@
-#ifndef ___FP_PP_OPTION_H__
-#define ___FP_PP_OPTION_H__
-
 #ifndef __FP_PLUS_PLUS__
 #error "This file must be included from "fp/fp.h"
 #endif
+
+#pragma once
 
 #include <functional>
 #include <iostream>
@@ -102,4 +101,3 @@ class Option {
 };
 
 }  // namespace fp
-#endif  // ___FP_PP_OPTION_H__

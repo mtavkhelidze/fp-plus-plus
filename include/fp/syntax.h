@@ -1,9 +1,8 @@
-#ifndef __FP_PP_SYNTAX_H__
-#define __FP_PP_SYNTAX_H__
-
 #ifndef __FP_PLUS_PLUS__
 #error "This file must be included from "fp/fp.h"
 #endif
+
+#pragma once
 
 #include <functional>
 
@@ -42,4 +41,3 @@ constexpr auto operator>=(A a, std::invocable<A> auto f) -> decltype(f(a)) {
 }
 
 }  // namespace fp
-#endif  // __FP_PP_SYNTAX_H__

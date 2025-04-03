@@ -1,9 +1,8 @@
-#ifndef __FP_PP_CONCEPTS_H__
-#define __FP_PP_CONCEPTS_H__
-
 #ifndef __FP_PLUS_PLUS__
 #error "This file must be included from "fp/fp.h"
 #endif
+
+#pragma once
 
 #include <concepts>
 
@@ -48,5 +47,3 @@ inline constexpr bool operator!=(const A& a, const A& b) {
 }
 
 }  // namespace fp
-
-#endif  // __FP_PP_CONCEPTS_H__
