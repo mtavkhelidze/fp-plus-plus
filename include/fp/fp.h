@@ -1,15 +1,13 @@
 #ifndef __FP_PLUS_PLUS__
 #define __FP_PLUS_PLUS__
-
 #pragma once
 
-#include <memory>
-#include <type_traits>
+#include <variant>
 
 namespace fp {
 
-template <typename A>
-using Unref = std::decay_t<A>;
+using Nothing = std::monostate;  // is {}
+using Unit = void;
 
 }  // namespace fp
 

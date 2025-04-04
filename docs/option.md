@@ -15,6 +15,8 @@
 - **Some(...)**: Public API to construct a present value (value, reference, or
   pointer).
 - **None&lt;T&gt;**: Represents the absence of a value of type `T`.
+- **Nothing**: Represents the absence of a value in the monad, synonymous with `None<T>`, which means there is no value of type `T`.
+- **Unit**: A type used to represent a value that carries no meaningful information. It is typically used to signal side effects or actions that return no value. In C++, this would be akin to `void`.
 - **mk_some(...)**: Internal normalization step that turns various inputs into
   variant-compatible forms.
 - **Some(nullptr)**: A valid value of type `Option&lt;T&gt;`, distinct from
@@ -70,7 +72,7 @@ Where:
   the reference is treated as an immutable value in the `Option` (making it
   immutable in this context).
 - `T*` stores a pointer to `T` (which may be `nullptr`).
-- `std::nullptr_t` is used exclusively for `Option<void>`, indicating a valid "
+- `std::nullptr_t` is used exclusively for `Option<Nothing>`, indicating a valid "
   empty" state that isn’t a `None` but rather a "null success" case.
 
 ### Construction Pipeline
@@ -117,14 +119,14 @@ Here’s how various expressions will work:
 |-----------------------|----------------|----------------|-------------------------------------|
 | `Some(42)`            | `Option<int>`  | `T`            | Holds integer `42`                  |
 | `Some(ptr)`           | `Option<T*>`   | `T*`           | Holds pointer `ptr`                 |
-| `Some(nullptr)`       | `Option<void>` | `nullptr_t`    | Represents "exists but null"        |
+| `Some(nullptr)`       | `Option<Nothing>` | `nullptr_t`    | Represents "exists but null"        |
 | `Some<int*>(nullptr)` | `Option<int*>` | `T*` (nullptr) | Holds `nullptr` explicitly for `T*` |
-| `None`                | `Option<void>` | -              | Represents absence of value         |
+| `None`                | `Option<Nothing>` | -              | Represents absence of value         |
 | `None<T>`             | `Option<T>`    | -              | Represents absence of `T`           |
 
 ### Special Considerations
 
-1. **`Some(nullptr)`**: This is treated as `Option<void>`, not `Option<T*>`,
+1. **`Some(nullptr)`**: This is treated as `Option<Nothing>`, not `Option<T*>`,
    because it signifies a "valid null" state. It indicates that there is a valid
    entity (the null pointer), but there is no actual value.
 
@@ -157,7 +159,7 @@ Here’s how various expressions will work:
 
 ## Behavior Considerations
 
-1. **`Some(nullptr)` is treated as `Option<void>`**: This ensures that `None`
+1. **`Some(nullptr)` is treated as `Option<Nothing>`**: This ensures that `None`
    and `Some(nullptr)` are distinct and do not mix the absence of value with the
    null pointer scenario.
 
@@ -183,11 +185,9 @@ Here’s how various expressions will work:
   `Some`.
     - Ensures that `Option` works correctly with callable types.
 
-### Void and Nullptr
+### void* and Nullptr
 
 - Tests with `void*` and `const void*` wrapped inside `Some`.
-    - Verifies that the `Option` works correctly when wrapped with null pointers
-      of `void*` types.
 
 ### Pointer
 

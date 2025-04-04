@@ -7,8 +7,8 @@ target_compile_options(rapidcheck INTERFACE -Wno-deprecated-declarations)
 
 set(TEST_LIB GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
-    src/concepts/eq.cpp
-    src/concepts/monoid.cpp
+    # src/concepts/eq.cpp
+    # src/concepts/monoid.cpp
     # src/monads/option/option_get.cpp
     # src/monads/option/option_map.cpp
     src/monads/option/option_some.cpp

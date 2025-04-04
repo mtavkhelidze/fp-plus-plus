@@ -1,36 +1,73 @@
+#ifndef __FP_PLUS_PLUS__
+#error "This file must be included from "fp/fp.h"
+#endif
+
+#pragma once
+
+#include <functional>
 #include <memory>
+#include <type_traits>
+#include <variant>
 
 namespace fp {
 template <typename T>
 struct Option;
 
+// Define OptionValue as a variant outside the Option class
 template <typename T>
-const auto Some(const T& value) {
-    return Option<const T>(value);
+using OptionValue =
+  std::variant<T, std::reference_wrapper<T>, T*, std::nullptr_t>;
+
+// Friend function definitions to wrap a value inside Option
+template <typename T>
+inline constexpr Option<T> Some(T&& value) {
+    return Option<T>::mk_some(std::forward<T>(value));
+}
+
+// template <typename T>
+// inline constexpr Option<T> Some(const T& value) {
+//     return Option<T>().mk_some(value);
+// }
+
+// template <typename T>
+// inline constexpr Option<T> Some(T* value) {
+//     return Option<T>().mk_some(value);
+// }
+template <typename T = Nothing>
+inline constexpr Option<T> None() {
+    return Option<T>::mk_none();
 }
 
 template <typename T>
 struct Option {
   public:
-    std::shared_ptr<const T> ptr;
+    inline auto getOrElse(T alternative) const {
+        if (std::holds_alternative<std::nullptr_t>(data)) {
+            return alternative;
+        }
+        return std::get<T>(data);
+    }
 
-    // Overload for const T&
-    explicit Option(const T& t) : ptr(std::make_shared<const T>(t)) {}
+  private:
+    OptionValue<T> data;
+    Option(OptionValue<T>&& v) : data(std::move(v)) {}
 
-    // Constructor that takes a pointer to T and stores it
-    explicit Option(T* t) : ptr(t) {}
+    static Option<T> mk_some(T&& value) {
+        return Option<T>(OptionValue<T>(std::forward<T>(value)));
+    }
+    // Default version for types other than void
+    static Option<T> mk_none() { return Option<T>(OptionValue<T>(nullptr)); }
 
-    // Constructor that takes a shared pointer to const T and stores it
-    explicit Option(std::shared_ptr<const T> t) : ptr(t) {}
+    // Option<T> mk_some(const T& value);
+    // Option<T> mk_some(T* value);
+    // Option<T> mk_some(std::nullptr_t);
 
-    // Copy constructor
-    Option(const Option& other) : ptr(other.ptr) {}
-
-    // Delete move constructor to enforce copy-only semantics
-    Option(Option&&) = delete;
-
-    // Delete move assignment operator to force copy constructor usage
-    Option& operator=(Option&&) = delete;
+    // Friends
+    friend Option<T> Some<>(T&& value);
+    friend Option<T> None<>();
+    // friend Option<T> Some<>(const T& value);
+    // friend Option<T> Some<>(T* value);
+    // friend Option<T> Some<>(std::nullptr_t);
 };
 
-};  // namespace fp
+}  // namespace fp
