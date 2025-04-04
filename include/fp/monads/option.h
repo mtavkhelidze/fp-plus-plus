@@ -13,17 +13,15 @@ namespace fp {
 template <typename T>
 struct Option;
 
-// Friend function definitions to wrap a value inside Option
 template <typename T>
-inline constexpr Option<T> Some(T&& value) {
-    return Option<T>::mk_some(std::forward<T>(value));
+    requires(!std::is_lvalue_reference_v<T>)
+inline constexpr Option<T> Some(T&& rv) {
+    return Option<T>::mk_some(std::forward<T>(rv));
 }
-
-// template <typename T>
-// inline constexpr Option<T> Some(const T& value) {
-//     return Option<T>().mk_some(value);
-// }
-
+template <typename T>
+inline constexpr Option<T&> Some(const T& lv) {
+    return Option<T&>::mk_some(lv);
+}
 // template <typename T>
 // inline constexpr Option<T> Some(T* value) {
 //     return Option<T>().mk_some(value);
@@ -44,25 +42,37 @@ struct Option {
     }
 
   private:
-    using ValueType =
-      std::variant<T, std::reference_wrapper<T>, T*, std::nullptr_t>;
+    using ValueType = std::variant<
+      std::remove_reference_t<T>,
+      std::reference_wrapper<std::remove_reference_t<T>>,
+      std::remove_reference_t<T>*, std::nullptr_t>;
+
     ValueType data;
     Option(ValueType&& v) : data(std::move(v)) {}
 
-    static Option<T> mk_some(T&& value) {
-        return Option<T>(ValueType(std::forward<T>(value)));
+    static Option<T> mk_some(T&& rv) {
+        return Option<T>(ValueType(std::forward<T>(rv)));
     }
+
+    static Option<T&> mk_some(const T& value)
+        requires(!std::is_lvalue_reference_v<T>)
+    {
+        return Option<T&>(ValueType(value));
+    }
+
     // Default version for types other than void
     static Option<T> mk_none() { return Option<T>(ValueType(nullptr)); }
 
-    // Option<T> mk_some(const T& value);
-    // Option<T> mk_some(T* value);
-    // Option<T> mk_some(std::nullptr_t);
-
     // Friends
-    friend Option<T> Some<>(T&& value);
-    friend Option<T> None<>();
-    // friend Option<T> Some<>(const T& value);
+    template <typename U>
+    friend constexpr Option<U> None();
+
+    template <typename U>
+    friend constexpr Option<U&> Some(const U& value);
+
+    template <typename U>
+        requires(!std::is_lvalue_reference_v<U>)
+    friend constexpr Option<U> Some(U&& value);
     // friend Option<T> Some<>(T* value);
     // friend Option<T> Some<>(std::nullptr_t);
 };
