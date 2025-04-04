@@ -1,4 +1,26 @@
-# Test Plan for Option
+# FP++ :: Monads :: Option
+
+## Contents
+
+- [Design Overview](#option-design-overview)
+- [Construction Pipeline](#construction-pipeline)
+- [Construction Rules](#construction-rules)
+- [Behavior Considerations](#behavior-considerations)
+- [Test Plan](#test-plan)
+- [Glossary](#glossary)
+
+## Glossary
+
+- **Option&lt;T&gt;**: A monadic wrapper for optional values.
+- **Some(...)**: Public API to construct a present value (value, reference, or
+  pointer).
+- **None&lt;T&gt;**: Represents the absence of a value of type `T`.
+- **mk_some(...)**: Internal normalization step that turns various inputs into
+  variant-compatible forms.
+- **Some(nullptr)**: A valid value of type `Option&lt;T&gt;`, distinct from
+  `None&lt;T&gt;`.
+- **std::variant&lt;T, std::reference_wrapper&lt;T&gt;, T*, std::
+  nullptr_t&gt;**: Internal representation used in the implementation.
 
 # Option Design Overview
 
@@ -50,6 +72,42 @@ Where:
 - `T*` stores a pointer to `T` (which may be `nullptr`).
 - `std::nullptr_t` is used exclusively for `Option<void>`, indicating a valid "
   empty" state that isn’t a `None` but rather a "null success" case.
+
+### Construction Pipeline
+
+The construction of an `Option<T>` value follows a 3-level indirection pattern
+for clarity and flexibility:
+
+1. **`Some(...)`** – This is the user-facing API. It’s simple and ergonomic,
+   letting the user wrap a value, reference, or pointer into an `Option` without
+   worrying about implementation details.
+2. **`mk_some(...)`** – This is an internal normalization layer. It has multiple
+   overloads to handle different kinds of input (e.g., values, references,
+   pointers) and converts them into a consistent, variant-compatible form.
+
+#### 🛠️ Design Notes
+
+The `mk_some` function serves as the foundational abstraction point for building
+up more complex monadic types in this library. Future implementations of types
+like `Either`, `List`, and others will build upon the same principles
+established in `mk_some`, enabling consistency and composability across monadic
+constructions.
+
+3. **Constructors of `Option<T>`** – These handle the final step of putting the
+   normalized value into the internal `std::variant`, applying the appropriate
+   move or copy semantics.
+
+This 3-step pipeline ensures a clean separation of concerns:
+
+- `Some(...)`: user-friendly interface
+- `mk_some(...)`: input normalization and dispatch
+- Constructors: efficient storage and lifetime semantics
+
+The flow can be visualized as:
+
+```
+User input → Some(...) → mk_some(...) → Option<T> constructor → std::variant
+```
 
 ### Construction Rules
 
