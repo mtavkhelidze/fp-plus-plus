@@ -80,6 +80,25 @@ struct Option {
     friend constexpr Option<U> Some(U&& value);
     // friend Option<T> Some<>(T* value);
     // friend Option<T> Some<>(std::nullptr_t);
+
+#ifdef __FP_PP_TESTING
+    // never mind those, only used for testing
+  public:
+    std::string type_name() const {
+        if (std::holds_alternative<std::nullptr_t>(data)) { return "Nothing"; }
+        if (std::holds_alternative<std::remove_reference_t<T>>(data)) {
+            return "T";
+        }
+        if (std::holds_alternative<
+              std::reference_wrapper<std::remove_reference_t<T>>>(data)) {
+            return "T&";
+        }
+        if (std::holds_alternative<std::remove_reference_t<T>*>(data)) {
+            return "T*";
+        }
+        return "This should not happen! Call technical personnel.";
+    }
+#endif  // __FP_PP_TESTING
 };
 
 }  // namespace fp
