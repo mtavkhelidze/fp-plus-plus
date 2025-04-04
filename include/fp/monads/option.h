@@ -16,11 +16,11 @@ struct Option;
 template <typename T>
     requires(!std::is_lvalue_reference_v<T>)
 inline constexpr Option<T> Some(T&& rv) {
-    return Option<T>::mk_some(std::forward<T>(rv));
+    return Option<T>::some_from_rvalue(std::forward<T>(rv));
 }
 template <typename T>
 inline constexpr Option<T&> Some(const T& lv) {
-    return Option<T&>::mk_some(lv);
+    return Option<T&>::some_from_lvalue(lv);
 }
 // template <typename T>
 // inline constexpr Option<T> Some(T* value) {
@@ -38,7 +38,14 @@ struct Option {
         if (std::holds_alternative<std::nullptr_t>(data)) {
             return alternative;
         }
-        return std::get<T>(data);
+        if constexpr (std::is_lvalue_reference_v<T>) {
+            return std::get<std::reference_wrapper<std::remove_reference_t<T>>>(
+                     data
+            )
+              .get();
+        } else {
+            return std::get<std::remove_reference_t<T>>(data);
+        }
     }
 
   private:
@@ -50,14 +57,12 @@ struct Option {
     ValueType data;
     Option(ValueType&& v) : data(std::move(v)) {}
 
-    static Option<T> mk_some(T&& rv) {
+    static Option<T> some_from_rvalue(T&& rv) {
         return Option<T>(ValueType(std::forward<T>(rv)));
     }
 
-    static Option<T&> mk_some(const T& value)
-        requires(!std::is_lvalue_reference_v<T>)
-    {
-        return Option<T&>(ValueType(value));
+    static Option<T&> some_from_lvalue(const T& lv) {
+        return Option<T&>(ValueType(std::ref(lv)));
     }
 
     // Default version for types other than void
