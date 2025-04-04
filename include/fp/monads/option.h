@@ -13,11 +13,6 @@ namespace fp {
 template <typename T>
 struct Option;
 
-// Define OptionValue as a variant outside the Option class
-template <typename T>
-using OptionValue =
-  std::variant<T, std::reference_wrapper<T>, T*, std::nullptr_t>;
-
 // Friend function definitions to wrap a value inside Option
 template <typename T>
 inline constexpr Option<T> Some(T&& value) {
@@ -49,14 +44,16 @@ struct Option {
     }
 
   private:
-    OptionValue<T> data;
-    Option(OptionValue<T>&& v) : data(std::move(v)) {}
+    using ValueType =
+      std::variant<T, std::reference_wrapper<T>, T*, std::nullptr_t>;
+    ValueType data;
+    Option(ValueType&& v) : data(std::move(v)) {}
 
     static Option<T> mk_some(T&& value) {
-        return Option<T>(OptionValue<T>(std::forward<T>(value)));
+        return Option<T>(ValueType(std::forward<T>(value)));
     }
     // Default version for types other than void
-    static Option<T> mk_none() { return Option<T>(OptionValue<T>(nullptr)); }
+    static Option<T> mk_none() { return Option<T>(ValueType(nullptr)); }
 
     // Option<T> mk_some(const T& value);
     // Option<T> mk_some(T* value);
