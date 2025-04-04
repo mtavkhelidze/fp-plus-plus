@@ -5,6 +5,18 @@
 
 using namespace fp;
 
+TEST(Option_Some, with_references) {
+    int just_int = 42;
+    int& non_const_ref = just_int;
+    auto o_non_const_ref = Some(non_const_ref);
+    static_assert(std::is_same_v<decltype(o_non_const_ref), Option<const int>>);
+
+    const int const_int = 42;
+    const int& const_ref = const_int;
+    auto o_const_ref = Some(const_ref);
+    static_assert(std::is_same_v<decltype(o_const_ref), Option<const int>>);
+}
+
 TEST(Option_Some, with_callables) {
     std::function<int(int)> func_obj = [](int x) { return x * 2; };
     auto o_func = Some(func_obj);

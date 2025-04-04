@@ -11,7 +11,7 @@ set(TEST_SRC
     src/concepts/monoid.cpp
     # src/monads/option/option_get.cpp
     # src/monads/option/option_map.cpp
-    src/monads/option/option.cpp
+    src/monads/option/option_some.cpp
     # src/syntax.cpp
 )
 
