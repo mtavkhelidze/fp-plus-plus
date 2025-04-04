@@ -5,7 +5,28 @@
 
 using namespace fp;
 
-// TEST(Option, is_Eq) { static_assert(Eq<Option<int>>, "Option is not Eq"); }
+TEST(Option_Some, with_callables) {
+    std::function<int(int)> func_obj = [](int x) { return x * 2; };
+    auto o_func = Some(func_obj);
+    static_assert(
+      std::is_same_v<decltype(o_func), Option<const std::function<int(int)>>>,
+      "Failed with std::function"
+    );
+
+    auto lambda = [](int x) { return x + 1; };
+    auto o_lambda = Some(lambda);
+    static_assert(
+      std::is_same_v<decltype(o_lambda), Option<const decltype(lambda)>>,
+      "Failed with lambda"
+    );
+
+    int (*func_ptr)(int) = [](int x) { return x * 3; };
+    auto o_func_ptr = Some(func_ptr);
+    static_assert(
+      std::is_same_v<decltype(o_func_ptr), Option<int (*const)(int)>>,
+      "Failed with function pointer"
+    );
+}
 
 TEST(Option_Some, with_void_and_nullptr) {
     void* void_null = nullptr;
