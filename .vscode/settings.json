@@ -64,7 +64,8 @@
         "iterator": "cpp",
         "functional": "cpp",
         "source_location": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "type_traits": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

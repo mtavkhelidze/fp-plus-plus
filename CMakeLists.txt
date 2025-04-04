@@ -26,4 +26,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 message(STATUS "PROJECT_BINARY_DIR: ${PROJECT_BINARY_DIR}")
 
 include_directories(include)
+# add_executable(fp_main main.cpp)
+
 subdirs(test)

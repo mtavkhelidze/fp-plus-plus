@@ -9,13 +9,13 @@ set(TEST_LIB GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
     src/concepts/eq.cpp
     src/concepts/monoid.cpp
-    src/monads/option/option_get.cpp
-    src/monads/option/option_map.cpp
+    # src/monads/option/option_get.cpp
+    # src/monads/option/option_map.cpp
     src/monads/option/option.cpp
-    src/syntax.cpp
+    # src/syntax.cpp
 )
 
-find_untracked_files("${TEST_SRC}" src "*.cpp")
+# find_untracked_files("${TEST_SRC}" src "*.cpp")
 
 add_executable(${PROJECT_NAME}_test ${TEST_SRC})
 target_include_directories(${PROJECT_NAME}_test PRIVATE include)

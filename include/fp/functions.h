@@ -6,6 +6,6 @@
 
 namespace fp {
 
-auto id = [](auto x) { return x; };
+inline const auto id = [](const auto x) { return x; };
 
 }  // namespace fp

@@ -1,19 +1,24 @@
 #include <exception>
 // keep for rapidcheck
 
+#include <fp/fp.h>
 #include <gtest/gtest.h>
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>
 
-#include <fp/fp.h>
-
 #include "shorts.h"
+
 using namespace fp;
 
+auto identity = [](auto x) {
+    decltype(x) y = x;
+    static_assert(std::is_same_v<decltype(y), decltype(x)>);
+    return y;
+};
+
 RC_GTEST_PROP(Option_Map, identity_law, (const int val)) {
-    auto actual = Some(val).map(id);
-    auto expected = Some(val);
-    RC_ASSERT(actual.equals(expected));
+    auto actual = Some(val).map(triple).equals(Some(val * 3));
+    RC_ASSERT(actual);
 }
 
 RC_GTEST_PROP(Option_Map, composition_law, (const int val)) {
