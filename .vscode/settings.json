@@ -65,7 +65,8 @@
         "functional": "cpp",
         "source_location": "cpp",
         "typeindex": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "tuple": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
