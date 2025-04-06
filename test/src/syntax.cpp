@@ -1,10 +1,11 @@
-#include <gtest/gtest.h>
-
 #include <fp/fp.h>
+#include <gtest/gtest.h>
 
 #include "shorts.h"
 
 using namespace fp;
+using namespace fp::test;
+using namespace fp::util;
 
 // &= like $ in Haskell
 TEST(Syntax_Operator_Dollar, works_with_primitive_type) {

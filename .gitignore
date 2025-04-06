@@ -4,3 +4,4 @@ third_party/
 CMakeCache.txt
 vcpkg_installed/
 stash/
+scratch.cpp

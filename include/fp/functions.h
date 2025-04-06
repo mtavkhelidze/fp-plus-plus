@@ -4,8 +4,21 @@
 
 #pragma once
 
-namespace fp {
+#include <algorithm>
+#include <array>
+#include <memory>
 
-auto id = [](auto x) { return x; };
+namespace fp::util {
 
-}  // namespace fp
+inline const auto id = [](const auto x) { return x; };
+
+template <typename T, typename... Ts>
+auto to_array(T&& t, Ts&&... ts) -> std::unique_ptr<T[]> {
+    auto arr = std::array<T, 1 + sizeof...(Ts)>{
+      std::forward<T>(t), std::forward<Ts>(ts)...
+    };
+    auto ptr = std::make_unique<T[]>(arr.size());
+    std::copy(arr.begin(), arr.end(), ptr.get());
+    return ptr;
+}
+}  // namespace fp::util

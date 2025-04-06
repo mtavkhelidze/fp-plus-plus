@@ -31,6 +31,9 @@ inline constexpr auto operator<=>(const M& lhs, const M& rhs) {
 
 namespace fp {
 
+template <typename T>
+concept Movable = std::is_nothrow_move_constructible_v<T>;
+
 template <typename E>
 concept Eq = requires(E a, E b) {
     { E::equals(a, b) } -> std::convertible_to<bool>;

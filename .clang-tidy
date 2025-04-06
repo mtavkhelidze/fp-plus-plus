@@ -1,3 +1,8 @@
+CheckOptions:
+  - {
+    key: readability-identider-length.MinimumVariableNameLength,
+    value: 1
+    }
 Checks: >
   bugprone-*,
   cert-*,
@@ -19,7 +24,5 @@ WarningsAsErrors: >
   performance-*
 
 HeaderFilterRegex: 'include/fp/.*'
-
 FormatStyle: file
-
 InheritParentConfig: Yes
