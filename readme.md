@@ -13,6 +13,10 @@ C++20 Functional Programming Header-Only Library
 3. Include the library with `#include <fp/fp.h>`.
 4. Compile with a C++20-compliant compiler.
 
+```bash
+g++ -Iinclude -o fp_test main.cpp -std=c++20 -g -O0
+```
+
 ## Building and Testing
 
 ```bash
