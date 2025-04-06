@@ -1,99 +1,85 @@
-#include <array>
-#include <functional>
+#include <fp/fp.h>
+
 #include <iostream>
-#include <memory>
-#include <optional>
-#include <string>
-#include <tuple>
-#include <variant>
 
-template <typename T>
-struct Box {
-  private:
-    std::shared_ptr<T> data;
+using namespace fp;
 
-  public:
-    explicit inline Box(T&& t) :
-        data(std::make_shared<T>(std::forward<T>(t))) {}
+auto main() -> int {
+    auto b101 = Box(1, 2, 3);
+    std::cout << "b101: " << typeid(b101).name() << " : " << (*b101.get())[0]
+              << "\n";
 
-    explicit inline Box(const char* t)
-        requires(std::is_constructible_v<T, const char*>)
-        : data(std::make_shared<T>(t)) {}
+    auto b100 = Box(Box(Box(142)));  // Box<int>
+    std::cout << "b100: " << typeid(b100).name() << " : " << *b100.get()
+              << "\n";
 
-    explicit inline Box(const T& t) : data(std::make_shared<T>(t)) {}
-
-    // Defaulted copy and move
-    Box(const Box&) = default;
-    Box& operator=(const Box&) = default;
-    Box(Box&&) = default;
-    Box& operator=(Box&&) = default;
-    const T* get() const { return static_cast<T*>(data.get()); }
-};
-
-template <typename T>
-Box(T&&) -> Box<std::decay_t<T>>;
-
-Box(const char*) -> Box<std::string>;
-
-int main() {
-    void* dp = nullptr;
     auto b1 = Box(1);
-    auto b2 = Box("Hello");
-    auto b3 = Box(dp);
+    std::cout << "b1: " << typeid(b1).name() << " : " << *b1.get() << "\n";
 
-    auto p1 = *b1.get();
-    auto p2 = *b2.get();
-    auto p3 = *b3.get();
+    std::string h = "hello", w = "world";
+    auto b2a = Box("hello");
+    auto b2b = Box(1, 2, 3);
+    auto b2c = Box(&h, &w);
+    std::cout << "b2a: " << typeid(b2a).name() << " : value : " << *b2a.get()
+              << "\n";
+    std::cout << "b2b: " << typeid(b2b).name() << " : value : " << b2b.get()[1]
+              << "\n";
+    std::cout << "b2c: " << typeid(b2c).name() << " : value : " << *b2c.get()[1]
+              << "\n";
 
-    std::cout << *b3.get() << "\n";
+    void* dp = nullptr;
+    Box<void*> b3 = Box(dp);
+    auto dpa = nullptr;
+    auto b3a = Box(dpa);
+    //    std::cout << "b3: " << typeid(b3).name() << " : " << *b3.get() <<
+    //    "\n";
 
-    auto b4 = Box(std::array<int, 5>{1, 2, 3, 4, 5});
-    std::cout << (b4.get())->at(0) << std::endl;  // Output: 1
-
-    int* arr = new int[3]{10, 20, 30};
-    auto b5 = Box(arr);                   // Box<int*>
-    std::cout << *b5.get() << std::endl;  // Output: 10
+    int x = 10;
+    auto arr = &x;
+    auto b5 = Box(arr);
+    std::cout << "b5: " << typeid(b5).name() << " : " << *b5.get() << "'n";
 
     auto func = [](int x) { return x * 2; };
     auto b6 = Box(func);
-    std::cout << (*b6.get())(5) << std::endl;  // Output: 10
+    std::cout << "b6: " << typeid(b6).name() << " : " << b6.get()(5) << "'n";
 
     std::variant<int, double, std::string> var = "Hello";
     auto b8 = Box(var);
-    std::cout << std::get<std::string>(*b8.get())
-              << std::endl;  // Output: Hello
+    std::cout << "b8: " << typeid(b8).name() << " : " << b8.get().index()
+              << "'n";
 
     auto b9 = Box(std::make_tuple(1, 2.5, "Tuple"));
-    auto tup = *b9.get();
-    std::cout << std::get<2>(tup) << std::endl;  // Output: Tuple
+    auto tup = b9.get();
+    std::cout << "b9: " << typeid(b9).name() << " : " << std::get<2>(tup)
+              << "'n";
 
     auto b10 = Box(std::make_shared<int>(100));
-    std::cout << *b10.get() << std::endl;  // Output: 100
+    std::cout << "b10: " << typeid(b10).name() << " : " << *b10.get() << "'n";
 
     auto b11 = Box(std::make_unique<int>(200));
-    std::cout << *b11.get() << std::endl;  // Output: 200
+    std::cout << "b11: " << typeid(b11).name() << " : " << *b11.get() << "'n";
 
     struct NoCopy {
         NoCopy() = default;
-        NoCopy(const NoCopy&) = delete;  // No copying allowed
+        NoCopy(const NoCopy&) = delete;
 
-        // Define move constructor
         NoCopy(NoCopy&& other) noexcept : value(other.value) {
-            other.value = 0;  // optional: reset moved-from value
+            other.value = 0;
         }
 
         int value = 42;
     };
     auto b12 = Box(NoCopy{});
-    std::cout << b12.get()->value << std::endl;  // Output: 42
+    std::cout << "b12: " << typeid(b12).name() << " : " << b12.get().value
+              << "'n";
 
     std::optional<int> opt = 123;
     auto b13 = Box(opt);
-    std::cout << b13.get()->value() << std::endl;  // Output: 123
+    std::cout << "b13: " << typeid(b13).name() << " : " << *b13.get() << "'n";
 
     std::function<int(int)> f = [](int x) { return x * 3; };
     auto b16 = Box(f);
-    std::cout << (*b16.get())(4) << std::endl;  // Output: 12
+    std::cout << "b16: " << typeid(b16).name() << " : " << b16.get()(4) << "'n";
 
     return 0;
 }

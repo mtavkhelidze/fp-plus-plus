@@ -67,7 +67,8 @@
         "typeindex": "cpp",
         "type_traits": "cpp",
         "tuple": "cpp",
-        "__config": "cpp"
+        "__config": "cpp",
+        "regex": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
