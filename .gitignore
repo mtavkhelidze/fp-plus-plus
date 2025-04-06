@@ -5,3 +5,4 @@ CMakeCache.txt
 vcpkg_installed/
 stash/
 scratch.cpp
+.cache/
