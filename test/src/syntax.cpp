@@ -10,6 +10,13 @@ using namespace fp::test;
 using namespace fp::util;
 
 // &= like $ in Haskell
+TEST(Syntax_Operator_Dollar, works_with_different_types) {
+    auto actual = int_to_string &= square &= 2;
+    auto expected = "4";
+
+    EXPECT_EQ(actual, expected);
+}
+
 TEST(Syntax_Operator_Dollar, works_with_primitive_type) {
     auto actual = square &= 2;
     auto expected = 4;

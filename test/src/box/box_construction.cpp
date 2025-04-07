@@ -27,7 +27,7 @@
 
 using ::testing::Test;
 
-using namespace fp;
+namespace fp {
 
 // NOLINTBEGIN: literal
 
@@ -306,6 +306,13 @@ TEST(Box_Construction_Literal_Extra, can_hold_weak_ptr) {
     static_assert(std::is_same_v<Box<std::weak_ptr<int>>, decltype(box)>);
 }
 
+TEST(Box_Construction_Literal_Extra, can_hold_reference) {
+    int number = 42;
+    const int& x = number;
+    auto box = Box(x);
+    static_assert(std::is_same_v<Box<int>, decltype(box)>);
+}
+
 TEST(Box_Construction_Literal_Extra, can_hold_reference_wrapper) {
     int x = 42;
     auto box = Box(std::ref(x));
@@ -358,5 +365,5 @@ TEST(Box_Construction_Literal_Extra, can_hold_empty_tuple) {
     auto box = Box(std::tuple<>{});
     static_assert(std::is_same_v<Box<std::tuple<>>, decltype(box)>);
 }
-
+}  // namespace fp
 // NOLINTEND

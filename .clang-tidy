@@ -9,7 +9,10 @@ Checks: >
   -readability-identifier-length,
   -llvmlibc-implementation-in-namespace,
   -clang-tidyfuchsia-*,
-  -fuchsia-*
+  -fuchsia-*,
+  -llvm-include-order,
+  -google-readability-avoid-underscore-in-googletest-name,
+  -cert-err58-cpp
 # readability-identifier-length.IgnoredExceptionVariableNames,
 # readability-identifier-length.MinimumExceptionNameLength,
 # readability-identifier-length.MinimumLoopCounterNameLength,

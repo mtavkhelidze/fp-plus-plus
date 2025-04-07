@@ -22,7 +22,7 @@ concept Monoid = requires(T a, T b, T c) {
 };
 
 template <Monoid M>
-inline constexpr auto operator<=>(const M& lhs, const M& rhs) {
+constexpr auto operator<=>(const M& lhs, const M& rhs) {
     return M::combine(lhs, rhs);
 }
 
@@ -39,12 +39,12 @@ concept Eq = requires(E a, E b) {
 };
 
 template <Eq A>
-inline constexpr bool operator==(const A& a, const A& b) {
+constexpr bool operator==(const A& a, const A& b) {
     return A::equals(a, b);
 }
 
 template <Eq A>
-inline constexpr bool operator!=(const A& a, const A& b) {
+constexpr bool operator!=(const A& a, const A& b) {
     return !A::equals(a, b);
 }
 

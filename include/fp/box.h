@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #ifndef __FP_PLUS_PLUS__
 #error "This file must be included from "fp/fp.h"
 #endif
@@ -15,7 +16,6 @@ struct Box {
     std::variant<std::unique_ptr<T>, std::unique_ptr<T[]>> data;
 
   public:
-    // mish
     [[nodiscard]] [[clang::annotate("nullable")]]
     auto getOrNull() const -> T* {
         if (data.index() == 0) {

@@ -34,7 +34,8 @@ constexpr auto operator<<=(F&& lhs, G&& rhs) -> decltype(auto) {
  * computation to the next.
  */
 template <typename A>
-constexpr auto operator>=(A a, std::invocable<A> auto f) -> decltype(f(a)) {
+constexpr auto operator>=(A a, std::invocable<double> auto f)
+  -> decltype(f(a)) {
     return f(a);
 }
 

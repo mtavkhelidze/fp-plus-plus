@@ -36,6 +36,8 @@ target_include_directories(
     INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
               $<INSTALL_INTERFACE:include>
 )
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/fp/ DESTINATION include/fp)
+
 # add_executable(fp_main main.cpp)
 
 subdirs(test)
