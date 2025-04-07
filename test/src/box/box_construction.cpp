@@ -25,7 +25,6 @@
 #include <variant>
 #include <vector>
 
-using ::testing::_;
 using ::testing::Test;
 
 using namespace fp;

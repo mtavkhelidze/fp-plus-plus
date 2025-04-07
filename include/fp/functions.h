@@ -1,8 +1,7 @@
+#pragma once
 #ifndef __FP_PLUS_PLUS__
 #error "This file must be included from "fp/fp.h"
 #endif
-
-#pragma once
 
 #include <algorithm>
 #include <array>

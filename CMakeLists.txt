@@ -10,6 +10,7 @@ endforeach()
 enable_testing()
 update_submodules()
 enable_vcpkg()
+
 # end of housekeeping
 
 project(
@@ -21,11 +22,20 @@ project(
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# clang-tidy things
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+enable_clang_tidy()
+# end of clang-tidy things
 
 message(STATUS "PROJECT_BINARY_DIR: ${PROJECT_BINARY_DIR}")
 
-include_directories(include)
+add_library(${PROJECT_NAME} INTERFACE)
+target_include_directories(
+    ${PROJECT_NAME}
+    INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+              $<INSTALL_INTERFACE:include>
+)
 # add_executable(fp_main main.cpp)
 
 subdirs(test)

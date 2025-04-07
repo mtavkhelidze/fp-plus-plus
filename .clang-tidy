@@ -1,28 +1,39 @@
-CheckOptions:
-  - {
-    key: readability-identider-length.MinimumVariableNameLength,
-    value: 1
-    }
+# .clang-tidy configuration file
+
 Checks: >
-  bugprone-*,
-  cert-*,
+  *, 
   clang-analyzer-*,
-  concurrency-*,
-  cppcoreguidelines-*,
-  modernize-*,
-  performance-*,
-  readability-*,
-  portability-*,
-  misc-*
+  -llvmlibc-*,
+  performance-*, 
+  -readability-identifier-length.*,
+  -readability-identifier-length,
+  -llvmlibc-implementation-in-namespace,
+  -clang-tidyfuchsia-*,
+  -fuchsia-*
+# readability-identifier-length.IgnoredExceptionVariableNames,
+# readability-identifier-length.MinimumExceptionNameLength,
+# readability-identifier-length.MinimumLoopCounterNameLength,
+# readability-identifier-length.MinimumParameterNameLength,
+# readability-identifier-length.MinimumVariableNameLength,
 
-WarningsAsErrors: >
-  bugprone-*,
-  cert-*,
-  clang-analyzer-*,
-  cppcoreguidelines-*,
-  modernize-*,
-  performance-*
 
-HeaderFilterRegex: 'include/fp/.*'
-FormatStyle: file
-InheritParentConfig: Yes
+# # Customize check options
+# CheckOptions:
+#   - key: readability-identifier-length.MinimumVariableNameLength
+#     value: 1
+#   - key: readability-identifier-length.MinimumParameterNameLength
+#     value: 1
+#   - key: readability-identifier-length.MinimumLoopCounterNameLength
+#     value: 1
+#   - key: readability-identifier-length.MinimumExceptionNameLength
+#     value: 3
+#   - key: readability-identifier-length.IgnoredExceptionVariableNames
+#     value: "e,ex"
+  
+#   # Performance checks
+#   - key: performance-unnecessary-copy-in-loop.Threshold
+#     value: 1
+
+#   # Miscellaneous check options
+#   - key: clang-analyzer-core.NullDereference
+#     value: 1

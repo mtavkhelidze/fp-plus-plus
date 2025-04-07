@@ -1,9 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 
-namespace fp {
-namespace test {
+namespace fp::test {
 
 template <typename... Args>
 void print_err(Args&&... args) {
@@ -11,7 +11,7 @@ void print_err(Args&&... args) {
 }
 
 // string
-constexpr auto hello = [](std::string name) { return "Hello " + name; };
+constexpr auto hello = [](const std::string& name) { return "Hello " + name; };
 
 // int
 constexpr auto increment = [](int x) { return x + 1; };
@@ -22,6 +22,4 @@ constexpr auto make_multiplier = [](int x) {
 constexpr auto square = [](int x) { return x * x; };
 constexpr auto triple = [](int x) { return x * 3; };
 
-}  // namespace test
-}  // namespace fp
-#include <iostream>
+}  // namespace fp::test

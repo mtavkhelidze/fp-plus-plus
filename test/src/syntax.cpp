@@ -1,3 +1,5 @@
+// NOLINTBEGIN:-hicpp-named-parameter,-readability-named-parameter,llvmlibc-implementation-in-namespace
+
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 
@@ -103,3 +105,4 @@ TEST(Syntax_Operator_Pipe, works_with_void_functions) {
     5 >= print;
     EXPECT_EQ(ss.str(), "5");
 }
+// NOLINTEND

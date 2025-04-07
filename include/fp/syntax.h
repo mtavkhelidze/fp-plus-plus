@@ -1,10 +1,9 @@
+#pragma once
 #ifndef __FP_PLUS_PLUS__
 #error "This file must be included from "fp/fp.h"
 #endif
 
-#pragma once
-
-#include <functional>
+#include <concepts>
 
 namespace fp {
 /**
@@ -12,8 +11,7 @@ namespace fp {
  * This operator applies the function `f` to the argument `a`.
  */
 template <typename A>
-constexpr inline auto operator&=(std::invocable<A> auto f, A a)
-  -> decltype(f(a)) {
+constexpr auto operator&=(std::invocable<A> auto f, A a) -> decltype(f(a)) {
     return f(a);
 }
 
@@ -23,7 +21,7 @@ constexpr inline auto operator&=(std::invocable<A> auto f, A a)
  * and then `lhs`.
  */
 template <typename F, typename G>
-constexpr inline auto operator<<=(F&& lhs, G&& rhs) -> decltype(auto) {
+constexpr auto operator<<=(F&& lhs, G&& rhs) -> decltype(auto) {
     return [lhs = std::forward<F>(lhs),
             rhs = std::forward<G>(rhs)](auto a) -> decltype(lhs(rhs(a))) {
         return lhs(rhs(a));

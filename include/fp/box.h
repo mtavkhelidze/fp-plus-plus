@@ -1,11 +1,7 @@
-#include <cstddef>
+#pragma once
 #ifndef __FP_PLUS_PLUS__
 #error "This file must be included from "fp/fp.h"
 #endif
-
-#pragma once
-
-#include <memory>
 
 #include "defs.h"
 #include "functions.h"
@@ -15,21 +11,19 @@ namespace fp {
 template <typename T, typename... Ts>
 struct Box {
   private:
+    // NOLINTNEXTLINE:avoid-c-arrays
     std::variant<std::unique_ptr<T>, std::unique_ptr<T[]>> data;
 
   public:
+    // mish
     [[nodiscard]] [[clang::annotate("nullable")]]
     auto getOrNull() const -> T* {
         if (data.index() == 0) {
             return std::get<std::unique_ptr<T>>(data).get();
         }
+        // NOLINTNEXTLINE:avoid-c-arrays
         if (data.index()) { return std::get<std::unique_ptr<T[]>>(data).get(); }
         return nullptr;
-    }
-
-    auto getOrElse(T* fallback) const -> T* {
-        auto ptr = getOrNull();
-        return ptr ? ptr : fallback;
     }
 
     explicit Box(const T& t) : data{std::make_unique<T>(t)} {}
@@ -39,7 +33,7 @@ struct Box {
               util::to_array(std::forward<T>(t), std::forward<Ts>(ts)...)
             );
         } else {
-            data = std::make_unique<T>(std::forward<T>(t));
+            data = std::make_unique<T>(std::move(std::forward<T>(t)));
         }
     }
     // Defaulted copy and move

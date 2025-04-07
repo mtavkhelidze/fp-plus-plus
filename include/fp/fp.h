@@ -1,6 +1,6 @@
+#pragma once
 #ifndef __FP_PLUS_PLUS__
 #define __FP_PLUS_PLUS__
-#pragma once
 
 #include "defs.h"
 // keep defs on top
