@@ -2,17 +2,16 @@
 
 Checks: >
   *, 
-  clang-analyzer-*,
-  -llvmlibc-*,
-  performance-*, 
-  -readability-identifier-length.*,
-  -readability-identifier-length,
-  -llvmlibc-implementation-in-namespace,
   -clang-tidyfuchsia-*,
   -fuchsia-*,
-  -llvm-include-order,
   -google-readability-avoid-underscore-in-googletest-name,
-  -cert-err58-cpp
+  -llvm-include-order,
+  -llvmlibc-*,
+  -llvmlibc-implementation-in-namespace,
+  -readability-identifier-length,
+  -readability-identifier-length.*,
+  clang-analyzer-*,
+  performance-*
 # readability-identifier-length.IgnoredExceptionVariableNames,
 # readability-identifier-length.MinimumExceptionNameLength,
 # readability-identifier-length.MinimumLoopCounterNameLength,

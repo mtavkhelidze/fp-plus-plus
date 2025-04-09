@@ -1,7 +1,8 @@
-#pragma once
-#ifndef __FP_PLUS_PLUS__
-#error "This file must be included from "fp/fp.h"
-#endif
+#ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
+#error "This file must be included from "<fp/fp.h>"
+#endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
+#ifndef FP_SYNTAX_H
+#define FP_SYNTAX_H
 
 #include <concepts>
 
@@ -40,3 +41,5 @@ constexpr auto operator>=(A a, std::invocable<double> auto f)
 }
 
 }  // namespace fp
+
+#endif  // FP_SYNTAX_H

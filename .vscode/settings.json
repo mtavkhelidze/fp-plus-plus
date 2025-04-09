@@ -68,8 +68,12 @@
         "type_traits": "cpp",
         "tuple": "cpp",
         "__config": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "cstddef": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled",
-    "C_Cpp.dimInactiveRegions": false
+    "C_Cpp.dimInactiveRegions": false,
+    "C_Cpp.codeAnalysis.clangTidy.checks.disabled": [
+        "clang-diagnostic-error"
+    ]
 }

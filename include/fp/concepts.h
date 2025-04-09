@@ -1,7 +1,9 @@
-#pragma once
-#ifndef __FP_PLUS_PLUS__
-#error "This file must be included from "fp/fp.h"
-#endif
+#ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
+#error "This file must be included from <fp/fp.h>"
+#endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
+#ifndef FP_CONCEPTS_H
+// NOLINTNEXTLINE:llvm-header-guard
+#define FP_CONCEPTS_H
 
 #include <concepts>
 
@@ -39,13 +41,15 @@ concept Eq = requires(E a, E b) {
 };
 
 template <Eq A>
-constexpr bool operator==(const A& a, const A& b) {
+constexpr auto operator==(const A& a, const A& b) -> bool {
     return A::equals(a, b);
 }
 
 template <Eq A>
-constexpr bool operator!=(const A& a, const A& b) {
+constexpr auto operator!=(const A& a, const A& b) -> bool {
     return !A::equals(a, b);
 }
 
 }  // namespace fp
+
+#endif  // FP_CONCEPTS_H

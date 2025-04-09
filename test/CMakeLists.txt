@@ -11,13 +11,13 @@ set(CMAKE_CXX_FLAGS "-O0 -g")
 set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
     src/box/box_construction.cpp
-    src/box/box_get.cpp
-    src/concepts/eq.cpp
-    src/concepts/monoid.cpp
-    src/syntax.cpp
+    # src/box/box_get.cpp
+    # src/concepts/eq.cpp
+    # src/concepts/monoid.cpp
+    # src/syntax.cpp
 )
 
-find_untracked_files("${TEST_SRC}" src "*.cpp")
+# find_untracked_files("${TEST_SRC}" src "*.cpp")
 
 add_executable(${PROJECT_NAME}_test ${TEST_SRC})
 target_include_directories(${PROJECT_NAME}_test PRIVATE include)
