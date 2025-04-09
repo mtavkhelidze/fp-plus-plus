@@ -16,6 +16,7 @@ struct Box {
     std::variant<std::unique_ptr<T>, std::unique_ptr<T*>> data;
 
   public:
+    // --- Accessors
     [[nodiscard]] [[clang::annotate("nullable")]]
     auto getOrNull() const -> T* {
         if (data.index() == 0) {
@@ -25,10 +26,10 @@ struct Box {
         return nullptr;
     }
 
-    // constructors
+    // --- constructors
     // Concrete (includes things like A*)
     explicit Box(const T& t)
-        requires(!std::is_pointer_v<T>)
+        requires(!std::is_pointer_v<T> && !std::is_null_pointer_v<T>)
         : data{std::make_unique<T>(t)} {
         std::cerr << ">>> concrete: " << typeid(T).name() << "\n";
     }
@@ -38,7 +39,7 @@ struct Box {
     }
     // Raw pointer
     explicit Box(T ptr)
-        requires std::is_pointer_v<T>
+        requires(std::is_pointer_v<T>)
         : data{std::make_unique<T>(ptr)} {
         std::cerr << ">>> raw pointer: " << typeid(T).name() << "\n";
     }
@@ -55,7 +56,13 @@ struct Box {
         data = std::make_unique<T*>(std::move(xs.data()));
         std::cerr << ">>> varargs: " << typeid(T).name() << "\n";
     }
-    // Defaulted copy and move
+    // nullptr
+    explicit Box(T /*np*/)
+        requires std::is_null_pointer_v<T>
+        : data{std::make_unique<T>(nullptr)} {
+        std::cerr << ">>> nullptr: " << typeid(T).name() << "\n";
+    }
+    // --- Other constructors
     ~Box() = default;
     auto operator=(Box&&) -> Box& = default;
     auto operator=(const Box&) -> Box& = default;

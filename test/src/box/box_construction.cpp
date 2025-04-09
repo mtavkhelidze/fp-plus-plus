@@ -65,6 +65,12 @@ TEST(Box_Construction, can_take_std_array) {
     auto box = Box(&xs);
     static_assert(std::is_same_v<Box<std::array<int, 3>*>, decltype(box)>);
 }
+
+TEST(Box_Construction, nullptr_value) {
+    auto box = Box(nullptr);
+    static_assert(std::is_same_v<Box<nullptr_t>, decltype(box)>);
+}
+
 }  // namespace fp
 
 // NOLINTEND(misc-use-internal-linkage,hicpp-named-parameter,readability-named-parameter,cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers,modernize-use-trailing-return-type,bugprone-unused-local-non-trivial-variable)
