@@ -14,7 +14,7 @@ namespace fp {
 template <typename T, typename... Ts>
 struct Box {
   private:
-    std::variant<std::unique_ptr<T>, std::unique_ptr<T*>> data;
+    std::variant<std::unique_ptr<T>, std::unique_ptr<T*>, Nothing> data;
 
   public:
     // --- Accessors
@@ -61,11 +61,14 @@ struct Box {
           std::is_move_constructible_v<T> && !std::is_copy_constructible_v<T>
         )
         : data{std::make_unique<T>(std::move(t))} {}
+
+    // nothing (default comes here)
+    explicit Box<Nothing>() : data(Nothing()) {}
+
     // --- Other constructors
     ~Box() = default;
     auto operator=(Box&&) -> Box& = default;
     auto operator=(const Box&) -> Box& = default;
-    Box() = delete;
     Box(Box&&) = default;
     Box(const Box&) = default;
 } FP_PLUS_PLUS_ALIGN_PACKED;
@@ -78,6 +81,8 @@ template <typename U, std::size_t N>
 Box(const std::array<U, N>&) -> Box<U*>;
 
 Box(const char*) -> Box<std::string>;
+
+Box() -> Box<Nothing>;
 
 }  // namespace fp
 

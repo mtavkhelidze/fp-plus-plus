@@ -11,7 +11,7 @@ set(CMAKE_CXX_FLAGS "-O0 -g")
 set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
     src/box/box_construction.cpp
-    # src/box/box_get.cpp
+    src/box/box_get.cpp
     # src/concepts/eq.cpp
     # src/concepts/monoid.cpp
     # src/syntax.cpp
