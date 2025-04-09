@@ -12,7 +12,6 @@
 #include "box.h"
 #include "concepts.h"
 #include "functions.h"
-#include "option.h"
 #include "syntax.h"
 
 #endif  // FP_FP_H

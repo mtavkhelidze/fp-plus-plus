@@ -71,6 +71,18 @@ TEST(Box_Construction, nullptr_value) {
     static_assert(std::is_same_v<Box<nullptr_t>, decltype(box)>);
 }
 
+TEST(Box_Construction, move_only) {
+    struct MoveOnly {
+        MoveOnly() = default;
+        MoveOnly(MoveOnly&&) = default;
+        MoveOnly(const MoveOnly&) = delete;
+    };
+    auto box1 = Box(MoveOnly{});
+    static_assert(std::is_same_v<Box<MoveOnly>, decltype(box1)>);
+
+    auto box2 = Box{std::make_unique<int>(5)};
+    static_assert(std::is_same_v<Box<std::unique_ptr<int>>, decltype(box2)>);
+}
 }  // namespace fp
 
 // NOLINTEND(misc-use-internal-linkage,hicpp-named-parameter,readability-named-parameter,cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers,modernize-use-trailing-return-type,bugprone-unused-local-non-trivial-variable)

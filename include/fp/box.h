@@ -62,6 +62,14 @@ struct Box {
         : data{std::make_unique<T>(nullptr)} {
         std::cerr << ">>> nullptr: " << typeid(T).name() << "\n";
     }
+    // Move-only
+    explicit Box(T&& t)
+        requires(
+          std::is_move_constructible_v<T> && !std::is_copy_constructible_v<T>
+        )
+        : data{std::make_unique<T>(std::move(t))} {
+        std::cerr << ">>> move-only: " << typeid(T).name() << "\n";
+    }
     // --- Other constructors
     ~Box() = default;
     auto operator=(Box&&) -> Box& = default;
