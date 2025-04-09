@@ -19,14 +19,13 @@ struct Box {
   public:
     // --- Accessors
     [[nodiscard]] [[clang::annotate("nullable")]]
-    auto getOrNull() const -> std::shared_ptr<T> {
+    auto getOrNull() const -> T* {
         if (data.index() == 0) {
-            return std::shared_ptr<T>(std::get<std::unique_ptr<T>>(data)
-            );  // Converts unique_ptr to shared_ptr
+            //
+            return std::get<std::unique_ptr<T>>(data).get();
         }
         if (data.index() == 1) {
-            return std::shared_ptr<T>(*std::get<std::unique_ptr<T*>>(data)
-            );  // Convert the raw pointer inside unique_ptr<T*> to shared_ptr
+            return *std::get<std::unique_ptr<T*>>(data).get();
         }
         return nullptr;  // No data in Box
     }

@@ -25,6 +25,7 @@ TEST(Box_Construction, box_with_nothing_in_it) {
     Box box;
     static_assert(std::is_same_v<Box<Nothing>, decltype(box)>);
 }
+
 TEST(Box_Construction, array_non_pointer) {
     // array (non-pointer)
     int arr[3] = {1, 2, 3};                                   // NOLINT
