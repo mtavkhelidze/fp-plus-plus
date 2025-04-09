@@ -57,7 +57,7 @@ struct Box {
         std::cerr << ">>> varargs: " << typeid(T).name() << "\n";
     }
     // nullptr
-    explicit Box(T /*np*/)
+    explicit Box(T /* np */)
         requires std::is_null_pointer_v<T>
         : data{std::make_unique<T>(nullptr)} {
         std::cerr << ">>> nullptr: " << typeid(T).name() << "\n";
