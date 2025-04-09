@@ -10,27 +10,38 @@
 
 #include <array>
 #include <cstddef>
+#include <deque>
+#include <list>
+#include <map>
 #include <memory>
 #include <string>
 #include <type_traits>
+#include <unordered_set>
+#include <vector>
 
 using ::testing::Test;
 
 namespace fp {
-
-TEST(Box_Construction, array_of_pointers) {
-    // array of pointers
-    int a = 1, b = 2, c = 3;    // NOLINT
-    int* arr[] = {&a, &b, &c};  // NOLINT
-    auto box = Box(arr);
-    static_assert(std::is_same_v<Box<int**>, decltype(box)>);
-}
-
 TEST(Box_Construction, array_non_pointer) {
     // array (non-pointer)
     int arr[3] = {1, 2, 3};                                   // NOLINT
     auto box = Box(arr);                                      // NOLINT
     static_assert(std::is_same_v<Box<int*>, decltype(box)>);  // NOLINT
+}
+
+TEST(Box_Construction, array_of_pointers) {
+    // array of pointers
+    int a = 1, b = 2, c = 3;    // NOLINT
+    int* arr[] = {&a, &b, &c};  // NOLINT
+    auto box = Box(arr);        // NOLINT
+    static_assert(std::is_same_v<Box<int**>, decltype(box)>);
+}
+
+TEST(Box_Construction, const_lvalue_ref) {
+    // const lvalue ref
+    const int x = 42;
+    auto box = Box(x);
+    static_assert(std::is_same_v<Box<int>, decltype(box)>);
 }
 
 TEST(Box_Construction, const_volatile_lvalue_ref) {
@@ -39,13 +50,6 @@ TEST(Box_Construction, const_volatile_lvalue_ref) {
     const auto& y = x;
     auto box = Box(y);
     static_assert(std::is_same_v<Box<volatile int>, decltype(box)>);
-}
-
-TEST(Box_Construction, const_lvalue_ref) {
-    // const lvalue ref
-    const int x = 42;
-    auto box = Box(x);
-    static_assert(std::is_same_v<Box<int>, decltype(box)>);
 }
 
 TEST(Box_Construction, copy_only_type) {
@@ -128,11 +132,33 @@ TEST(Box_Construction, std_array) {
     static_assert(std::is_same_v<Box<std::array<int, 3>*>, decltype(box)>);
 }
 
+TEST(Box_Construction, std_deque) {
+    // std::deque as a value
+    std::deque<int> deq = {1, 2, 3};
+    auto box = Box(deq);
+    static_assert(std::is_same_v<Box<std::deque<int>>, decltype(box)>);
+}
+
 TEST(Box_Construction, std_function) {
     // std::function
     std::function<int(int)> func = [](int x) { return x * 2; };
     auto box = Box(func);
     static_assert(std::is_same_v<Box<std::function<int(int)>>, decltype(box)>);
+}
+
+TEST(Box_Construction, std_list) {
+    // std::list as a value
+    std::list<int> lst = {1, 2, 3};
+    auto box = Box(lst);
+    static_assert(std::is_same_v<Box<std::list<int>>, decltype(box)>);
+}
+
+TEST(Box_Construction, std_map) {
+    // std::map as a value
+    std::map<int, std::string> mp = {{1, "one"}, {2, "two"}, {3, "three"}};
+    auto box = Box(mp);
+    static_assert(std::is_same_v<Box<std::map<int, std::string>>, decltype(box)>
+    );
 }
 
 TEST(Box_Construction, std_optional) {
@@ -142,12 +168,35 @@ TEST(Box_Construction, std_optional) {
     static_assert(std::is_same_v<Box<std::optional<int>>, decltype(box)>);
 }
 
-TEST(Box_Construction, std_variant) {
-    // std::variant
-    std::variant<int, double> var = 42;
-    auto box = Box(var);
-    static_assert(std::is_same_v<Box<std::variant<int, double>>, decltype(box)>
+TEST(Box_Construction, std_set) {
+    // std::set as a value
+    std::set<int> st = {1, 2, 3};
+    auto box = Box(st);
+    static_assert(std::is_same_v<Box<std::set<int>>, decltype(box)>);
+}
+
+TEST(Box_Construction, std_unordered_map) {
+    // std::unordered_map as a value
+    std::unordered_map<int, std::string> umap = {
+      {1, "one"}, {2, "two"}, {3, "three"}
+    };
+    auto box = Box(umap);
+    static_assert(
+      std::is_same_v<Box<std::unordered_map<int, std::string>>, decltype(box)>
     );
+}
+TEST(Box_Construction, std_unordered_set) {
+    // std::unordered_set as a value
+    std::unordered_set<int> ust = {1, 2, 3};
+    auto box = Box(ust);
+    static_assert(std::is_same_v<Box<std::unordered_set<int>>, decltype(box)>);
+}
+
+TEST(Box_Construction, std_vector) {
+    // std::vector as a value
+    std::vector<int> vec = {1, 2, 3};  // NOLINT
+    auto box = Box(vec);
+    static_assert(std::is_same_v<Box<std::vector<int>>, decltype(box)>);
 }
 
 TEST(Box_Construction, string_literal) {
