@@ -1,5 +1,3 @@
-// NOLINTBEGIN(misc-use-internal-linkage,hicpp-named-parameter,readability-named-parameter,cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers,modernize-use-trailing-return-type,bugprone-unused-local-non-trivial-variable)
-
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-volatile"
@@ -219,11 +217,8 @@ TEST(Box_Construction, unique_ptr) {
     );
 }
 
-// NOLINTBEGIN(cert-err58-cpp,cppcoreguidelines-owning-memory)
 }  // namespace fp
 
 #ifdef __clang__
 #pragma clang diagnostic pop
 #endif  // __clang__
-
-// NOLINTEND(misc-use-internal-linkage,hicpp-named-parameter,readability-named-parameter,cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers,modernize-use-trailing-return-type,bugprone-unused-local-non-trivial-variable)
