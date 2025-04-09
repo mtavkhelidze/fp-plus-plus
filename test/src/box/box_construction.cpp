@@ -18,18 +18,123 @@ using ::testing::Test;
 
 namespace fp {
 
-TEST(Box_Construction, std_function) {
-    // std::function
-    std::function<int(int)> func = [](int x) { return x * 2; };
-    auto box = Box(func);
-    static_assert(std::is_same_v<Box<std::function<int(int)>>, decltype(box)>);
+TEST(Box_Construction, array_of_pointers) {
+    // array of pointers
+    int a = 1, b = 2, c = 3;    // NOLINT
+    int* arr[] = {&a, &b, &c};  // NOLINT
+    auto box = Box(arr);
+    static_assert(std::is_same_v<Box<int**>, decltype(box)>);
 }
+
 TEST(Box_Construction, array_non_pointer) {
     // array (non-pointer)
     int arr[3] = {1, 2, 3};                                   // NOLINT
     auto box = Box(arr);                                      // NOLINT
     static_assert(std::is_same_v<Box<int*>, decltype(box)>);  // NOLINT
 }
+
+TEST(Box_Construction, const_volatile_lvalue_ref) {
+    // const volatile lvalue reference
+    const volatile int x = 42;
+    const auto& y = x;
+    auto box = Box(y);
+    static_assert(std::is_same_v<Box<volatile int>, decltype(box)>);
+}
+
+TEST(Box_Construction, const_lvalue_ref) {
+    // const lvalue ref
+    const int x = 42;
+    auto box = Box(x);
+    static_assert(std::is_same_v<Box<int>, decltype(box)>);
+}
+
+TEST(Box_Construction, copy_only_type) {
+    // copy-only type
+    struct CopyOnly {  // NOLINT
+        CopyOnly() = default;
+        CopyOnly(const CopyOnly&) = default;
+        CopyOnly(CopyOnly&&) = delete;
+    };
+    auto box = Box(CopyOnly{});
+    static_assert(std::is_same_v<Box<CopyOnly>, decltype(box)>);
+}
+
+TEST(Box_Construction, function_pointer) {
+    // function pointer
+    using FuncType = void (*)();
+    FuncType func = nullptr;
+    auto box = Box(func);
+    static_assert(std::is_same_v<Box<FuncType>, decltype(box)>);
+}
+
+TEST(Box_Construction, lambda_expression) {
+    // lambda expression
+    auto lambda = []() { return 42; };
+    auto box = Box(lambda);
+    static_assert(std::is_same_v<Box<decltype(lambda)>, decltype(box)>);
+}
+
+TEST(Box_Construction, literal_parameter_pack) {
+    // literal parameter pack
+    auto box = Box{1, 2, 3};
+    static_assert(std::is_same_v<Box<int, int, int>, decltype(box)>);
+}
+
+TEST(Box_Construction, move_only_rvalue_and_smart_ptr) {
+    // move-only type and rvalue move-only smart pointer
+    struct MoveOnly {
+        MoveOnly() = default;
+        MoveOnly(MoveOnly&&) = default;
+        MoveOnly(const MoveOnly&) = delete;
+    };
+    auto box1 = Box(MoveOnly{});
+    static_assert(std::is_same_v<Box<MoveOnly>, decltype(box1)>);
+
+    auto box2 = Box{std::make_unique<int>(5)};
+    static_assert(std::is_same_v<Box<std::unique_ptr<int>>, decltype(box2)>);
+}
+
+TEST(Box_Construction, nullptr_type) {
+    // nullptr_t
+    auto box = Box(nullptr);
+    static_assert(std::is_same_v<Box<nullptr_t>, decltype(box)>);
+}
+
+TEST(Box_Construction, rvalue) {
+    // rvalue
+    auto box1 = Box(42);
+    static_assert(std::is_same_v<Box<int>, decltype(box1)>);
+
+    int x = 42;
+    auto box2 = Box(x);
+    static_assert(std::is_same_v<Box<int>, decltype(box2)>);
+}
+
+TEST(Box_Construction, shared_ptr) {
+    // shared_ptr and rvalue shared_ptr
+    auto ptr = std::make_shared<std::string>("hello");
+    auto box1 = Box(ptr);
+    static_assert(std::is_same_v<Box<std::string>, decltype(box1)>);
+
+    struct MyType {};
+    auto box2 = Box(std::make_shared<MyType>());
+    static_assert(std::is_same_v<Box<MyType>, decltype(box2)>);
+}
+
+TEST(Box_Construction, std_array) {
+    // std::array*
+    std::array<int, 3> xs = {1, 2, 3};
+    auto box = Box(&xs);
+    static_assert(std::is_same_v<Box<std::array<int, 3>*>, decltype(box)>);
+}
+
+TEST(Box_Construction, std_function) {
+    // std::function
+    std::function<int(int)> func = [](int x) { return x * 2; };
+    auto box = Box(func);
+    static_assert(std::is_same_v<Box<std::function<int(int)>>, decltype(box)>);
+}
+
 TEST(Box_Construction, std_optional) {
     // std::optional
     std::optional<int> opt = 42;
@@ -45,100 +150,10 @@ TEST(Box_Construction, std_variant) {
     );
 }
 
-TEST(Box_Construction, lambda_expression) {
-    // lambda expression
-    auto lambda = []() { return 42; };
-    auto box = Box(lambda);
-    static_assert(std::is_same_v<Box<decltype(lambda)>, decltype(box)>);
-}
-
-TEST(Box_Construction, function_pointer) {
-    // function pointer
-    using FuncType = void (*)();
-    FuncType func = nullptr;
-    auto box = Box(func);
-    static_assert(std::is_same_v<Box<FuncType>, decltype(box)>);
-}
-
-TEST(Box_Construction, array_of_pointers) {
-    // array of pointers
-    int a = 1, b = 2, c = 3;    // NOLINT
-    int* arr[] = {&a, &b, &c};  // NOLINT
-    auto box = Box(arr);
-    static_assert(std::is_same_v<Box<int**>, decltype(box)>);
-}
-
-TEST(Box_Construction, const_volatile_lvalue_ref) {
-    // const volatile lvalue reference
-    const volatile int x = 42;
-    const auto& y = x;
-    auto box = Box(y);
-    static_assert(std::is_same_v<Box<volatile int>, decltype(box)>);
-}
-
-TEST(Box_Construction, rvalue) {
-    // rvalue
-    auto box1 = Box(42);
-    static_assert(std::is_same_v<Box<int>, decltype(box1)>);
-
-    int x = 42;
-    auto box2 = Box(x);
-    static_assert(std::is_same_v<Box<int>, decltype(box2)>);
-}
-
-TEST(Box_Construction, copy_only_type) {
-    // copy-only type
-    struct CopyOnly {  // NOLINT
-        CopyOnly() = default;
-        CopyOnly(const CopyOnly&) = default;
-        CopyOnly(CopyOnly&&) = delete;
-    };
-    auto box = Box(CopyOnly{});
-    static_assert(std::is_same_v<Box<CopyOnly>, decltype(box)>);
-}
-
-TEST(Box_Construction, const_lvalue_ref) {
-    // const lvalue ref
-    const int x = 42;
-    auto box = Box(x);
-    static_assert(std::is_same_v<Box<int>, decltype(box)>);
-}
-
-TEST(Box_Construction, raw_pointer) {
-    // const int* (const raw pointer)
-    int x[] = {1, 2};  // NOLINT
-    auto box1 = Box(x);
-    static_assert(std::is_same_v<Box<int*>, decltype(box1)>);
-
-    const int* p = new int(5);
-    Box box2 = Box(p);
-    static_assert(std::is_same_v<Box<const int*>, decltype(box2)>);
-    delete p;  // NOLINT
-}
-
-TEST(Box_Construction, lvalue) {
-    // lvalue
-    const int x = 42;
-    const auto& y = x;
-    auto box = Box(y);
-    static_assert(std::is_same_v<Box<int>, decltype(box)>);
-}
-
 TEST(Box_Construction, string_literal) {
     // string literal
     auto box = Box("hello");
     static_assert(std::is_same_v<Box<std::string>, decltype(box)>);
-}
-
-TEST(Box_Construction, shared_ptr) {
-    // shared_ptr and rvalue shared_ptr
-    auto ptr = std::make_shared<std::string>("hello");
-    auto box1 = Box(ptr);
-    static_assert(std::is_same_v<Box<std::string>, decltype(box1)>);
-
-    struct MyType {};
-    auto box2 = Box(std::make_shared<MyType>());
-    static_assert(std::is_same_v<Box<MyType>, decltype(box2)>);
 }
 
 TEST(Box_Construction, unique_ptr) {
@@ -156,39 +171,6 @@ TEST(Box_Construction, unique_ptr) {
 }
 
 // NOLINTBEGIN(cert-err58-cpp,cppcoreguidelines-owning-memory)
-TEST(Box_Construction, nullptr_type) {
-    // nullptr_t
-    auto box = Box(nullptr);
-    static_assert(std::is_same_v<Box<nullptr_t>, decltype(box)>);
-}
-// NOLINTEND(cert-err58-cpp,cppcoreguidelines-owning-memory)
-
-TEST(Box_Construction, literal_parameter_pack) {
-    // literal parameter pack
-    auto box = Box{1, 2, 3};
-    static_assert(std::is_same_v<Box<int, int, int>, decltype(box)>);
-}
-
-TEST(Box_Construction, std_array) {
-    // std::array*
-    std::array<int, 3> xs = {1, 2, 3};
-    auto box = Box(&xs);
-    static_assert(std::is_same_v<Box<std::array<int, 3>*>, decltype(box)>);
-}
-
-TEST(Box_Construction, move_only_rvalue_and_smart_ptr) {
-    // move-only type and rvalue move-only smart pointer
-    struct MoveOnly {
-        MoveOnly() = default;
-        MoveOnly(MoveOnly&&) = default;
-        MoveOnly(const MoveOnly&) = delete;
-    };
-    auto box1 = Box(MoveOnly{});
-    static_assert(std::is_same_v<Box<MoveOnly>, decltype(box1)>);
-
-    auto box2 = Box{std::make_unique<int>(5)};
-    static_assert(std::is_same_v<Box<std::unique_ptr<int>>, decltype(box2)>);
-}
 }  // namespace fp
 
 #ifdef __clang__
