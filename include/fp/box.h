@@ -25,7 +25,9 @@ struct Box {
         if (data.index() == 0) {
             return std::get<std::shared_ptr<T>>(data).get();
         }
-        if (data.index() == 1) { return std::get<std::vector<T>>(data).data(); }
+        if (data.index() == 1) {
+            return std::get<std::vector<T>>(data).data();
+        }
         return nullptr;
     }
     // --- constructors
