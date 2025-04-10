@@ -11,16 +11,8 @@
 namespace fp {
 template <typename T>
 concept Monoid = requires(T a, T b, T c) {
-    // Identity element must return type T
-    { T::empty() } -> std::same_as<const T>;
-    { T::combine(a, b) } -> std::same_as<const T>;
-
-    // Combining with the identity should return the same element
-    { T::combine(a, T::empty()) } -> std::same_as<const T>;
-    { T::combine(T::empty(), b) } -> std::same_as<const T>;
-
-    //    Associativity (implicitly checked)
-    { T::combine(T::combine(a, b), c) } -> std::same_as<const T>;
+    { T::empty() } -> std::same_as<T>;
+    { T::combine(a, b) } -> std::same_as<T>;
 };
 
 template <Monoid M>

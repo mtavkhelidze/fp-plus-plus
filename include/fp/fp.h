@@ -12,6 +12,10 @@
 #include "box.h"
 #include "concepts.h"
 #include "functions.h"
+#include "ops/monoid.h"
 #include "syntax.h"
 
+namespace fp::ops::all {
+using namespace fp::ops::monoid;
+}
 #endif  // FP_FP_H

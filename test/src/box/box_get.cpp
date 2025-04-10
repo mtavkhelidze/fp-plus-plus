@@ -13,7 +13,7 @@ TEST(Box_getOrNull, default_box) {
 }
 
 TEST(Box_getOrNull, empty_box) {
-    Box<int> emptyBox;
+    auto emptyBox = Box();
     EXPECT_EQ(emptyBox.getOrNull(), nullptr);
 }
 

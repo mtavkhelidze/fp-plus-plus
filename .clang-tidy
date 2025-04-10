@@ -4,6 +4,7 @@ Checks: >
   *, 
   -clang-tidyfuchsia-*,
   -fuchsia-*,
+  -google-build-using-namespace,
   -google-readability-avoid-underscore-in-googletest-name,
   -llvm-include-order,
   -llvmlibc-*,

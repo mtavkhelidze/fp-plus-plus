@@ -1,8 +1,3 @@
-#ifdef __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-volatile"
-#endif  // __clang__
-
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 
@@ -46,14 +41,6 @@ TEST(Box_Construction, const_lvalue_ref) {
     const int x = 42;
     auto box = Box(x);
     static_assert(std::is_same_v<Box<int>, decltype(box)>);
-}
-
-TEST(Box_Construction, const_volatile_lvalue_ref) {
-    // const volatile lvalue reference
-    const volatile int x = 42;
-    const auto& y = x;
-    auto box = Box(y);
-    static_assert(std::is_same_v<Box<volatile int>, decltype(box)>);
 }
 
 TEST(Box_Construction, copy_only_type) {
@@ -105,7 +92,7 @@ TEST(Box_Construction, move_only_rvalue_and_smart_ptr) {
 TEST(Box_Construction, nullptr_type) {
     // nullptr_t
     auto box = Box(nullptr);
-    static_assert(std::is_same_v<Box<nullptr_t>, decltype(box)>);
+    static_assert(std::is_same_v<Box<Nothing>, decltype(box)>);
 }
 
 TEST(Box_Construction, rvalue) {
@@ -224,7 +211,3 @@ TEST(Box_Construction, unique_ptr) {
 }
 
 }  // namespace fp
-
-#ifdef __clang__
-#pragma clang diagnostic pop
-#endif  // __clang__

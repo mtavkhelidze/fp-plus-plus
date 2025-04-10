@@ -15,16 +15,6 @@ inline constexpr size_t FP_PLUS_PLUS_ALIGN = 16;
 #include <variant>
 
 namespace fp {
-template <typename T>
-struct is_std_array : std::false_type {};
-template <typename U, std::size_t N>
-struct is_std_array<std::array<U, N>> : std::true_type {};
-
-template <typename T>
-constexpr bool is_std_array_v = is_std_array<T>::value;
-}  // namespace fp
-
-namespace fp {
 
 using Nothing = std::monostate;  // is {}
 using Unit = void;

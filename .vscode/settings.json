@@ -69,7 +69,12 @@
         "tuple": "cpp",
         "__config": "cpp",
         "regex": "cpp",
-        "cstddef": "cpp"
+        "cstddef": "cpp",
+        "filesystem": "cpp",
+        "atomic": "cpp",
+        "utility": "cpp",
+        "chrono": "cpp",
+        "compare": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled",
     "C_Cpp.dimInactiveRegions": false,
