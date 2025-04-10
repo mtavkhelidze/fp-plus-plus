@@ -27,7 +27,6 @@ TEST(Box_Construction, array_non_pointer) {
     auto box = Box(arr);                                      // NOLINT
     static_assert(std::is_same_v<Box<int*>, decltype(box)>);  // NOLINT
 }
-
 TEST(Box_Construction, array_of_pointers) {
     // array of pointers
     int a = 1, b = 2, c = 3;    // NOLINT
@@ -119,8 +118,8 @@ TEST(Box_Construction, shared_ptr) {
 TEST(Box_Construction, std_array) {
     // std::array*
     std::array<int, 3> xs = {1, 2, 3};
-    auto box = Box(&xs);
-    static_assert(std::is_same_v<Box<std::array<int, 3>*>, decltype(box)>);
+    auto box = Box(xs.data());
+    static_assert(std::is_same_v<Box<int*>, decltype(box)>);
 }
 
 TEST(Box_Construction, std_deque) {

@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
@@ -39,7 +40,9 @@ struct Box {
     // Pointer: raw
     explicit Box(T ptr)
         requires(std::is_pointer_v<T>)
-        : data{std::make_shared<T>(ptr)} {}
+        : data(std::make_shared<T>(std::move(ptr))) {
+        static_assert(!std::is_null_pointer_v<T>, "nullptr is not allowed");
+    }
     // Varargs; creates an array
     explicit Box(const T&& t, Ts&&... ts)
         requires(sizeof...(Ts) > 0)
@@ -48,9 +51,6 @@ struct Box {
         std::vector<T> vec = {std::move(t), std::move(ts)...};
         data = std::move(vec);
     }
-    // nullptr: can't have it
-    // explicit Box(std::nullptr_t) : data(Nothing()) {}
-
     // Move-only
     explicit Box(T&& t)
         requires(
