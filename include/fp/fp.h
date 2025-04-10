@@ -10,12 +10,11 @@
 #include "defs.h"
 // keep defs on top
 #include "box.h"
-#include "concepts.h"
 #include "functions.h"
-#include "ops/monoid.h"
 #include "syntax.h"
+#include "traits/traits.h"
 
-namespace fp::ops::all {
-using namespace fp::ops::monoid;
+namespace fp {
+using namespace fp::traits;
 }
 #endif  // FP_FP_H

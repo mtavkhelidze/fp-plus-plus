@@ -9,10 +9,13 @@ Checks: >
   -llvm-include-order,
   -llvmlibc-*,
   -llvmlibc-implementation-in-namespace,
+  -misc-use-anonymous-namespace,
   -readability-identifier-length,
   -readability-identifier-length.*,
   clang-analyzer-*,
   performance-*
+Function 'equals' declared 'static', move to anonymous namespace insteadclang-tidymisc-use-anonymous-namespace
+
 # readability-identifier-length.IgnoredExceptionVariableNames,
 # readability-identifier-length.MinimumExceptionNameLength,
 # readability-identifier-length.MinimumLoopCounterNameLength,
