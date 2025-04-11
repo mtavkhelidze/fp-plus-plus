@@ -6,6 +6,7 @@
 #define FP_TRAITS_H
 
 #include "eq.h"
+#include "monad.h"
 #include "monoid.h"
 
 #endif  // FP_TRAITS_H

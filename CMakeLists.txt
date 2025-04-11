@@ -39,7 +39,7 @@ target_include_directories(
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/fp/ DESTINATION include/fp)
 
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_CXX_FLAGS "-O0 -g")
+set(CMAKE_CXX_FLAGS "-O0 -g -std=c++20 -Wall -Wextra -Wpedantic")
 
 add_executable(fp_main main.cpp)
 target_include_directories(fp_main PRIVATE include)

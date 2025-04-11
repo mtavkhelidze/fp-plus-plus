@@ -12,6 +12,7 @@ set(TEST_SRC
     src/syntax.cpp
     src/traits/eq.cpp
     src/traits/monoid.cpp
+    src/traits/monad.cpp
 )
 
 # find_untracked_files("${TEST_SRC}" src "*.cpp")

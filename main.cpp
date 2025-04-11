@@ -1,40 +1,45 @@
+#include <concepts>
+#include <functional>
 #include <iostream>
+#include <type_traits>
 
-template <typename Function>
-struct infix {
-    explicit infix(Function f) : f(f) {}
-    Function f;
+#include "fp/fp.h"
+
+template <typename T>
+struct MyMonad;
+
+template <typename T>
+MyMonad<T> unit(T a);  // Forward declaration
+
+template <template <typename> typename M, typename A, typename B = A>
+concept Monad = requires(M<A> m, A a, std::function<M<B>(A)> f) {
+    { unit(a) } -> std::same_as<M<A>>;
+    { m.flatMap(f) } -> std::same_as<decltype(f(a))>;
 };
 
-template <typename Left, typename Function>
-struct LeftAndFunction {
-    template <typename Left_>
-    LeftAndFunction(Left_ &&left, Function f)
-        : left(std::forward<Left_>(left)), f(f) {}
+template <typename T>
+struct MyMonad {
+    T value;
+    MyMonad(T v) : value(v) {}
 
-    Left left;
-    Function f;
+    template <typename F>
+    auto flatMap(F&& f) -> decltype(f(value)) {
+        return f(value);
+    }
 };
+template <typename T>
+MyMonad<T> unit(T a) {
+    return MyMonad<T>(a);
+}
+static_assert(Monad<MyMonad, int>, "Not a monad");
 
-template <typename Left, typename Function>
-LeftAndFunction<std::remove_reference_t<Left>, Function> operator<<(
-  Left &&left, infix<Function> const &infix
-) {
-    return LeftAndFunction<std::remove_reference_t<Left>, Function>(
-      std::forward<Left>(left), infix.f
-    );
+auto to_string(int i) -> MyMonad<std::string> {
+    return unit(std::to_string(i));
 }
 
-template <typename Left, typename Function, typename Right>
-decltype(auto) operator>>(LeftAndFunction<Left, Function> lf, Right &&right) {
-    return lf.f(lf.left, std::forward<Right>(right));
-}
-
-// #define _(x) << x $
-
-auto add = infix{[](auto a, auto b) { return a + b; }};
 int main() {
-    auto result = 2 << add >> 10;
-    std::cout << result << std::endl;
+    MyMonad<int> m(42);
+    auto r = m.flatMap(to_string);
+    std::cout << r.value << "\n";
     return 0;
 }

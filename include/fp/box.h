@@ -49,7 +49,6 @@ struct Box {
     explicit Box(const T&& t, Ts&&... ts)
         requires(sizeof...(Ts) > 0)
     {
-        constexpr size_t size = sizeof...(Ts) + 1;
         std::vector<T> vec = {std::move(t), std::move(ts)...};
         data = std::move(vec);
     }
