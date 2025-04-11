@@ -11,8 +11,8 @@ namespace fp::traits {
 
 template <typename M>
 concept Monoid = requires(M a, M b) {
-    { M::empty() } -> std::same_as<M>;
-    { combine(a, b) } -> std::same_as<M>;
+    requires std::same_as<std::decay_t<decltype(M::empty())>, M>;
+    requires std::same_as<std::decay_t<decltype(combine(a, b))>, M>;
 };
 
 template <Monoid M>

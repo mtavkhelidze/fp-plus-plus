@@ -11,7 +11,7 @@
 
 #include "defs.h"
 
-namespace fp {
+namespace fp::internal {
 
 template <typename T, typename... Ts>
 struct Box {
@@ -82,6 +82,6 @@ Box(const char*) -> Box<std::string>;
 Box() -> Box<Nothing>;
 
 Box(std::nullptr_t) -> Box<Nothing>;
-}  // namespace fp
+}  // namespace fp::internal
 
 #endif  // FP_BOX_H

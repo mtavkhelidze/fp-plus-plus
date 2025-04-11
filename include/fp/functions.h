@@ -5,10 +5,10 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_FUNCTIONS_H
 
-namespace fp::util {
+namespace fp::functions {
 
 inline const auto id = [](const auto x) { return x; };
 
-}  // namespace fp::util
+}  // namespace fp::functions
 
 #endif  // FP_FUNCTIONS_H

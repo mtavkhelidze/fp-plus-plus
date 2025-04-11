@@ -6,7 +6,7 @@
 
 #include <concepts>
 
-namespace fp {
+namespace fp::syntax {
 /**
  * Function application operator (similar to $ in Haskell).
  * This operator applies the function `f` to the argument `a`.
@@ -40,6 +40,6 @@ constexpr auto operator>=(A a, std::invocable<double> auto f)
     return f(a);
 }
 
-}  // namespace fp
+}  // namespace fp::syntax
 
 #endif  // FP_SYNTAX_H

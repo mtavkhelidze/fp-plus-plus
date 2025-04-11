@@ -9,7 +9,7 @@ template <typename T>
 struct MyMonad;
 
 template <typename T>
-MyMonad<T> unit(T a);  // Forward declaration
+MyMonad<T> unit(T a);
 
 template <template <typename> typename M, typename A, typename B = A>
 concept Monad = requires(M<A> m, A a, std::function<M<B>(A)> f) {

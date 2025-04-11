@@ -2,7 +2,9 @@
 
 #include "fp/fp.h"
 
-namespace fp {
+using namespace fp;
+using namespace fp::internal;
+
 TEST(Box_getOrNull, default_typed_box) {
     Box<int> box;
     EXPECT_EQ(box.getOrNull(), nullptr);
@@ -45,4 +47,3 @@ TEST(Box_getOrNull, with_nullptr) {
     Box<int*> box(nullptr);
     EXPECT_EQ(*box.getOrNull(), nullptr);
 }
-}  // namespace fp

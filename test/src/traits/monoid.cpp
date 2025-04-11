@@ -3,16 +3,16 @@
 
 using ::testing::Test;
 
-using namespace fp;
+using namespace fp::traits;
 
 namespace str {
 
 struct String {
     std::string s;
-    static String empty() { return String{""}; }
+    static const String empty() { return String{""}; }
 };
 
-auto combine(const String& a, const String& b) -> String {
+auto combine(const String& a, const String& b) -> const String {
     return String{a.s + b.s};
 }
 }  // namespace str

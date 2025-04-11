@@ -5,7 +5,7 @@
 using ::testing::_;
 using ::testing::Test;
 
-using namespace fp;
+using namespace fp::traits;
 
 // Eq concept implementations
 namespace eq {

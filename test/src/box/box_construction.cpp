@@ -13,8 +13,9 @@
 #include <vector>
 
 using ::testing::Test;
+using namespace fp;
+using namespace fp::internal;
 
-namespace fp {
 TEST(Box_Construction, box_with_nothing_in_it) {
     // Nothing type (std::monostate)
     Box box;
@@ -145,7 +146,11 @@ TEST(Box_Construction, std_list) {
 
 TEST(Box_Construction, std_map) {
     // std::map as a value
-    std::map<int, std::string> mp = {{1, "one"}, {2, "two"}, {3, "three"}};
+    std::map<int, std::string> mp = {
+      {1, "one"  },
+      {2, "two"  },
+      {3, "three"}
+    };
     auto box = Box(mp);
     static_assert(std::is_same_v<Box<std::map<int, std::string>>, decltype(box)>
     );
@@ -168,7 +173,9 @@ TEST(Box_Construction, std_set) {
 TEST(Box_Construction, std_unordered_map) {
     // std::unordered_map as a value
     std::unordered_map<int, std::string> umap = {
-      {1, "one"}, {2, "two"}, {3, "three"}
+      {1, "one"  },
+      {2, "two"  },
+      {3, "three"}
     };
     auto box = Box(umap);
     static_assert(
@@ -208,5 +215,3 @@ TEST(Box_Construction, unique_ptr) {
         decltype(box2)>
     );
 }
-
-}  // namespace fp
