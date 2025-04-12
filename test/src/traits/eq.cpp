@@ -5,26 +5,26 @@
 using ::testing::_;
 using ::testing::Test;
 
-using namespace fp::traits;
+using namespace fp::traits::eq;
 
 // Eq concept implementations
-namespace eq {
+namespace eq_char {
 struct Char {
     char c;
 };
 
 inline auto equals(const Char& a, const Char& b) -> bool { return a.c == b.c; }
 
-};  // namespace eq
+};  // namespace eq_char
 
 TEST(Eq_Char, satisfies_eq_concept) {
-    static_assert(Eq<eq::Char>, "Char does not satisfy the Eq concept");
+    static_assert(Eq<eq_char::Char>, "Char does not satisfy the Eq concept");
 };
 
 TEST(Eq_Operator_Equals, works) {
-    const eq::Char a{.c = 'a'};
-    const eq::Char b{.c = 'a'};
-    const eq::Char c{.c = 'c'};
+    const eq_char::Char a{.c = 'a'};
+    const eq_char::Char b{.c = 'a'};
+    const eq_char::Char c{.c = 'c'};
 
     EXPECT_EQ((b == a), (a == b));
     EXPECT_EQ((a != b), !(a == b));

@@ -7,7 +7,7 @@
 
 #include <concepts>
 
-namespace fp::traits {
+namespace fp::traits::eq {
 
 template <typename E>
 concept Eq = requires(E a, E b) {
@@ -24,6 +24,6 @@ constexpr auto operator!=(const A& a, const A& b) -> bool {
     return !equals(a, b);
 }
 
-}  // namespace fp::traits
+}  // namespace fp::traits::eq
 
 #endif  // FP_TRAITS_EQ_H

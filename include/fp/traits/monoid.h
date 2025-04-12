@@ -7,7 +7,7 @@
 
 #include <concepts>
 
-namespace fp::traits {
+namespace fp::traits::monoid {
 
 template <typename M>
 concept Monoid = requires(M a, M b) {
@@ -20,6 +20,6 @@ constexpr auto operator<=>(const M& lhs, const M& rhs) {
     return combine(lhs, rhs);
 }
 
-}  // namespace fp::traits
+}  // namespace fp::traits::monoid
 
 #endif  // FP_TRAITS_MONOID_H

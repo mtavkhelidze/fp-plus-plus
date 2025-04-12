@@ -9,7 +9,7 @@
 
 #include <concepts>
 
-namespace fp::traits {
+namespace fp::traits::monad {
 template <template <typename> typename M, typename A>
 concept HasApply = requires(A a) {
     { M<A>(a) };
@@ -40,6 +40,6 @@ template <template <typename> typename M, typename A>
 auto unit(A&& a) -> M<A> {
     return M(std::forward<A>(a));
 }
-}  // namespace fp::traits
+}  // namespace fp::traits::monad
 
 #endif  // FP_TRAITS_MONAD_H

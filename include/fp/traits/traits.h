@@ -9,4 +9,9 @@
 #include "monad.h"
 #include "monoid.h"
 
+namespace fp::traits {
+using namespace eq;
+using namespace monad;
+using namespace monoid;
+}  // namespace fp::traits
 #endif  // FP_TRAITS_H
