@@ -15,6 +15,6 @@
 #include "traits/traits.h"
 
 namespace fp {
-using namespace fp::traits;
+// using namespace fp::traits;
 }
 #endif  // FP_FP_H
