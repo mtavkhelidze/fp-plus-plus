@@ -15,12 +15,14 @@ concept Eq = requires(E a, E b) {
 };
 
 template <Eq A>
-constexpr auto operator==(const A& a, const A& b) -> bool {
+constexpr bool operator==(const A& a, const A& b) noexcept(noexcept(equals(a, b)
+)) {
     return equals(a, b);
 }
 
 template <Eq A>
-constexpr auto operator!=(const A& a, const A& b) -> bool {
+constexpr bool operator!=(const A& a, const A& b) noexcept(noexcept(equals(a, b)
+)) {
     return !equals(a, b);
 }
 

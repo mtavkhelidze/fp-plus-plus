@@ -5,9 +5,19 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_FUNCTIONS_H
 
+#include <utility>
+
 namespace fp::functions {
 
 inline const auto id = [](const auto x) { return x; };
+struct Identity {
+    template <typename T>
+    constexpr T&& operator()(T&& value) const noexcept {
+        return std::forward<T>(value);
+    }
+};
+
+constexpr Identity identity;
 
 }  // namespace fp::functions
 

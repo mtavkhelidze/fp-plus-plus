@@ -11,7 +11,6 @@ using namespace fp::traits;
 using namespace fp::syntax;
 using namespace fp::test;
 using namespace fp::functions;
-using fp::traits::unit;
 
 template <typename T>
 struct Simple {

@@ -12,7 +12,8 @@ namespace fp::syntax {
  * This operator applies the function `f` to the argument `a`.
  */
 template <typename A>
-constexpr auto operator&=(std::invocable<A> auto f, A a) -> decltype(f(a)) {
+constexpr auto operator&=(std::invocable<A> auto f, A a) noexcept(noexcept(f(a))
+) -> decltype(f(a)) {
     return f(a);
 }
 
@@ -22,11 +23,13 @@ constexpr auto operator&=(std::invocable<A> auto f, A a) -> decltype(f(a)) {
  * and then `lhs`.
  */
 template <typename F, typename G>
-constexpr auto operator<<=(F&& lhs, G&& rhs) -> decltype(auto) {
-    return [lhs = std::forward<F>(lhs),
-            rhs = std::forward<G>(rhs)](auto a) -> decltype(lhs(rhs(a))) {
-        return lhs(rhs(a));
-    };
+constexpr auto operator<<=(F&& lhs, G&& rhs) noexcept(
+  noexcept(lhs(rhs(std::declval<int>())))
+) -> decltype(auto) {
+    return [lhs = std::forward<F>(lhs), rhs = std::forward<G>(rhs)](
+             auto a
+           ) constexpr noexcept(noexcept(lhs(rhs(a)))
+           ) -> decltype(lhs(rhs(a))) { return lhs(rhs(a)); };
 }
 
 /**
@@ -35,8 +38,9 @@ constexpr auto operator<<=(F&& lhs, G&& rhs) -> decltype(auto) {
  * computation to the next.
  */
 template <typename A>
-constexpr auto operator>=(A a, std::invocable<double> auto f)
-  -> decltype(f(a)) {
+constexpr auto operator>=(A a, std::invocable<double> auto f) noexcept(
+  noexcept(f(a))
+) -> decltype(f(a)) {
     return f(a);
 }
 
