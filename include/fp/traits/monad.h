@@ -1,3 +1,4 @@
+#include <functional>
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -5,47 +6,43 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_TRAITS_MONAD_H
 
-#include <concepts>
 #include <type_traits>
 
 #include "guards.h"
 
+using namespace fp::traits::guards;
+
 namespace fp::traits::monad {
 
-template <typename Fn, typename T, template <typename> typename Container>
-concept kleisli_arrow = requires {
-    typename std::invoke_result_t<Fn, T>;
-    requires fp::traits::guards::is_instance_of<
-      Container, std::decay_t<std::invoke_result_t<Fn, T>>>;
+template <typename Fn, typename T, template <typename> typename TypeConstructor>
+concept fp_kleisli_arrow = requires {
+    requires fp_is_instance_of<
+      TypeConstructor, std::decay_t<std::invoke_result_t<Fn, T>>>;
 };
 
 }  // namespace fp::traits::monad
 
 namespace fp::traits::monad {
 
-template <typename F, template <typename> typename M, typename A, typename B>
-concept FlatMapUnary =
-  std::invocable<F, A> && !std::is_reference_v<B> &&
-  std::same_as<std::invoke_result_t<F, A>, M<std::decay_t<B>>>;
+/// Wraps a raw value into the given monadic type constructor. Requires that
+/// the> is constructible from T.
+template <template <typename> typename TypeConstructor, typename T>
+    requires fp_constructible_from<T, TypeConstructor>
+constexpr auto pure(T&& val) {
+    return TypeConstructor<std::decay_t<T>>{std::forward<T>(val)};
+}
 
-template <template <typename> typename M, typename A>
-concept HasApply = std::is_nothrow_constructible_v<M<A>, A>;
-
-template <template <typename> typename M, typename A>
-concept HasUnit = HasApply<M, A> && requires(A a) {
-    { M<A>::unit(a) } -> std::convertible_to<M<std::decay_t<A>>>;
+/// Concept representing a lawful Monad: must support `pure` and `flatMap`.
+/// Requires that `pure` wraps a value and `flatMap` supports Kleisli chaining.
+template <template <typename> typename TypeConstructor, typename T>
+concept Monad = requires(TypeConstructor<std::decay_t<T>> c, T t) {
+    {
+        pure<TypeConstructor>(t)
+    } -> std::same_as<TypeConstructor<std::decay_t<T>>>;
+    {
+        c.flatMap([](T&& x) { return pure<TypeConstructor>(x); })
+    } -> std::same_as<TypeConstructor<std::decay_t<T>>>;
 };
-
-template <template <typename> typename M, typename F, typename A, typename B>
-concept HasFlatMap = HasUnit<M, A> && requires(M<A> m, F f) {
-    FlatMapUnary<F, M, A, B>;
-    { m.flatMap(f) } -> std::same_as<M<std::decay_t<B>>>;
-};
-
-template <
-  template <typename> typename M, typename F, typename A, typename B = A>
-concept Monad = HasApply<M, A> && HasUnit<M, A> && HasFlatMap<M, F, A, B>;
-
 }  // namespace fp::traits::monad
 
 namespace fp::traits::monad {

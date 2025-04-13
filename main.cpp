@@ -11,20 +11,16 @@ struct Id {
 
     auto toString() const -> std::string { return std::string(box); }
 
-    template <kleisli_arrow<T, Id> F>
+    template <fp_kleisli_arrow<T, Id> F>
     auto flatMap(F&& f) const -> std::invoke_result_t<F, T> {
         return std::forward<F>(f)(box);
     };
 };
-
-template <typename T>
-Id<T> pure(T&& val) {
-    return Id<T>{std::forward<T>(val)};
-}
+static_assert(Monad<Id, int>);
 
 int main() {
     auto stringify = [](int x) -> const Id<std::string> {
-        return pure(std::to_string(x));
+        return pure<Id>(std::to_string(x));
     };
     Id<int> id{42};
     auto result = id.flatMap(stringify);
