@@ -4,26 +4,34 @@
 #include <string>
 
 using namespace fp::traits::monad;
+using namespace fp::syntax;
 
 template <typename T>
 struct Id {
     const T box;
 
-    auto toString() const -> std::string { return std::string(box); }
+    auto toString() const -> std::string {
+        if constexpr (std::is_same_v<T, std::string>) {
+            return box;
+        } else {
+            return std::to_string(box);
+        };
+    }
 
     template <fp_kleisli_arrow<T, Id> F>
-    auto flatMap(F&& f) const -> std::invoke_result_t<F, T> {
+    auto flatMap(F &&f) const -> std::invoke_result_t<F, T> {
         return std::forward<F>(f)(box);
     };
 };
-static_assert(Monad<Id, int>);
 
 int main() {
+    auto addOne = [](int x) -> const Id<int> { return pure<Id>(x + 1); };
     auto stringify = [](int x) -> const Id<std::string> {
         return pure<Id>(std::to_string(x));
     };
-    Id<int> id{42};
-    auto result = id.flatMap(stringify);
-    std::cout << "Result: " << result.toString() << "\n";
+    auto triple = [](int x) -> int { return x * 3; };
+
+    auto monadChain = liftM<Id>(triple) >>= addOne >>= stringify;
+    std::cout << "Result: " << monadChain(52).toString() << "\n";
     return 0;
 }

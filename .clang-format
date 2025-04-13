@@ -1,6 +1,13 @@
 AccessModifierOffset: -2
 AlignAfterOpenBracket: BlockIndent
 AlignArrayOfStructures: Left
+AlignEscapedNewlines: LeftWithLastLine
+AlignOperands: AlignAfterOperator
+BreakBeforeTernaryOperators: true
+BreakBinaryOperations: OnePerLine
+BreakConstructorInitializers: BeforeComma
+BreakInheritanceList: BeforeComma
+BreakBeforeBinaryOperators: NonAssignment
 BasedOnStyle: Google
 ColumnLimit: 80
 ContinuationIndentWidth: 2

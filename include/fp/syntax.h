@@ -23,7 +23,7 @@ constexpr auto operator&=(std::invocable<A> auto f, A a) noexcept(noexcept(f(a))
  * and then `lhs`.
  */
 template <typename F, typename G>
-constexpr auto operator<<=(F&& lhs, G&& rhs) noexcept(
+constexpr auto operator*(F&& lhs, G&& rhs) noexcept(
   noexcept(lhs(rhs(std::declval<int>())))
 ) -> decltype(auto) {
     return [lhs = std::forward<F>(lhs), rhs = std::forward<G>(rhs)](

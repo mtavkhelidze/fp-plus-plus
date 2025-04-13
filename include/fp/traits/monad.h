@@ -8,58 +8,72 @@
 
 #include <type_traits>
 
-#include "guards.h"
+#include "fp/syntax.h"
+#include "fp/traits/guards.h"
 
 using namespace fp::traits::guards;
 
 namespace fp::traits::monad {
 
-template <typename Fn, typename T, template <typename> typename TypeConstructor>
+// Concept that checks if `Fn` can be applied to `T` and returns a value of type
+// `TC<U>`.
+template <typename Fn, typename T, template <typename> typename TC>
 concept fp_kleisli_arrow = requires {
-    requires fp_is_instance_of<
-      TypeConstructor, std::decay_t<std::invoke_result_t<Fn, T>>>;
+    requires fp_is_instance_of<TC, std::decay_t<std::invoke_result_t<Fn, T>>>;
 };
 
 }  // namespace fp::traits::monad
 
 namespace fp::traits::monad {
 
-/// Wraps a raw value into the given monadic type constructor. Requires that
-/// the> is constructible from T.
-template <template <typename> typename TypeConstructor, typename T>
-    requires fp_constructible_from<T, TypeConstructor>
-constexpr auto pure(T&& val) {
-    return TypeConstructor<std::decay_t<T>>{std::forward<T>(val)};
-}
-
-/// Concept representing a lawful Monad: must support `pure` and `flatMap`.
-/// Requires that `pure` wraps a value and `flatMap` supports Kleisli chaining.
-template <template <typename> typename TypeConstructor, typename T>
-concept Monad = requires(TypeConstructor<std::decay_t<T>> c, T t) {
+/// Concept representing a lawful Monad, requiring `pure` and `flatMap` support.
+template <template <typename> typename TC, typename T>
+concept Monad = requires(TC<std::decay_t<T>> c, T t) {
+    { pure<TC>(t) } -> std::same_as<TC<std::decay_t<T>>>;
     {
-        pure<TypeConstructor>(t)
-    } -> std::same_as<TypeConstructor<std::decay_t<T>>>;
-    {
-        c.flatMap([](T&& x) { return pure<TypeConstructor>(x); })
-    } -> std::same_as<TypeConstructor<std::decay_t<T>>>;
+        c.flatMap([](T &&x) { return pure<TC>(x); })
+    } -> std::same_as<TC<std::decay_t<T>>>;
 };
 }  // namespace fp::traits::monad
 
 namespace fp::traits::monad {
 
-/**
- * Kleisli composition operator for composing two functions.
- * This operator composes two Kleisli arrows `f` and `g`, returning a new
- * function.
- */
+// `pure`: Lifts a value into the monadic context (e.g., wraps it in `TC`).
+template <template <typename> typename TC>
+inline constexpr auto pure = []<typename T>(T &&t) noexcept(
+                               noexcept(TC<std::decay_t<T>>{std::forward<T>(t)})
+                             )
+    requires fp_constructible_from<T, TC>
+{ return TC<std::decay_t<T>>{std::forward<T>(t)}; };
+
+// `lift`: Lifts a normal function `f` into the monadic context by applying it
+// and then wrapping the result using `pure`.
+template <template <typename> typename TC, typename F>
+constexpr auto lift(F &&f) {
+    return
+      [f = std::forward<F>(f)](auto &&x) constexpr noexcept(
+        noexcept(pure<TC>(f(std::forward<decltype(x)>(x))))
+      ) -> decltype(auto) { return pure<TC>(f(std::forward<decltype(x)>(x))); };
+};
+
+// `operator>>=`: Kleisli composition operator. This function composes two
+// functions `f` and `g` into one, such that `f` is applied first and `g`
+// is applied to the result of `f`.
 template <typename F, typename G>
-constexpr auto operator>>=(F&& f, G&& g) {
-    return [f = std::forward<F>(f), g = std::forward<G>(g)](
-             auto x
-           ) constexpr noexcept(noexcept(f(x).flatMap(g))) -> decltype(auto) {
-        return f(x).flatMap(g);
-    };
+constexpr auto operator>>=(F &&f, G &&g) {
+    return [f = std::forward<F>(f), g = std::forward<G>(g)]<typename X>(
+             X &&x
+           ) constexpr noexcept(noexcept(f(std::forward<X>(x)).flatMap(g))
+           ) -> decltype(auto) { return f(std::forward<X>(x)).flatMap(g); };
 }
+
+// `liftM`: Lifts a function `f` into the monadic context by composing it with
+// `pure<TC>`, where `TC` is the monadic type constructor.
+template <template <typename> typename TC>
+inline constexpr auto liftM = []<typename F>(F &&f) {
+    using fp::syntax::operator*;
+    return pure<TC> * std::forward<F>(f);
+};
 
 }  // namespace fp::traits::monad
 #endif  // FP_TRAITS_MONAD_H

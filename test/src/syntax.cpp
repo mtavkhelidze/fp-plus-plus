@@ -46,10 +46,10 @@ TEST(Syntax_Operator_Dollar, works_multiple_function_application) {
     EXPECT_EQ(actual, expected);
 }
 
-// <<= like . in Haskell
+// * like . in Haskell
 TEST(Syntax_Operator_Compose, works_with_composition_right_to_left) {
     auto initial = 2;
-    auto f = increment <<= triple;
+    auto f = increment * triple;
     auto actual = f(initial);
     auto expected = 7;
 
@@ -58,7 +58,7 @@ TEST(Syntax_Operator_Compose, works_with_composition_right_to_left) {
 
 TEST(Syntax_Operator_Compose, works_with_multiple_compositions_right_to_left) {
     auto inittial = 2;
-    auto f = increment <<= triple <<= increment;
+    auto f = increment * triple * increment;
     auto actual = 10;
     auto expected = f(inittial);
 
@@ -66,17 +66,17 @@ TEST(Syntax_Operator_Compose, works_with_multiple_compositions_right_to_left) {
 }
 
 TEST(Syntax_Operator_Compose, works_with_identity_function) {
-    auto actual = increment <<= id;
+    auto actual = increment * id;
     EXPECT_EQ(actual(2), increment(2));
 
-    auto actual2 = id <<= triple;
+    auto actual2 = id * triple;
     EXPECT_EQ(actual2(2), triple(2));
 }
 
 TEST(Syntax_Operator_Compose, works_with_different_return_types) {
     auto add_exclamation = [](std::string s) { return s + "!"; };
 
-    auto actual = add_exclamation <<= int_to_string <<= increment;
+    auto actual = add_exclamation * int_to_string * increment;
     EXPECT_EQ(actual(42), "43!");
 }
 
@@ -85,14 +85,14 @@ TEST(Syntax_Operator_Compose, works_with_void_return) {
     auto print = [&](int x) { ss << x; };
     auto double_it = [](int x) { return x * 2; };
 
-    auto composed = print <<= double_it;
+    auto composed = print * double_it;
     composed(5);
 
     EXPECT_EQ(ss.str(), "10");
 }
 
 TEST(Syntax_Operator_Compose, works_with_nested_lambdas) {
-    auto add_then_multiply = make_multiplier(3) <<= increment;
+    auto add_then_multiply = make_multiplier(3) * increment;
 
     EXPECT_EQ(add_then_multiply(2), 9);  // (2 + 1) * 3 = 9
 }
