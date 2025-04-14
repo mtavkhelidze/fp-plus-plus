@@ -33,8 +33,6 @@ TEST(UnaryArgType, extractsArgumentType) {
     );
 }
 
-// -----
-
 template <typename T>
 struct Wrapper {
     explicit Wrapper(T)
@@ -92,7 +90,7 @@ TEST(IsTemplateInstance, works) {
 }
 
 TEST(ExtractTypeConstructor, works) {
-    using namespace fp::guards::extract_type_constructor;
+    using namespace fp::guards::extract_type;
 
     using VInt = std::vector<int>;
     using VFloat = std::vector<float>;
@@ -130,5 +128,22 @@ TEST(UnaryResultType, extractsReturnType) {
     static_assert(
       std::is_same_v<fp_result_t<PlainFunc>, int>,
       "Plain function type should return int"
+    );
+}
+
+TEST(ExtractDependentType, works) {
+    using namespace fp::guards::extract_type;
+
+    using VInt = std::vector<int>;
+    using WithTemplateDouble = WithTemplate<double>;
+
+    static_assert(
+      std::is_same_v<fp_extract_dependent_type_t<VInt>, int>,
+      "Should extract int from std::vector<int>"
+    );
+
+    static_assert(
+      std::is_same_v<fp_extract_dependent_type_t<WithTemplateDouble>, double>,
+      "Should extract double from WithTemplate<double>"
     );
 }

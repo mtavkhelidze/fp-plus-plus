@@ -43,14 +43,9 @@ concept Monad = requires(TC<std::decay_t<T>> c, T t) {
 
 namespace fp::traits::monad {
 
-/**
- *  Lifts a value into the monadic context (e.g., wraps it in `TC`).
- */
 template <template <typename> typename TC>
-inline constexpr auto pure = []<typename T>(T &&t) noexcept(
-                               noexcept(TC<std::decay_t<T>>{std::forward<T>(t)})
-                             )
-    requires fp_is_template_instance_v<TC<T>>
+inline constexpr auto pure = []<typename T>(T &&t)
+    requires(std::is_constructible_v<TC<std::decay_t<T>>, T>)
 { return TC<std::decay_t<T>>{std::forward<T>(t)}; };
 
 /**

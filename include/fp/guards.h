@@ -45,7 +45,9 @@ inline constexpr bool fp_is_template_instance_v =
 
 }  // namespace fp::guards::is_template_instance
 
-namespace fp::guards::extract_type_constructor {
+namespace fp::guards::extract_type {
+
+using namespace fp::guards::is_template_instance;
 /**
  * @brief Extracts the type constructor from a unary template instance.
  *
@@ -54,9 +56,7 @@ namespace fp::guards::extract_type_constructor {
  * @tparam T The type from which to extract the constructor.
  */
 template <
-  typename T,
-  typename = std::enable_if_t<
-    fp::guards::is_template_instance::fp_is_template_instance<T>::value>>
+  typename T, typename = std::enable_if_t<fp_is_template_instance<T>::value>>
 struct fp_extract_type_constructor;
 
 /**
@@ -74,6 +74,25 @@ struct fp_extract_type_constructor<TC<T>> {
 };
 
 /**
+ * @brief Extracts the dependent type from a unary template instance.
+ *
+ * Only enabled if the input type T is an instantiation of a unary template.
+ *
+ * @tparam T The type from which to extract the dependent type.
+ */
+template <
+  typename T, typename = std::enable_if_t<fp_is_template_instance<T>::value>>
+struct fp_extract_dependent_type;
+
+template <template <typename> typename TC, typename T>
+struct fp_extract_dependent_type<TC<T>> {
+    using type = T;
+};
+
+template <typename T>
+using fp_extract_dependent_type_t = typename fp_extract_dependent_type<T>::type;
+
+/**
  * @brief Rebinds a unary type constructor to a different type.
  *
  * Given an instantiation like TC<T>, this extracts TC and applies it to U.
@@ -85,7 +104,7 @@ struct fp_extract_type_constructor<TC<T>> {
 template <typename T, typename U>
 using fp_rebind_type_t =
   typename fp_extract_type_constructor<T>::template type<U>;
-}  // namespace fp::guards::extract_type_constructor
+}  // namespace fp::guards::extract_type
 
 namespace fp::guards::is_nested_instance_of {
 template <
@@ -116,6 +135,20 @@ concept fp_is_nested_instance_of =
 }  // namespace fp::guards::is_nested_instance_of
 
 namespace fp::guards::callable {
+
+/**
+ * @brief Trait to check if TC can be applied to a type T using operator() or is
+ * constructible from T
+ */
+template <typename TC, typename T>
+using fp_has_apply = std::is_constructible<TC, T>;
+
+/**
+ * @brief Convenience variable template for fp_has_apply
+ */
+template <typename TC, typename T>
+inline constexpr bool fp_has_apply_v = fp_has_apply<TC, T>::value;
+
 // Helper to extract argument type from various function types
 template <typename T>
 struct fp_callable_arg;
@@ -238,7 +271,7 @@ namespace fp::guards {
 using namespace fp::guards::callable;
 using namespace fp::guards::is_nested_instance_of;
 using namespace fp::guards::is_template_instance;
-using namespace fp::guards::extract_type_constructor;
+using namespace fp::guards::extract_type;
 }  // namespace fp::guards
 
 #endif  // FP_GUARDS_H
