@@ -22,15 +22,10 @@ inline constexpr auto operator+(const M& lhs, const M& rhs) {
 }
 }  // namespace fp::syntax::semigroup
 
-namespace fp::syntax::monad {
-template <typename F, typename G>
-constexpr auto operator>>=(F&& f, G&& g) {
-    return traits::monad::kleisli_compose(
-      std::forward<F>(f), std::forward<G>(g)
-    );
-}
+namespace fp::syntax::monoid {
+using namespace syntax::semigroup;
+}  // namespace fp::syntax::monoid
 
-}  // namespace fp::syntax::monad
 namespace fp::syntax::composition {
 
 template <typename F, typename G>
@@ -51,8 +46,8 @@ constexpr auto operator>=(A a, auto&& f) {
 
 namespace fp::syntax::all {
 using namespace fp::syntax::composition;
-using namespace fp::syntax::monad;
 using namespace fp::syntax::semigroup;
+using namespace fp::syntax::monoid;
 }  // namespace fp::syntax::all
 
 #endif  // FP_SYNTAX_H

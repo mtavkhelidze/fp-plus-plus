@@ -5,6 +5,8 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_TRAITS_MONOID_H
 
+#include <fp/traits/semigroup.h>
+
 #include <concepts>
 
 namespace fp::traits::monoid {
@@ -12,20 +14,10 @@ namespace fp::traits::monoid {
  * Monoid extends the power of \ref Semigroup by providing an additional empty
  * value.
  */
-template <template <typename> typename M, typename A>
-concept Monoid = requires(M<A> ma, A a, A b) {
-    { ma.empty() } -> std::same_as<A>;
-    { ma.combine(a, b) } -> std::same_as<A>;
+template <typename M>
+concept Monoid = traits::semigroup::Semigroup<M> && requires() {
+    { M::empty() } -> std::same_as<M>;
 };
-
-/**
- * Monoid combine oparator.
- */
-template <template <typename> typename M, typename A>
-    requires Monoid<M, A>
-constexpr auto plus(const M<A>& lhs, const A& rhs) -> A {
-    return M<A>::combine(lhs, rhs);
-}
 
 }  // namespace fp::traits::monoid
 

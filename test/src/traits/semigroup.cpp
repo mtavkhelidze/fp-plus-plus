@@ -12,7 +12,7 @@ struct String {
     std::string s;
 };
 
-auto combine(const String& a, const String& b) -> String {
+inline constexpr auto combine(const String& a, const String& b) -> String {
     return String{a.s + " combine " + b.s};
 }
 }  // namespace str
