@@ -6,3 +6,4 @@ vcpkg_installed/
 stash/
 scratch.cpp
 .cache/
+* copy*

@@ -7,9 +7,9 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_BOX_H
 
-#include <memory>
+#include <fp/defs.h>
 
-#include "defs.h"
+#include <memory>
 
 namespace fp::internal {
 

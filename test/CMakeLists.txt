@@ -7,12 +7,13 @@ target_compile_options(rapidcheck INTERFACE -Wno-deprecated-declarations)
 
 set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
+    # src/traits/monoid.cpp
     src/box/box_construction.cpp
     src/box/box_get.cpp
     src/syntax.cpp
     src/traits/eq.cpp
-    src/traits/monoid.cpp
     src/traits/monad.cpp
+    src/traits/semigroup.cpp
 )
 
 # find_untracked_files("${TEST_SRC}" src "*.cpp")

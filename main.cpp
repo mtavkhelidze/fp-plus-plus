@@ -1,37 +1,20 @@
 #include <fp/fp.h>
 
-#include <iostream>
-#include <string>
+#include <type_traits>
 
-using namespace fp::traits::monad;
-using namespace fp::syntax;
+auto f_lambda = [](std::string x) -> std::string { return x; };
+static_assert(fp_is_unary<decltype(f_lambda)>, "lambda is not callable");
 
-template <typename T>
-struct Id {
-    const T box;
+int f_fn(int /* x */) { return 0; }
+static_assert(fp_is_unary<decltype(f_fn)>, "functon is not callable");
 
-    auto toString() const -> std::string {
-        if constexpr (std::is_same_v<T, std::string>) {
-            return box;
-        } else {
-            return std::to_string(box);
-        };
-    }
-
-    template <fp_kleisli_arrow<T, Id> F>
-    auto flatMap(F &&f) const -> std::invoke_result_t<F, T> {
-        return std::forward<F>(f)(box);
-    };
+struct f_struct {
+    int operator()(int /* x */) { return 0; }
 };
+static_assert(
+  std::is_invocable_r_v<int, f_struct, int>, "Struct is not callable"
+);
 
-int main() {
-    auto addOne = [](int x) -> const Id<int> { return pure<Id>(x + 1); };
-    auto stringify = [](int x) -> const Id<std::string> {
-        return pure<Id>(std::to_string(x));
-    };
-    auto triple = [](int x) -> int { return x * 3; };
-
-    auto monadChain = liftM<Id>(triple) >>= addOne >>= stringify;
-    std::cout << "Result: " << monadChain(52).toString() << "\n";
+int main() {  //
     return 0;
 }

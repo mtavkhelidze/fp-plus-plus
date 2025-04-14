@@ -8,16 +8,23 @@
 #include <concepts>
 
 namespace fp::traits::monoid {
-
-template <typename M>
-concept Monoid = requires(M a, M b) {
-    requires std::same_as<std::decay_t<decltype(M::empty())>, M>;
-    requires std::same_as<std::decay_t<decltype(combine(a, b))>, M>;
+/**
+ * Monoid extends the power of \ref Semigroup by providing an additional empty
+ * value.
+ */
+template <template <typename> typename M, typename A>
+concept Monoid = requires(M<A> ma, A a, A b) {
+    { ma.empty() } -> std::same_as<A>;
+    { ma.combine(a, b) } -> std::same_as<A>;
 };
 
-template <Monoid M>
-constexpr auto operator<=>(const M& lhs, const M& rhs) {
-    return combine(lhs, rhs);
+/**
+ * Monoid combine oparator.
+ */
+template <template <typename> typename M, typename A>
+    requires Monoid<M, A>
+constexpr auto plus(const M<A>& lhs, const A& rhs) -> A {
+    return M<A>::combine(lhs, rhs);
 }
 
 }  // namespace fp::traits::monoid

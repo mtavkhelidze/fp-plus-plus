@@ -6,17 +6,19 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_TRAITS_MONAD_H
 
-#include <type_traits>
+#include <fp/operators.h>
+#include <fp/traits/guards.h>
 
-#include "fp/syntax.h"
-#include "fp/traits/guards.h"
+#include <type_traits>
 
 using namespace fp::traits::guards;
 
 namespace fp::traits::monad {
 
-// Concept that checks if `Fn` can be applied to `T` and returns a value of type
-// `TC<U>`.
+/**
+ * Concept that checks if `Fn` can be applied to `T` and returns a value of type
+ * `TC<U>`.
+ */
 template <typename Fn, typename T, template <typename> typename TC>
 concept fp_kleisli_arrow = requires {
     requires fp_is_instance_of<TC, std::decay_t<std::invoke_result_t<Fn, T>>>;
@@ -26,7 +28,10 @@ concept fp_kleisli_arrow = requires {
 
 namespace fp::traits::monad {
 
-/// Concept representing a lawful Monad, requiring `pure` and `flatMap` support.
+/**
+ * Concept representing a lawful Monad, requiring `pure` and `flatMap`
+ * support.
+ */
 template <template <typename> typename TC, typename T>
 concept Monad = requires(TC<std::decay_t<T>> c, T t) {
     { pure<TC>(t) } -> std::same_as<TC<std::decay_t<T>>>;
@@ -38,7 +43,9 @@ concept Monad = requires(TC<std::decay_t<T>> c, T t) {
 
 namespace fp::traits::monad {
 
-// `pure`: Lifts a value into the monadic context (e.g., wraps it in `TC`).
+/**
+ *  Lifts a value into the monadic context (e.g., wraps it in `TC`).
+ */
 template <template <typename> typename TC>
 inline constexpr auto pure = []<typename T>(T &&t) noexcept(
                                noexcept(TC<std::decay_t<T>>{std::forward<T>(t)})
@@ -46,8 +53,10 @@ inline constexpr auto pure = []<typename T>(T &&t) noexcept(
     requires fp_constructible_from<T, TC>
 { return TC<std::decay_t<T>>{std::forward<T>(t)}; };
 
-// `lift`: Lifts a normal function `f` into the monadic context by applying it
-// and then wrapping the result using `pure`.
+/**
+ * `lift`: Lifts a normal function `f` into the monadic context by applying it
+ * and then wrapping the result using `pure`.
+ */
 template <template <typename> typename TC, typename F>
 constexpr auto lift(F &&f) {
     return
@@ -56,23 +65,24 @@ constexpr auto lift(F &&f) {
       ) -> decltype(auto) { return pure<TC>(f(std::forward<decltype(x)>(x))); };
 };
 
-// `operator>>=`: Kleisli composition operator. This function composes two
-// functions `f` and `g` into one, such that `f` is applied first and `g`
-// is applied to the result of `f`.
+/**
+ * Kleisli composition operator. Composes two Kleisli arrows.
+ */
 template <typename F, typename G>
-constexpr auto operator>>=(F &&f, G &&g) {
+constexpr auto kleisli_compose(F &&f, G &&g) {
     return [f = std::forward<F>(f), g = std::forward<G>(g)]<typename X>(
              X &&x
            ) constexpr noexcept(noexcept(f(std::forward<X>(x)).flatMap(g))
            ) -> decltype(auto) { return f(std::forward<X>(x)).flatMap(g); };
 }
 
-// `liftM`: Lifts a function `f` into the monadic context by composing it with
-// `pure<TC>`, where `TC` is the monadic type constructor.
+/**
+ *  Lifts a function `f` into the monadic context by composing it with
+ * `pure<TC>`, where `TC` is the monadic type constructor.
+ */
 template <template <typename> typename TC>
 inline constexpr auto liftM = []<typename F>(F &&f) {
-    using fp::syntax::operator*;
-    return pure<TC> * std::forward<F>(f);
+    return fp::operators::dot(pure<TC>, std::forward<F>(f));
 };
 
 }  // namespace fp::traits::monad

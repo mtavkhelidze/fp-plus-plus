@@ -4,6 +4,7 @@
 using ::testing::Test;
 
 using namespace fp::traits;
+using namespace fp::syntax::monoid;
 
 namespace str {
 

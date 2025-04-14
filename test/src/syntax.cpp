@@ -7,7 +7,7 @@
 
 using namespace fp;
 using namespace fp::test;
-using namespace fp::syntax;
+using namespace fp::syntax::composition;
 using namespace fp::functions;
 
 // &= like $ in Haskell

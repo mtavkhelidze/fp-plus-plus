@@ -5,15 +5,17 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_TRAITS_TRAITS_H
 
-#include "eq.h"
-#include "guards.h"
-#include "monad.h"
-#include "monoid.h"
+#include <fp/traits/eq.h>
+#include <fp/traits/guards.h>
+#include <fp/traits/monad.h>
+#include <fp/traits/monoid.h>
+#include <fp/traits/semigroup.h>
 
 namespace fp::traits {
 using namespace eq;
+using namespace guards;
 using namespace monad;
 using namespace monoid;
-using namespace guards;
+using namespace semigroup;
 }  // namespace fp::traits
 #endif  // FP_TRAITS_TRAITS_H

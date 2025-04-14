@@ -11,10 +11,12 @@
 // keep defs on top
 #include "box.h"
 #include "functions.h"
+#include "operators.h"
 #include "syntax.h"
 #include "traits/traits.h"
 
 namespace fp {
 using namespace fp::traits;
-}
+using namespace fp::operators;
+}  // namespace fp
 #endif  // FP_FP_H
