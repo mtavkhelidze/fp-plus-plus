@@ -6,12 +6,12 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_TRAITS_MONAD_H
 
+#include <fp/guards.h>
 #include <fp/operators.h>
-#include <fp/traits/guards.h>
 
 #include <type_traits>
 
-using namespace fp::traits::guards;
+using namespace fp::guards;
 
 namespace fp::traits::monad {
 
@@ -21,7 +21,8 @@ namespace fp::traits::monad {
  */
 template <typename Fn, typename T, template <typename> typename TC>
 concept fp_kleisli_arrow = requires {
-    requires fp_is_instance_of<TC, std::decay_t<std::invoke_result_t<Fn, T>>>;
+    requires fp_is_template_instance_v<
+      TC<std::decay_t<std::invoke_result_t<Fn, T>>>>;
 };
 
 }  // namespace fp::traits::monad
@@ -50,7 +51,7 @@ template <template <typename> typename TC>
 inline constexpr auto pure = []<typename T>(T &&t) noexcept(
                                noexcept(TC<std::decay_t<T>>{std::forward<T>(t)})
                              )
-    requires fp_constructible_from<T, TC>
+    requires fp_is_template_instance_v<TC<T>>
 { return TC<std::decay_t<T>>{std::forward<T>(t)}; };
 
 /**

@@ -9,9 +9,9 @@ set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
     src/box/box_construction.cpp
     src/box/box_get.cpp
+    src/guards.cpp
     src/syntax.cpp
     src/traits/eq.cpp
-    src/traits/monad.cpp
     src/traits/monoid.cpp
     src/traits/semigroup.cpp
 )
