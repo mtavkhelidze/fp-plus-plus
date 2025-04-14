@@ -4,7 +4,7 @@
 #include <type_traits>
 
 TEST(UnaryArgType, extractsArgumentType) {
-    using namespace fp::guards::is_unary;
+    using namespace fp::guards::callable;
 
     auto lambda = [](double) { return 1.0; };
     static_assert(
@@ -54,6 +54,7 @@ struct WithTemplate {};
 struct WithoutATemplate {};
 
 TEST(IsNestedInstanceOf, works) {
+    using namespace fp::guards::is_nested_instance_of;
     using Nested = Outer<Inner<int>>;
     using Flat = Outer<int>;
 
@@ -99,5 +100,35 @@ TEST(ExtractTypeConstructor, works) {
     using Extracted = fp_rebind_type_t<VInt, float>;
     static_assert(
       std::is_same_v<Extracted, VFloat>, "Should extract std::vector<_>"
+    );
+}
+
+TEST(UnaryResultType, extractsReturnType) {
+    using namespace fp::guards::callable;
+
+    auto lambda = [](int x) -> double { return x + 0.5; };
+    static_assert(
+      std::is_same_v<fp_result_t<decltype(lambda)>, double>,
+      "Lambda should return double"
+    );
+
+    struct Functor {
+        std::string operator()(bool) const { return "true"; }
+    };
+    static_assert(
+      std::is_same_v<fp_result_t<Functor>, std::string>,
+      "Functor should return std::string"
+    );
+
+    using FuncPtr = char (*)(float);
+    static_assert(
+      std::is_same_v<fp_result_t<FuncPtr>, char>,
+      "Function pointer should return char"
+    );
+
+    using PlainFunc = int(double);
+    static_assert(
+      std::is_same_v<fp_result_t<PlainFunc>, int>,
+      "Plain function type should return int"
     );
 }

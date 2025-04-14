@@ -11,13 +11,12 @@
 
 #include <type_traits>
 
-using namespace fp::guards;
+using namespace fp::guards::is_template_instance;
 
 namespace fp::traits::monad {
-
 /**
- * Concept that checks if `Fn` can be applied to `T` and returns a value of type
- * `TC<U>`.
+ * Concept that checks if `Fn` can be applied to `T` and returns a value of
+ * type `TC<U>`.
  */
 template <typename Fn, typename T, template <typename> typename TC>
 concept fp_kleisli_arrow = requires {

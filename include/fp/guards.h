@@ -115,7 +115,7 @@ concept fp_is_nested_instance_of =
 
 }  // namespace fp::guards::is_nested_instance_of
 
-namespace fp::guards::is_unary {
+namespace fp::guards::callable {
 // Helper to extract argument type from various function types
 template <typename T>
 struct fp_callable_arg;
@@ -208,20 +208,34 @@ template <typename F>
 concept fp_is_unary = _fp_is_unary<F>::value;
 
 /**
- * @brief Deduces the type of the single argument accepted by a unary callable.
+ * @brief Extracts the return type of a unary callable.
  *
- * Supports function pointers, plain function types, and functors/lambdas.
+ * Given a callable type F that takes a single argument, this metafunction
+ * deduces the type of the result of invoking F with its unary argument type.
  *
  * @tparam F The callable type.
  */
 template <typename F>
 using fp_unary_arg_t = typename _fp_unary_arg_selector<F>::type;
 
-}  // namespace fp::guards::is_unary
+template <typename F>
+struct fp_callable_result {
+    using type = decltype(std::declval<F>()(std::declval<fp_unary_arg_t<F>>()));
+};
+
+/**
+ * @brief Alias for the return type of a unary callable.
+ *
+ * Convenience alias for fp_callable_result<F>::type.
+ *
+ * @tparam F The callable type.
+ */
+template <typename F>
+using fp_result_t = typename fp_callable_result<F>::type;
+}  // namespace fp::guards::callable
 
 namespace fp::guards {
-using namespace fp::guards::is_unary;
-
+using namespace fp::guards::callable;
 using namespace fp::guards::is_nested_instance_of;
 using namespace fp::guards::is_template_instance;
 using namespace fp::guards::extract_type_constructor;
