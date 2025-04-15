@@ -8,40 +8,18 @@
 #include <type_traits>
 
 namespace fp::guards::is_template_instance {
-/**
- * @brief Checks whether a type is an instantiation of a unary template.
- *
- * This primary template resolves to std::false_type. Specializations exist for
- * types of the form TC<T>, where TC is a template that takes a single type
- * parameter.
- *
- * @tparam T The type to inspect.
- */
+//
 template <typename T>
-struct fp_is_template_instance : std::false_type {};
-
-/**
- * @brief Specialization that returns true for unary template instantiations.
- *
- * Matches types of the form TC<T> where TC is a unary template and T is any
- * type.
- *
- * @tparam TC The unary template.
- * @tparam T The type parameter applied to TC.
- */
+struct _is_template_instance : std::false_type {};
+//
 template <template <typename> typename TC, typename T>
-struct fp_is_template_instance<TC<T>> : std::true_type {};
-
+struct _is_template_instance<TC<T>> : std::true_type {};
 /**
- * @brief Convenience variable template for fp_is_template_instance.
- *
- * Resolves to true if the type is an instantiation of a unary template.
- *
- * @tparam T The type to inspect.
+ * @brief Checks if TC is template constructor.
  */
-template <typename T>
-inline constexpr bool fp_is_template_instance_v =
-  fp_is_template_instance<T>::value;
+template <typename TC>
+inline constexpr bool fp_is_template_instance =
+  _is_template_instance<TC>::value;
 
 }  // namespace fp::guards::is_template_instance
 
@@ -55,8 +33,7 @@ using namespace fp::guards::is_template_instance;
  *
  * @tparam T The type from which to extract the constructor.
  */
-template <
-  typename T, typename = std::enable_if_t<fp_is_template_instance<T>::value>>
+template <typename T, typename = std::enable_if_t<fp_is_template_instance<T>>>
 struct fp_extract_type_constructor;
 
 /**
@@ -80,8 +57,7 @@ struct fp_extract_type_constructor<TC<T>> {
  *
  * @tparam T The type from which to extract the dependent type.
  */
-template <
-  typename T, typename = std::enable_if_t<fp_is_template_instance<T>::value>>
+template <typename T, typename = std::enable_if_t<fp_is_template_instance<T>>>
 struct fp_extract_dependent_type;
 
 template <template <typename> typename TC, typename T>
@@ -264,7 +240,19 @@ struct fp_callable_result {
  * @tparam F The callable type.
  */
 template <typename F>
-using fp_result_t = typename fp_callable_result<F>::type;
+using fp_callable_result_t = typename fp_callable_result<F>::type;
+
+template <typename F, typename Arg, typename = void>
+struct fp_is_callable_with : std::false_type {};
+
+template <typename F, typename Arg>
+struct fp_is_callable_with<
+  F, Arg, std::void_t<decltype(std::declval<F>()(std::declval<Arg>()))>>
+    : std::true_type {};
+
+template <typename F, typename Arg>
+inline constexpr bool fp_is_callable_with_v =
+  fp_is_callable_with<F, Arg>::value;
 }  // namespace fp::guards::callable
 
 namespace fp::guards {

@@ -70,21 +70,21 @@ TEST(IsTemplateInstance, works) {
     using namespace fp::guards::is_template_instance;
 
     static_assert(
-      fp_is_template_instance_v<std::vector<int>>,
+      fp_is_template_instance<std::vector<int>>,
       "std::vector<int> should be detected as a template instance"
     );
     static_assert(
-      !fp_is_template_instance_v<int>,
+      !fp_is_template_instance<int>,
       "int should not be detected as a template instance"
     );
 
     static_assert(
-      fp_is_template_instance_v<WithTemplate<double>>,
+      fp_is_template_instance<WithTemplate<double>>,
       "WithTemplate<double> should be detected as a template instance"
     );
 
     static_assert(
-      !fp_is_template_instance_v<WithoutATemplate>,
+      !fp_is_template_instance<WithoutATemplate>,
       "Plain struct should not be detected as a template instance"
     );
 }
@@ -106,7 +106,7 @@ TEST(UnaryResultType, extractsReturnType) {
 
     auto lambda = [](int x) -> double { return x + 0.5; };
     static_assert(
-      std::is_same_v<fp_result_t<decltype(lambda)>, double>,
+      std::is_same_v<fp_callable_result_t<decltype(lambda)>, double>,
       "Lambda should return double"
     );
 
@@ -114,19 +114,19 @@ TEST(UnaryResultType, extractsReturnType) {
         std::string operator()(bool) const { return "true"; }
     };
     static_assert(
-      std::is_same_v<fp_result_t<Functor>, std::string>,
+      std::is_same_v<fp_callable_result_t<Functor>, std::string>,
       "Functor should return std::string"
     );
 
     using FuncPtr = char (*)(float);
     static_assert(
-      std::is_same_v<fp_result_t<FuncPtr>, char>,
+      std::is_same_v<fp_callable_result_t<FuncPtr>, char>,
       "Function pointer should return char"
     );
 
     using PlainFunc = int(double);
     static_assert(
-      std::is_same_v<fp_result_t<PlainFunc>, int>,
+      std::is_same_v<fp_callable_result_t<PlainFunc>, int>,
       "Plain function type should return int"
     );
 }
