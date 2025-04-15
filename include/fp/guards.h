@@ -440,6 +440,7 @@ using namespace fp::guards::extract_type_constructor;
 using namespace fp::guards::is_nested_instance_of;
 using namespace fp::guards::extract_dependent_type;
 using namespace fp::guards::make_pair_type;
+using namespace fp::guards::is_arrow_function;
 }  // namespace fp::guards
 
 #endif  // FP_GUARDS_H
