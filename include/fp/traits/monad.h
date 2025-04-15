@@ -6,12 +6,12 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_TRAITS_MONAD_H
 
-#include <fp/guards.h>
+#include <fp/meta.h>
 #include <fp/operators.h>
 
 #include <type_traits>
 
-using namespace fp::guards::is_type_class_instance;
+using namespace fp::meta::is_type_class_instance;
 
 namespace fp::traits::monad {
 /**

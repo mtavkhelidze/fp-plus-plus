@@ -1,6 +1,6 @@
 #include <fp/fp.h>
 // using namespace fp::guards::callable;
-using namespace fp::guards::is_type_class_instance;
+using namespace fp::meta::is_type_class_instance;
 
 template <template <typename> typename TC>
 inline constexpr auto pure = []<typename T>(T&& t) noexcept(

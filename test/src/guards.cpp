@@ -4,7 +4,7 @@
 #include <type_traits>
 
 TEST(UnaryArgType, extractsArgumentType) {
-    using namespace fp::guards::callable;
+    using namespace fp::meta::callable;
 
     auto lambda = [](double) { return 1.0; };
     static_assert(
@@ -52,7 +52,7 @@ struct WithTemplate {};
 struct WithoutATemplate {};
 
 TEST(IsNestedInstanceOf, works) {
-    using namespace fp::guards::is_nested_instance_of;
+    using namespace fp::meta::is_nested_instance_of;
     using Nested = Outer<Inner<int>>;
     using Flat = Outer<int>;
 
@@ -67,7 +67,7 @@ TEST(IsNestedInstanceOf, works) {
 }
 
 TEST(IsTemplateInstance, works) {
-    using namespace fp::guards::is_type_class_instance;
+    using namespace fp::meta::is_type_class_instance;
 
     static_assert(
       fp_is_template_instance<std::vector<int>>,
@@ -90,7 +90,7 @@ TEST(IsTemplateInstance, works) {
 }
 
 TEST(ExtractTypeConstructor, works) {
-    using namespace fp::guards::extract_type;
+    using namespace fp::meta::extract_type;
 
     using VInt = std::vector<int>;
     using VFloat = std::vector<float>;
@@ -102,7 +102,7 @@ TEST(ExtractTypeConstructor, works) {
 }
 
 TEST(UnaryResultType, extractsReturnType) {
-    using namespace fp::guards::callable;
+    using namespace fp::meta::callable;
 
     auto lambda = [](int x) -> double { return x + 0.5; };
     static_assert(
@@ -132,7 +132,7 @@ TEST(UnaryResultType, extractsReturnType) {
 }
 
 TEST(ExtractDependentType, works) {
-    using namespace fp::guards::is_type_class_instance;
+    using namespace fp::meta::is_type_class_instance;
 
     using VInt = std::vector<int>;
     using WithTemplateDouble = WithTemplate<double>;

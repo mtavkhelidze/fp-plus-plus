@@ -8,7 +8,7 @@
 
 #include <type_traits>
 
-namespace fp::guards::is_type_class_unary_constructor {
+namespace fp::meta::is_type_class_unary_constructor {
 
 template <template <typename> typename TC>
 concept __type_constructible_with = requires { typename TC<void>; };
@@ -30,9 +30,9 @@ template <template <typename> typename TC>
 inline constexpr bool fp_is_type_class_unary_constructor =
   __type_constructible_with<TC>;
 
-}  // namespace fp::guards::is_type_class_unary_constructor
+}  // namespace fp::meta::is_type_class_unary_constructor
 
-namespace fp::guards::is_type_class_instance {
+namespace fp::meta::is_type_class_instance {
 
 template <typename>
 struct __is_type_class_instance : std::false_type {};
@@ -57,9 +57,9 @@ inline constexpr bool fp_is_type_class_instance =
 // Optional concept: checks whether type constructor extraction is possible
 template <typename T>
 concept fp_has_type_class_constructor = fp_is_type_class_instance<T>;
-}  // namespace fp::guards::is_type_class_instance
+}  // namespace fp::meta::is_type_class_instance
 
-namespace fp::guards::type_constructor_arity {
+namespace fp::meta::type_constructor_arity {
 
 template <typename T>
 struct __type_constructor_arity {
@@ -82,11 +82,11 @@ template <typename T>
 inline constexpr std::size_t fp_type_constructor_arity =
   __type_constructor_arity<T>::value;
 
-}  // namespace fp::guards::type_constructor_arity
+}  // namespace fp::meta::type_constructor_arity
 
-namespace fp::guards::extract_type_constructor {
+namespace fp::meta::extract_type_constructor {
 
-using namespace fp::guards::type_constructor_arity;
+using namespace fp::meta::type_constructor_arity;
 
 template <typename T>
 struct __extract_type_constructor {
@@ -142,9 +142,9 @@ using fp_extract_type_constructor_unary = std::enable_if_t<
 template <typename T>
 using fp_extract_type_constructor_binary = std::enable_if_t<
   fp_type_constructor_arity<T> == 2, fp_extract_type_constructor<T>>;
-}  // namespace fp::guards::extract_type_constructor
+}  // namespace fp::meta::extract_type_constructor
 
-namespace fp::guards::is_nested_instance_of {
+namespace fp::meta::is_nested_instance_of {
 
 template <
   template <typename> typename Outer, template <typename> typename Inner,
@@ -173,9 +173,9 @@ template <
 concept fp_is_nested_instance_of =
   __is_nested_instance_of<Outer, Inner, T>::value;
 
-}  // namespace fp::guards::is_nested_instance_of
+}  // namespace fp::meta::is_nested_instance_of
 
-namespace fp::guards::callable {
+namespace fp::meta::callable {
 
 // template <typename F>
 // struct fp_callable_result {
@@ -205,12 +205,12 @@ namespace fp::guards::callable {
 // inline constexpr bool fp_is_callable_with_v =
 //   fp_is_callable_with<F, Arg>::value;
 
-}  // namespace fp::guards::callable
+}  // namespace fp::meta::callable
 
-namespace fp::guards::extract_dependent_type {
+namespace fp::meta::extract_dependent_type {
 
-using namespace fp::guards::type_constructor_arity;
-using namespace fp::guards::is_type_class_instance;
+using namespace fp::meta::type_constructor_arity;
+using namespace fp::meta::is_type_class_instance;
 
 template <typename T>
 struct __extract_dependent_type {
@@ -259,12 +259,12 @@ struct __extract_dependent_type<TC<T>> {
 template <typename T>
 using fp_extract_dependent_type = typename __extract_dependent_type<T>::type;
 
-}  // namespace fp::guards::extract_dependent_type
+}  // namespace fp::meta::extract_dependent_type
 
-namespace fp::guards::make_pair_type {
+namespace fp::meta::make_pair_type {
 
-using namespace fp::guards::is_type_class_instance;
-using namespace fp::guards::type_constructor_arity;
+using namespace fp::meta::is_type_class_instance;
+using namespace fp::meta::type_constructor_arity;
 
 template <typename T>
 struct __make_tuple_type {
@@ -307,9 +307,9 @@ template <typename T>
 using fp_make_tuple_type = std::pair<
   typename __make_tuple_type<T>::first, typename __make_tuple_type<T>::second>;
 
-}  // namespace fp::guards::make_pair_type
+}  // namespace fp::meta::make_pair_type
 
-namespace fp::guards::is_arrow_function {
+namespace fp::meta::is_arrow_function {
 
 // various function types
 template <typename T>
@@ -430,13 +430,13 @@ template <typename F>
 using fp_arrow_function_return_type =
   std::enable_if_t<fp_is_arrow_function<F>, __arrow_ret<F>>;
 
-}  // namespace fp::guards::is_arrow_function
+}  // namespace fp::meta::is_arrow_function
 
-namespace fp::guards::is_kleisli_arrow {
-using namespace fp::guards::is_arrow_function;
-using namespace fp::guards::is_type_class_instance;
-using namespace fp::guards::extract_type_constructor;
-using namespace fp::guards::extract_dependent_type;
+namespace fp::meta::is_kleisli_arrow {
+using namespace fp::meta::is_arrow_function;
+using namespace fp::meta::is_type_class_instance;
+using namespace fp::meta::extract_type_constructor;
+using namespace fp::meta::extract_dependent_type;
 
 template <typename F>
 concept fp_is_kleisli_arrow =
@@ -450,18 +450,18 @@ using fp_kleisli_monad_type_constructor =
 template <typename F>
 using fp_kleisli_result_type =
   fp_extract_dependent_type<fp_arrow_function_return_type<F>>;
-}  // namespace fp::guards::is_kleisli_arrow
+}  // namespace fp::meta::is_kleisli_arrow
 
-namespace fp::guards {
-using namespace fp::guards::is_type_class_unary_constructor;
-using namespace fp::guards::is_type_class_instance;
-using namespace fp::guards::type_constructor_arity;
-using namespace fp::guards::extract_type_constructor;
-using namespace fp::guards::is_nested_instance_of;
-using namespace fp::guards::extract_dependent_type;
-using namespace fp::guards::make_pair_type;
-using namespace fp::guards::is_arrow_function;
-using namespace fp::guards::is_kleisli_arrow;
-}  // namespace fp::guards
+namespace fp::meta {
+using namespace fp::meta::is_type_class_unary_constructor;
+using namespace fp::meta::is_type_class_instance;
+using namespace fp::meta::type_constructor_arity;
+using namespace fp::meta::extract_type_constructor;
+using namespace fp::meta::is_nested_instance_of;
+using namespace fp::meta::extract_dependent_type;
+using namespace fp::meta::make_pair_type;
+using namespace fp::meta::is_arrow_function;
+using namespace fp::meta::is_kleisli_arrow;
+}  // namespace fp::meta
 
 #endif  // FP_GUARDS_H
