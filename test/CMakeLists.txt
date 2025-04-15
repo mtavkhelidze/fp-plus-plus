@@ -7,9 +7,9 @@ target_compile_options(rapidcheck INTERFACE -Wno-deprecated-declarations)
 
 set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
-    src/box/box_construction.cpp
-    src/box/box_get.cpp
     # src/guards.cpp
+    src/__internal/box/box_construction.cpp
+    src/__internal/box/box_get.cpp
     src/syntax.cpp
     src/traits/eq.cpp
     src/traits/monoid.cpp
@@ -21,7 +21,10 @@ set(TEST_SRC
 add_executable(${PROJECT_NAME}_test ${TEST_SRC})
 target_include_directories(${PROJECT_NAME}_test PRIVATE include)
 
-target_compile_definitions(${PROJECT_NAME}_test PRIVATE __FP_PP_TESTING)
+target_compile_definitions(${PROJECT_NAME}_test PRIVATE FP_PLUS_PLUS_TESTING)
+target_compile_definitions(
+    ${PROJECT_NAME}_test PRIVATE FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
+)
 target_link_libraries(${PROJECT_NAME}_test PRIVATE ${TEST_LIB})
 
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME}_test)

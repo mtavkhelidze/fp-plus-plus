@@ -2,7 +2,6 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-using ::testing::_;
 using ::testing::Test;
 
 using namespace fp::traits::eq;
@@ -13,7 +12,7 @@ struct Char {
     char c;
 };
 
-inline auto equals(const Char& a, const Char& b) -> bool { return a.c == b.c; }
+auto equals(const Char& a, const Char& b) -> bool { return a.c == b.c; }
 
 };  // namespace eq_char
 

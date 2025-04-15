@@ -1,4 +1,4 @@
-#include <fp/fp.h>
+#include <fp/__internal/box.h>
 #include <gtest/gtest.h>
 
 #include <array>

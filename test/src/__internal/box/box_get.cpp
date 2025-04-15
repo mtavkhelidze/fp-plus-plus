@@ -1,6 +1,5 @@
+#include <fp/__internal/box.h>
 #include <gtest/gtest.h>
-
-#include "fp/fp.h"
 
 using namespace fp;
 using namespace fp::internal;

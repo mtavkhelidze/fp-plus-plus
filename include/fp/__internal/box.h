@@ -1,15 +1,14 @@
-#include <iostream>
-#include <vector>
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
-#ifndef FP_BOX_H
+#ifndef FP___INTERNAL_BOX_H
 // NOLINTNEXTLINE:llvm-header-guard
-#define FP_BOX_H
+#define FP___INTERNAL_BOX_H
 
 #include <fp/defs.h>
 
 #include <memory>
+#include <vector>
 
 namespace fp::internal {
 
@@ -84,4 +83,4 @@ Box() -> Box<Nothing>;
 Box(std::nullptr_t) -> Box<Nothing>;
 }  // namespace fp::internal
 
-#endif  // FP_BOX_H
+#endif  // FP___INTERNAL_BOX_H
