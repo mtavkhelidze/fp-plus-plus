@@ -416,21 +416,41 @@ struct __fp_is_arrow_function<
        __arrow_ret<F>>> : std::true_type {};
 
 /**
- * @brief Checks whether a type F is a unary function, pointer, or lambda
- *        with exactly one argument.
+ * Checks whether a type F is a unary function, pointer, or lambda with exactly
+ * one argument.
  */
 template <typename F>
 concept fp_is_arrow_function = __fp_is_arrow_function<F>::value;
 
 template <typename F>
-using fp_is_arrow_function_argument_type =
+using fp_arrow_function_argument_type =
   std::enable_if_t<fp_is_arrow_function<F>, __arrow_arg<F>>;
 
 template <typename F>
-using fp_is_arrow_function_return_type =
+using fp_arrow_function_return_type =
   std::enable_if_t<fp_is_arrow_function<F>, __arrow_ret<F>>;
 
 }  // namespace fp::guards::is_arrow_function
+
+namespace fp::guards::is_kleisli_arrow {
+using namespace fp::guards::is_arrow_function;
+using namespace fp::guards::is_type_class_instance;
+using namespace fp::guards::extract_type_constructor;
+using namespace fp::guards::extract_dependent_type;
+
+template <typename F>
+concept fp_is_kleisli_arrow =
+  fp_is_arrow_function<F>
+  && fp_is_type_class_instance<fp_arrow_function_return_type<F>>;
+
+template <typename F>
+using fp_kleisli_monad_type_constructor =
+  fp_extract_type_constructor<fp_arrow_function_return_type<F>>;
+
+template <typename F>
+using fp_kleisli_result_type =
+  fp_extract_dependent_type<fp_arrow_function_return_type<F>>;
+}  // namespace fp::guards::is_kleisli_arrow
 
 namespace fp::guards {
 using namespace fp::guards::is_type_class_unary_constructor;
@@ -441,6 +461,7 @@ using namespace fp::guards::is_nested_instance_of;
 using namespace fp::guards::extract_dependent_type;
 using namespace fp::guards::make_pair_type;
 using namespace fp::guards::is_arrow_function;
+using namespace fp::guards::is_kleisli_arrow;
 }  // namespace fp::guards
 
 #endif  // FP_GUARDS_H
