@@ -177,125 +177,6 @@ concept fp_is_nested_instance_of =
 
 namespace fp::guards::callable {
 
-// /**
-//  * @brief Trait to check if TC can be applied to a type T using operator() or
-//  is
-//  * constructible from T
-//  */
-// template <typename TC, typename T>
-// using fp_has_apply = std::is_constructible<TC, T>;
-
-// /**
-//  * @brief Convenience variable template for fp_has_apply
-//  */
-// template <typename TC, typename T>
-// inline constexpr bool fp_has_apply_v = fp_has_apply<TC, T>::value;
-
-// // Helper to extract argument type from various function types
-// template <typename T>
-// struct fp_callable_arg;
-
-// // Function pointer
-// template <typename Ret, typename Arg>
-// struct fp_callable_arg<Ret (*)(Arg)> {
-//     using type = Arg;
-// };
-// // Plain function type
-// template <typename Ret, typename Arg>
-// struct fp_callable_arg<Ret(Arg)> {
-//     using type = Arg;
-// };
-
-// // Lambda or functor
-// template <typename C, typename Ret, typename Arg>
-// struct fp_callable_arg<Ret (C::*)(Arg) const> {
-//     using type = Arg;
-// };
-
-// // Lambda or functor - mutable
-// template <typename C, typename Ret, typename Arg>
-// struct fp_callable_arg<Ret (C::*)(Arg)> {
-//     using type = Arg;
-// };
-
-// // Lambda or functor - const &
-// template <typename C, typename Ret, typename Arg>
-// struct fp_callable_arg<Ret (C::*)(Arg) const &> {
-//     using type = Arg;
-// };
-
-// // Lambda or functor - mutable &
-// template <typename C, typename Ret, typename Arg>
-// struct fp_callable_arg<Ret (C::*)(Arg) &> {
-//     using type = Arg;
-// };
-
-// // Lambda or functor - const &&
-// template <typename C, typename Ret, typename Arg>
-// struct fp_callable_arg<Ret (C::*)(Arg) const &&> {
-//     using type = Arg;
-// };
-
-// // Lambda or functor - mutable &&
-// template <typename C, typename Ret, typename Arg>
-// struct fp_callable_arg<Ret (C::*)(Arg) &&> {
-//     using type = Arg;
-// };
-
-// template <typename F>
-// struct _fp_unary_arg_selector {
-//     using type = typename fp_callable_arg<decltype(&F::operator())>::type;
-// };
-
-// template <typename Ret, typename Arg>
-// struct _fp_unary_arg_selector<Ret(Arg)> {
-//     using type = typename fp_callable_arg<Ret(Arg)>::type;
-// };
-
-// template <typename Ret, typename Arg>
-// struct _fp_unary_arg_selector<Ret (*)(Arg)> {
-//     using type = typename fp_callable_arg<Ret (*)(Arg)>::type;
-// };
-
-// template <typename F>
-// struct _fp_is_unary {
-//   private:
-//     template <typename U>
-//     static auto test(int)
-//       ->
-//       decltype(std::declval<U>()(std::declval<_fp_unary_arg_selector<U>::type>()),
-//       std::true_type{});
-
-//     template <typename>
-//     static std::false_type test(...);
-
-//   public:
-//     static constexpr bool value = decltype(test<F>(0))::value;
-// };
-
-// /**
-//  * @brief Concept that checks whether a callable takes exactly one argument.
-//  *
-//  * Supports function pointers, plain function types, lambdas, and functors
-//  * with
-//  * a unary operator().
-//  *
-//  * @tparam F The callable type to check.
-//  */
-// template <typename F>
-// concept fp_is_unary = _fp_is_unary<F>::value;
-
-// /**
-//  * @brief Extracts the return type of a unary callable.
-//  *
-//  * Given a callable type F that takes a single argument, this metafunction
-//  * deduces the type of the result of invoking F with its unary argument type.
-//  *
-//  * @tparam F The callable type.
-//  */
-// template <typename F>
-// using fp_unary_arg_t = typename _fp_unary_arg_selector<F>::type;
-
 // template <typename F>
 // struct fp_callable_result {
 //     using type =
@@ -323,6 +204,7 @@ namespace fp::guards::callable {
 // template <typename F, typename Arg>
 // inline constexpr bool fp_is_callable_with_v =
 //   fp_is_callable_with<F, Arg>::value;
+
 }  // namespace fp::guards::callable
 
 namespace fp::guards::extract_dependent_type {
@@ -379,7 +261,7 @@ using fp_extract_dependent_type = typename __extract_dependent_type<T>::type;
 
 }  // namespace fp::guards::extract_dependent_type
 
-namespace fp::guards::make_tuple_type {
+namespace fp::guards::make_pair_type {
 
 using namespace fp::guards::is_type_class_instance;
 using namespace fp::guards::type_constructor_arity;
@@ -425,7 +307,130 @@ template <typename T>
 using fp_make_tuple_type = std::pair<
   typename __make_tuple_type<T>::first, typename __make_tuple_type<T>::second>;
 
-}  // namespace fp::guards::make_tuple_type
+}  // namespace fp::guards::make_pair_type
+
+namespace fp::guards::is_arrow_function {
+
+// various function types
+template <typename T>
+struct __arrow_function {
+    static_assert(
+      sizeof(T) != sizeof(T),
+      "fp::guards::is_arrow_function::__arrow_function<T>: Unsupported "
+      "function type. Only single-argument functions, function pointers, or "
+      "lambdas are allowed."
+    );
+};
+
+// Function pointer
+template <typename R, typename A>
+struct __arrow_function<R (*)(A)> {
+    using a = A;
+    using b = R;
+    static constexpr std::size_t arity = 1;
+};
+
+template <typename R, typename A>
+struct __arrow_function<R(A)> {
+    using a = A;
+    using b = R;
+    static constexpr std::size_t arity = 1;
+};
+
+// Member function pointers (lambdas, functors)
+template <typename R, typename A, typename M>
+struct __arrow_function<R (M::*)(A)> {
+    using a = A;
+    using b = R;
+    static constexpr std::size_t arity = 1;
+};
+
+template <typename R, typename A, typename M>
+struct __arrow_function<R (M::*)(A) const> {
+    using a = A;
+    using b = R;
+    static constexpr std::size_t arity = 1;
+};
+
+template <typename R, typename A, typename M>
+struct __arrow_function<R (M::*)(A) &> {
+    using a = A;
+    using b = R;
+    static constexpr std::size_t arity = 1;
+};
+
+template <typename R, typename A, typename M>
+struct __arrow_function<R (M::*)(A) const &> {
+    using a = A;
+    using b = R;
+    static constexpr std::size_t arity = 1;
+};
+
+template <typename R, typename A, typename M>
+struct __arrow_function<R (M::*)(A) &&> {
+    using a = A;
+    using b = R;
+    static constexpr std::size_t arity = 1;
+};
+
+template <typename R, typename A, typename M>
+struct __arrow_function<R (M::*)(A) const &&> {
+    using a = A;
+    using b = R;
+    static constexpr std::size_t arity = 1;
+};
+
+template <typename F>
+struct __arrow_traits : __arrow_function<decltype(&F::operator())> {};
+
+// Specializations for plain function and function pointers
+template <typename R, typename A>
+struct __arrow_traits<R(A)> : __arrow_function<R(A)> {};
+
+template <typename R, typename A>
+struct __arrow_traits<R (*)(A)> : __arrow_function<R (*)(A)> {};
+
+template <typename F>
+using __arrow_arg = typename __arrow_traits<F>::a;
+
+template <typename F>
+using __arrow_ret = typename __arrow_traits<F>::b;
+
+template <typename F>
+constexpr std::size_t __arrow_arity = __arrow_traits<F>::arity;
+
+// SFINAE fallback
+template <typename F, typename = void>
+struct __fp_is_arrow_function : std::false_type {
+    static_assert(
+      sizeof(F) != sizeof(F),
+      "is_arrow_function: F does not appear to be a unary  function, pointer, "
+      "or lambda with exactly one argument."
+    );
+};
+
+template <typename F>
+struct __fp_is_arrow_function<
+  F, std::void_t<
+       decltype(std::declval<F>()(std::declval<__arrow_arg<F>>())),
+       __arrow_ret<F>>> : std::true_type {};
+
+/**
+ * @brief Checks whether a type F is a unary function, pointer, or lambda
+ *        with exactly one argument.
+ */
+template <typename F>
+concept fp_is_arrow_function = __fp_is_arrow_function<F>::value;
+
+template <typename F>
+using fp_is_arrow_function_argument_type =
+  std::enable_if_t<fp_is_arrow_function<F>, __arrow_arg<F>>;
+
+template <typename F>
+using fp_is_arrow_function_return_type =
+  std::enable_if_t<fp_is_arrow_function<F>, __arrow_ret<F>>;
+
+}  // namespace fp::guards::is_arrow_function
 
 namespace fp::guards {
 using namespace fp::guards::is_type_class_unary_constructor;
@@ -434,7 +439,7 @@ using namespace fp::guards::type_constructor_arity;
 using namespace fp::guards::extract_type_constructor;
 using namespace fp::guards::is_nested_instance_of;
 using namespace fp::guards::extract_dependent_type;
-using namespace fp::guards::make_tuple_type;
+using namespace fp::guards::make_pair_type;
 }  // namespace fp::guards
 
 #endif  // FP_GUARDS_H
