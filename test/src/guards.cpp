@@ -67,7 +67,7 @@ TEST(IsNestedInstanceOf, works) {
 }
 
 TEST(IsTemplateInstance, works) {
-    using namespace fp::guards::is_template_instance;
+    using namespace fp::guards::is_type_class_instance;
 
     static_assert(
       fp_is_template_instance<std::vector<int>>,
@@ -132,7 +132,7 @@ TEST(UnaryResultType, extractsReturnType) {
 }
 
 TEST(ExtractDependentType, works) {
-    using namespace fp::guards::extract_type;
+    using namespace fp::guards::is_type_class_instance;
 
     using VInt = std::vector<int>;
     using WithTemplateDouble = WithTemplate<double>;

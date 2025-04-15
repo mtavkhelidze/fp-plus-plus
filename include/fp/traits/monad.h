@@ -11,7 +11,7 @@
 
 #include <type_traits>
 
-using namespace fp::guards::is_template_instance;
+using namespace fp::guards::is_type_class_instance;
 
 namespace fp::traits::monad {
 /**
@@ -20,7 +20,7 @@ namespace fp::traits::monad {
  */
 template <typename Fn, typename T, template <typename> typename TC>
 concept fp_kleisli_arrow = requires {
-    requires fp_is_template_instance<
+    requires fp_is_type_class_instance<
       TC<std::decay_t<std::invoke_result_t<Fn, T>>>>;
 };
 

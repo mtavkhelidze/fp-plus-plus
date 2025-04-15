@@ -1,13 +1,12 @@
 #include <fp/fp.h>
-using namespace fp::guards::callable;
-using namespace fp::guards::extract_type;
-using namespace fp::guards::is_template_instance;
+// using namespace fp::guards::callable;
+using namespace fp::guards::is_type_class_instance;
 
 template <template <typename> typename TC>
 inline constexpr auto pure = []<typename T>(T&& t) noexcept(
                                noexcept(TC<std::decay_t<T>>{std::forward<T>(t)})
                              )
-    requires fp_is_template_instance<TC<T>> && fp_has_apply_v<TC<T>, T>
+    requires fp_is_type_class_instance<TC<T>>
 { return TC<std::decay_t<T>>{std::forward<T>(t)}; };
 
 // template <typename M>
