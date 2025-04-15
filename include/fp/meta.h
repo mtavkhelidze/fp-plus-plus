@@ -2,9 +2,9 @@
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp::fp.h>
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
-#ifndef FP_GUARDS_H
+#ifndef FP_META_H
 // NOLINTNEXTLINE:llvm-header-guard
-#define FP_GUARDS_H
+#define FP_META_H
 
 #include <type_traits>
 
@@ -175,38 +175,6 @@ concept fp_is_nested_instance_of =
 
 }  // namespace fp::meta::is_nested_instance_of
 
-namespace fp::meta::callable {
-
-// template <typename F>
-// struct fp_callable_result {
-//     using type =
-//     decltype(std::declval<F>()(std::declval<fp_unary_arg_t<F>>()));
-// };
-
-// /**
-//  * @brief Alias for the return type of a unary callable.
-//  *
-//  * Convenience alias for fp_callable_result<F>::type.
-//  *
-//  * @tparam F The callable type.
-//  */
-// template <typename F>
-// using fp_callable_result_t = typename fp_callable_result<F>::type;
-
-// template <typename F, typename Arg, typename = void>
-// struct fp_is_callable_with : std::false_type {};
-
-// template <typename F, typename Arg>
-// struct fp_is_callable_with<
-//   F, Arg, std::void_t<decltype(std::declval<F>()(std::declval<Arg>()))>>
-//     : std::true_type {};
-
-// template <typename F, typename Arg>
-// inline constexpr bool fp_is_callable_with_v =
-//   fp_is_callable_with<F, Arg>::value;
-
-}  // namespace fp::meta::callable
-
 namespace fp::meta::extract_dependent_type {
 
 using namespace fp::meta::type_constructor_arity;
@@ -309,14 +277,14 @@ using fp_make_tuple_type = std::pair<
 
 }  // namespace fp::meta::make_pair_type
 
-namespace fp::meta::is_arrow_function {
+namespace fp::meta::arrow_function {
 
 // various function types
 template <typename T>
 struct __arrow_function {
     static_assert(
       sizeof(T) != sizeof(T),
-      "fp::guards::is_arrow_function::__arrow_function<T>: Unsupported "
+      "pf_is_arrow_function::__arrow_function<T>: Unsupported "
       "function type. Only single-argument functions, function pointers, or "
       "lambdas are allowed."
     );
@@ -404,7 +372,7 @@ template <typename F, typename = void>
 struct __fp_is_arrow_function : std::false_type {
     static_assert(
       sizeof(F) != sizeof(F),
-      "is_arrow_function: F does not appear to be a unary  function, pointer, "
+      "arrow_function: F does not appear to be a unary  function, pointer, "
       "or lambda with exactly one argument."
     );
 };
@@ -430,10 +398,11 @@ template <typename F>
 using fp_arrow_function_return_type =
   std::enable_if_t<fp_is_arrow_function<F>, __arrow_ret<F>>;
 
-}  // namespace fp::meta::is_arrow_function
+}  // namespace fp::meta::arrow_function
 
 namespace fp::meta::is_kleisli_arrow {
-using namespace fp::meta::is_arrow_function;
+
+using namespace fp::meta::arrow_function;
 using namespace fp::meta::is_type_class_instance;
 using namespace fp::meta::extract_type_constructor;
 using namespace fp::meta::extract_dependent_type;
@@ -452,6 +421,38 @@ using fp_kleisli_result_type =
   fp_extract_dependent_type<fp_arrow_function_return_type<F>>;
 }  // namespace fp::meta::is_kleisli_arrow
 
+namespace fp::meta::callable {
+
+// template <typename F>
+// struct fp_callable_result {
+//     using type =
+//     decltype(std::declval<F>()(std::declval<fp_unary_arg_t<F>>()));
+// };
+
+// /**
+//  * @brief Alias for the return type of a unary callable.
+//  *
+//  * Convenience alias for fp_callable_result<F>::type.
+//  *
+//  * @tparam F The callable type.
+//  */
+// template <typename F>
+// using fp_callable_result_t = typename fp_callable_result<F>::type;
+
+// template <typename F, typename Arg, typename = void>
+// struct fp_is_callable_with : std::false_type {};
+
+// template <typename F, typename Arg>
+// struct fp_is_callable_with<
+//   F, Arg, std::void_t<decltype(std::declval<F>()(std::declval<Arg>()))>>
+//     : std::true_type {};
+
+// template <typename F, typename Arg>
+// inline constexpr bool fp_is_callable_with_v =
+//   fp_is_callable_with<F, Arg>::value;
+
+}  // namespace fp::meta::callable
+
 namespace fp::meta {
 using namespace fp::meta::is_type_class_unary_constructor;
 using namespace fp::meta::is_type_class_instance;
@@ -460,8 +461,8 @@ using namespace fp::meta::extract_type_constructor;
 using namespace fp::meta::is_nested_instance_of;
 using namespace fp::meta::extract_dependent_type;
 using namespace fp::meta::make_pair_type;
-using namespace fp::meta::is_arrow_function;
+using namespace fp::meta::arrow_function;
 using namespace fp::meta::is_kleisli_arrow;
 }  // namespace fp::meta
 
-#endif  // FP_GUARDS_H
+#endif  // FP_META_H
