@@ -1,4 +1,4 @@
-#include <functional>
+#pragma once
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -11,9 +11,8 @@
 
 #include <type_traits>
 
-using namespace fp::meta::is_type_class_instance;
-
 namespace fp::traits::monad {
+using namespace fp::meta::is_type_class_instance;
 /**
  * Concept that checks if `Fn` can be applied to `T` and returns a value of
  * type `TC<U>`.

@@ -7,3 +7,4 @@ stash/
 scratch.cpp
 .cache/
 * copy*
+.idea/

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef FP_FP_H
 #define FP_FP_H
 

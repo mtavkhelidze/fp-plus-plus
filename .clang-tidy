@@ -1,8 +1,11 @@
 # .clang-tidy configuration file
 
 Checks: >
-  *, 
+  *,
+  -bugprone-reserved-identifier,
   -clang-tidyfuchsia-*,
+  -*-dcl37-c,
+  -*-dcl51-cpp,
   -fuchsia-*,
   -google-build-using-namespace,
   -google-readability-avoid-underscore-in-googletest-name,
@@ -14,7 +17,7 @@ Checks: >
   -readability-identifier-length.*,
   clang-analyzer-*,
   performance-*
-Function 'equals' declared 'static', move to anonymous namespace insteadclang-tidymisc-use-anonymous-namespace
+  Function 'equals' declared 'static', move to anonymous namespace insteadclang-tidymisc-use-anonymous-namespace
 
 # readability-identifier-length.IgnoredExceptionVariableNames,
 # readability-identifier-length.MinimumExceptionNameLength,
@@ -35,7 +38,7 @@ Function 'equals' declared 'static', move to anonymous namespace insteadclang-ti
 #     value: 3
 #   - key: readability-identifier-length.IgnoredExceptionVariableNames
 #     value: "e,ex"
-  
+
 #   # Performance checks
 #   - key: performance-unnecessary-copy-in-loop.Threshold
 #     value: 1

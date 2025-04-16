@@ -1,12 +1,10 @@
-#include <vector>
+#pragma once
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp::fp.h>
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #ifndef FP_META_H
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_META_H
-
-#include <type_traits>
 
 namespace fp::meta::is_type_class_unary_constructor {
 
@@ -25,6 +23,7 @@ concept __type_constructible_with = requires { typename TC<void>; };
  * struct Simple {};
  *
  * static_assert(fp_is_type_class_unary_constructor<Simple>);
+ * @endcode
  */
 template <template <typename> typename TC>
 inline constexpr bool fp_is_type_class_unary_constructor =
@@ -49,6 +48,7 @@ struct __is_type_class_instance<TC<T>> : std::true_type {};
  * template <typename T> struct Simple {};
  * static_assert(fp_is_type_class_instance<Simple<int>>);
  * static_assert(!fp_is_type_class_instance<int>);
+ * @endcode
  */
 template <typename T>
 inline constexpr bool fp_is_type_class_instance =
@@ -91,7 +91,7 @@ using namespace fp::meta::type_constructor_arity;
 template <typename T>
 struct __extract_type_constructor {
     static_assert(
-      sizeof(T) != sizeof(T),
+      sizeof(T) != sizeof(T),  // NOLINT
       "fp_extract_type_constructor<T>: T must be of the form TC<...>"
     );
 };
@@ -195,7 +195,7 @@ struct __extract_dependent_type {
     );
 
     static_assert(
-      sizeof(T) != sizeof(T),
+      sizeof(T) != sizeof(T),  // NOLINT
       "fp_extract_dependent_type<T>: Unknown structure; T must be of the form "
       "TC<T>"
     );
@@ -249,7 +249,8 @@ struct __make_tuple_type {
     );
 
     static_assert(
-      sizeof(T) != sizeof(T), "fp_make_tuple_type<T>: Unexpected type structure"
+      sizeof(T) != sizeof(T),  // NOLINT
+      "fp_make_tuple_type<T>: Unexpected type structure"
     );
 };
 
@@ -283,7 +284,7 @@ namespace fp::meta::arrow_function {
 template <typename T>
 struct __arrow_function {
     static_assert(
-      sizeof(T) != sizeof(T),
+      sizeof(T) != sizeof(T),  // NOLINT
       "pf_is_arrow_function::__arrow_function<T>: Unsupported "
       "function type. Only single-argument functions, function pointers, or "
       "lambdas are allowed."
@@ -371,7 +372,7 @@ constexpr std::size_t __arrow_arity = __arrow_traits<F>::arity;
 template <typename F, typename = void>
 struct __fp_is_arrow_function : std::false_type {
     static_assert(
-      sizeof(F) != sizeof(F),
+      sizeof(F) != sizeof(F),  // NOLINT
       "arrow_function: F does not appear to be a unary  function, pointer, "
       "or lambda with exactly one argument."
     );
@@ -434,7 +435,7 @@ namespace fp::meta::callable {
 //  *
 //  * Convenience alias for fp_callable_result<F>::type.
 //  *
-//  * @tparam F The callable type.
+//  * @param F The callable type.
 //  */
 // template <typename F>
 // using fp_callable_result_t = typename fp_callable_result<F>::type;
