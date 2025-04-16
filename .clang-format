@@ -3,12 +3,14 @@ AlignAfterOpenBracket: BlockIndent
 AlignArrayOfStructures: Left
 AlignEscapedNewlines: LeftWithLastLine
 AlignOperands: AlignAfterOperator
+AllowAllParametersOfDeclarationOnNextLine: true
+BasedOnStyle: Google
+BinPackParameters: false
+BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeTernaryOperators: true
 BreakBinaryOperations: OnePerLine
 BreakConstructorInitializers: BeforeComma
 BreakInheritanceList: BeforeComma
-BreakBeforeBinaryOperators: NonAssignment
-BasedOnStyle: Google
 ColumnLimit: 80
 ContinuationIndentWidth: 2
 IndentAccessModifiers: false

@@ -36,6 +36,7 @@ template <template <typename> typename TC, typename T>
 concept Monad = requires(TC<std::decay_t<T>> c, T t) {
     { pure<TC>(t) } -> std::same_as<TC<std::decay_t<T>>>;
     {
+        // NOLINTNEXTLINE(cppcoreguidelines-rvalue-reference-param-not-moved)
         c.flatMap([](T &&x) { return pure<TC>(x); })
     } -> std::same_as<TC<std::decay_t<T>>>;
 };

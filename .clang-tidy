@@ -6,6 +6,7 @@ Checks: >
   -clang-tidyfuchsia-*,
   -*-dcl37-c,
   -*-dcl51-cpp,
+  -cert-err58-cpp,
   -fuchsia-*,
   -google-build-using-namespace,
   -google-readability-avoid-underscore-in-googletest-name,
@@ -17,7 +18,6 @@ Checks: >
   -readability-identifier-length.*,
   clang-analyzer-*,
   performance-*
-  Function 'equals' declared 'static', move to anonymous namespace insteadclang-tidymisc-use-anonymous-namespace
 
 # readability-identifier-length.IgnoredExceptionVariableNames,
 # readability-identifier-length.MinimumExceptionNameLength,
