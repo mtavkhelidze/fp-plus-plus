@@ -13,7 +13,7 @@ namespace fp::functions {
 inline const auto id = [](const auto x) { return x; };
 struct Identity {
     template <typename T>
-    constexpr T&& operator()(T&& value) const noexcept {
+    constexpr auto operator()(T&& value) const noexcept -> T&& {
         return std::forward<T>(value);
     }
 };

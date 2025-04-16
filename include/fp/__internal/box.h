@@ -8,13 +8,18 @@
 
 #include <fp/defs.h>
 
+#include <array>
+#include <cstddef>
 #include <memory>
+#include <string>
+#include <type_traits>
+#include <variant>
 #include <vector>
 
 namespace fp::internal {
 
 template <typename T, typename... Ts>
-struct Box {
+struct FP_ALIGN_PACKED_16 Box {
   private:
     std::variant<std::shared_ptr<T>, std::vector<T>, Nothing> data = Nothing();
 
@@ -68,7 +73,7 @@ struct Box {
     auto operator=(const Box&) -> Box& = default;
     Box(Box&&) = default;
     Box(const Box&) = default;
-} FP_PLUS_PLUS_ALIGN_PACKED;
+};
 
 // Deduction guides
 template <typename T>

@@ -9,16 +9,18 @@
 #include <fp/operators.h>
 #include <fp/traits/traits.h>
 
+#include <concepts>
+
 namespace fp::syntax::semigroup {
 using namespace traits::semigroup;
 
 template <Semigroup M>
-inline constexpr auto operator+(M&& lhs, M&& rhs) {
+constexpr auto operator+(M&& lhs, M&& rhs) {
     return combine(std::forward<M>(lhs), std::forward<M>(rhs));
 }
 
 template <Semigroup M>
-inline constexpr auto operator+(const M& lhs, const M& rhs) {
+constexpr auto operator+(const M& lhs, const M& rhs) {
     return combine(lhs, rhs);
 }
 }  // namespace fp::syntax::semigroup

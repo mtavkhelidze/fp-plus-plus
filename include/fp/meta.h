@@ -6,6 +6,10 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_META_H
 
+#include <cstddef>
+#include <type_traits>
+#include <utility>
+
 namespace fp::meta::is_type_class_unary_constructor {
 
 template <template <typename> typename TC>

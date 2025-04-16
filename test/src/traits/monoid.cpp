@@ -1,5 +1,8 @@
-#include <fp/fp.h>
+#include <fp/defs.h>
+#include <fp/syntax.h>
 #include <gtest/gtest.h>
+
+#include <string>
 
 using ::testing::Test;
 
@@ -8,12 +11,12 @@ using namespace fp::syntax::monoid;
 
 namespace str {
 
-struct String {
+struct FP_ALIGN_PACKED_32 String {
     std::string s;
-    static String empty() { return String{""}; }
+    static auto empty() -> String { return String{""}; }
 };
 
-inline constexpr auto combine(const String& a, const String& b) -> String {
+static constexpr auto combine(const String& a, const String& b) -> String {
     return String(a.s + b.s);
 }
 }  // namespace str

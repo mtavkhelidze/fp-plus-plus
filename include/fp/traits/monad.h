@@ -9,10 +9,11 @@
 #include <fp/meta.h>
 #include <fp/operators.h>
 
+#include <concepts>
 #include <type_traits>
 
 namespace fp::traits::monad {
-using namespace fp::meta::is_type_class_instance;
+using namespace meta::is_type_class_instance;
 /**
  * Concept that checks if `Fn` can be applied to `T` and returns a value of
  * type `TC<U>`.

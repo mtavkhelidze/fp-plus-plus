@@ -82,5 +82,17 @@
     "C_Cpp.dimInactiveRegions": false,
     "C_Cpp.codeAnalysis.clangTidy.checks.disabled": [
         "clang-diagnostic-error"
-    ]
+    ],
+    "clang-format.language.glsl.enable": false,
+    "clang-format.language.glsl.fallbackStyle": "",
+    "clang-format.language.java.enable": false,
+    "clang-format.language.javascript.enable": false,
+    "clang-format.language.objective-c.enable": false,
+    "clang-format.language.objective-cpp.enable": false,
+    "clang-format.language.proto.enable": false,
+    "clang-format.language.typescript.enable": false,
+    "clangd.checkUpdates": true,
+    "clangd.onConfigChanged": "restart",
+    "clangd.path": "clangd",
+    "cmake.automaticReconfigure": false
 }

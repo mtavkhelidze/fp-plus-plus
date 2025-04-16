@@ -3,9 +3,11 @@
 #error "This file must be included from "<fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #ifndef FP_OPERATORS_H
+// NOLINTNEXTLINE:llvm-header-guard
 #define FP_OPERATORS_H
 
 #include <concepts>
+#include <utility>
 
 namespace fp::operators {
 /**

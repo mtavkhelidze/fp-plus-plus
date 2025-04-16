@@ -7,24 +7,12 @@
 #define FP_DEFS_H
 
 #include <cstddef>
+inline constexpr std::size_t __fp_align_16 = 16;
+inline constexpr std::size_t __fp_align_32 = 32;
 
-inline constexpr size_t FP_PLUS_PLUS_ALIGN = 16;
-#define FP_PLUS_PLUS_PACKED __attribute__((packed))
-#define FP_PLUS_PLUS_ALIGN_PACKED                                        \
-    __attribute__((aligned(FP_PLUS_PLUS_ALIGN))) __attribute__((packed))
-
-#define EMIT_COMPILER_WARNING_STRINGIFY0(x) #x
-#define EMIT_COMPILER_WARNING_STRINGIFY1(x) EMIT_COMPILER_WARNING_STRINGIFY0(x)
-#ifdef __GNUC__
-#define EMIT_COMPILER_WARNING_COMPOSE(x) GCC warning x
-#else
-#define EMIT_COMPILER_MESSAGE_PREFACE(type)                                 \
-    __FILE__ "(" EMIT_COMPILER_WARNING_STRINGIFY1(__LINE__) "): " type ": "
-#define EMIT_COMPILER_WARNING_COMPOSE(x)                      \
-    message(EMIT_COMPILER_MESSAGE_PREFACE("warning C0000") x)
-#endif
-#define WARNING(x) \
-    _Pragma(EMIT_COMPILER_WARNING_STRINGIFY1(EMIT_COMPILER_WARNING_COMPOSE(x)))
+#define FP_PACKED [[gnu::packed]]
+#define FP_ALIGN_PACKED_16 alignas(__fp_align_16) FP_PACKED
+#define FP_ALIGN_PACKED_32 alignas(__fp_align_32) FP_PACKED
 
 #include <variant>
 
