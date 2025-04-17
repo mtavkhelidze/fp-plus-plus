@@ -50,14 +50,15 @@ TEST(Meta, fp_arrow_function_check) {
     static_assert(std::is_same_v<fp_arrow_function_return_type<FuncPtr>, double>
     );
 
-    struct Functor {
+    struct Callable {
         auto operator()(int x) const -> double { return x + double_number; }
     };
 
-    static_assert(fp_is_arrow_function<Functor>);
-    static_assert(std::is_same_v<fp_arrow_function_argument_type<Functor>, int>
+    static_assert(fp_is_arrow_function<Callable>);
+    static_assert(std::is_same_v<fp_arrow_function_argument_type<Callable>, int>
     );
-    static_assert(std::is_same_v<fp_arrow_function_return_type<Functor>, double>
+    static_assert(
+      std::is_same_v<fp_arrow_function_return_type<Callable>, double>
     );
 
     // Uncommenting this should cause a compilation error
@@ -149,4 +150,29 @@ TEST(Meta, fp_make_pair_type_check) {
 
     // Uncommenting these should cause a compilation error
     //    using Invalid = fp_make_pair_type<int>;
+}
+
+// NOLINTNEXTLINE
+TEST(Meta, fp_is_kleisli_arrow_check) {
+    using namespace fp::meta::is_kleisli_arrow;
+
+    auto kleisli = [](int x) -> std::optional<double> {
+        return x > 0 ? std::optional<double>{static_cast<double>(x)}
+                     : std::nullopt;
+    };
+
+    using Kleisli = decltype(kleisli);
+
+    static_assert(fp_is_kleisli_arrow<Kleisli>);
+    static_assert(std::is_same_v<fp_kleisli_result_type<Kleisli>, double>);
+    static_assert(
+      std::is_same_v<
+        fp_kleisli_monad_type_constructor<Kleisli>, std::optional<double>>
+    );
+
+    auto nonKleisli = [](int x) -> double { return static_cast<double>(x); };
+
+    using NonKleisli = decltype(nonKleisli);
+
+    static_assert(!fp_is_kleisli_arrow<NonKleisli>);
 }

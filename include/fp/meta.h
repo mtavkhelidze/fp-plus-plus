@@ -415,52 +415,13 @@ using fp_kleisli_monad_type_constructor = fp_rebind_type_constructor<
 
 }  // namespace fp::meta::is_kleisli_arrow
 
-namespace fp::meta::callable {
-
-// template <typename F>
-// struct fp_callable_result {
-//     using type =
-//     decltype(std::declval<F>()(std::declval<fp_unary_arg_t<F>>()));
-// };
-
-// /**
-//  * @brief Alias for the return type of a unary callable.
-//  *
-//  * Convenience alias for fp_callable_result<F>::type.
-//  *
-//  * @param F The callable type.
-//  */
-// template <typename F>
-// using fp_callable_result_t = typename fp_callable_result<F>::type;
-
-// template <typename F, typename Arg, typename = void>
-// struct fp_is_callable_with : std::false_type {};
-
-// template <typename F, typename Arg>
-// struct fp_is_callable_with<
-//   F, Arg, std::void_t<decltype(std::declval<F>()(std::declval<Arg>()))>>
-//     : std::true_type {};
-
-// template <typename F, typename Arg>
-// inline constexpr bool fp_is_callable_with_v =
-//   fp_is_callable_with<F, Arg>::value;
-
-}  // namespace fp::meta::callable
-
 namespace fp::meta {
-// done
 using namespace fp::meta::is_type_class_unary_constructor;
-// done
 using namespace fp::meta::is_type_class_instance;
-// done
 using namespace fp::meta::type_constructor_arity;
-// done
 using namespace fp::meta::rebind_type_constructor;
-// done
 using namespace fp::meta::is_wrapped_by;
-// done
 using namespace fp::meta::extract_dependent_type;
-// done
 using namespace fp::meta::make_pair_type;
 using namespace fp::meta::arrow_function;
 using namespace fp::meta::is_kleisli_arrow;
