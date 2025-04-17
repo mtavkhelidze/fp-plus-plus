@@ -235,25 +235,38 @@ template <
   template <typename> typename Inner,
   template <typename> typename Outer,
   typename Given>
-constexpr bool fp_is_wrapped_by_with =
+inline constexpr bool fp_is_wrapped_by_with =
   __is_wrapped_by<Inner, Outer, Given>::value;
 
 template <
   template <typename> typename Inner,
   template <typename> typename Outer,
   typename Given>
-concept fp_wrapped_by_with = __is_wrapped_by<Inner, Outer, Given>::value;
+inline constexpr bool fp_wrapped_by_with_concept =
+  __is_wrapped_by<Inner, Outer, Given>::value;
+// Using the inline variable above to define the concept
+template <
+  template <typename> typename Inner,
+  template <typename> typename Outer,
+  typename Given>
+concept fp_wrapped_by_with = fp_wrapped_by_with_concept<Inner, Outer, Given>;
 
 template <
   template <typename> typename Inner,
   template <typename> typename Outer>
-constexpr bool fp_is_wrapped_by =
+inline constexpr bool fp_is_wrapped_by =
   fp_is_wrapped_by_with<Inner, Outer, fp::Nothing>;
 
 template <
   template <typename> typename Inner,
   template <typename> typename Outer>
-concept fp_wrapped_by = fp_is_wrapped_by_with<Inner, Outer, fp::Nothing>;
+inline constexpr bool fp_wrapped_by_concept =
+  fp_is_wrapped_by_with<Inner, Outer, fp::Nothing>;
+// Using the inline variable above to define the concept
+template <
+  template <typename> typename Inner,
+  template <typename> typename Outer>
+concept fp_wrapped_by = fp_wrapped_by_concept<Inner, Outer>;
 /**
  * @brief Checks if a type is equivalent to `Outer<Inner<T>>`.
  *
@@ -411,7 +424,7 @@ template <typename F>
 using __arrow_ret = typename __arrow_traits<F>::b;
 
 template <typename F>
-constexpr std::size_t __arrow_arity = __arrow_traits<F>::arity;
+inline constexpr std::size_t __arrow_arity = __arrow_traits<F>::arity;
 
 // SFINAE fallback
 template <typename F, typename = void>
