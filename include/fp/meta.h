@@ -140,7 +140,7 @@ struct __extract_type_constructor<TC<Arg>> {
  */
 template <typename TC, typename U>
 using fp_rebind_constructor =
-  typename __extract_type_constructor<TC>::template type<U>;
+  typename __extract_type_constructor<std::decay_t<TC>>::template type<U>;
 
 }  // namespace fp::meta::rebind_constructor
 
@@ -204,14 +204,18 @@ template <typename TC>
 using fp_inner_type = typename __extract_inner_type<std::decay_t<TC>>::type;
 
 template <typename T, typename TC>
-concept fp_has_inner_type = requires { typename fp_inner_type<TC>; }
-                         && std::same_as<fp_inner_type<TC>, T>;
+concept fp_has_inner_type = requires {
+    typename fp_inner_type<std::decay_t<TC>>;
+} && std::same_as<fp_inner_type<std::decay_t<TC>>, T>;
 
 template <typename TA, typename TB>
-concept fp_has_same_inner_type = requires {
-    typename fp_inner_type<TA>;
-    typename fp_inner_type<TB>;
-} && std::same_as<fp_inner_type<TA>, fp_inner_type<TB>>;
+concept fp_has_same_inner_type =
+  requires {
+      typename fp_inner_type<std::decay_t<TA>>;
+      typename fp_inner_type<std::decay_t<TB>>;
+  }
+  && std::
+    same_as<fp_inner_type<std::decay_t<TA>>, fp_inner_type<std::decay_t<TB>>>;
 }  // namespace fp::meta::inner_type
 
 namespace fp::meta::is_wrapped_by {
