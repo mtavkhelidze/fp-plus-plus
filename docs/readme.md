@@ -1,4 +1,3 @@
-FP++ Documentation
+FP++ Namespaces
 ---
-
-**NB** Everything in this directory for now is totally bogus. 
+### [fp::meta: Template Tools](./meta.md)
