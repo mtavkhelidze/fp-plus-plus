@@ -65,8 +65,28 @@ TEST(Meta, fp_rebind_type_constructor_check) {
     static_assert(std::is_same_v<Maybe<double>, std::optional<double>>);
 }
 
+template <typename T>
+using Vector = std::vector<Maybe<T>>;
+
 // NOLINTNEXTLINE
 TEST(Meta, fp_is_nested_instance_of_check) {
     using namespace fp::meta::is_wrapped_by;
-    //    static_assert(fp_is_nested_instance_of<VectorOfMaybes, Maybe, int>);
+    static_assert(is_wrapped_by<Vector, Maybe>);
+}
+
+// NOLINTNEXTLINE
+TEST(Meta, fp_extract_dependent_type_check) {
+    using namespace fp::meta::extract_dependent_type;
+
+    using Extracted = fp_extract_dependent_type<UnaryStruct<int>>;
+    static_assert(std::is_same_v<Extracted, int>);
+
+    using Boxed = fp_extract_dependent_type<UnaryStruct<UnaryStruct<int>>>;
+    static_assert(std::is_same_v<Boxed, UnaryStruct<int>>);
+
+    using ExtractedConst = fp_extract_dependent_type<const UnaryStruct<int>>;
+    static_assert(std::is_same_v<ExtractedConst, int>);
+
+    // Uncommenting this should cause a compilation error
+    // using FailExtract = fp_extract_dependent_type<NoTemplateStruct>;
 }

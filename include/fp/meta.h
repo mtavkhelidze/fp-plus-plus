@@ -56,13 +56,13 @@ struct __is_type_class_instance<TC<T>> : std::true_type {};
  * static_assert(!fp_is_type_class_instance<int>);
  * @endcode
  */
-template <typename T>
+template <typename TC>
 inline constexpr bool fp_is_type_class_instance =
-  __is_type_class_instance<T>::value;
+  __is_type_class_instance<std::decay_t<TC>>::value;
 
 // Optional concept: checks whether type constructor extraction is possible
-template <typename T>
-concept fp_has_type_class_constructor = fp_is_type_class_instance<T>;
+template <typename TC>
+concept fp_has_type_class_constructor = fp_is_type_class_instance<TC>;
 }  // namespace fp::meta::is_type_class_instance
 
 namespace fp::meta::type_constructor_arity {
@@ -136,7 +136,7 @@ struct __extract_dependent_type {
     );
 
     static_assert(
-      fp_type_constructor_arity<T> == 1,
+      fp_type_constructor_arity<T> < 1,
       "fp_extract_dependent_type<T>: Type class instance must have arity 1 "
       "(i.e., TC<T>)"
     );
@@ -172,8 +172,9 @@ struct __extract_dependent_type<TC<T>> {
  * template <typename T> struct Box {};
  * using T = fp_extract_dependent_type<Box<int>>; // int
  */
-template <typename T>
-using fp_extract_dependent_type = typename __extract_dependent_type<T>::type;
+template <typename TC>
+using fp_extract_dependent_type =
+  typename __extract_dependent_type<std::decay_t<TC>>::type;
 
 }  // namespace fp::meta::extract_dependent_type
 
@@ -454,8 +455,10 @@ using namespace fp::meta::is_type_class_instance;
 using namespace fp::meta::type_constructor_arity;
 // done
 using namespace fp::meta::rebind_type_constructor;
-using namespace fp::meta::extract_dependent_type;
+// done
 using namespace fp::meta::is_wrapped_by;
+// done
+using namespace fp::meta::extract_dependent_type;
 using namespace fp::meta::make_pair_type;
 using namespace fp::meta::arrow_function;
 using namespace fp::meta::is_kleisli_arrow;
