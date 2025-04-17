@@ -18,7 +18,7 @@ struct NoTemplateStruct {};
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_is_type_class_unary_constructor_check) {
-    using namespace fp::meta::is_type_class_unary_constructor;
+    using namespace fp::meta::type_class_unary_constructor;
 
     static_assert(fp_is_unary_constructor<UnaryStruct>);
 
@@ -74,7 +74,7 @@ TEST(Meta, fp_arrow_function_check) {
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_is_type_class_instance_check) {
-    using namespace fp::meta::is_type_class_instance;
+    using namespace fp::meta::type_class_instance;
 
     using Int = UnaryStruct<int>;
     static_assert(fp_is_type_class_instance<Int>);
@@ -118,7 +118,7 @@ using Vector = std::vector<Maybe<T>>;
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_is_nested_instance_of_check) {
-    using namespace fp::meta::fp_is_wrapped_by;
+    using namespace fp::meta::is_wrapped_by;
     static_assert(fp_is_wrapped_by<Vector, Maybe>);
 }
 
@@ -160,7 +160,7 @@ TEST(Meta, fp_make_pair_type_check) {
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_is_kleisli_arrow_check) {
-    using namespace fp::meta::is_kleisli_arrow;
+    using namespace fp::meta::kleisli_arrow;
 
     auto kleisli = [](int x) -> std::optional<double> {
         return x > 0 ? std::optional<double>{static_cast<double>(x)}

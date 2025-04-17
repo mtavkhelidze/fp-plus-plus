@@ -93,18 +93,17 @@ struct __type_constructor_arity<TC<Args...>> {
     static constexpr std::size_t value = sizeof...(Args);
 };
 /**
- * @brief Returns the number of type arguments of a type constructor.
+ * @brief Returns the number of type arguments of a type constructor instance.
  *
- * This trait is useful for determining how many type parameters a given type
- * constructor expects, which can be essential for metaprogramming tasks.
- * Knowing the arity allows for more flexible and type-safe programming
- * patterns.
+ * This trait is useful for inspecting instantiated types to determine how
+ * many type parameters were provided. It is essential in metaprogramming
+ * tasks where generic arity inspection is needed for validation or
+ * transformation.
  *
  * @example
- * template <typename T>
- * using Optional = std::optional<T>;
- * static_assert(fp_get_constructor_arity<Optional<int>> == 1); // Optional has
- * arity 1
+ * template <typename T, typename U>
+ * struct Pair {};
+ * static_assert(fp_get_constructor_arity<Pair<int, float>> == 2); // Valid
  */
 template <typename T>
 inline constexpr std::size_t fp_get_constructor_arity =
@@ -117,7 +116,8 @@ template <typename T>
 struct __extract_type_constructor {
     static_assert(
       sizeof(T) != sizeof(T),  // NOLINT
-      "fp_rebind_constructor<T>: T must be of the form TC<T>"
+      "fp_rebind_constructor<T>: T must be of the form TC<T>. Example: "
+      "std::optional<int>"
     );
 };
 
@@ -126,23 +126,17 @@ struct __extract_type_constructor<TC<Arg>> {
     template <typename U>
     using type = TC<U>;
 };
-
 /**
- * \short Rebinds TC<T> to TC<U> where T can be any type, valid for TC and U is
- * user supplied type.
+ * @brief Rebinds a unary type constructor instance to a new type.
  *
- * This utility is particularly useful when you want to transform a type
- * constructor that wraps a certain type into one that wraps a different type,
- * while preserving the structure of the type constructor.
+ * This metafunction transforms a type like `TC<A>` into `TC<B>`, preserving
+ * the structure of the original constructor while substituting the type
+ * argument. It is useful for manipulating higher-kinded types generically.
  *
- * \code(.cpp)
- * template <typename U>
- * using Maybe = fp_rebind_constructor<std::optional<int>, U>;
- *
- * static_assert(std::is_same_v<Maybe<double>, std::optional<double>>);
- * // Here, Maybe<double> is a rebind of std::optional<int> to
- * std::optional<double>.
- * \endcode
+ * @example
+ * using Orig = std::optional<int>;
+ * using Rebound = fp_rebind_constructor<Orig, double>;
+ * static_assert(std::is_same_v<Rebound, std::optional<double>>);
  */
 template <typename TC, typename U>
 using fp_rebind_constructor =
@@ -171,8 +165,8 @@ struct __extract_inner_type {
 
     static_assert(
       sizeof(T) != sizeof(T),  // NOLINT
-      "fp_inner_type<T>: Unknown structure; T must be of the form "
-      "TC<T>"
+      "fp_inner_type<T>: Unsupported structure; T must match the form TC<T>. "
+      "Example: std::optional<int>"
     );
 };
 
@@ -260,28 +254,23 @@ template <
   template <typename> typename Inner,
   template <typename> typename Outer>
 concept fp_wrapped_by = fp_is_wrapped_by_with<Inner, Outer, fp::Nothing>;
-
+/**
+ * @brief Checks if a type is equivalent to `Outer<Inner<T>>`.
+ *
+ * This trait is useful for verifying deep wrapping relationships,
+ * e.g., ensuring a value is wrapped first by one type constructor
+ * and then another, in a specific nesting order.
+ *
+ * @example
+ * using Wrapped = std::optional<std::vector<int>>;
+ * static_assert(fp_is_wrapped_as<std::optional, std::vector, int>); // Valid
+ */
 template <
   template <typename> typename Outer,
   template <typename> typename Inner,
   typename T>
 concept fp_is_wrapped_as = fp_wrapped_by_with<Inner, Outer, T>;
 
-/**
- * @brief Checks if a type is wrapped by a specific type constructor.
- *
- * This concept is useful for verifying whether a type is nested within another
- * type constructor. For example, it can be used to check if a type is wrapped
- * by `std::optional` or `std::vector`, enabling more complex type manipulations
- * in generic programming.
- *
- * @example
- * using Wrapped = std::optional<int>;
- * static_assert(fp_is_wrapped_by<Wrapped, std::optional>); // Valid
- * static_assert(!fp_is_wrapped_by<Wrapped, std::vector>); // Invalid
- * using Nested = std::vector<Wrapped>;
- * static_assert(fp_is_wrapped_by<Nested, std::vector>); // Valid
- */
 }  // namespace fp::meta::is_wrapped_by
 namespace fp::meta::make_pair_type {
 
@@ -304,7 +293,8 @@ struct __make_pair_type {
 
     static_assert(
       sizeof(T) != sizeof(T),  // NOLINT
-      "fp_make_pair_type<T>: Unexpected type structure"
+      "fp_make_pair_type<T>: Type must be of the form TC<A, B>. Example: "
+      "std::map<std::string, float>"
     );
 };
 
@@ -341,9 +331,8 @@ template <typename T>
 struct __arrow_function {
     static_assert(
       sizeof(T) != sizeof(T),  // NOLINT
-      "pf_is_arrow_function::__arrow_function<T>: Unsupported "
-      "function type. Only single-argument functions, function pointers, or "
-      "lambdas are allowed."
+      "fp_is_arrow_function<T>: T must be a function pointer, function type, "
+      "or lambda with exactly one argument"
     );
 };
 
@@ -429,8 +418,8 @@ template <typename F, typename = void>
 struct __fp_is_arrow_function : std::false_type {
     static_assert(
       sizeof(F) != sizeof(F),  // NOLINT
-      "arrow_function: F does not appear to be a unary  function, pointer, "
-      "or lambda with exactly one argument."
+      "fp_is_arrow_function<F>: F must be a unary function, function pointer, "
+      "or lambda (i.e., F(A) -> B)"
     );
 };
 
