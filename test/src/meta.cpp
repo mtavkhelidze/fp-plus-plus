@@ -28,6 +28,44 @@ TEST(Meta, fp_is_type_class_unary_constructor_check) {
 }
 
 // NOLINTNEXTLINE
+TEST(Meta, fp_arrow_function_check) {
+    using namespace fp::meta::arrow_function;
+
+    constexpr double double_number = 1.5;
+
+    auto lambda = [](int x) -> double { return x + double_number; };
+    using Lambda = decltype(lambda);
+
+    static_assert(fp_is_arrow_function<Lambda>);
+    static_assert(std::is_same_v<fp_arrow_function_argument_type<Lambda>, int>);
+    static_assert(std::is_same_v<fp_arrow_function_return_type<Lambda>, double>
+    );
+
+    double (*func_ptr)(int) = [](int x) { return static_cast<double>(x); };
+    using FuncPtr = decltype(func_ptr);
+
+    static_assert(fp_is_arrow_function<FuncPtr>);
+    static_assert(std::is_same_v<fp_arrow_function_argument_type<FuncPtr>, int>
+    );
+    static_assert(std::is_same_v<fp_arrow_function_return_type<FuncPtr>, double>
+    );
+
+    struct Functor {
+        auto operator()(int x) const -> double { return x + double_number; }
+    };
+
+    static_assert(fp_is_arrow_function<Functor>);
+    static_assert(std::is_same_v<fp_arrow_function_argument_type<Functor>, int>
+    );
+    static_assert(std::is_same_v<fp_arrow_function_return_type<Functor>, double>
+    );
+
+    // Uncommenting this should cause a compilation error
+    //    struct BadFunctor { double operator()(int, int) const; };
+    //    static_assert(fp_is_arrow_function<BadFunctor>);
+}
+
+// NOLINTNEXTLINE
 TEST(Meta, fp_is_type_class_instance_check) {
     using namespace fp::meta::is_type_class_instance;
 
