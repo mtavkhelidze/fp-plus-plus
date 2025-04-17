@@ -223,30 +223,31 @@ using namespace fp::meta::is_type_class_instance;
 using namespace fp::meta::type_constructor_arity;
 
 template <typename T>
-struct __make_tuple_type {
+struct __make_pair_type {
     static_assert(
       fp_is_type_class_instance<T>,
-      "fp_make_tuple_type<T>: T must be an instance of a type class of form "
+      "fp_make_pair_type<T>: T must be an instance of a type class of form "
       "TC<A, B>)"
     );
 
     static_assert(
       fp_type_constructor_arity<T> == 2,
-      "fp_make_tuple_type<T>: T must have exactly two type parameters (i.e., "
+      "fp_make_pair_type<T>: T must have exactly two type parameters (i.e., "
       "TC<A, B>)"
     );
 
     static_assert(
       sizeof(T) != sizeof(T),  // NOLINT
-      "fp_make_tuple_type<T>: Unexpected type structure"
+      "fp_make_pair_type<T>: Unexpected type structure"
     );
 };
 
 template <template <typename, typename> typename TC, typename A, typename B>
-struct __make_tuple_type<TC<A, B>> {
+struct __make_pair_type<TC<A, B>> {
     static_assert(
-      fp_type_constructor_arity<TC<A, B>> == 2,
-      "fp_make_tuple_type<T>: T must be of the form TC<A, B> (with arity 2)."
+      fp_type_constructor_arity<TC<A, B>> >= 2,
+      "fp_make_pair_type<Type>: Type must be of the form TC<A, B> (with arity "
+      "2)."
     );
 
     using first = A;
@@ -258,12 +259,12 @@ struct __make_tuple_type<TC<A, B>> {
  *
  * @example
  * using Map = std::map<std::string, float>;
- * using Tuple = fp_make_tuple_type<Map>; // std::pair<std::string, float>
+ * using Tuple = fp_make_pair_type<Map>; // std::pair<std::string, float>
  */
 template <typename T>
-using fp_make_tuple_type = std::pair<
-  typename __make_tuple_type<T>::first,
-  typename __make_tuple_type<T>::second>;
+using fp_make_pair_type = std::pair<
+  typename __make_pair_type<T>::first,
+  typename __make_pair_type<T>::second>;
 
 }  // namespace fp::meta::make_pair_type
 

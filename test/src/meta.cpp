@@ -1,8 +1,11 @@
 #include <fp/meta.h>
 #include <gtest/gtest.h>
 
+#include <map>
 #include <optional>
+#include <string>
 #include <type_traits>
+#include <utility>
 #include <vector>
 
 template <typename T>
@@ -88,5 +91,24 @@ TEST(Meta, fp_extract_dependent_type_check) {
     static_assert(std::is_same_v<ExtractedConst, int>);
 
     // Uncommenting this should cause a compilation error
-    // using FailExtract = fp_extract_dependent_type<NoTemplateStruct>;
+    //    using FailExtract = fp_extract_dependent_type<NoTemplateStruct>;
+}
+
+// NOLINTNEXTLINE
+TEST(Meta, fp_make_pair_type_check) {
+    using namespace fp::meta::make_pair_type;
+
+    using Map = std::map<std::string, float>;
+    using ResultOne = fp_make_pair_type<Map>;
+
+    static_assert(std::is_same_v<ResultOne, std::pair<std::string, float>>);
+
+    using JustPair = std::pair<int, double>;
+    using PairWithPair = std::pair<JustPair, char>;
+    using ResultTwo = fp_make_pair_type<PairWithPair>;
+
+    static_assert(std::is_same_v<ResultTwo, std::pair<JustPair, char>>);
+
+    // Uncommenting these should cause a compilation error
+    //    using Invalid = fp_make_pair_type<int>;
 }
