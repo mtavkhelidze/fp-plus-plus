@@ -20,11 +20,11 @@ struct NoTemplateStruct {};
 TEST(Meta, fp_is_type_class_unary_constructor_check) {
     using namespace fp::meta::is_type_class_unary_constructor;
 
-    static_assert(fp_is_type_class_unary_constructor<UnaryStruct>);
+    static_assert(fp_is_unary_constructor<UnaryStruct>);
 
     // Uncommenting these should cause a compilation error
-    // static_assert(!fp_is_type_class_unary_constructor<NoTemplateStruct>);
-    // static_assert(!fp_is_type_class_unary_constructor<BinaryStruct>);
+    // static_assert(!fp_is_unary_constructor<NoTemplateStruct>);
+    // static_assert(!fp_is_unary_constructor<BinaryStruct>);
 }
 
 // NOLINTNEXTLINE
@@ -37,17 +37,22 @@ TEST(Meta, fp_arrow_function_check) {
     using Lambda = decltype(lambda);
 
     static_assert(fp_is_arrow_function<Lambda>);
-    static_assert(std::is_same_v<fp_arrow_function_argument_type<Lambda>, int>);
-    static_assert(std::is_same_v<fp_arrow_function_return_type<Lambda>, double>
+    static_assert(
+      std::is_same_v<fp_get_arrow_function_argument_type<Lambda>, int>
+    );
+    static_assert(
+      std::is_same_v<fp_get_arrow_function_return_type<Lambda>, double>
     );
 
     double (*func_ptr)(int) = [](int x) { return static_cast<double>(x); };
     using FuncPtr = decltype(func_ptr);
 
     static_assert(fp_is_arrow_function<FuncPtr>);
-    static_assert(std::is_same_v<fp_arrow_function_argument_type<FuncPtr>, int>
+    static_assert(
+      std::is_same_v<fp_get_arrow_function_argument_type<FuncPtr>, int>
     );
-    static_assert(std::is_same_v<fp_arrow_function_return_type<FuncPtr>, double>
+    static_assert(
+      std::is_same_v<fp_get_arrow_function_return_type<FuncPtr>, double>
     );
 
     struct Callable {
@@ -55,10 +60,11 @@ TEST(Meta, fp_arrow_function_check) {
     };
 
     static_assert(fp_is_arrow_function<Callable>);
-    static_assert(std::is_same_v<fp_arrow_function_argument_type<Callable>, int>
+    static_assert(
+      std::is_same_v<fp_get_arrow_function_argument_type<Callable>, int>
     );
     static_assert(
-      std::is_same_v<fp_arrow_function_return_type<Callable>, double>
+      std::is_same_v<fp_get_arrow_function_return_type<Callable>, double>
     );
 
     // Uncommenting this should cause a compilation error
@@ -84,23 +90,23 @@ TEST(Meta, fp_is_type_class_instance_check) {
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_type_constructor_arity_check) {
-    using namespace fp::meta::type_constructor_arity;
+    using namespace fp::meta::constructor_arity;
 
-    static_assert(fp_type_constructor_arity<UnaryStruct<int>> == 1);
-    static_assert(fp_type_constructor_arity<decltype(UnaryStruct<int>{})> == 1);
+    static_assert(fp_get_constructor_arity<UnaryStruct<int>> == 1);
+    static_assert(fp_get_constructor_arity<decltype(UnaryStruct<int>{})> == 1);
 
-    static_assert(fp_type_constructor_arity<BinaryStruct<int, float>> == 2);
+    static_assert(fp_get_constructor_arity<BinaryStruct<int, float>> == 2);
     static_assert(
-      fp_type_constructor_arity<decltype(BinaryStruct<int, float>{})> == 2
+      fp_get_constructor_arity<decltype(BinaryStruct<int, float>{})> == 2
     );
 
-    static_assert(fp_type_constructor_arity<NoTemplateStruct> == 0);
-    static_assert(fp_type_constructor_arity<decltype(NoTemplateStruct{})> == 0);
+    static_assert(fp_get_constructor_arity<NoTemplateStruct> == 0);
+    static_assert(fp_get_constructor_arity<decltype(NoTemplateStruct{})> == 0);
 }
 
 template <typename U>
-using Maybe = fp::meta::rebind_type_constructor::
-  fp_rebind_type_constructor<std::optional<int>, U>;
+using Maybe =
+  fp::meta::rebind_constructor::fp_rebind_constructor<std::optional<int>, U>;
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_rebind_type_constructor_check) {
@@ -112,25 +118,25 @@ using Vector = std::vector<Maybe<T>>;
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_is_nested_instance_of_check) {
-    using namespace fp::meta::is_wrapped_by;
-    static_assert(is_wrapped_by<Vector, Maybe>);
+    using namespace fp::meta::fp_is_wrapped_by;
+    static_assert(fp_is_wrapped_by<Vector, Maybe>);
 }
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_extract_dependent_type_check) {
-    using namespace fp::meta::extract_dependent_type;
+    using namespace fp::meta::inner_type;
 
-    using Extracted = fp_extract_dependent_type<UnaryStruct<int>>;
+    using Extracted = fp_inner_type<UnaryStruct<int>>;
     static_assert(std::is_same_v<Extracted, int>);
 
-    using Boxed = fp_extract_dependent_type<UnaryStruct<UnaryStruct<int>>>;
+    using Boxed = fp_inner_type<UnaryStruct<UnaryStruct<int>>>;
     static_assert(std::is_same_v<Boxed, UnaryStruct<int>>);
 
-    using ExtractedConst = fp_extract_dependent_type<const UnaryStruct<int>>;
+    using ExtractedConst = fp_inner_type<const UnaryStruct<int>>;
     static_assert(std::is_same_v<ExtractedConst, int>);
 
     // Uncommenting this should cause a compilation error
-    //    using FailExtract = fp_extract_dependent_type<NoTemplateStruct>;
+    //    using FailExtract = fp_inner_type<NoTemplateStruct>;
 }
 
 // NOLINTNEXTLINE
@@ -164,10 +170,10 @@ TEST(Meta, fp_is_kleisli_arrow_check) {
     using Kleisli = decltype(kleisli);
 
     static_assert(fp_is_kleisli_arrow<Kleisli>);
-    static_assert(std::is_same_v<fp_kleisli_result_type<Kleisli>, double>);
+    static_assert(std::is_same_v<fp_get_kleisli_result_type<Kleisli>, double>);
     static_assert(
       std::is_same_v<
-        fp_kleisli_monad_type_constructor<Kleisli>, std::optional<double>>
+        fp_get_kleisli_type_constructor<Kleisli>, std::optional<double>>
     );
 
     auto nonKleisli = [](int x) -> double { return static_cast<double>(x); };

@@ -8,6 +8,7 @@
 
 #include <fp/defs.h>
 
+#include <concepts>
 #include <cstddef>
 #include <type_traits>
 #include <utility>
@@ -28,12 +29,14 @@ concept __type_constructible_with = requires { typename TC<void>; };
  * template <typename T>
  * struct Simple {};
  *
- * static_assert(fp_is_type_class_unary_constructor<Simple>);
+ * static_assert(fp_is_unary_constructor<Simple>);
  * @endcode
  */
 template <template <typename> typename TC>
-inline constexpr bool fp_is_type_class_unary_constructor =
-  __type_constructible_with<TC>;
+inline constexpr bool fp_is_unary_constructor = __type_constructible_with<TC>;
+
+template <template <typename> typename TC>
+concept fp_unary_constructor = fp_is_unary_constructor<TC>;
 
 }  // namespace fp::meta::is_type_class_unary_constructor
 
@@ -60,12 +63,13 @@ template <typename TC>
 inline constexpr bool fp_is_type_class_instance =
   __is_type_class_instance<std::decay_t<TC>>::value;
 
-// Optional concept: checks whether type constructor extraction is possible
 template <typename TC>
-concept fp_has_type_class_constructor = fp_is_type_class_instance<TC>;
+concept fp_type_class_instance =
+  __is_type_class_instance<std::decay_t<TC>>::value;
+
 }  // namespace fp::meta::is_type_class_instance
 
-namespace fp::meta::type_constructor_arity {
+namespace fp::meta::constructor_arity {
 
 template <typename T>
 struct __type_constructor_arity {
@@ -82,20 +86,20 @@ struct __type_constructor_arity<TC<Args...>> {
  * @example
  * template <typename T>
  * using Optional = std::optional<T>;
- * static_assert(fp_type_constructor_arity<Optional<int>> == 1);
+ * static_assert(fp_get_constructor_arity<Optional<int>> == 1);
  */
 template <typename T>
-inline constexpr std::size_t fp_type_constructor_arity =
+inline constexpr std::size_t fp_get_constructor_arity =
   __type_constructor_arity<T>::value;
 
-}  // namespace fp::meta::type_constructor_arity
+}  // namespace fp::meta::constructor_arity
 
-namespace fp::meta::rebind_type_constructor {
+namespace fp::meta::rebind_constructor {
 template <typename T>
 struct __extract_type_constructor {
     static_assert(
       sizeof(T) != sizeof(T),  // NOLINT
-      "fp_rebind_type_constructor<T>: T must be of the form TC<T>"
+      "fp_rebind_constructor<T>: T must be of the form TC<T>"
     );
 };
 
@@ -111,54 +115,54 @@ struct __extract_type_constructor<TC<Arg>> {
  *
  * \code(.cpp)
  * template <typename U>
- * using Maybe = fp_rebind_type_constructor<std::optional<int>, U>;
+ * using Maybe = fp_rebind_constructor<std::optional<int>, U>;
  *
  * static_assert(std::is_same_v<Maybe<double>, std::optional<double>>);
  * \endcode
  */
 template <typename TC, typename U>
-using fp_rebind_type_constructor =
+using fp_rebind_constructor =
   typename __extract_type_constructor<TC>::template type<U>;
 
-}  // namespace fp::meta::rebind_type_constructor
+}  // namespace fp::meta::rebind_constructor
 
-namespace fp::meta::extract_dependent_type {
+namespace fp::meta::inner_type {
 
-using namespace fp::meta::type_constructor_arity;
+using namespace fp::meta::constructor_arity;
 using namespace fp::meta::is_type_class_instance;
 
 template <typename T>
-struct __extract_dependent_type {
+struct __extract_inner_type {
     static_assert(
       fp_is_type_class_instance<T>,
-      "fp_extract_dependent_type<T>: T must be an instance of a type class "
+      "fp_inner_type<T>: T must be an instance of a type class "
       "(e.g., TC<T>)"
     );
 
     static_assert(
-      fp_type_constructor_arity<T> < 1,
-      "fp_extract_dependent_type<T>: Type class instance must have arity 1 "
+      fp_get_constructor_arity<T> < 1,
+      "fp_inner_type<T>: Type class instance must have arity 1 "
       "(i.e., TC<T>)"
     );
 
     static_assert(
       sizeof(T) != sizeof(T),  // NOLINT
-      "fp_extract_dependent_type<T>: Unknown structure; T must be of the form "
+      "fp_inner_type<T>: Unknown structure; T must be of the form "
       "TC<T>"
     );
 };
 
 template <template <typename> typename TC, typename T>
-struct __extract_dependent_type<TC<T>> {
+struct __extract_inner_type<TC<T>> {
     static_assert(
       fp_is_type_class_instance<TC<T>>,
-      "fp_extract_dependent_type<T>: TC<T> is not a recognized type class "
+      "fp_inner_type<T>: TC<T> is not a recognized type class "
       "instance"
     );
 
     static_assert(
-      fp_type_constructor_arity<TC<T>> >= 1,
-      "fp_extract_dependent_type<T>: TC<T> must have exactly one type "
+      fp_get_constructor_arity<TC<T>> >= 1,
+      "fp_inner_type<T>: TC<T> must have exactly one type "
       "parameter"
     );
 
@@ -170,17 +174,25 @@ struct __extract_dependent_type<TC<T>> {
  *
  * @example
  * template <typename T> struct Box {};
- * using T = fp_extract_dependent_type<Box<int>>; // int
+ * using T = fp_inner_type<Box<int>>; // int
  */
 template <typename TC>
-using fp_extract_dependent_type =
-  typename __extract_dependent_type<std::decay_t<TC>>::type;
+using fp_inner_type = typename __extract_inner_type<std::decay_t<TC>>::type;
 
-}  // namespace fp::meta::extract_dependent_type
+template <typename T, typename TC>
+concept fp_has_inner_type = requires { typename fp_inner_type<TC>; }
+                         && std::same_as<fp_inner_type<TC>, T>;
 
-namespace fp::meta::is_wrapped_by {
+template <typename TA, typename TB>
+concept fp_has_same_inner_type = requires {
+    typename fp_inner_type<TA>;
+    typename fp_inner_type<TB>;
+} && std::same_as<fp_inner_type<TA>, fp_inner_type<TB>>;
+}  // namespace fp::meta::inner_type
 
-using namespace fp::meta::extract_dependent_type;
+namespace fp::meta::fp_is_wrapped_by {
+
+using namespace fp::meta::inner_type;
 
 template <
   template <typename> typename Outer,
@@ -188,39 +200,48 @@ template <
   typename Given>
 struct __is_wrapped_by {
     static constexpr bool value =
-      std::is_same_v<Inner<Given>, fp_extract_dependent_type<Outer<Given>>>;
+      std::is_same_v<Inner<Given>, fp_inner_type<Outer<Given>>>;
 
     static_assert(
-      value, "is_wrapped_by_given: cannot construct Outer<Inner<Given>> "
+      value, "fp_is_wrapped_by_with: cannot construct Outer<Inner<Given>> "
     );
 };
 
-/**
- * @brief Checks that Inner is wrapped by Outer given some type Given. I.e.
- * Outer<Inneer<Given>> is valid.
- */
+template <
+  template <typename> typename Inner,
+  template <typename> typename Outer,
+  typename Given>
+constexpr bool fp_is_wrapped_by_with =
+  __is_wrapped_by<Inner, Outer, Given>::value;
+
+template <
+  template <typename> typename Inner,
+  template <typename> typename Outer,
+  typename Given>
+concept fp_wrapped_by_with = __is_wrapped_by<Inner, Outer, Given>::value;
+
+template <
+  template <typename> typename Inner,
+  template <typename> typename Outer>
+constexpr bool fp_is_wrapped_by =
+  fp_is_wrapped_by_with<Inner, Outer, fp::Nothing>;
+
+template <
+  template <typename> typename Inner,
+  template <typename> typename Outer>
+concept fp_wrapped_by = fp_is_wrapped_by_with<Inner, Outer, fp::Nothing>;
+
 template <
   template <typename> typename Outer,
   template <typename> typename Inner,
-  typename Given>
-constexpr bool is_wrapped_by_given =
-  __is_wrapped_by<Inner, Outer, Given>::value;
-
-/**
- * \brief Checks that Inner is wrapped by Outer. Same as
- * \ref{is_wrapped_by_given}<Oouter, Inner, fp::Nothing>.
- */
-template <
-  template <typename> typename Outer,
-  template <typename> typename Inner>
-constexpr bool is_wrapped_by = is_wrapped_by_given<Inner, Outer, fp::Nothing>;
-
-}  // namespace fp::meta::is_wrapped_by
+  typename T>
+concept fp_is_wrapped_as = fp_wrapped_by_with<Inner, Outer, T>;
+}  // namespace fp::meta::fp_is_wrapped_by
 
 namespace fp::meta::make_pair_type {
 
 using namespace fp::meta::is_type_class_instance;
-using namespace fp::meta::type_constructor_arity;
+using namespace fp::meta::constructor_arity;
 
 template <typename T>
 struct __make_pair_type {
@@ -231,7 +252,7 @@ struct __make_pair_type {
     );
 
     static_assert(
-      fp_type_constructor_arity<T> == 2,
+      fp_get_constructor_arity<T> == 2,
       "fp_make_pair_type<T>: T must have exactly two type parameters (i.e., "
       "TC<A, B>)"
     );
@@ -245,7 +266,7 @@ struct __make_pair_type {
 template <template <typename, typename> typename TC, typename A, typename B>
 struct __make_pair_type<TC<A, B>> {
     static_assert(
-      fp_type_constructor_arity<TC<A, B>> >= 2,
+      fp_get_constructor_arity<TC<A, B>> >= 2,
       "fp_make_pair_type<Type>: Type must be of the form TC<A, B> (with arity "
       "2)."
     );
@@ -375,53 +396,51 @@ struct __fp_is_arrow_function<
     decltype(std::declval<F>()(std::declval<__arrow_arg<F>>())),
     __arrow_ret<F>>> : std::true_type {};
 
-/**
- * Checks whether a type F is a unary function, pointer, or lambda with exactly
- * one argument.
- */
 template <typename F>
-concept fp_is_arrow_function = __fp_is_arrow_function<F>::value;
+inline constexpr bool fp_is_arrow_function = __fp_is_arrow_function<F>::value;
 
 template <typename F>
-using fp_arrow_function_argument_type =
-  std::enable_if_t<fp_is_arrow_function<F>, __arrow_arg<F>>;
+concept fp_arrow_function = fp_is_arrow_function<F>;
 
-template <typename F>
-using fp_arrow_function_return_type =
-  std::enable_if_t<fp_is_arrow_function<F>, __arrow_ret<F>>;
+template <fp_arrow_function F>
+using fp_get_arrow_function_argument_type = __arrow_arg<F>;
 
+template <fp_arrow_function F>
+using fp_get_arrow_function_return_type = __arrow_ret<F>;
 }  // namespace fp::meta::arrow_function
 
 namespace fp::meta::is_kleisli_arrow {
 
 using namespace fp::meta::arrow_function;
 using namespace fp::meta::is_type_class_instance;
-using namespace fp::meta::rebind_type_constructor;
-using namespace fp::meta::extract_dependent_type;
+using namespace fp::meta::rebind_constructor;
+using namespace fp::meta::inner_type;
+
+template <fp_arrow_function F>
+inline constexpr bool fp_is_kleisli_arrow =
+  fp_is_type_class_instance<fp_get_arrow_function_return_type<F>>;
 
 template <typename F>
-concept fp_is_kleisli_arrow =
-  fp_is_arrow_function<F>
-  && fp_is_type_class_instance<fp_arrow_function_return_type<F>>;
+concept fp_kleisli_arrow = fp_is_kleisli_arrow<F>;
 
-template <typename F>
-using fp_kleisli_result_type =
-  fp_extract_dependent_type<fp_arrow_function_return_type<F>>;
+template <fp_kleisli_arrow F>
+using fp_get_kleisli_result_type =
+  fp_inner_type<fp_get_arrow_function_return_type<F>>;
 
-template <typename F>
-using fp_kleisli_monad_type_constructor = fp_rebind_type_constructor<
-  fp_arrow_function_return_type<F>,
-  fp_kleisli_result_type<F>>;
+template <fp_kleisli_arrow F>
+using fp_get_kleisli_type_constructor = fp_rebind_constructor<
+  fp_get_arrow_function_return_type<F>,
+  fp_get_kleisli_result_type<F>>;
 
 }  // namespace fp::meta::is_kleisli_arrow
 
 namespace fp::meta {
 using namespace fp::meta::is_type_class_unary_constructor;
 using namespace fp::meta::is_type_class_instance;
-using namespace fp::meta::type_constructor_arity;
-using namespace fp::meta::rebind_type_constructor;
-using namespace fp::meta::is_wrapped_by;
-using namespace fp::meta::extract_dependent_type;
+using namespace fp::meta::constructor_arity;
+using namespace fp::meta::rebind_constructor;
+using namespace fp::meta::fp_is_wrapped_by;
+using namespace fp::meta::inner_type;
 using namespace fp::meta::make_pair_type;
 using namespace fp::meta::arrow_function;
 using namespace fp::meta::is_kleisli_arrow;
