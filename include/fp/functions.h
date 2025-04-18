@@ -8,18 +8,18 @@
 
 #include <utility>
 
-namespace fp::functions {
-
-inline const auto id = [](const auto x) { return x; };
-struct Identity {
-    template <typename T>
-    constexpr auto operator()(T&& value) const noexcept -> T&& {
-        return std::forward<T>(value);
+namespace fp::__internal {
+struct __identity {
+    template <typename A>
+    constexpr A operator()(A&& value) const noexcept {
+        return std::forward<A>(value);
     }
 };
+}  // namespace fp::__internal
 
-constexpr Identity identity;
-
-}  // namespace fp::functions
+namespace fp {
+inline constexpr fp::__internal::__identity identity{};
+using identity_t = decltype(fp::identity);
+}  // namespace fp
 
 #endif  // FP_FUNCTIONS_H

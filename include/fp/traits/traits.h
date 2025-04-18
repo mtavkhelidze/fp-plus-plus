@@ -6,17 +6,17 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_TRAITS_TRAITS_H
 
+#include <fp/traits/applicative.h>
 #include <fp/traits/eq.h>
 #include <fp/traits/functor.h>
-// #include <fp/traits/monad.h>
 #include <fp/traits/monoid.h>
 #include <fp/traits/semigroup.h>
 
-namespace fp::traits {
+namespace fp::traits::all {
+using namespace applicative;
 using namespace eq;
-// using namespace monad;
+using namespace functor;
 using namespace monoid;
 using namespace semigroup;
-using namespace functor;
-}  // namespace fp::traits
+}  // namespace fp::traits::all
 #endif  // FP_TRAITS_TRAITS_H

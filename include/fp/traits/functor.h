@@ -18,6 +18,11 @@ using namespace fp::tools::inner_type;
 using namespace fp::tools::instance;
 using namespace fp::tools::rebind;
 
+/**
+ * Functor is a type class that abstracts over type constructors that can be
+ * `map`'ed over. Examples of such type constructors are `List`, `Option`, and
+ * `Future`.
+ */
 template <typename FA, typename F>
 concept Functor =
   fp_is_unary_instance<FA>

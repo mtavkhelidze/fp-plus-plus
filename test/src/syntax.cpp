@@ -8,7 +8,6 @@
 using namespace fp;
 using namespace fp::test;
 using namespace fp::syntax::composition;
-using namespace fp::functions;
 
 // &= like $ in Haskell
 TEST(Syntax_Operator_Dollar, works_with_different_types) {
@@ -66,10 +65,10 @@ TEST(Syntax_Operator_Compose, works_with_multiple_compositions_right_to_left) {
 }
 
 TEST(Syntax_Operator_Compose, works_with_identity_function) {
-    auto actual = increment * id;
+    auto actual = increment * fp::identity;
     EXPECT_EQ(actual(2), increment(2));
 
-    auto actual2 = id * triple;
+    auto actual2 = fp::identity * triple;
     EXPECT_EQ(actual2(2), triple(2));
 }
 

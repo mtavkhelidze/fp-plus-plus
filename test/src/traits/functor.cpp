@@ -6,6 +6,7 @@
 using ::testing::Test;
 
 using namespace fp;
+using namespace fp::traits::functor;
 using namespace fp::tools::arrow;
 
 namespace functor_box {
