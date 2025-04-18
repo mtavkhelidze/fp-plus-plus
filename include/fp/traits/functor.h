@@ -13,16 +13,21 @@
 #include <concepts>
 
 namespace fp::traits::functor {
-using namespace fp::tools::instance;
-using namespace fp::tools::inner_type;
-using namespace fp::tools::rebind;
 using namespace fp::tools::arrow;
+using namespace fp::tools::inner_type;
+using namespace fp::tools::instance;
+using namespace fp::tools::rebind;
 
 template <typename FA, typename F>
 concept Functor =
-  fp_is_unary_instance<FA> && requires(FA fa, fp_inner_type<FA> a, F f) {
-      { fa.template map<F>(f) } -> std::same_as<FA>;
-  };
+  fp_is_unary_instance<FA>
+  && fp_is_arrow<F, fp_inner_type<FA>>
+  && requires(FA fa, F f) {
+         {
+             fa.map(f)
+         }
+         -> std::same_as<fp_rebind<FA, fp_arrow_result<F, fp_inner_type<FA>>>>;
+     };
 }  // namespace fp::traits::functor
 
 #endif  // FP_TRAITS_FUNCTOR_H

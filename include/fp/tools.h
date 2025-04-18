@@ -180,13 +180,16 @@ using fp_make_pair_type = std::pair<
 namespace fp::tools::arrow {
 
 template <typename F, typename A>
-concept Arrow = requires(F f, A a) { std::invoke(f, a); }
-             && !std::is_void_v<std::invoke_result_t<F, A>>;
+inline constexpr bool fp_is_arrow = requires(F f, A a) { std::invoke(f, a); }
+                                 && !std::is_void_v<std::invoke_result_t<F, A>>;
+
+template <typename F, typename A>
+concept Arrow = fp_is_arrow<F, A>;
 
 // 5. Extract the result type (optional helper)
 template <typename F, typename A>
     requires Arrow<F, A>
-using fp_arrow_result = std::invoke_result_t<F, A>;
+using fp_arrow_result = std::decay_t<std::invoke_result_t<F, std::decay_t<A>>>;
 
 }  // namespace fp::tools::arrow
 namespace fp::tools::kleisli_arrow {

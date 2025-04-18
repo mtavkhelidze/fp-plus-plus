@@ -12,7 +12,7 @@ set(TEST_SRC
     # src/meta.cpp
     src/syntax.cpp
     src/traits/eq.cpp
-#    src/traits/functor.cpp
+   src/traits/functor.cpp
     src/traits/monoid.cpp
     src/traits/semigroup.cpp
 )

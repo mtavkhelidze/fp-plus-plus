@@ -1,39 +1,50 @@
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 
-#include <string>
+#include <functional>
 
 using ::testing::Test;
 
-using namespace fp::traits::functor;
-using namespace fp::traits::functor::laws;
+using namespace fp;
+using namespace fp::tools::arrow;
+
 namespace functor_box {
+
 template <typename A>
 struct FunctorBox {
     A value;
 
-    template <fp_arrow_function F>
+    template <typename F>
     [[nodiscard]] auto map(F&& f) const {
-        using RT = fp_get_arrow_function_return_type<F>;
-        return FunctorBox<RT>{std::forward<F>(f)(value)};
+        using RT = fp_arrow_result<F, A>;
+        return FunctorBox<RT>{std::forward<F>(f)(A{value})};
     }
 };
 
-using IntBox = FunctorBox<int>;
-static auto equals(const IntBox& a, const IntBox& b) -> bool {
-    return a.value == b.value;
-}
-
 }  // namespace functor_box
-TEST(Functor, identity_law) {
+
+TEST(Functor, identity_law) {  // NOLINT
     using namespace functor_box;
 
-    const IntBox box(42);
-    static_assert(Functor<IntBox>);
+    using IntBox = FunctorBox<int>;
+    IntBox const ib(10);
 
-    // ASSERT_TRUE(FunctorLaws<IntBox>::identity(box));
-    // ASSERT_TRUE(FunctorLaws<IntBox>::composition(box));
+    static_assert(Functor<IntBox, std::identity>);
 
-    auto mapped = box.map([](int x) { return std::to_string(x); });
-    ASSERT_EQ(mapped.value, "42");
+    ASSERT_TRUE(ib.map(std::identity()).value == ib.value);
+}
+
+TEST(Functor, composition_law) {  // NOLINT
+    using namespace functor_box;
+
+    using IntBox = FunctorBox<int>;
+    IntBox const ib(10);
+
+    auto f = [](int x) { return x + 1; };
+    auto g = [](int x) { return x * 2; };
+
+    auto composed = ib.map(f).map(g);
+    auto sequential = ib.map([&](int x) { return g(f(x)); });
+
+    ASSERT_EQ(composed.value, sequential.value);
 }
