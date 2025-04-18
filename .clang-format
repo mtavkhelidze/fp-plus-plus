@@ -1,3 +1,4 @@
+NamespaceIndentation: Inner
 AccessModifierOffset: -2
 AlignAfterOpenBracket: BlockIndent
 AlignArrayOfStructures: Left

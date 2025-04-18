@@ -6,524 +6,224 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_META_H
 
-#include <fp/defs.h>
-
 #include <concepts>
 #include <cstddef>
 #include <type_traits>
 #include <utility>
 
-namespace fp::meta::type_class_unary_constructor {
+namespace fp::tools::instance {
+namespace __internal {
+    template <typename T>
+    struct __type_class_instance {
+        static constexpr std::size_t value = 0;
+        static_assert(
+          sizeof(T) != sizeof(T),  // NOLINT
+          "TC must be of the form TC<...T> (i.e.std::optional<int>)."
+        );
+    };
+    template <template <typename...> typename TC, typename... Args>
+    struct __type_class_instance<TC<Args...>> {
+        static constexpr std::size_t value = sizeof...(Args);
+    };
 
-template <template <typename> typename TC>
-concept __type_constructible_with = requires { typename TC<void>; };
+    template <typename>
+    struct __type_class_unary_instance : std::false_type {
+        static_assert(
+          sizeof(int) != sizeof(int),  // NOLINT
+          "TC must be of the form TC<A> (i.e.std::optional<int>)."
+        );
+    };
+    template <template <typename> typename TC, typename T>
+    struct __type_class_unary_instance<TC<T>> : std::true_type {};
 
-/**
- * @brief Checks whether TC is a unary type constructor.
- *
- * A unary type constructor is a template that takes exactly one type parameter.
- * This concept is useful for ensuring that a type constructor can be
- * instantiated with a single type argument, which is a common pattern in
- * type-level programming.
- *
- * Example:
- * @code
- *
- * template <typename T>
- * struct Simple {};
- *
- * static_assert(fp_is_unary_constructor<Simple>);
- * // Here, Simple is a unary type constructor since it takes one type
- * parameter.
- * @endcode
- */
-template <template <typename> typename TC>
-inline constexpr bool fp_is_unary_constructor = __type_constructible_with<TC>;
-
-template <template <typename> typename TC>
-concept fp_unary_constructor = fp_is_unary_constructor<TC>;
-
-}  // namespace fp::meta::type_class_unary_constructor
-
-namespace fp::meta::type_class_instance {
-
-template <typename>
-struct __is_type_class_instance : std::false_type {};
-
-// Specialization: matches any instantiation of a unary template
-template <template <typename> typename TC, typename T>
-struct __is_type_class_instance<TC<T>> : std::true_type {};
-
-/**
- * @brief Concept or constant that checks whether a type T is an instance
- *        of some unary type constructor.
- *
- * This trait is particularly useful for verifying that a type is a valid
- * instance of a type constructor that expects a single type argument. This is
- * essential in generic programming where type safety and correctness are
- * paramount.
- *
- * Example:
- * @code
- * template <typename T> struct Simple {};
- * static_assert(fp_is_type_class_instance<Simple<int>>); // Valid instance
- * static_assert(!fp_is_type_class_instance<int>); // int is not a type
- * constructor
- * @endcode
- */
-template <typename TC>
-inline constexpr bool fp_is_type_class_instance =
-  __is_type_class_instance<std::decay_t<TC>>::value;
+    template <typename>
+    struct __type_class_binary_instance : std::false_type {
+        static_assert(
+          sizeof(int) != sizeof(int),  // NOLINT
+          "TC must be of the form TC<A, B> (i.e.std::ppair<int, float>)."
+        );
+    };
+    template <template <typename, typename> typename TC, typename A, typename B>
+    struct __type_class_binary_instance<TC<A, B>> : std::true_type {};
+}  // namespace __internal
+using namespace __internal;
 
 template <typename TC>
-concept fp_type_class_instance =
-  __is_type_class_instance<std::decay_t<TC>>::value;
+inline constexpr bool fp_is_instance =
+  __type_class_instance<std::decay_t<TC>>::value > 0;
 
-}  // namespace fp::meta::type_class_instance
-
-namespace fp::meta::constructor_arity {
-
-template <typename T>
-struct __type_constructor_arity {
-    static constexpr std::size_t value = 0;
-};
-
-template <template <typename...> typename TC, typename... Args>
-struct __type_constructor_arity<TC<Args...>> {
-    static constexpr std::size_t value = sizeof...(Args);
-};
-/**
- * @brief Returns the number of type arguments of a type constructor instance.
- *
- * This trait is useful for inspecting instantiated types to determine how
- * many type parameters were provided. It is essential in metaprogramming
- * tasks where generic arity inspection is needed for validation or
- * transformation.
- *
- * @example
- * template <typename T, typename U>
- * struct Pair {};
- * static_assert(fp_get_constructor_arity<Pair<int, float>> == 2); // Valid
- */
-template <typename T>
-inline constexpr std::size_t fp_get_constructor_arity =
-  __type_constructor_arity<T>::value;
-
-}  // namespace fp::meta::constructor_arity
-
-namespace fp::meta::rebind_constructor {
-template <typename T>
-struct __extract_type_constructor {
-    static_assert(
-      sizeof(T) != sizeof(T),  // NOLINT
-      "fp_rebind_constructor<T>: T must be of the form TC<T>. Example: "
-      "std::optional<int>"
-    );
-};
-
-template <template <typename...> typename TC, typename Arg>
-struct __extract_type_constructor<TC<Arg>> {
-    template <typename U>
-    using type = TC<U>;
-};
-/**
- * @brief Rebinds a unary type constructor instance to a new type.
- *
- * This metafunction transforms a type like `TC<A>` into `TC<B>`, preserving
- * the structure of the original constructor while substituting the type
- * argument. It is useful for manipulating higher-kinded types generically.
- *
- * @example
- * using Orig = std::optional<int>;
- * using Rebound = fp_rebind_constructor<Orig, double>;
- * static_assert(std::is_same_v<Rebound, std::optional<double>>);
- */
-template <typename TC, typename U>
-using fp_rebind_constructor =
-  typename __extract_type_constructor<std::decay_t<TC>>::template type<U>;
-
-}  // namespace fp::meta::rebind_constructor
-
-namespace fp::meta::inner_type {
-
-using namespace fp::meta::constructor_arity;
-using namespace fp::meta::type_class_instance;
-
-template <typename T>
-struct __extract_inner_type {
-    static_assert(
-      fp_is_type_class_instance<T>,
-      "fp_inner_type<T>: T must be an instance of a type class "
-      "(e.g., TC<T>)"
-    );
-
-    static_assert(
-      fp_get_constructor_arity<T> < 1,
-      "fp_inner_type<T>: Type class instance must have arity 1 "
-      "(i.e., TC<T>)"
-    );
-
-    static_assert(
-      sizeof(T) != sizeof(T),  // NOLINT
-      "fp_inner_type<T>: Unsupported structure; T must match the form TC<T>. "
-      "Example: std::optional<int>"
-    );
-};
-
-template <template <typename> typename TC, typename T>
-struct __extract_inner_type<TC<T>> {
-    static_assert(
-      fp_is_type_class_instance<TC<T>>,
-      "fp_inner_type<T>: TC<T> is not a recognized type class "
-      "instance"
-    );
-
-    static_assert(
-      fp_get_constructor_arity<TC<T>> >= 1,
-      "fp_inner_type<T>: TC<T> must have exactly one type "
-      "parameter"
-    );
-
-    using type = T;
-};
-
-/**
- * @brief Extracts the dependent type T from a type constructor TC<T>.
- *
- * This trait is useful for retrieving the type that a type constructor wraps.
- * For example, given a type like `std::optional<T>`, it allows you to extract
- * the inner type `T`. This is essential in scenarios where you need to work
- * with the type contained within a wrapper.
- *
- * @example
- * template <typename T> struct Box {};
- * using T = fp_inner_type<Box<int>>; // int
- * using InnerType = fp_inner_type<std::optional<float>>; // float
- */
 template <typename TC>
+concept Instance = fp_is_instance<TC>;
+
+template <typename TC>
+inline constexpr bool fp_is_unary_instance =
+  __type_class_unary_instance<std::decay_t<TC>>::value;
+
+template <typename TC>
+concept UnaryInstance = fp_is_unary_instance<TC>;
+
+template <typename TC>
+inline constexpr bool fp_is_binary_instance =
+  __type_class_binary_instance<std::decay_t<TC>>::value;
+
+template <typename TC>
+concept BinaryInstance = fp_is_binary_instance<TC>;
+
+template <typename TC>
+inline constexpr std::size_t fp_get_instance_arity =
+  __type_class_instance<std::decay_t<TC>>::value;
+
+}  // namespace fp::tools::instance
+
+namespace fp::tools::rebind {
+using namespace fp::tools::instance;
+
+namespace __internal {
+    template <typename T>
+    struct __rebind_instance {};
+
+    template <template <typename> typename TC, typename A>
+    struct __rebind_instance<TC<A>> {
+        template <typename B>
+        using type = TC<std::decay_t<B>>;
+    };
+
+    template <template <typename, typename> typename TC, typename A, typename B>
+    struct __rebind_instance<TC<A, B>> {
+        template <typename C, typename D>
+        using type = TC<std::decay_t<C>, std::decay_t<D>>;
+    };
+};  // namespace __internal
+using namespace __internal;
+
+/// Transform TC<A> into TC<B>
+template <typename TC, typename B>
+    requires(fp_is_unary_instance<TC>)
+using fp_rebind =
+  typename __rebind_instance<std::decay_t<TC>>::template type<B>;
+
+/// Transform TC<A, B> into TC<C, D>
+template <typename TC, typename C, typename D>
+    requires(fp_is_binary_instance<TC>)
+using fp_rebind_binary =
+  typename __rebind_instance<std::decay_t<TC>>::template type<C, D>;
+
+}  // namespace fp::tools::rebind
+
+namespace fp::tools::inner_type {
+
+using namespace fp::tools::instance;
+namespace __internal {
+    template <typename T>
+    struct __extract_inner_type {};
+
+    template <template <typename> typename TC, typename A>
+    struct __extract_inner_type<TC<A>> {
+        using type = std::decay_t<A>;
+    };
+}  // namespace __internal
+using namespace __internal;
+
+/// If given TC<A>, access A
+template <UnaryInstance TC>
 using fp_inner_type = typename __extract_inner_type<std::decay_t<TC>>::type;
 
-template <typename T, typename TC>
-concept fp_has_inner_type = requires {
-    typename fp_inner_type<std::decay_t<TC>>;
-} && std::same_as<fp_inner_type<std::decay_t<TC>>, T>;
+/// Given two instances, check if their inner types are the same (i.e.
+/// std::optional<int> and std::vectro<double> will result in false)
+template <UnaryInstance TA, UnaryInstance TB>
+inline constexpr bool fp_is_same_inner_type = std::
+  same_as<fp_inner_type<std::decay_t<TA>>, fp_inner_type<std::decay_t<TB>>>;
+
+}  // namespace fp::tools::inner_type
+
+namespace fp::tools::instance_with {
+
+using namespace fp::tools::instance;
+using namespace fp::tools::inner_type;
+
+namespace __internal {
+    template <typename TA, typename TB>
+    struct __is_instance_with {
+        static constexpr bool value = std::same_as<TA, fp_inner_type<TB>>;
+    };
+}  // namespace __internal
+using namespace __internal;
+
+template <UnaryInstance TA, UnaryInstance TB>
+inline constexpr bool fp_is_instance_with =
+  fp_is_unary_instance<TA>
+  && fp_is_instance<TB>
+  && __is_instance_with<std::decay_t<TA>, std::decay_t<TB>>::value;
 
 template <typename TA, typename TB>
-concept fp_has_same_inner_type =
-  requires {
-      typename fp_inner_type<std::decay_t<TA>>;
-      typename fp_inner_type<std::decay_t<TB>>;
-  }
-  && std::
-    same_as<fp_inner_type<std::decay_t<TA>>, fp_inner_type<std::decay_t<TB>>>;
-}  // namespace fp::meta::inner_type
+concept InstanceWith = fp_is_instance_with<TA, TB>;
 
-namespace fp::meta::is_wrapped_by {
+}  // namespace fp::tools::instance_with
 
-using namespace fp::meta::inner_type;
+namespace fp::tools::make_pair_type {
 
-template <
-  template <typename> typename Outer,
-  template <typename> typename Inner,
-  typename Given>
-struct __is_wrapped_by {
-    static constexpr bool value =
-      std::is_same_v<Inner<Given>, fp_inner_type<Outer<Given>>>;
-
-    static_assert(
-      value, "fp_is_wrapped_by_with: cannot construct Outer<Inner<Given>> "
-    );
-};
-
-template <
-  template <typename> typename Inner,
-  template <typename> typename Outer,
-  typename Given>
-inline constexpr bool fp_is_wrapped_by_with =
-  __is_wrapped_by<Inner, Outer, Given>::value;
-
-template <
-  template <typename> typename Inner,
-  template <typename> typename Outer,
-  typename Given>
-inline constexpr bool fp_wrapped_by_with_concept =
-  __is_wrapped_by<Inner, Outer, Given>::value;
-// Using the inline variable above to define the concept
-template <
-  template <typename> typename Inner,
-  template <typename> typename Outer,
-  typename Given>
-concept fp_wrapped_by_with = fp_wrapped_by_with_concept<Inner, Outer, Given>;
-
-template <
-  template <typename> typename Inner,
-  template <typename> typename Outer>
-inline constexpr bool fp_is_wrapped_by =
-  fp_is_wrapped_by_with<Inner, Outer, fp::Nothing>;
-
-template <
-  template <typename> typename Inner,
-  template <typename> typename Outer>
-inline constexpr bool fp_wrapped_by_concept =
-  fp_is_wrapped_by_with<Inner, Outer, fp::Nothing>;
-// Using the inline variable above to define the concept
-template <
-  template <typename> typename Inner,
-  template <typename> typename Outer>
-concept fp_wrapped_by = fp_wrapped_by_concept<Inner, Outer>;
-/**
- * @brief Checks if a type is equivalent to `Outer<Inner<T>>`.
- *
- * This trait is useful for verifying deep wrapping relationships,
- * e.g., ensuring a value is wrapped first by one type constructor
- * and then another, in a specific nesting order.
- *
- * @example
- * using Wrapped = std::optional<std::vector<int>>;
- * static_assert(fp_is_wrapped_as<std::optional, std::vector, int>); // Valid
- */
-template <
-  template <typename> typename Outer,
-  template <typename> typename Inner,
-  typename T>
-concept fp_is_wrapped_as = fp_wrapped_by_with<Inner, Outer, T>;
-
-}  // namespace fp::meta::is_wrapped_by
-namespace fp::meta::make_pair_type {
-
-using namespace fp::meta::type_class_instance;
-using namespace fp::meta::constructor_arity;
+using namespace fp::tools::instance;
 
 template <typename T>
-struct __make_pair_type {
-    static_assert(
-      fp_is_type_class_instance<T>,
-      "fp_make_pair_type<T>: T must be an instance of a type class of form "
-      "TC<A, B>)"
-    );
-
-    static_assert(
-      fp_get_constructor_arity<T> == 2,
-      "fp_make_pair_type<T>: T must have exactly two type parameters (i.e., "
-      "TC<A, B>)"
-    );
-
-    static_assert(
-      sizeof(T) != sizeof(T),  // NOLINT
-      "fp_make_pair_type<T>: Type must be of the form TC<A, B>. Example: "
-      "std::map<std::string, float>"
-    );
-};
+struct __make_pair_type {};
 
 template <template <typename, typename> typename TC, typename A, typename B>
 struct __make_pair_type<TC<A, B>> {
-    static_assert(
-      fp_get_constructor_arity<TC<A, B>> >= 2,
-      "fp_make_pair_type<Type>: Type must be of the form TC<A, B> (with arity "
-      "2)."
-    );
-
-    using first = A;
-    using second = B;
+    using first = std::decay_t<A>;
+    using second = std::decay_t<B>;
 };
 
-/**
- * @brief Converts types of the form `TC<A, B>` into `std::pair<A, B>`.
- *
- * @example
- * using Map = std::map<std::string, float>;
- * using Tuple = fp_make_pair_type<Map>; // std::pair<std::string, float>
- */
 template <typename T>
 using fp_make_pair_type = std::pair<
-  typename __make_pair_type<T>::first,
-  typename __make_pair_type<T>::second>;
+  typename __make_pair_type<std::decay_t<T>>::first,
+  typename __make_pair_type<std::decay_t<T>>::second>;
+}  // namespace fp::tools::make_pair_type
 
-}  // namespace fp::meta::make_pair_type
+namespace fp::tools::arrow {
 
-namespace fp::meta::arrow_function {
+template <typename F, typename A>
+concept Arrow = requires(F f, A a) { std::invoke(f, a); }
+             && !std::is_void_v<std::invoke_result_t<F, A>>;
 
-// various function types
-template <typename T>
-struct __arrow_function {
-    static_assert(
-      sizeof(T) != sizeof(T),  // NOLINT
-      "fp_is_arrow_function<T>: T must be a function pointer, function type, "
-      "or lambda with exactly one argument"
-    );
-};
+// 5. Extract the result type (optional helper)
+template <typename F, typename A>
+    requires Arrow<F, A>
+using fp_arrow_result = std::invoke_result_t<F, A>;
 
-// Function pointer
-template <typename R, typename A>
-struct __arrow_function<R (*)(A)> {
-    using a = A;
-    using b = R;
-    static constexpr std::size_t arity = 1;
-};
+}  // namespace fp::tools::arrow
 
-template <typename R, typename A>
-struct __arrow_function<R(A)> {
-    using a = A;
-    using b = R;
-    static constexpr std::size_t arity = 1;
-};
+namespace fp::tools::kleisli_arrow {
 
-// Member function pointers (lambdas, functors)
-template <typename R, typename A, typename M>
-struct __arrow_function<R (M::*)(A)> {
-    using a = A;
-    using b = R;
-    static constexpr std::size_t arity = 1;
-};
+using namespace fp::tools::instance;
+using namespace fp::tools::inner_type;
+using namespace fp::tools::arrow;
 
-template <typename R, typename A, typename M>
-struct __arrow_function<R (M::*)(A) const> {
-    using a = A;
-    using b = R;
-    static constexpr std::size_t arity = 1;
-};
-
-template <typename R, typename A, typename M>
-struct __arrow_function<R (M::*)(A) &> {
-    using a = A;
-    using b = R;
-    static constexpr std::size_t arity = 1;
-};
-
-template <typename R, typename A, typename M>
-struct __arrow_function<R (M::*)(A) const &> {
-    using a = A;
-    using b = R;
-    static constexpr std::size_t arity = 1;
-};
-
-template <typename R, typename A, typename M>
-struct __arrow_function<R (M::*)(A) &&> {
-    using a = A;
-    using b = R;
-    static constexpr std::size_t arity = 1;
-};
-
-template <typename R, typename A, typename M>
-struct __arrow_function<R (M::*)(A) const &&> {
-    using a = A;
-    using b = R;
-    static constexpr std::size_t arity = 1;
-};
-
-template <typename F>
-struct __arrow_traits : __arrow_function<decltype(&F::operator())> {};
-
-// Specializations for plain function and function pointers
-template <typename R, typename A>
-struct __arrow_traits<R(A)> : __arrow_function<R(A)> {};
-
-template <typename R, typename A>
-struct __arrow_traits<R (*)(A)> : __arrow_function<R (*)(A)> {};
-
-template <typename F>
-using __arrow_arg = typename __arrow_traits<F>::a;
-
-template <typename F>
-using __arrow_ret = typename __arrow_traits<F>::b;
-
-template <typename F>
-inline constexpr std::size_t __arrow_arity = __arrow_traits<F>::arity;
-
-// SFINAE fallback
-template <typename F, typename = void>
-struct __fp_is_arrow_function : std::false_type {
-    static_assert(
-      sizeof(F) != sizeof(F),  // NOLINT
-      "fp_is_arrow_function<F>: F must be a unary function, function pointer, "
-      "or lambda (i.e., F(A) -> B)"
-    );
-};
-
-template <typename F>
-struct __fp_is_arrow_function<
-  F,
-  std::void_t<
-    decltype(std::declval<F>()(std::declval<__arrow_arg<F>>())),
-    __arrow_ret<F>>> : std::true_type {};
-
-/**
- * @brief Checks if a function or lambda is a unary function.
- *
- * This concept verifies that a given function type takes exactly one argument
- * and returns a value. It's particularly useful in generic programming where
- * you want to ensure that a function adheres to a specific signature, allowing
- * for safer and more predictable behavior.
- *
- * @example
- * void func(int);
- * static_assert(fp_is_arrow_function<decltype(func)>); // Valid
- * auto lambda = [](double x) { return x * 2; };
- * static_assert(fp_is_arrow_function<decltype(lambda)>); // Valid
- * static_assert(!fp_is_arrow_function<void()>); // Invalid: no arguments
- * static_assert(!fp_is_arrow_function<int(int, int)>); // Invalid: multiple
- * arguments
- */
-template <typename F>
-inline constexpr bool fp_is_arrow_function = __fp_is_arrow_function<F>::value;
-
-template <typename F>
-concept fp_arrow_function = fp_is_arrow_function<F>;
-
-template <fp_arrow_function F>
-using fp_get_arrow_function_argument_type = __arrow_arg<F>;
-
-template <fp_arrow_function F>
-using fp_get_arrow_function_return_type = __arrow_ret<F>;
-}  // namespace fp::meta::arrow_function
-
-namespace fp::meta::kleisli_arrow {
-
-using namespace fp::meta::arrow_function;
-using namespace fp::meta::type_class_instance;
-using namespace fp::meta::rebind_constructor;
-using namespace fp::meta::inner_type;
-
-/**
- * @brief Checks if a function is a Kleisli arrow.
- *
- * A Kleisli arrow is a special kind of function that returns a type wrapped
- * by a type constructor. This is useful for ensuring that a function fits
- * within the Kleisli monad framework.
- *
- * @example
- * auto kleisli_func = [](int x) { return std::optional<int>(x * 2); };
- * static_assert(fp_is_kleisli_arrow<decltype(kleisli_func)>); // Valid
- * static_assert(!fp_is_kleisli_arrow<decltype(func)>); // Invalid
- */
-template <fp_arrow_function F>
+template <typename F, typename A>
+    requires Arrow<F, A>
 inline constexpr bool fp_is_kleisli_arrow =
-  fp_is_type_class_instance<fp_get_arrow_function_return_type<F>>;
+  fp_is_instance<fp_arrow_result<F, A>>;
 
-template <typename F>
-concept fp_kleisli_arrow = fp_is_kleisli_arrow<F>;
+template <typename F, typename A>
+concept KleisliArrow = fp_is_kleisli_arrow<F, A>;
 
-template <fp_kleisli_arrow F>
-using fp_get_kleisli_result_type =
-  fp_inner_type<fp_get_arrow_function_return_type<F>>;
+template <typename F, typename A>
+    requires KleisliArrow<F, A>
+using fp_kvalue = fp_arrow_result<F, A>;
 
-template <fp_kleisli_arrow F>
-using fp_get_kleisli_type_constructor = fp_rebind_constructor<
-  fp_get_arrow_function_return_type<F>,
-  fp_get_kleisli_result_type<F>>;
+template <typename F, typename A>
+    requires KleisliArrow<F, A>
+using fp_kvalue_type = fp_inner_type<fp_kvalue<F, A>>;
 
-}  // namespace fp::meta::kleisli_arrow
+}  // namespace fp::tools::kleisli_arrow
 
-namespace fp::meta {
-using namespace fp::meta::type_class_unary_constructor;
-using namespace fp::meta::type_class_instance;
-using namespace fp::meta::constructor_arity;
-using namespace fp::meta::rebind_constructor;
-using namespace fp::meta::is_wrapped_by;
-using namespace fp::meta::inner_type;
-using namespace fp::meta::make_pair_type;
-using namespace fp::meta::arrow_function;
-using namespace fp::meta::kleisli_arrow;
-}  // namespace fp::meta
+namespace fp::tools {
+using namespace fp::tools::instance;
+using namespace fp::tools::rebind;
+using namespace fp::tools::inner_type;
+using namespace fp::tools::instance_with;
+using namespace fp::tools::make_pair_type;
+using namespace fp::tools::arrow;
+using namespace fp::tools::kleisli_arrow;
+}  // namespace fp::tools
 
 #endif  // FP_META_H

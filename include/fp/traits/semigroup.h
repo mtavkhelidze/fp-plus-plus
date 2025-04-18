@@ -10,7 +10,11 @@
 
 namespace fp::traits::semigroup {
 /**
- * If a type A can form a Semigroup it has an associative binary operation.
+ * @brief A Semigroup provides an associative binary operation via `combine(a,
+ * b)`.
+ *
+ * The `combine` function must be found via ADL and satisfy the associativity
+ * law: combine(a, combine(b, c)) == combine(combine(a, b), c)
  */
 template <typename S>
 concept Semigroup = requires(S a, S b) {

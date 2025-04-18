@@ -12,7 +12,7 @@ struct Char {
     char c;
 };
 
-auto equals(const Char& a, const Char& b) -> bool { return a.c == b.c; }
+static auto equals(const Char& a, const Char& b) -> bool { return a.c == b.c; }
 
 };  // namespace eq_char
 

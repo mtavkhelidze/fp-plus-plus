@@ -1,6 +1,7 @@
 #include <fp/meta.h>
 #include <gtest/gtest.h>
 
+#include <functional>
 #include <map>
 #include <optional>
 #include <string>
@@ -18,7 +19,7 @@ struct NoTemplateStruct {};
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_is_type_class_unary_constructor_check) {
-    using namespace fp::meta::type_class_unary_constructor;
+    using namespace fp::tools::type_class_unary_constructor;
 
     static_assert(fp_is_unary_constructor<UnaryStruct>);
 
@@ -29,7 +30,7 @@ TEST(Meta, fp_is_type_class_unary_constructor_check) {
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_arrow_function_check) {
-    using namespace fp::meta::arrow_function;
+    using namespace fp::tools::arrow_function;
 
     constexpr double double_number = 1.5;
 
@@ -67,6 +68,8 @@ TEST(Meta, fp_arrow_function_check) {
       std::is_same_v<fp_get_arrow_function_return_type<Callable>, double>
     );
 
+    // static_assert(fp_is_arrow_function<std::identity>);
+
     // Uncommenting this should cause a compilation error
     //    struct BadFunctor { double operator()(int, int) const; };
     //    static_assert(fp_is_arrow_function<BadFunctor>);
@@ -74,7 +77,7 @@ TEST(Meta, fp_arrow_function_check) {
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_is_type_class_instance_check) {
-    using namespace fp::meta::type_class_instance;
+    using namespace fp::tools::type_class_instance;
 
     using Int = UnaryStruct<int>;
     static_assert(fp_is_type_class_instance<Int>);
@@ -90,7 +93,7 @@ TEST(Meta, fp_is_type_class_instance_check) {
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_type_constructor_arity_check) {
-    using namespace fp::meta::constructor_arity;
+    using namespace fp::tools::constructor_arity;
 
     static_assert(fp_get_constructor_arity<UnaryStruct<int>> == 1);
     static_assert(fp_get_constructor_arity<decltype(UnaryStruct<int>{})> == 1);
@@ -106,11 +109,14 @@ TEST(Meta, fp_type_constructor_arity_check) {
 
 template <typename U>
 using Maybe =
-  fp::meta::rebind_constructor::fp_rebind_constructor<std::optional<int>, U>;
+  fp::tools::rebind_constructor::fp_rebind_constructor<std::optional<int>, U>;
 
 // NOLINTNEXTLINE
-TEST(Meta, fp_rebind_type_constructor_check) {
-    static_assert(std::is_same_v<Maybe<double>, std::optional<double>>);
+TEST(Meta, fp_rebind_constructor_check) {
+    using namespace fp::tools::rebind_constructor;
+    using Orig = std::optional<int>;
+    using Rebound = fp_rebind_constructor<Orig, double>;
+    static_assert(std::is_same_v<Rebound, std::optional<double>>);
 }
 
 template <typename T>
@@ -118,13 +124,13 @@ using Vector = std::vector<Maybe<T>>;
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_is_nested_instance_of_check) {
-    using namespace fp::meta::is_wrapped_by;
+    using namespace fp::tools::is_wrapped_by;
     static_assert(fp_is_wrapped_by<Vector, Maybe>);
 }
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_extract_dependent_type_check) {
-    using namespace fp::meta::inner_type;
+    using namespace fp::tools::inner_type;
 
     using Extracted = fp_inner_type<UnaryStruct<int>>;
     static_assert(std::is_same_v<Extracted, int>);
@@ -141,7 +147,7 @@ TEST(Meta, fp_extract_dependent_type_check) {
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_make_pair_type_check) {
-    using namespace fp::meta::make_pair_type;
+    using namespace fp::tools::make_pair_type;
 
     using Map = std::map<std::string, float>;
     using ResultOne = fp_make_pair_type<Map>;
@@ -160,7 +166,7 @@ TEST(Meta, fp_make_pair_type_check) {
 
 // NOLINTNEXTLINE
 TEST(Meta, fp_is_kleisli_arrow_check) {
-    using namespace fp::meta::kleisli_arrow;
+    using namespace fp::tools::kleisli_arrow;
 
     auto kleisli = [](int x) -> std::optional<double> {
         return x > 0 ? std::optional<double>{static_cast<double>(x)}

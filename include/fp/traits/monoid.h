@@ -12,8 +12,11 @@
 
 namespace fp::traits::monoid {
 /**
- * Monoid extends the power of \ref Semigroup by providing an additional empty
- * value.
+ * @brief Monoid extends the power of \ref Semigroup by providing an identity
+ * element.
+ *
+ * The `empty` function must be a static member function returning a value of
+ * type `M` since ADL won't work with arity 0.
  */
 template <typename M>
 concept Monoid = traits::semigroup::Semigroup<M> && requires() {
