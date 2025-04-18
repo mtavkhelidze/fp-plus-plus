@@ -13,21 +13,6 @@
 #include <type_traits>
 
 namespace fp::traits::monad {
-using namespace meta::type_class_instance;
-/**
- * Concept that checks if `Fn` can be applied to `T` and returns a value of
- * type `TC<U>`.
- */
-template <typename Fn, typename T, template <typename> typename TC>
-concept fp_kleisli_arrow = requires {
-    requires fp_is_type_class_instance<
-      TC<std::decay_t<std::invoke_result_t<Fn, T>>>>;
-};
-
-}  // namespace fp::traits::monad
-
-namespace fp::traits::monad {
-
 /**
  * Concept representing a lawful Monad, requiring `pure` and `flatMap`
  * support.
