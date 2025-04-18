@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 
 using namespace fp;
-using namespace fp::internal;
+using namespace fp::__internal::box;
 
 TEST(Box_getOrNull, default_typed_box) {
     Box<int> box;

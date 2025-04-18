@@ -16,8 +16,7 @@
 #include <variant>
 #include <vector>
 
-namespace fp::internal {
-
+namespace fp::__internal::box {
 template <typename T, typename... Ts>
 struct FP_ALIGN_PACKED_16 Box {
   private:
@@ -87,6 +86,5 @@ Box(const char*) -> Box<std::string>;
 Box() -> Box<Nothing>;
 
 Box(std::nullptr_t) -> Box<Nothing>;
-}  // namespace fp::internal
-
+}  // namespace fp::__internal::box
 #endif  // FP___INTERNAL_BOX_H

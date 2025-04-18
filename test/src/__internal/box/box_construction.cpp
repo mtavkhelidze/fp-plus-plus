@@ -14,7 +14,7 @@
 
 using ::testing::Test;
 using namespace fp;
-using namespace fp::internal;
+using namespace fp::__internal::box;
 
 TEST(Box_Construction, box_with_nothing_in_it) {
     // Nothing type (std::monostate)

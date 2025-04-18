@@ -46,7 +46,7 @@ namespace __internal {
     template <template <typename, typename> typename TC, typename A, typename B>
     struct __type_class_binary_instance<TC<A, B>> : std::true_type {};
 }  // namespace __internal
-using namespace __internal;
+using namespace fp::tools::instance::__internal;
 
 template <typename TC>
 inline constexpr bool fp_is_instance =
@@ -74,7 +74,6 @@ inline constexpr std::size_t fp_get_instance_arity =
   __type_class_instance<std::decay_t<TC>>::value;
 
 }  // namespace fp::tools::instance
-
 namespace fp::tools::rebind {
 using namespace fp::tools::instance;
 
@@ -93,8 +92,8 @@ namespace __internal {
         template <typename C, typename D>
         using type = TC<std::decay_t<C>, std::decay_t<D>>;
     };
-};  // namespace __internal
-using namespace __internal;
+}  // namespace __internal
+using namespace fp::tools::rebind::__internal;
 
 /// Transform TC<A> into TC<B>
 template <typename TC, typename B>
@@ -109,10 +108,10 @@ using fp_rebind_binary =
   typename __rebind_instance<std::decay_t<TC>>::template type<C, D>;
 
 }  // namespace fp::tools::rebind
-
 namespace fp::tools::inner_type {
 
-using namespace fp::tools::instance;
+using namespace instance;
+
 namespace __internal {
     template <typename T>
     struct __extract_inner_type {};
@@ -122,7 +121,7 @@ namespace __internal {
         using type = std::decay_t<A>;
     };
 }  // namespace __internal
-using namespace __internal;
+using namespace fp::tools::inner_type::__internal;
 
 /// If given TC<A>, access A
 template <UnaryInstance TC>
@@ -135,10 +134,8 @@ inline constexpr bool fp_is_same_inner_type = std::
   same_as<fp_inner_type<std::decay_t<TA>>, fp_inner_type<std::decay_t<TB>>>;
 
 }  // namespace fp::tools::inner_type
-
 namespace fp::tools::instance_with {
 
-using namespace fp::tools::instance;
 using namespace fp::tools::inner_type;
 
 namespace __internal {
@@ -147,7 +144,7 @@ namespace __internal {
         static constexpr bool value = std::same_as<TA, fp_inner_type<TB>>;
     };
 }  // namespace __internal
-using namespace __internal;
+using namespace fp::tools::instance_with::__internal;
 
 template <UnaryInstance TA, UnaryInstance TB>
 inline constexpr bool fp_is_instance_with =
@@ -159,26 +156,27 @@ template <typename TA, typename TB>
 concept InstanceWith = fp_is_instance_with<TA, TB>;
 
 }  // namespace fp::tools::instance_with
-
 namespace fp::tools::make_pair_type {
 
 using namespace fp::tools::instance;
 
-template <typename T>
-struct __make_pair_type {};
+namespace __internal {
+    template <typename T>
+    struct __make_pair_type {};
 
-template <template <typename, typename> typename TC, typename A, typename B>
-struct __make_pair_type<TC<A, B>> {
-    using first = std::decay_t<A>;
-    using second = std::decay_t<B>;
-};
+    template <template <typename, typename> typename TC, typename A, typename B>
+    struct __make_pair_type<TC<A, B>> {
+        using first = std::decay_t<A>;
+        using second = std::decay_t<B>;
+    };
+}  // namespace __internal
+using namespace fp::tools::make_pair_type::__internal;
 
 template <typename T>
 using fp_make_pair_type = std::pair<
   typename __make_pair_type<std::decay_t<T>>::first,
   typename __make_pair_type<std::decay_t<T>>::second>;
 }  // namespace fp::tools::make_pair_type
-
 namespace fp::tools::arrow {
 
 template <typename F, typename A>
@@ -191,12 +189,11 @@ template <typename F, typename A>
 using fp_arrow_result = std::invoke_result_t<F, A>;
 
 }  // namespace fp::tools::arrow
-
 namespace fp::tools::kleisli_arrow {
 
-using namespace fp::tools::instance;
-using namespace fp::tools::inner_type;
-using namespace fp::tools::arrow;
+using namespace instance;
+using namespace inner_type;
+using namespace arrow;
 
 template <typename F, typename A>
     requires Arrow<F, A>
@@ -216,14 +213,13 @@ using fp_kvalue_type = fp_inner_type<fp_kvalue<F, A>>;
 
 }  // namespace fp::tools::kleisli_arrow
 
-namespace fp::tools {
-using namespace fp::tools::instance;
-using namespace fp::tools::rebind;
+namespace fp::tools::all {
+using namespace fp::tools::arrow;
 using namespace fp::tools::inner_type;
 using namespace fp::tools::instance_with;
-using namespace fp::tools::make_pair_type;
-using namespace fp::tools::arrow;
+using namespace fp::tools::instance;
 using namespace fp::tools::kleisli_arrow;
-}  // namespace fp::tools
-
+using namespace fp::tools::make_pair_type;
+using namespace fp::tools::rebind;
+}  // namespace fp::tools::all
 #endif  // FP_META_H
