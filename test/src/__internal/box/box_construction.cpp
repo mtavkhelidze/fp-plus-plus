@@ -12,14 +12,15 @@
 #include <unordered_set>
 #include <vector>
 
+// NOLINTBEGIN:(cppcoreguidelines-avoid-magic-numbers)
 using ::testing::Test;
 using namespace fp;
 using namespace fp::__internal::box;
 
 TEST(Box_Construction, box_with_nothing_in_it) {
     // Nothing type (std::monostate)
-    Box box;
-    static_assert(std::is_same_v<Box<Nothing>, decltype(box)>);
+    Box const box;
+    static_assert(std::is_same_v<Box<Nothing>, std::decay_t<decltype(box)>>);
 }
 
 TEST(Box_Construction, array_non_pointer) {
@@ -100,7 +101,7 @@ TEST(Box_Construction, rvalue) {
     auto box1 = Box(42);
     static_assert(std::is_same_v<Box<int>, decltype(box1)>);
 
-    int x = 42;
+    int const x = 42;
     auto box2 = Box(x);
     static_assert(std::is_same_v<Box<int>, decltype(box2)>);
 }
@@ -125,28 +126,28 @@ TEST(Box_Construction, std_array) {
 
 TEST(Box_Construction, std_deque) {
     // std::deque as a value
-    std::deque<int> deq = {1, 2, 3};
+    std::deque<int> const deq = {1, 2, 3};
     auto box = Box(deq);
     static_assert(std::is_same_v<Box<std::deque<int>>, decltype(box)>);
 }
 
 TEST(Box_Construction, std_function) {
     // std::function
-    std::function<int(int)> func = [](int x) { return x * 2; };
+    std::function<int(int)> const func = [](int x) { return x * 2; };
     auto box = Box(func);
     static_assert(std::is_same_v<Box<std::function<int(int)>>, decltype(box)>);
 }
 
 TEST(Box_Construction, std_list) {
     // std::list as a value
-    std::list<int> lst = {1, 2, 3};
+    std::list<int> const lst = {1, 2, 3};
     auto box = Box(lst);
     static_assert(std::is_same_v<Box<std::list<int>>, decltype(box)>);
 }
 
 TEST(Box_Construction, std_map) {
     // std::map as a value
-    std::map<int, std::string> mp = {
+    std::map<int, std::string> const mp = {
       {1, "one"  },
       {2, "two"  },
       {3, "three"}
@@ -158,21 +159,21 @@ TEST(Box_Construction, std_map) {
 
 TEST(Box_Construction, std_optional) {
     // std::optional
-    std::optional<int> opt = 42;
+    std::optional<int> const opt = 42;
     auto box = Box(opt);
     static_assert(std::is_same_v<Box<std::optional<int>>, decltype(box)>);
 }
 
 TEST(Box_Construction, std_set) {
     // std::set as a value
-    std::set<int> st = {1, 2, 3};
+    std::set<int> const st = {1, 2, 3};
     auto box = Box(st);
     static_assert(std::is_same_v<Box<std::set<int>>, decltype(box)>);
 }
 
 TEST(Box_Construction, std_unordered_map) {
     // std::unordered_map as a value
-    std::unordered_map<int, std::string> umap = {
+    std::unordered_map<int, std::string> const umap = {
       {1, "one"  },
       {2, "two"  },
       {3, "three"}
@@ -184,7 +185,7 @@ TEST(Box_Construction, std_unordered_map) {
 }
 TEST(Box_Construction, std_unordered_set) {
     // std::unordered_set as a value
-    std::unordered_set<int> ust = {1, 2, 3};
+    std::unordered_set<int> const ust = {1, 2, 3};
     auto box = Box(ust);
     static_assert(std::is_same_v<Box<std::unordered_set<int>>, decltype(box)>);
 }
@@ -215,3 +216,4 @@ TEST(Box_Construction, unique_ptr) {
         decltype(box2)>
     );
 }
+// NOLINTEND

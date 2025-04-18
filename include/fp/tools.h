@@ -2,9 +2,9 @@
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp::fp.h>
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
-#ifndef FP_META_H
+#ifndef FP_TOOLS_H
 // NOLINTNEXTLINE:llvm-header-guard
-#define FP_META_H
+#define FP_TOOLS_H
 
 #include <concepts>
 #include <cstddef>
@@ -222,4 +222,4 @@ using namespace fp::tools::kleisli_arrow;
 using namespace fp::tools::make_pair_type;
 using namespace fp::tools::rebind;
 }  // namespace fp::tools::all
-#endif  // FP_META_H
+#endif  // FP_TOOLS_H

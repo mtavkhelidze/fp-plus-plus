@@ -1,5 +1,4 @@
-
-#include <fp/fp.h>
+#include <fp/fp.h>  // NOLINT
 
 using namespace fp;
 
