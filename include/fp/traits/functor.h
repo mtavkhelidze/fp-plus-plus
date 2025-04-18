@@ -7,7 +7,7 @@
 #define FP_TRAITS_FUNCTOR_H
 
 #include <fp/functions.h>
-#include <fp/meta.h>
+#include <fp/tools.h>
 #include <fp/traits/eq.h>
 
 #include <concepts>

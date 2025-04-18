@@ -16,9 +16,9 @@
 #include "defs.h"
 // keep defs on top
 #include "functions.h"
-#include "meta.h"
 #include "operators.h"
 #include "syntax.h"
+#include "tools.h"
 #include "traits/traits.h"
 
 namespace fp {
