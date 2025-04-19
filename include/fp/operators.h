@@ -1,17 +1,17 @@
 #pragma once
+#include <concepts>
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from "<fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
-#include "prelude.h"
-#ifndef FP_SYNTAX_H
+#ifndef FP_OPERATORS_H
 // NOLINTNEXTLINE:llvm-header-guard
-#define FP_SYNTAX_H
+#define FP_OPERATORS_H
 
+#include <fp/prelude.h>
 #include <fp/traits/traits.h>
 
-using namespace fp::prelude;
-
 namespace fp::operators::semigroup {
+using namespace prelude;
 using namespace traits::semigroup;
 
 template <Semigroup M>
@@ -25,12 +25,8 @@ constexpr auto operator+(const M& lhs, const M& rhs) {
 }
 }  // namespace fp::operators::semigroup
 
-namespace fp::operators::monoid {
-using namespace operators::semigroup;
-}  // namespace fp::operators::monoid
-
 namespace fp::operators::composition {
-
+using namespace prelude;
 template <typename F, typename G>
 constexpr auto operator*(F&& f, G&& g) {
     return dot(std::forward<F>(f), std::forward<G>(g));
@@ -50,7 +46,6 @@ constexpr auto operator>=(A a, auto&& f) {
 namespace fp::operators::all {
 using namespace fp::operators::composition;
 using namespace fp::operators::semigroup;
-using namespace fp::operators::monoid;
 }  // namespace fp::operators::all
 
-#endif  // FP_SYNTAX_H
+#endif  // FP_OPERATORS_H

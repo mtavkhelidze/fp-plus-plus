@@ -1,10 +1,11 @@
 #pragma once
+#include <cstddef>
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
-#ifndef FP___INTERNAL_BOX_H
+#ifndef FP_KERNEL_BOX_H
 // NOLINTNEXTLINE:llvm-header-guard
-#define FP___INTERNAL_BOX_H
+#define FP_KERNEL_BOX_H
 
 #include <fp/prelude.h>
 
@@ -15,10 +16,9 @@
 #include <variant>
 #include <vector>
 
+namespace fp::kernel::box {
 using namespace fp::prelude;
 
-
-namespace fp::kernel::box {
 template <typename T, typename... Ts>
 struct FP_ALIGN_PACKED_16 Box {
   private:
@@ -89,4 +89,4 @@ Box() -> Box<Nothing>;
 
 Box(std::nullptr_t) -> Box<Nothing>;
 }  // namespace fp::kernel::box
-#endif  // FP___INTERNAL_BOX_H
+#endif  // FP_KERNEL_BOX_H

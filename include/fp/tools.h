@@ -191,6 +191,19 @@ template <typename F, typename A>
     requires Arrow<F, A>
 using fp_arrow_result = std::decay_t<std::invoke_result_t<F, std::decay_t<A>>>;
 
+template <typename F, typename A, typename B>
+inline constexpr bool fp_is_binary_arrow = requires(F f, A a, B b) {
+    std::invoke(f, a, b);
+} && !std::is_void_v<std::invoke_result_t<F, A, B>>;
+
+template <typename F, typename A, typename B>
+concept BinaryArrow = fp_is_binary_arrow<F, A, B>;
+
+template <typename F, typename A, typename B>
+    requires BinaryArrow<F, A, B>
+using fp_binary_arrow_result =
+  std::decay_t<std::invoke_result_t<F, std::decay_t<A>, std::decay_t<B>>>;
+
 }  // namespace fp::tools::arrow
 namespace fp::tools::kleisli_arrow {
 

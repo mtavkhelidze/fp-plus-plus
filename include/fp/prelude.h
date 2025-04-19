@@ -2,25 +2,28 @@
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from "<fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
-#include <__variant/monostate.h>
-#ifndef FP_OPERATORS_H
+#ifndef FP_PRELUDE_H
 // NOLINTNEXTLINE:llvm-header-guard
-#define FP_OPERATORS_H
+#define FP_PRELUDE_H
+
+#include <fp/tools.h>
 
 #include <concepts>
+#include <cstddef>
 #include <utility>
+#include <variant>
 
 namespace fp::prelude {
 struct __identity {
     template <typename A>
-    constexpr A operator()(A&& value) const noexcept {
+    constexpr auto operator()(A&& value) const noexcept -> A {
         return std::forward<A>(value);
     }
 };
 
 inline constexpr __identity identity{};
 using identity_t = decltype(identity);
-}  // namespace fp::prelude::identity
+}  // namespace fp::prelude
 
 namespace fp::prelude {
 /**
@@ -32,7 +35,7 @@ constexpr auto dollar(std::invocable<A> auto f, A a) noexcept(noexcept(f(a)))
   -> decltype(f(a)) {
     return f(a);
 }
-}  // namespace fp::prelude::dollar
+}  // namespace fp::prelude
 namespace fp::prelude {
 /**
  * Function composition operator (similar to . in Haskell). dot(f, g) is
@@ -47,7 +50,7 @@ constexpr auto dot(F&& lhs, G&& rhs) noexcept(
            ) constexpr noexcept(noexcept(lhs(rhs(a)))
            ) -> decltype(lhs(rhs(a))) { return lhs(rhs(a)); };
 }
-}  // namespace fp::prelude::dot
+}  // namespace fp::prelude
 namespace fp::prelude {
 /**
  * Pipe operator (similar to |> in Elm, used for chaining).
@@ -57,9 +60,28 @@ template <typename A>
 constexpr auto pipe(A a, auto&& f) noexcept(noexcept(f(a))) -> decltype(f(a)) {
     return f(a);
 }
-}  // namespace fp::prelude::pipe
+}  // namespace fp::prelude
+namespace fp::prelude {
+using namespace fp::tools::arrow;
 
-#include <cstddef>
+/**
+ * Flip function arguments: flip(f)(a, b) == f(b, a)
+ */
+
+// You can't have flip :: (a -> b) -> (b -> a)
+// Because of the second law of thermodynamics: entropy always increases :)
+
+template <typename F, typename A, typename B>
+    requires fp_is_binary_arrow<F, A, B>
+constexpr auto flip(F&& f) {
+    return [f = std::forward<F>(f)](A&& a, B&& b) constexpr noexcept(
+             noexcept(fp_binary_arrow_result<F, B, A>)
+           ) -> fp_binary_arrow_result<F, B, A> {
+        return f(std::forward<B>(b), std::forward<A>(a));
+    };
+}
+}  // namespace fp::prelude
+
 inline constexpr std::size_t __fp_align_16 = 16;
 inline constexpr std::size_t __fp_align_32 = 32;
 
@@ -67,10 +89,8 @@ inline constexpr std::size_t __fp_align_32 = 32;
 #define FP_ALIGN_PACKED_16 alignas(__fp_align_16) FP_PACKED
 #define FP_ALIGN_PACKED_32 alignas(__fp_align_32) FP_PACKED
 
-#include <variant>
-
 namespace fp::prelude {
 using Nothing = std::monostate;  // is {}
 }  // namespace fp::prelude
 
-#endif  // FP_OPERATORS_H
+#endif  // FP_PRELUDE_H

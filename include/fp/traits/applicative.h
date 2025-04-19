@@ -15,6 +15,7 @@
 #include <utility>
 
 namespace fp::traits::applicative {
+using namespace fp::prelude;
 using namespace fp::tools::all;
 using namespace fp::traits::functor;
 

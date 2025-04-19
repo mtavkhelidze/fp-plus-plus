@@ -7,7 +7,7 @@
 
 using namespace fp;
 using namespace fp::test;
-using namespace fp::operators::composition;
+using namespace fp::operators::all;
 
 // &= like $ in Haskell
 TEST(Syntax_Operator_Dollar, works_with_different_types) {
