@@ -20,12 +20,11 @@ set(TEST_SRC
 # find_untracked_files("${TEST_SRC}" src "*.cpp")
 
 add_executable(${PROJECT_NAME}_test ${TEST_SRC})
-target_include_directories(${PROJECT_NAME}_test PRIVATE include)
-
 target_compile_definitions(${PROJECT_NAME}_test PRIVATE FP_PLUS_PLUS_TESTING)
 target_compile_definitions(
     ${PROJECT_NAME}_test PRIVATE FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 )
+target_include_directories(${PROJECT_NAME}_test PRIVATE include)
 target_link_libraries(${PROJECT_NAME}_test PRIVATE ${TEST_LIB})
 
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME}_test)

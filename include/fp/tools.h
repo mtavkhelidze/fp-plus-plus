@@ -204,6 +204,11 @@ template <typename F, typename A, typename B>
 using fp_binary_arrow_result =
   std::decay_t<std::invoke_result_t<F, std::decay_t<A>, std::decay_t<B>>>;
 
+template <typename F, typename A, typename B>
+    requires BinaryArrow<F, A, B>
+using fp_binary_arrow_result_v =
+  std::decay_t<std::invoke_result<F, std::decay_t<A>, std::decay_t<B>>>;
+
 }  // namespace fp::tools::arrow
 namespace fp::tools::kleisli_arrow {
 

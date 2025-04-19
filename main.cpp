@@ -1,8 +1,9 @@
 #include <fp/fp.h>  // NOLINT
 
+#include <iostream>
+
 using namespace fp;
 
 auto main() -> int {  //
-    auto id = Id<int>::apply(1);
     return 0;
 }

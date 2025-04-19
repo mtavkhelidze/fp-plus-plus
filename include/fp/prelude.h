@@ -67,15 +67,11 @@ using namespace fp::tools::arrow;
 /**
  * Flip function arguments: flip(f)(a, b) == f(b, a)
  */
-
-// You can't have flip :: (a -> b) -> (b -> a)
-// Because of the second law of thermodynamics: entropy always increases :)
-
 template <typename F, typename A, typename B>
     requires fp_is_binary_arrow<F, A, B>
 constexpr auto flip(F&& f) {
     return [f = std::forward<F>(f)](A&& a, B&& b) constexpr noexcept(
-             noexcept(fp_binary_arrow_result<F, B, A>)
+             noexcept(std::declval<F>()(std::declval<B>(), std::declval<A>()))
            ) -> fp_binary_arrow_result<F, B, A> {
         return f(std::forward<B>(b), std::forward<A>(a));
     };

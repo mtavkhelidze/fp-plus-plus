@@ -1,15 +1,15 @@
+#ifndef FP_KERNEL_BOX_H
+#define FP_KERNEL_BOX_H
 #pragma once
-#include <cstddef>
+
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
-#ifndef FP_KERNEL_BOX_H
-// NOLINTNEXTLINE:llvm-header-guard
-#define FP_KERNEL_BOX_H
 
 #include <fp/prelude.h>
 
 #include <array>
+#include <cstddef>
 #include <memory>
 #include <string>
 #include <type_traits>
