@@ -6,13 +6,13 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_INSTANCE_MONAD_ID_H
 
-#include <fp/__internal/box.h>
+#include <fp/kernel//box.h>
 #include <fp/tools.h>
 #include <fp/traits/traits.h>
 
 #include <iostream>
 
-using namespace fp::__internal::box;
+using namespace fp::kernel::box;
 using namespace fp::tools::all;
 using namespace fp::traits::all;
 

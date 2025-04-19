@@ -1,10 +1,10 @@
-#include <fp/__internal/box.h>
+#include <fp/kernel/box.h>
 #include <gtest/gtest.h>
 
 #include <memory>
 
 using namespace fp;
-using namespace fp::__internal::box;
+using namespace fp::kernel::box;
 
 TEST(Box_getOrNull, default_typed_box) {
     Box<int> const box;

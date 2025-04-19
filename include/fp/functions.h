@@ -8,7 +8,7 @@
 
 #include <utility>
 
-namespace fp::__internal {
+namespace fp::kernel {
 struct __identity {
     template <typename A>
     constexpr A operator()(A&& value) const noexcept {
@@ -18,7 +18,7 @@ struct __identity {
 }  // namespace fp::__internal
 
 namespace fp {
-inline constexpr fp::__internal::__identity identity{};
+inline constexpr fp::kernel::__identity identity{};
 using identity_t = decltype(fp::identity);
 }  // namespace fp
 

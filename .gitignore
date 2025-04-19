@@ -8,3 +8,4 @@ scratch.cpp
 .cache/
 * copy*
 .idea/
+cmake-build-debug/

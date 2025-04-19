@@ -11,7 +11,7 @@
             ],
             "cStandard": "c23",
             "cppStandard": "c++20",
-            "intelliSenseMode": "macos-clang-arm64",
+            "intelliSenseMode": "${default}",
             "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],

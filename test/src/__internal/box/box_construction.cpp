@@ -1,4 +1,4 @@
-#include <fp/__internal/box.h>
+#include <fp/kernel/box.h>
 #include <gtest/gtest.h>
 
 #include <array>
@@ -15,7 +15,7 @@
 // NOLINTBEGIN:(cppcoreguidelines-avoid-magic-numbers)
 using ::testing::Test;
 using namespace fp;
-using namespace fp::__internal::box;
+using namespace fp::kernel::box;
 
 TEST(Box_Construction, box_with_nothing_in_it) {
     // Nothing type (std::monostate)

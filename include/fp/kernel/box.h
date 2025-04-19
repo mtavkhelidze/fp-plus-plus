@@ -16,7 +16,7 @@
 #include <variant>
 #include <vector>
 
-namespace fp::__internal::box {
+namespace fp::kernel::box {
 template <typename T, typename... Ts>
 struct FP_ALIGN_PACKED_16 Box {
   private:
