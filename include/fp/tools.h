@@ -240,20 +240,33 @@ template <typename F, typename A>
 using fp_kvalue_type = fp_inner_type<fp_kvalue<F, A>>;
 
 }  // namespace fp::tools::kleisli_arrow
-namespace fp::tools::apply {
+namespace fp::tools::object {
 using namespace fp::tools::instance;
 using namespace fp::tools::inner_type;
 
-template <typename TC, typename A, typename B>
-inline constexpr bool is_object =
-  (fp_is_unary_instance<TC> || fp_is_binary_instance<TC>);
-// requires(As as) {
-//     { TC<As...>::template apply<As...>(as) } -> std::same_as<TC<As...>>;
-// };
-// template <typename T>
-// concept NotPubliclyConstructible =
-//   !std::is_constructible_v<T, typename T::value_type>;
-}  // namespace fp::tools::apply
+template <typename TC>
+inline constexpr bool fp_has_no_direct_constructor =
+  !std::constructible_from<TC, fp_inner_type<TC>>;
+template <typename TC>
+inline constexpr bool fp_has_no_copy = !std::is_copy_constructible_v<TC>;
+template <typename TC>
+inline constexpr bool fp_has_no_move = !std::is_move_constructible_v<TC>;
+
+template <typename TC>
+inline constexpr bool fp_is_not_constructible =
+  fp_has_no_direct_constructor<TC> && fp_has_no_copy<TC> && fp_has_no_move<TC>;
+
+template <typename TC>
+inline constexpr bool fp_is_unary_object = requires {
+    typename fp_inner_type<TC>;
+    requires(fp_is_not_constructible<TC>);
+    { TC::apply(std::declval<fp_inner_type<TC>>()) } -> std::same_as<TC>;
+};
+
+template <typename TC>
+concept Object = fp_is_unary_object<TC>;
+
+}  // namespace fp::tools::object
 namespace fp::tools::all {
 using namespace arrow;
 using namespace inner_type;
@@ -262,6 +275,6 @@ using namespace instance;
 using namespace kleisli_arrow;
 using namespace make_pair_type;
 using namespace rebind;
-using namespace apply;
+using namespace object;
 }  // namespace fp::tools::all
 #endif  // FP_TOOLS_H

@@ -25,26 +25,20 @@ struct Id {
   private:
     Box<A> box;
 
-    // private:
-    //   Id() = default;
-    //   explicit Id(Box<A> value) : box(value) {}
-
-    // public:
-    //   Id(const Id&) = delete;
-    //   Id(Id&&) = delete;
-
-    //   template <typename T>
-    //   static auto apply(T&& value) -> Id<std::decay_t<T>> {
-    //       return Id(std::forward<std::decay_t<T>>(value));
-    //   }
+    Id() = default;
 
   public:
-    explicit Id(Box<std::decay_t<A>>&& b) : box(std::move(b)) {}
+    Id(const Id&) = delete;
+    Id(Id&&) = delete;
+    Id& operator=(const Id&) = delete;
+    Id& operator=(Id&&) = delete;
 
     template <typename T>
-    inline static auto apply(T&& a) -> Id<std::decay_t<T>> {
-        return Id<std::decay_t<T>>{Box<T>{std::forward<std::decay_t<T>>(a)}};
+    static auto apply(T&& value) -> Id<std::decay_t<T>> {
+        return Id{Box<std::decay_t<T>>(std::forward<T>(value))};
     }
+
+    explicit Id(Box<std::decay_t<A>>&& b) : box(std::move(b)) {}
 
     // NOLINTNEXTLINE(google-explicit-constructor, hicpp-explicit-conversions)
     inline operator A() const { return *box.getOrNull(); }
@@ -62,12 +56,6 @@ struct Id {
         auto v = *box.getOrNull();
         return pure<Id>(std::forward<F>(f)(v));
     }
-
-    // // Monad
-    // template <typename F>
-    // auto flatMap(F&& f) const {
-    //     return f(*value.getOrNull());  // f must return Id<U>
-    // }
 };
 
 }  // namespace fp::data::monad::id
@@ -76,7 +64,9 @@ struct Id {
 namespace {
 using namespace fp::data::monad::id;
 using namespace fp::prelude;
+using namespace fp::tools::all;
 
+static_assert(Object<Id<int>>);
 static_assert(Eq<Id<int>>);
 static_assert(Functor<Id<int>, identity_t>);
 static_assert(Applicative<Id, int, int>);

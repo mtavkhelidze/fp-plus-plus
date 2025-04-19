@@ -27,8 +27,3 @@ TEST(Monad_Id, implicit_conversion_to_inner_type) {
     int n = x;
     ASSERT_EQ(n, 10);
 }
-
-// TEST(Monad_Id, is_applicative) {
-//     static_assert(Applicative<Id<int>, fp::identity_t, int, int>);
-// }
-// // NOLINTEND:cppcoreguidelines-avoid-magic-numbers
