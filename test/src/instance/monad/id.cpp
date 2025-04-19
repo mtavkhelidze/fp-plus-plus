@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 
 using namespace fp::traits::all;
-using namespace fp::instance::monad::id;
+using namespace fp::data::monad::id;
 
 TEST(Monad_Id, is_eq) {  //
     static_assert(Eq<Id<int>>);

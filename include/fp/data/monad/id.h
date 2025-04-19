@@ -17,7 +17,8 @@ using namespace fp::tools::all;
 using namespace fp::traits::all;
 
 using namespace fp::traits::applicative;
-namespace fp::instance::monad::id {
+
+namespace fp::data::monad::id {
 
 template <typename A>
 struct Id {

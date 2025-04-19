@@ -6,10 +6,10 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_INSTANCE_H
 
-#include <fp/instance/monad/id.h>
+#include <fp/data/monad/id.h>
 
-namespace fp::instance::all {
-using namespace fp::instance::monad::id;
+namespace fp::data::all {
+using namespace fp::data::monad::id;
 }
 
 #endif  // FP_INSTANCE_H

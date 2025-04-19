@@ -25,10 +25,11 @@
 //
 #include "traits/traits.h"
 //
-#include "instance/instance.h"
+#include "data/data.h"
 
 namespace fp {
 using namespace fp::traits;
 using namespace fp::operators;
+using namespace fp::data;
 }  // namespace fp
 #endif  // FP_FP_H
