@@ -4,7 +4,7 @@
 using ::testing::Test;
 
 using namespace fp::traits::semigroup;
-using namespace fp::syntax::semigroup;
+using namespace fp::operators::semigroup;
 
 namespace str {
 

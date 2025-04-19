@@ -21,7 +21,7 @@
 //
 #include "tools.h"
 //
-#include "syntax.h"
+#include "prelude.h"
 //
 #include "traits/traits.h"
 //
@@ -29,7 +29,7 @@
 
 namespace fp {
 using namespace fp::traits;
-using namespace fp::operators;
+using namespace fp::prelude;
 using namespace fp::data;
 }  // namespace fp
 #endif  // FP_FP_H
