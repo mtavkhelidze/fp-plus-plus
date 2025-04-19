@@ -32,8 +32,7 @@ g++ -Iinclude -o fp_test main.cpp -std=c++20 -g -O0
 
 Documentation is _incomplete_.
 
-* There is some documentation in [`docs`](./docs/readme.md).
-* Have a look at examples in [`test`](./test).
+* There is some documentation in [HOWTO](./howto.md).
 
 ```bash
 cmake -B build -S .

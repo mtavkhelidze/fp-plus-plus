@@ -15,10 +15,7 @@
 #include <utility>
 
 namespace fp::traits::applicative {
-using namespace fp::tools::arrow;
-using namespace fp::tools::inner_type;
-using namespace fp::tools::instance;
-using namespace fp::tools::rebind;
+using namespace fp::tools::all;
 using namespace fp::traits::functor;
 
 template <template <typename> typename FA, typename A>
