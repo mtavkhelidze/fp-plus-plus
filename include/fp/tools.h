@@ -1,16 +1,15 @@
+#ifndef FP_TOOLS_H
+#define FP_TOOLS_H
 #pragma once
+
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp::fp.h>
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
-#ifndef FP_TOOLS_H
-// NOLINTNEXTLINE:llvm-header-guard
-#define FP_TOOLS_H
 
 #include <concepts>
 #include <cstddef>
 #include <type_traits>
 #include <utility>
-
 namespace fp::tools::instance {
 namespace __internal {
     template <typename T>
@@ -72,6 +71,14 @@ concept BinaryInstance = fp_is_binary_instance<TC>;
 template <typename TC>
 inline constexpr std::size_t fp_get_instance_arity =
   __type_class_instance<std::decay_t<TC>>::value;
+
+template <typename TC>
+inline constexpr bool fp_has_apply = fp_is_instance<TC> && requires() {
+    { TC::apply() };
+};
+
+template <typename TC>
+concept HasApply = fp_has_apply<TC>;
 
 }  // namespace fp::tools::instance
 namespace fp::tools::rebind {
@@ -233,7 +240,20 @@ template <typename F, typename A>
 using fp_kvalue_type = fp_inner_type<fp_kvalue<F, A>>;
 
 }  // namespace fp::tools::kleisli_arrow
+namespace fp::tools::apply {
+using namespace fp::tools::instance;
+using namespace fp::tools::inner_type;
 
+template <typename TC, typename A, typename B>
+inline constexpr bool is_object =
+  (fp_is_unary_instance<TC> || fp_is_binary_instance<TC>);
+// requires(As as) {
+//     { TC<As...>::template apply<As...>(as) } -> std::same_as<TC<As...>>;
+// };
+// template <typename T>
+// concept NotPubliclyConstructible =
+//   !std::is_constructible_v<T, typename T::value_type>;
+}  // namespace fp::tools::apply
 namespace fp::tools::all {
 using namespace arrow;
 using namespace inner_type;
@@ -242,5 +262,6 @@ using namespace instance;
 using namespace kleisli_arrow;
 using namespace make_pair_type;
 using namespace rebind;
+using namespace apply;
 }  // namespace fp::tools::all
 #endif  // FP_TOOLS_H

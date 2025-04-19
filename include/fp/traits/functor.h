@@ -1,10 +1,10 @@
+#ifndef FP_TRAITS_FUNCTOR_H
+#define FP_TRAITS_FUNCTOR_H
 #pragma once
+
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
-#ifndef FP_TRAITS_FUNCTOR_H
-// NOLINTNEXTLINE:llvm-header-guard
-#define FP_TRAITS_FUNCTOR_H
 
 #include <fp/tools.h>
 #include <fp/traits/eq.h>

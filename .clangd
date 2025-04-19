@@ -3,4 +3,4 @@ Diagnostics:
   ClangTidy:
     Remove: '*'
 CompileFlags:
-  Add: [-DFP_PLUS_PLUS_TESTING, -DFP_PLUS_PLUS_INCLUDED_FROM_FP_FP]
+  Add: [-DFP_PLUS_PLUS_INCLUDED_FROM_FP_FP=1]

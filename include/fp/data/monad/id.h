@@ -1,10 +1,10 @@
+#ifndef FP_DATA_MONAD_ID_H
+#define FP_DATA_MONAD_ID_H
 #pragma once
+
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
-#ifndef FP_DATA_MONAD_ID_H
-// NOLINTNEXTLINE:llvm-header-guard
-#define FP_DATA_MONAD_ID_H
 
 #include <fp/kernel/box.h>
 #include <fp/tools.h>
@@ -25,16 +25,29 @@ struct Id {
   private:
     Box<A> box;
 
+    // private:
+    //   Id() = default;
+    //   explicit Id(Box<A> value) : box(value) {}
+
+    // public:
+    //   Id(const Id&) = delete;
+    //   Id(Id&&) = delete;
+
+    //   template <typename T>
+    //   static auto apply(T&& value) -> Id<std::decay_t<T>> {
+    //       return Id(std::forward<std::decay_t<T>>(value));
+    //   }
+
   public:
     explicit Id(Box<std::decay_t<A>>&& b) : box(std::move(b)) {}
 
     template <typename T>
-    static auto apply(T&& a) -> Id<std::decay_t<T>> {
+    inline static auto apply(T&& a) -> Id<std::decay_t<T>> {
         return Id<std::decay_t<T>>{Box<T>{std::forward<std::decay_t<T>>(a)}};
     }
 
     // NOLINTNEXTLINE(google-explicit-constructor, hicpp-explicit-conversions)
-    operator A() const { return *box.getOrNull(); }
+    inline operator A() const { return *box.getOrNull(); }
 
     // Eq
     [[nodiscard]] auto equals(const Id& other) const -> bool {
@@ -58,4 +71,17 @@ struct Id {
 };
 
 }  // namespace fp::data::monad::id
+
+#ifdef FP_PLUS_PLUS_TESTING
+namespace {
+using namespace fp::data::monad::id;
+using namespace fp::prelude;
+
+static_assert(Eq<Id<int>>);
+static_assert(Functor<Id<int>, identity_t>);
+static_assert(Applicative<Id, int, int>);
+}  // namespace
+
+#endif  // FP_PLUS_PLUS_TESTING
+
 #endif  // FP_DATA_MONAD_ID_H

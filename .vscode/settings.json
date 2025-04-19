@@ -1,5 +1,13 @@
 {
+    "C_Cpp.codeAnalysis.clangTidy.args": [
+        "-std=c++20",
+        "-Iinclude",
+        "-DFP_PLUS_PLUS_TESTING=1",
+        "-DFP_PLUS_PLUS_INCLUDED_FROM_FP_FP=1"
+    ],
+    "C_Cpp.codeFolding": "enabled",
     "C_Cpp.dimInactiveRegions": false,
+    "C_Cpp.errorSquiggles": "disabled",
     "clang-format.language.glsl.enable": false,
     "clang-format.language.glsl.fallbackStyle": "",
     "clang-format.language.java.enable": false,
@@ -92,6 +100,5 @@
         "utility": "cpp",
         "variant": "cpp",
         "vector": "cpp"
-    },
-    "C_Cpp.errorSquiggles": "disabled"
+    }
 }

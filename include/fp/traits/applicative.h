@@ -1,12 +1,12 @@
+#ifndef FP_TRAITS_APPLICATIVE_H
+#define FP_TRAITS_APPLICATIVE_H
 #pragma once
+
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
-#include <fp/prelude.h>
-#ifndef FP_TRAITS_APPLICATIVE_H
-// NOLINTNEXTLINE:llvm-header-guard
-#define FP_TRAITS_APPLICATIVE_H
 
+#include <fp/prelude.h>
 #include <fp/tools.h>
 #include <fp/traits/functor.h>
 

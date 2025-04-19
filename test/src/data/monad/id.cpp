@@ -5,18 +5,6 @@
 using namespace fp::traits::all;
 using namespace fp::data::monad::id;
 
-TEST(Monad_Id, is_eq) {  //
-    static_assert(Eq<Id<int>>);
-};
-
-TEST(Monad_Id, is_functor) {  //
-    static_assert(Functor<Id<int>, fp::identity_t>);
-};
-
-TEST(Monad_Id, is_applicative) {  //
-    static_assert(Applicative<Id, int, int>);
-};
-
 TEST(Monad_Id, functor_laws_map_identity) {  // laws
     auto a = pure<Id>(10);
     auto b = a.map(fp::identity);
