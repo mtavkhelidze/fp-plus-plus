@@ -69,9 +69,9 @@ struct FP_ALIGN_PACKED_16 Box {
     // --- Other constructors
     ~Box() = default;
     auto operator=(Box&&) -> Box& = default;
-    auto operator=(const Box&) -> Box& = default;
+    auto operator=(const Box&) -> Box& = delete;
     Box(Box&&) = default;
-    Box(const Box&) = default;
+    Box(const Box&) = delete;
 };
 
 // Deduction guides
