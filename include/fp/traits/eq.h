@@ -11,27 +11,20 @@
 namespace fp::traits::eq {
 
 template <typename E>
-/**
- * @brief Concept for types that support an equality comparison via a
- * user-defined `equals` function.
- *
- * The `equals` function must be callable with two values of type `E`,
- * and is expected to be found via argument-dependent lookup (ADL).
- */
 concept Eq = requires(E a, E b) {
-    { equals(a, b) } -> std::convertible_to<bool>;
+    { a.equals(b) } -> std::convertible_to<bool>;
 };
 
 template <Eq A>
-constexpr auto operator==(const A& a, const A& b) noexcept(noexcept(equals(a, b)
-)) -> bool {
-    return equals(a, b);
+constexpr auto operator==(const A& a, const A& b) noexcept(noexcept(a.equals(b))
+) -> bool {
+    return a.equals(b);
 }
 
 template <Eq A>
-constexpr auto operator!=(const A& a, const A& b) noexcept(noexcept(equals(a, b)
-)) -> bool {
-    return !equals(a, b);
+constexpr auto operator!=(const A& a, const A& b) noexcept(noexcept(a.equals(b))
+) -> bool {
+    return !a.equals(b);
 }
 
 }  // namespace fp::traits::eq

@@ -14,12 +14,18 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include "defs.h"
-// keep defs on top
+//
 #include "functions.h"
+//
 #include "operators.h"
-#include "syntax.h"
+//
 #include "tools.h"
+//
+#include "syntax.h"
+//
 #include "traits/traits.h"
+//
+#include "instance/instance.h"
 
 namespace fp {
 using namespace fp::traits;

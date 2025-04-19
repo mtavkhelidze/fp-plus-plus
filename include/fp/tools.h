@@ -217,12 +217,12 @@ using fp_kvalue_type = fp_inner_type<fp_kvalue<F, A>>;
 }  // namespace fp::tools::kleisli_arrow
 
 namespace fp::tools::all {
-using namespace fp::tools::arrow;
-using namespace fp::tools::inner_type;
-using namespace fp::tools::instance_with;
-using namespace fp::tools::instance;
-using namespace fp::tools::kleisli_arrow;
-using namespace fp::tools::make_pair_type;
-using namespace fp::tools::rebind;
+using namespace arrow;
+using namespace inner_type;
+using namespace instance_with;
+using namespace instance;
+using namespace kleisli_arrow;
+using namespace make_pair_type;
+using namespace rebind;
 }  // namespace fp::tools::all
 #endif  // FP_TOOLS_H

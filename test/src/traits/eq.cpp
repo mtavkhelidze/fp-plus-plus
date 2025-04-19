@@ -1,5 +1,4 @@
 #include <fp/fp.h>
-#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using ::testing::Test;
@@ -10,9 +9,10 @@ using namespace fp::traits::eq;
 namespace eq_char {
 struct Char {
     char c;
+    [[nodiscard]] auto equals(const Char& other) const -> bool {
+        return this->c == other.c;
+    }
 };
-
-static auto equals(const Char& a, const Char& b) -> bool { return a.c == b.c; }
 
 };  // namespace eq_char
 

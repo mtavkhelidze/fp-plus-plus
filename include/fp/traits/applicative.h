@@ -11,6 +11,7 @@
 #include <fp/traits/functor.h>
 
 #include <concepts>
+#include <type_traits>
 #include <utility>
 
 namespace fp::traits::applicative {
@@ -20,18 +21,25 @@ using namespace fp::tools::instance;
 using namespace fp::tools::rebind;
 using namespace fp::traits::functor;
 
+template <template <typename> typename FA, typename A>
+    requires(UnaryInstance<FA<A>>)
+constexpr auto pure(A&& a) -> FA<std::decay_t<A>> {
+    return FA<std::decay_t<A>>::apply(std::forward<std::decay_t<A>>(a));
+}
 /**
  * Applicative extends @ref{Functor} with `an` ap and `pure` method.
  */
-template <typename FA, typename A, typename B>
-concept Applicative = fp_is_unary_instance<FA>
-                   && Functor<FA, fp::identity_t>
-                   && requires(FA fa, FA fb, A a) {
-                          { FA::pure(a) } -> std::same_as<FA>;
-                          {
-                              FA::product(fa, fb)
-                          } -> std::same_as<fp_rebind<FA, std::pair<A, B>>>;
+template <template <typename> typename FA, typename A, typename B>
+concept Applicative = fp_is_unary_instance<FA<A>>
+                   && Functor<FA<A>, fp::identity_t>
+                   && requires(FA<A> fa, FA<B> fb, A a) {
+                          { pure<FA>(a) } -> std::same_as<FA<A>>;
+                          //   {
+                          //       FA<::product(fa, fb)
+                          //   } -> std::same_as<fp_rebind<FA, std::pair<A,
+                          //   B>>>;
                       };
+
 }  // namespace fp::traits::applicative
 
 #endif  // FP_TRAITS_APPLICATIVE_H
