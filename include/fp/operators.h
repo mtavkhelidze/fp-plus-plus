@@ -9,7 +9,7 @@
 
 #include <fp/traits/traits.h>
 
-using namespace fp::prelude::all;
+using namespace fp::prelude;
 
 namespace fp::operators::semigroup {
 using namespace traits::semigroup;

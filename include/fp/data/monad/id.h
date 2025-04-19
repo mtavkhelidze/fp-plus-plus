@@ -6,7 +6,7 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_INSTANCE_MONAD_ID_H
 
-#include <fp/kernel//box.h>
+#include <fp/kernel/box.h>
 #include <fp/tools.h>
 #include <fp/traits/traits.h>
 

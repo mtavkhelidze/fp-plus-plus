@@ -9,7 +9,7 @@
 #include <fp/data/monad/id.h>
 
 namespace fp::data::all {
-using namespace fp::data::monad::id;
+using namespace monad::id;
 }
 
 #endif  // FP_INSTANCE_H

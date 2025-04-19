@@ -6,15 +6,17 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP___INTERNAL_BOX_H
 
-#include <fp/defs.h>
+#include <fp/prelude.h>
 
 #include <array>
-#include <cstddef>
 #include <memory>
 #include <string>
 #include <type_traits>
 #include <variant>
 #include <vector>
+
+using namespace fp::prelude;
+
 
 namespace fp::kernel::box {
 template <typename T, typename... Ts>
@@ -86,5 +88,5 @@ Box(const char*) -> Box<std::string>;
 Box() -> Box<Nothing>;
 
 Box(std::nullptr_t) -> Box<Nothing>;
-}  // namespace fp::__internal::box
+}  // namespace fp::kernel::box
 #endif  // FP___INTERNAL_BOX_H

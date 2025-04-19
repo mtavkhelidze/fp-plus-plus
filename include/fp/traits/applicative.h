@@ -28,7 +28,7 @@ constexpr auto pure(A&& a) -> FA<std::decay_t<A>> {
  */
 template <template <typename> typename FA, typename A, typename B>
 concept Applicative = fp_is_unary_instance<FA<A>>
-                   && Functor<FA<A>, prelude::identity::identity_t>
+                   && Functor<FA<A>, identity_t>
                    && requires(FA<A> fa, FA<B> fb, A a) {
                           { pure<FA>(a) } -> std::same_as<FA<A>>;
                           //   {
