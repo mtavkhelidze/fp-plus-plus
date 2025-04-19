@@ -14,22 +14,16 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include "defs.h"
-//
-#include "functions.h"
-//
-#include "operators.h"
-//
-#include "tools.h"
-//
-#include "prelude.h"
-//
-#include "traits/traits.h"
-//
+// keep
 #include "data/data.h"
+#include "operators.h"
+#include "prelude.h"
+#include "tools.h"
+#include "traits/traits.h"
 
 namespace fp {
-using namespace fp::traits;
-using namespace fp::prelude;
-using namespace fp::data;
+using namespace fp::prelude::all;
+using namespace fp::prelude::identity;
+using namespace fp::data::all;
 }  // namespace fp
 #endif  // FP_FP_H

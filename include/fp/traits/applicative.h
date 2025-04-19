@@ -2,11 +2,11 @@
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
+#include <fp/prelude.h>
 #ifndef FP_TRAITS_APPLICATIVE_H
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_TRAITS_APPLICATIVE_H
 
-#include <fp/functions.h>
 #include <fp/tools.h>
 #include <fp/traits/functor.h>
 
@@ -28,7 +28,7 @@ constexpr auto pure(A&& a) -> FA<std::decay_t<A>> {
  */
 template <template <typename> typename FA, typename A, typename B>
 concept Applicative = fp_is_unary_instance<FA<A>>
-                   && Functor<FA<A>, fp::identity_t>
+                   && Functor<FA<A>, prelude::identity::identity_t>
                    && requires(FA<A> fa, FA<B> fb, A a) {
                           { pure<FA>(a) } -> std::same_as<FA<A>>;
                           //   {

@@ -6,7 +6,6 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_TRAITS_FUNCTOR_H
 
-#include <fp/functions.h>
 #include <fp/tools.h>
 #include <fp/traits/eq.h>
 
