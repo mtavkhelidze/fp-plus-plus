@@ -17,8 +17,20 @@
 #include <vector>
 
 namespace fp::kernel::box {
-using namespace fp::prelude;
+using Nothing = fp::prelude::Nothing;
 
+/**
+ * Pure type value holder box.
+ *
+ * stored value is owned by Box: value or its type cannot be modified, direct
+ * access to it is gone and is only available via `getOrNull`.
+ *
+ * Box cannot be copied. To create a copy, create a new box.
+ *
+ * For some convinience, Box can be moved.
+ * When passed a pointer, Box only manages the pointer itself, not the memory
+ * region it may point to.
+ */
 template <typename T, typename... Ts>
 struct FP_ALIGN_PACKED_16 Box {
   private:
@@ -70,9 +82,9 @@ struct FP_ALIGN_PACKED_16 Box {
 
     // --- Other constructors
     ~Box() = default;
-    auto operator=(Box&&) -> Box& = default;
+    auto operator=(Box&&) noexcept -> Box& = default;
     auto operator=(const Box&) -> Box& = delete;
-    Box(Box&&) = default;
+    Box(Box&&) noexcept = default;
     Box(const Box&) = delete;
 };
 
