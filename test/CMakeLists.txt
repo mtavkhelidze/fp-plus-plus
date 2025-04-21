@@ -24,6 +24,8 @@ target_compile_definitions(${PROJECT_NAME}_test PRIVATE FP_PLUS_PLUS_TESTING)
 target_compile_definitions(
     ${PROJECT_NAME}_test PRIVATE FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 )
+# target_compile_options(${PROJECT_NAME}_test PRIVATE -fsanitize=address)
+# target_link_options(${PROJECT_NAME}_test PRIVATE -fsanitize=address)
 
 target_include_directories(${PROJECT_NAME}_test PRIVATE include)
 target_link_libraries(${PROJECT_NAME}_test PRIVATE ${TEST_LIB})

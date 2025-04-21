@@ -16,7 +16,7 @@
 #include <variant>
 #include <vector>
 
-namespace fp::kernel::box {
+namespace fp::internal::box {
 using Nothing = fp::prelude::Nothing;
 
 /**
@@ -100,5 +100,5 @@ Box(const char*) -> Box<std::string>;
 Box() -> Box<Nothing>;
 
 Box(std::nullptr_t) -> Box<Nothing>;
-}  // namespace fp::kernel::box
+}  // namespace fp::internal::box
 #endif  // FP_KERNEL_BOX_H

@@ -18,7 +18,7 @@ Object:
 | No copy or move                      | Yes       |
 | Only constructible via decayingapply | Yes       |
 
-### Id
+### Instance
 
 | Spec Requirement                                   | Conforms? |
 |----------------------------------------------------|-----------|

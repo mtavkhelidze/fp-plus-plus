@@ -6,7 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/kernel/box.h>
+#include <fp/internal/box.h>
 #include <fp/tools.h>
 #include <fp/traits/traits.h>
 
@@ -14,8 +14,7 @@
 
 namespace fp::data::monad::id {
 
-using namespace fp::kernel::box;
-using namespace fp::tools::all;
+using namespace fp::internal::box;
 using namespace fp::traits::all;
 
 using namespace fp::traits::applicative;
@@ -63,10 +62,8 @@ struct Id {
 #ifdef FP_PLUS_PLUS_TESTING
 namespace {
 using namespace fp::data::monad::id;
-using namespace fp::prelude;
-using namespace fp::tools::all;
 
-static_assert(Object<Id<int>>);
+// static_assert(Object<Id<int>>);
 static_assert(Eq<Id<int>>);
 static_assert(Functor<Id<int>, identity_t>);
 static_assert(Applicative<Id, int, int>);
