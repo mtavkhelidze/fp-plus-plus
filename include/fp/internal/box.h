@@ -49,6 +49,10 @@ struct FP_ALIGN_PACKED_16 Box {
         return nullptr;
     }
     // --- constructors
+    // initializer_list: converts to vector
+    explicit Box(std::initializer_list<T> init)
+        requires(!std::is_pointer_v<T>)
+        : data{std::vector<T>(init)} {}
     // Concrete
     explicit Box(const T& t)
         requires(!std::is_pointer_v<T> && !std::is_null_pointer_v<T>)
@@ -100,5 +104,9 @@ Box(const char*) -> Box<std::string>;
 Box() -> Box<Nothing>;
 
 Box(std::nullptr_t) -> Box<Nothing>;
+
+template <typename U>
+Box(std::initializer_list<U>) -> Box<std::vector<U>>;
+
 }  // namespace fp::internal::box
 #endif  // FP_KERNEL_BOX_H

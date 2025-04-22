@@ -4,20 +4,18 @@
 #include <array>
 #include <cstddef>
 #include <deque>
+#include <functional>
 #include <list>
 #include <map>
 #include <memory>
+#include <optional>
+#include <set>
 #include <string>
 #include <type_traits>
+#include <unordered_map>
 #include <unordered_set>
 #include <utility>
 #include <vector>
-#include <variant>
-#include <functional>
-#include <optional>
-#include <set>
-#include <unordered_map>
-
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers, hicpp-no-array-decay)
 
@@ -29,6 +27,14 @@ TEST(Box_Construction, box_with_nothing_in_it) {
     // Nothing type (std::monostate)
     [[maybe_unused]] Box const box;
     static_assert(std::is_same_v<Box<Nothing>, std::decay_t<decltype(box)>>);
+}
+
+TEST(Box_Construction, box_std_init_list) {
+    auto ints = {1, 2, 3};
+    auto box = Box(ints);
+    static_assert(
+      std::is_same_v<Box<std::vector<int>>, std::decay_t<decltype(box)>>
+    );
 }
 
 TEST(Box_Construction, array_non_pointer) {
