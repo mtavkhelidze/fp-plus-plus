@@ -8,8 +8,6 @@
 
 #include <fp/internal/box.h>
 
-#include <iostream>
-
 namespace fp::internal::storage::box {
 /**
  * Internal boxed value storage abstraction.
@@ -36,45 +34,53 @@ namespace fp::internal::storage::box {
  */
 template <template <typename> typename TC, typename A>
 struct BoxedStorage {
+  protected:
+    using Box = fp::internal::box::Box<A>;
     template <typename T>
     using Derived = fp::tools::rebind::fp_rebind<TC<A>, T>;
-    using Box = fp::internal::box::Box<A>;
 
   private:
     Box box;
 
   protected:
-    // 1. Default constructor
+    // 1. Constructor of nothing
     explicit BoxedStorage() : box() {}
-
     // 2. Constructor from value
     explicit BoxedStorage(const A& value) : box(value) {}
-
     // 3. Copy constructor
     BoxedStorage(const BoxedStorage& other)
         : box([&]() {
-            auto* ptr = other.box.getOrNull();
+            auto* ptr = other.box.get();
             return ptr ? Box(*ptr) : Box();
         }()) {}
 
     // 4. Move constructor
-    BoxedStorage(BoxedStorage&& other) noexcept : box(std::move(other.box)) {}
+    BoxedStorage(BoxedStorage&& other) noexcept = default;
+    // 5. Copy assignment
+    BoxedStorage& operator=(const BoxedStorage&) = default;
+    // 6. Move assignment
+    BoxedStorage& operator=(BoxedStorage&&) noexcept = default;
 
-  public:
     template <typename T>
     static auto store(T&& value) -> Derived<std::decay_t<T>> {  //
         return Derived<std::decay_t<T>>{std::forward<T>(value)};
     }
 
+    static auto store(const char* s) -> Derived<std::string> {
+        return Derived<std::string>{std::string(s)};
+    }
+
+  public:
     auto getOrElse(const A& alt) const -> A {
-#ifdef FP_PLUS_PLUS_TESTING
-        if (auto* ptr = box.getOrNull()) {
-            std::cout << "Boxed value: " << *ptr << std::endl;
-        }
-#endif
-        auto* ptr = box.getOrNull();
+        auto* ptr = box.get();
         return ptr == nullptr ? alt : *ptr;
     }
+
+#ifdef FP_PLUS_PLUS_TESTING
+  public:
+    static constexpr const char* _backend_tag() { return "BoxedStorage"; }
+    constexpr const char* backend_tag() const { return _backend_tag(); }
+#endif
 };
 
 #endif  // FP_INTERNAL_BOX_STORAGE_H

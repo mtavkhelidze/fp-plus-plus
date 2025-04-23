@@ -12,6 +12,21 @@
 #include <fp/internal/stack_storage.h>
 
 namespace fp::internal::storage {
+
+/// Canonical storage type: normalize const char* and char* to std::string, else
+/// decay
+template <typename T>
+struct canonical_storage_type {
+    using type = std::conditional_t<
+      std::is_same_v<std::decay_t<T>, const char*>
+        || std::is_same_v<std::decay_t<T>, char*>,
+      std::string,
+      std::decay_t<T>>;
+};
+
+template <typename T>
+using __canonical_storage_t = typename canonical_storage_type<T>::type;
+
 template <template <typename> typename TC, typename A>
 using __box_storage = fp::internal::storage::box::BoxedStorage<TC, A>;
 
@@ -20,42 +35,28 @@ using __stack__storage = fp::internal::storage::stack::StackStorage<TC, A>;
 
 template <template <typename> typename TC, typename A>
 struct StorageProvider {
-    using type = __box_storage<TC, A>;
+    using type = __box_storage<TC, __canonical_storage_t<A>>;
 };
 
 template <template <typename> typename TC, typename A>
-    requires(std::is_fundamental_v<A>)
+    requires(std::is_fundamental_v<__canonical_storage_t<A>>)
 struct StorageProvider<TC, A> {
-    using type = __stack__storage<TC, A>;
+    using type = __stack__storage<TC, __canonical_storage_t<A>>;
 };
 
 /**
- * A generic storage container for values.
+ * Storage backend abstraction to be be used as a template base class for
+ * containers.
  *
- * This class provides a unified interface for different storage strategies
- * based on the type of the value. It selects between heap-based storage
- * (BoxedStorage) for non-fundamental types, and stack-based storage
- * (StackStorage) for fundamental types.
+ * See @ref{fp::internal::storage::BoxStorage} and
+ * @ref{fp::internal::storage::StackStorage} for the real thing.
  *
- * ## Usage:
- * - The appropriate storage strategy is automatically chosen based on the type
- *   of the value.
- * - The storage mechanism is selected via `StorageSelector`, which evaluates
- *   whether the type is fundamental or not, and chooses `StackStorage` or
- *   `BoxedStorage` accordingly.
- * - This class **does not directly store the value**; instead, it delegates the
- *   storage responsibility to either `BoxedStorage` or `StackStorage` depending
- *   on the type.
- *
- * ## Constraints:
- * - Storage is automatically chosen based on the type of `T`, and users do not
- *   need to manually select a storage strategy.
- * - Values are accessible via the storage strategy's `getOrElse()` method.
+ * Do not construct or manipulate this unless you know what you're doing
  */
 template <typename T>
-struct Storage : public StorageProvider<Storage, std::decay_t<T>>::type {
+struct Storage : public StorageProvider<Storage, T>::type {
   private:
-    using SP = typename StorageProvider<Storage, std::decay_t<T>>::type;
+    using SP = typename StorageProvider<Storage, T>::type;
     friend SP;
 
   public:

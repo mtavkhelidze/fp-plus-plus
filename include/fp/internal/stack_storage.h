@@ -7,48 +7,54 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <iostream>
 #include <type_traits>
 
 namespace fp::internal::storage::stack {
 
 /**
- * Internal stack-based value storage abstraction.
+ * Internal stack-based, zero-overhead storage abstraction for values of
+ * fundamental types (i.e.int, char).
  *
- * This class is designed to hold simple, fundamental types directly on the
- * stack. It is not intended for direct construction — values must be created
- * via the static `store()` method.
+ * This struct is not intended for direct construction — values must be created
+ * via the static `store()` method. The struct must be used by `Master`
+ * container via @ref{Storage} selector template.
  *
  * ## Constraints:
  * - StackStorage instances can only be created via the static `store()` method.
  * - Copying and moving are both allowed as the underlying value is trivially
  *   copyable.
- * - Values can only be accessed via `getOrElse(const A&)`.
+ * - - Values are accessed via `getOrElse(alternative)`, though the alternative
+ * is never used. (see @ref{fp::internal::storage::BoxStorage} for different
+ * case)
  *
- * Do not construct or manipulate this class directly.
+ * Do not construct or manipulate this unless you know what you're doing.
  */
-template <template <typename> typename TC, typename A>
+template <template <typename> typename Master, typename A>
     requires std::is_fundamental_v<A>
 struct StackStorage {
   private:
     A value;
 
   protected:
-    explicit StackStorage(A&& a) : value(std::forward<A>(a)) {}
+    explicit StackStorage(A v) : value(v) {}
+    StackStorage(const StackStorage&) noexcept = default;
+    StackStorage(StackStorage&&) noexcept = delete;
+    StackStorage& operator=(const StackStorage&) noexcept = delete;
+    StackStorage& operator=(StackStorage&&) noexcept = default;
 
-  protected:
     template <typename T>
-    static auto store(T&& x) -> TC<std::decay_t<T>> {  //
-        return TC<std::decay_t<T>>(std::forward<std::decay_t<T>>(x));
-    };
+    static auto store(T&& x) -> Master<std::decay_t<T>> {
+        return Master<std::decay_t<T>>(std::forward<std::decay_t<T>>(x));
+    }
 
   public:
-    auto getOrElse(const A&) const -> A {  //
+    auto getOrElse(const A&) const -> A { return value; }
+
 #ifdef FP_PLUS_PLUS_TESTING
-        std::cout << "Simple value: " << value << std::endl;
+  public:
+    static constexpr const char* _backend_tag() { return "StackStorage"; }
+    constexpr const char* backend_tag() const { return _backend_tag(); }
 #endif
-        return value;
-    }
 };
 }  // namespace fp::internal::storage::stack
 #endif  // FP_INTERNAL_STACK_STORAGE_H

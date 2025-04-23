@@ -10,8 +10,12 @@
 
 #include <array>
 #include <cstddef>
+#include <initializer_list>
+#include <iterator>
 #include <memory>
+#include <optional>
 #include <string>
+#include <tuple>
 #include <type_traits>
 #include <variant>
 #include <vector>
@@ -23,7 +27,7 @@ using Nothing = fp::prelude::Nothing;
  * Pure type value holder box.
  *
  * stored value is owned by Box: value or its type cannot be modified, direct
- * access to it is gone and is only available via `getOrNull`.
+ * access to it is gone and is only available via `get`.
  *
  * Box cannot be copied. To create a copy, create a new box.
  *
@@ -34,46 +38,47 @@ using Nothing = fp::prelude::Nothing;
 template <typename T, typename... Ts>
 struct FP_ALIGN_PACKED_16 Box {
   private:
-    std::variant<std::shared_ptr<T>, std::vector<T>, Nothing> data = Nothing();
+    std::variant<std::shared_ptr<T>> data;
+    static constexpr Nothing __nothing = Nothing();
 
   public:
+    using kind = T;
+
     // --- Accessors
-    [[nodiscard]] [[clang::annotate("nullable")]]
-    auto getOrNull() const -> const T* {
-        if (data.index() == 0) {
-            return std::get<std::shared_ptr<T>>(data).get();
+    [[nodiscard]]
+    constexpr auto get() const -> const T& {
+        return *std::get<std::shared_ptr<T>>(data).get();
+    }
+    constexpr auto empty() -> bool {
+        if constexpr (std::is_same_v<T, Nothing>) {
+            return true;
+        } else {
+            return false;
         }
-        if (data.index() == 1) {
-            return std::get<std::vector<T>>(data).data();
-        }
-        return nullptr;
     }
     // --- constructors
-    // initializer_list: converts to vector
-    explicit Box(std::initializer_list<T> init)
-        requires(!std::is_pointer_v<T>)
-        : data{std::vector<T>(init)} {}
-    // Concrete
+
+    // Value (not pointer)
     explicit Box(const T& t)
-        requires(!std::is_pointer_v<T> && !std::is_null_pointer_v<T>)
+        requires(!std::is_pointer_v<T>)
         : data{std::make_shared<T>(t)} {}
+
     // Pointer: shared
     explicit Box(std::shared_ptr<T> ptr) : data(std::move(ptr)) {}
+
     // Pointer: unique
     explicit Box(std::unique_ptr<T>& ptr) : data(std::move(ptr)) {}
+
     // Pointer: raw
     explicit Box(T ptr)
         requires(std::is_pointer_v<T>)
-        : data(std::make_shared<T>(std::move(ptr))) {
-        static_assert(!std::is_null_pointer_v<T>, "nullptr is not allowed");
-    }
-    // Varargs; creates an array
-    explicit Box(const T&& t, Ts&&... ts)
-        requires(sizeof...(Ts) > 0)
-    {
-        std::vector<T> vec = {std::move(t), std::move(ts)...};
-        data = std::move(vec);
-    }
+        : data(std::make_shared<T>(std::move(ptr))) {}
+
+    // Pointer: null
+    explicit Box(std::nullopt_t)
+        requires(std::is_null_pointer_v<T>)
+        : data(std::make_shared<Nothing>(__nothing)) {}
+
     // Move-only
     explicit Box(T&& t)
         requires(
@@ -82,31 +87,71 @@ struct FP_ALIGN_PACKED_16 Box {
         : data{std::make_shared<T>(std::move(t))} {}
 
     // nothing (default comes here)
-    explicit Box<Nothing>() : data(Nothing()) {}
+    explicit Box() : data(std::make_shared<Nothing>(__nothing)) {}
 
+    // init list
+    // template <typename U>
+    // explicit Box(std::initializer_list<U> list) {
+    //     // T is a vector, by the power of deduction guide below
+    //     T v(list.begin(), list.end());
+    //     data = std::make_shared<T>(v);
+    // }
+    // c-style array, not char*
+    template <typename U, std::size_t N>
+        requires(!std::same_as<std::decay<U>, char>)
+    Box(const U (&arr)[N]) {
+        T v(std::begin(arr), std::end(arr));
+        data = std::make_shared<T>(v);
+    }
+    // tuple
+    template <typename U, typename... Us>
+        requires(
+          std::is_same_v<T, std::tuple<std::decay_t<U>, std::decay_t<Us>...>>
+        )
+    Box(U&& u, Us&&... us) {
+        T t(u, us...);
+        data = std::make_shared<T>(t);
+    }
     // --- Other constructors
     ~Box() = default;
     auto operator=(Box&&) noexcept -> Box& = default;
     auto operator=(const Box&) -> Box& = delete;
     Box(Box&&) noexcept = default;
     Box(const Box&) = delete;
-};
+};  // namespace fp::internal::box
 
-// Deduction guides
-template <typename T>
-Box(T&&) -> Box<std::decay_t<T>>;
+// Anything
+template <typename U>
+Box(const U&&) -> Box<std::decay_t<U>>;
+template <typename U>
+Box(const U&) -> Box<std::decay_t<U>>;
 
-template <typename U, std::size_t N>
-Box(const std::array<U, N>&) -> Box<U*>;
-
+// Literal strings (Box b = "str" or Box("str")), converted automatically to
+// string
 Box(const char*) -> Box<std::string>;
 
+template <typename U, std::size_t N>
+    requires(std::same_as<std::decay<U>, char>)
+Box(const U (&)[N]) -> Box<std::string>;
+
+// c-style arrays, bar char*
+template <typename U, std::size_t N>
+    requires(!std::same_as<std::decay<U>, char>)
+Box(const U (&)[N]) -> Box<std::vector<std::decay_t<U>>>;
+
+// std::initializer_list
+// template <typename U>
+// Box(std::initializer_list<U> u)
+//   -> Box<std::tuple<std::decay_t<U>, std::decay_t<Us>...>>;
+
+// varargs
+template <typename U, typename... Us>
+    requires(sizeof...(Us) > 0)
+Box(U&&, Us&&...) -> Box<std::tuple<std::decay_t<U>, std::decay_t<Us>...>>;
+
+// Empty box
 Box() -> Box<Nothing>;
-
 Box(std::nullptr_t) -> Box<Nothing>;
-
-template <typename U>
-Box(std::initializer_list<U>) -> Box<std::vector<U>>;
 
 }  // namespace fp::internal::box
 #endif  // FP_KERNEL_BOX_H
