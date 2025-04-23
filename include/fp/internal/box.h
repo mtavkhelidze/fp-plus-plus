@@ -10,7 +10,6 @@
 
 #include <array>
 #include <cstddef>
-#include <initializer_list>
 #include <iterator>
 #include <memory>
 #include <optional>
@@ -89,13 +88,6 @@ struct FP_ALIGN_PACKED_16 Box {
     // nothing (default comes here)
     explicit Box() : data(std::make_shared<Nothing>(__nothing)) {}
 
-    // init list
-    // template <typename U>
-    // explicit Box(std::initializer_list<U> list) {
-    //     // T is a vector, by the power of deduction guide below
-    //     T v(list.begin(), list.end());
-    //     data = std::make_shared<T>(v);
-    // }
     // c-style array, not char*
     template <typename U, std::size_t N>
         requires(!std::same_as<std::decay<U>, char>)
@@ -138,11 +130,6 @@ Box(const U (&)[N]) -> Box<std::string>;
 template <typename U, std::size_t N>
     requires(!std::same_as<std::decay<U>, char>)
 Box(const U (&)[N]) -> Box<std::vector<std::decay_t<U>>>;
-
-// std::initializer_list
-// template <typename U>
-// Box(std::initializer_list<U> u)
-//   -> Box<std::tuple<std::decay_t<U>, std::decay_t<Us>...>>;
 
 // varargs
 template <typename U, typename... Us>
