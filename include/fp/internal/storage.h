@@ -23,11 +23,24 @@ struct Backend {
 };
 
 template <template <typename> typename Data, typename A>
-struct StorageProvider : public Backend<Data, A>::type {
-  protected:
+struct StorageProvider : private Backend<Data, A>::type {
+  private:
     using Base = Backend<Data, A>::type;
     using Base::Base;
-    friend Data<A>;
+
+    // this foreces the coomon interface onto Backends
+  protected:
+    inline constexpr auto have_value() const noexcept -> bool {  //
+        return !this->empty();
+    }
+    inline constexpr auto retrieve() const noexcept -> A& {  //
+        return this->get();
+    }
+    inline static constexpr auto store(
+      A&& x
+    ) noexcept(std::is_nothrow_move_constructible_v<A>) {  //
+        return Base::put(std::forward<A>(x));
+    }
 };
 };  // namespace fp::internal::storage
 

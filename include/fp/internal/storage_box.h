@@ -39,19 +39,12 @@ using rebind = fp::tools::rebind::fp_rebind<TC, T>;
  */
 template <template <typename> class Container, typename A>
 struct StorageBox {
-    friend Container<A>;
-
-  protected:
+  private:
     using Box = fp::internal::box::Box<A>;
-
-  private:
     Box box;
-    friend Container<A>;
 
-  private:
     explicit StorageBox(Box&& box) noexcept : box(std::move(box)) {}
 
-  private:
     StorageBox() noexcept = delete;
     StorageBox(const StorageBox& other) noexcept = delete;
     StorageBox(StorageBox&& other) noexcept = delete;
@@ -59,14 +52,12 @@ struct StorageBox {
     StorageBox& operator=(StorageBox&&) noexcept = delete;
 
   protected:
-    using kind = typename Box::kind;
+    inline constexpr auto get() const noexcept -> A& { return box.get(); }
 
-    auto get() const noexcept -> const A& { return box.get(); }
-
-    auto empty() const noexcept -> bool { return box.empty(); }
+    inline constexpr auto empty() const noexcept -> bool { return box.empty(); }
 
     template <typename T>
-    static auto store(T&& value) {
+    static auto put(T&& value) {
         auto box = Box{std::forward<T>(value)};
         using U = typename decltype(box)::kind;
         using Derived = rebind<Container<A>, U>;

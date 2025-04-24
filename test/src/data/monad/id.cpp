@@ -7,6 +7,7 @@ using namespace fp::data::monad::id;
 
 TEST(Monad_Id, functor_laws_map_identity) {  // laws
     auto a = pure<Id>(10);
+
     // auto b = a.map(fp::identity);
 
     // ASSERT_TRUE(a == b);

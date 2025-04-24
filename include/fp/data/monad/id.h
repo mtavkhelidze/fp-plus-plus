@@ -25,12 +25,19 @@ struct Id : public StorageProvider<Id, A> {
     using Base::Base;
 
   public:
-    inline operator A() const { return this->get(); }
+    inline constexpr operator A() const noexcept { return this->value(); }
 
     template <typename T>
-    static auto apply(T&& value) {
+    inline static constexpr auto apply(
+      T&& value
+    ) noexcept(std::is_nothrow_constructible_v<A, T&&>) -> Id {
         return Id{Id::store(std::forward<T>(value))};
     }
+
+    inline constexpr auto value() const noexcept -> const A& {
+        return this->retrieve();
+    }
+
     // Eq
     // [[nodiscard]] auto equals(const Id& other) const -> bool {
     //     const auto a = this->get();

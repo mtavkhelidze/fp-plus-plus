@@ -1,21 +1,19 @@
 #include <fp/internal/storage.h>
 #include <gtest/gtest.h>
 
-template <typename A>
-using StorageProvider = fp::internal::storage::StorageProvider<A>;
+template <template <typename> typename Data, typename A>
+using StorageProvider = fp::internal::storage::StorageProvider<Data, A>;
 
 template <typename A>
-struct Container : public StorageProvider<A> {
+struct DataClass : public StorageProvider<DataClass, A> {
     template <typename T>
-    static auto apply(T&& value) /* -> Container<std::decay_t<T>> */ {
-        return Container{
-          StorageProvider<std::decay_t<T>>::store(std::forward<T>(value))
-        };
+    static auto apply(T&& value) {
+        return DataClass{DataClass::store(std::forward<T>(value))};
     }
 };
 
 TEST(Storage_Fundamental, uses_stack_storage) {
-    auto c = Container<int>::apply(0);
+    auto c = DataClass<int>::apply(0);
     EXPECT_EQ(c.getOrElse(0), 0);
     EXPECT_EQ(c.backend_tag(), "StackStorage");
 }
