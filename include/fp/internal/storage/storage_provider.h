@@ -7,7 +7,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/internal/storage_box.h>
+#include <fp/internal/storage/storage_box.h>
 
 #include <type_traits>
 
@@ -30,10 +30,10 @@ struct StorageProvider : private Backend<Data, A>::type {
 
     // this foreces the coomon interface onto Backends
   protected:
-    inline constexpr auto have_value() const noexcept -> bool {  //
+    inline auto have_value() const noexcept -> bool {  //
         return !this->empty();
     }
-    inline constexpr auto retrieve() const noexcept -> A& {  //
+    inline auto retrieve() const noexcept -> const A& {  //
         return this->get();
     }
     inline static constexpr auto store(
@@ -41,6 +41,12 @@ struct StorageProvider : private Backend<Data, A>::type {
     ) noexcept(std::is_nothrow_move_constructible_v<A>) {  //
         return Base::put(std::forward<A>(x));
     }
+#ifdef FP_PLUS_PLUS_TESTING
+  public:
+    inline constexpr auto is_box() -> bool {
+        return strcmp(this->_tag, "StorageBox") == 0;
+    }
+#endif  // FP_PLUS_PLUS_TESTING
 };
 };  // namespace fp::internal::storage
 

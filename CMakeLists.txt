@@ -37,9 +37,9 @@ add_library(
     include/fp/data/monad/id.h
     include/fp/fp.h
     include/fp/internal/box.h
-    include/fp/internal/storage_box.h
-    include/fp/internal/storage_stack.h
-    include/fp/internal/storage.h
+    include/fp/internal/storage/storage_box.h
+    include/fp/internal/storage/storage_provider.h
+    include/fp/internal/storage/storage_stack.h
     include/fp/operators.h
     include/fp/prelude.h
     include/fp/tools.h

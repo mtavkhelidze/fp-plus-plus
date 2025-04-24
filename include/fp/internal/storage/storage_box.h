@@ -52,7 +52,7 @@ struct StorageBox {
     StorageBox& operator=(StorageBox&&) noexcept = delete;
 
   protected:
-    inline constexpr auto get() const noexcept -> A& { return box.get(); }
+    constexpr auto get() const noexcept -> const A& { return box.get(); }
 
     inline constexpr auto empty() const noexcept -> bool { return box.empty(); }
 
@@ -65,11 +65,10 @@ struct StorageBox {
     }
 
 #ifdef FP_PLUS_PLUS_TESTING
-  public:
-    static constexpr const char* _backend_tag() { return "StorageBox"; }
-    constexpr const char* backend_tag() const { return _backend_tag(); }
+  protected:
+    static constexpr const char* _tag = "StorageBox";
 #endif
 };
 
 #endif  // FP_INTERNAL_BOX_STORAGE_H
-}
+}  // namespace fp::internal::storage
