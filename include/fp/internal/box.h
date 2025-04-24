@@ -48,7 +48,7 @@ struct FP_ALIGN_PACKED_16 Box {
     constexpr auto get() const -> const T& {
         return *std::get<std::shared_ptr<T>>(data).get();
     }
-    constexpr auto empty() -> bool {
+    constexpr auto empty() const -> bool {
         if constexpr (std::is_same_v<T, Nothing>) {
             return true;
         } else {

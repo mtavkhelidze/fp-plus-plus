@@ -1,6 +1,5 @@
 #ifndef FP_INTERNAL_STACK_STORAGE_H
 #define FP_INTERNAL_STACK_STORAGE_H
-#include <utility>
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -8,8 +7,9 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <type_traits>
+#include <utility>
 
-namespace fp::internal::storage::stack {
+namespace fp::internal::storage {
 
 /**
  * Internal stack-based, zero-overhead storage abstraction for values of
@@ -17,7 +17,7 @@ namespace fp::internal::storage::stack {
  *
  * This struct is not intended for direct construction — values must be created
  * via the static `store()` method. The struct must be used by `Master`
- * container via @ref{Storage} selector template.
+ * container via @ref{StorageProvider} selector template.
  *
  * ## Constraints:
  * - StackStorage instances can only be created via the static `store()` method.
@@ -56,5 +56,5 @@ struct StackStorage {
     constexpr const char* backend_tag() const { return _backend_tag(); }
 #endif
 };
-}  // namespace fp::internal::storage::stack
+}  // namespace fp::internal::storage
 #endif  // FP_INTERNAL_STACK_STORAGE_H

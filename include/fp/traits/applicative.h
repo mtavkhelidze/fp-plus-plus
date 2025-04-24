@@ -20,9 +20,10 @@ using namespace fp::tools::all;
 using namespace fp::traits::functor;
 
 template <template <typename> typename FA, typename A>
-    requires(UnaryInstance<FA<A>>)
+    requires(UnaryInstance<FA<std::decay_t<A>>>)
 constexpr auto pure(A&& a) -> FA<std::decay_t<A>> {
-    return FA<std::decay_t<A>>::apply(std::forward<std::decay_t<A>>(a));
+    using T = std::decay_t<A>;
+    return FA<T>::apply(std::forward<A>(a));
 }
 /**
  * Applicative extends @ref{Functor} with `an` ap and `pure` method.

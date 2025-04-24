@@ -2,14 +2,14 @@
 #include <gtest/gtest.h>
 
 template <typename A>
-using Storage = fp::internal::storage::Storage<A>;
+using StorageProvider = fp::internal::storage::StorageProvider<A>;
 
 template <typename A>
-struct Container : public Storage<A> {
+struct Container : public StorageProvider<A> {
     template <typename T>
     static auto apply(T&& value) /* -> Container<std::decay_t<T>> */ {
         return Container{
-          Storage<std::decay_t<T>>::store(std::forward<T>(value))
+          StorageProvider<std::decay_t<T>>::store(std::forward<T>(value))
         };
     }
 };

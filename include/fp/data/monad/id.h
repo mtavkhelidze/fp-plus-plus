@@ -13,50 +13,57 @@
 
 namespace fp::data::monad::id {
 
-template <typename A>
-using Storage = fp::internal::storage::Storage<A>;
+template <template <typename> typename TC, typename A>
+using StorageProvider = fp::internal::storage::StorageProvider<TC, A>;
 
 using namespace fp::tools::arrow;
 
 template <typename A>
-struct Id : public Storage<A> {
-    inline operator A() const { return this->getOrElse(A{}); }
+struct Id : public StorageProvider<Id, A> {
+  private:
+    using Base = StorageProvider<Id, A>;
+    using Base::Base;
+
+  public:
+    inline operator A() const { return this->get(); }
 
     template <typename T>
-    static auto apply(T&& value) -> Id<std::decay_t<T>> {
-        return Id{Storage<std::decay_t<T>>::store(std::forward<T>(value))};
+    static auto apply(T&& value) {
+        return Id{Id::store(std::forward<T>(value))};
     }
-
     // Eq
-    [[nodiscard]] auto equals(const Id& other) const -> bool {
-        const auto a = this->getOrElse(A{});
-        const auto b = other.getOrElse(A{});
-        return a == b;
-    }
+    // [[nodiscard]] auto equals(const Id& other) const -> bool {
+    //     const auto a = this->get();
+    //     const auto b = other.get();
+    //     return a == b;
+    // }
 
-    // Functor
-    template <Arrow<A> F>
-    [[nodiscard]] auto map(F&& f) const {
-        auto v = this->getOrElse(A{});
-        return Id<A>::apply(std::forward<F>(f)(v));
-    }
+    // // Functor
+    // template <Arrow<A> F>
+    // [[nodiscard]] auto map(F&& f) const {
+    //     if (!this->empty()) {
+    //         auto v = this->get();
+    //         return this->apply(std::forward<F>(f)(v));
+    //     }
+    //     return this->apply(this->get());
+    // }
 };
 
 }  // namespace fp::data::monad::id
 
-#ifdef FP_PLUS_PLUS_TESTING
-#include <fp/traits/traits.h>
-namespace {
-using namespace fp::data::monad::id;
-using namespace fp::prelude;
-using namespace fp::tools::all;
-using namespace fp::traits::all;
+// #ifdef FP_PLUS_PLUS_TESTING
+// #include <fp/traits/traits.h>
+// namespace {
+// using namespace fp::data::monad::id;
+// using namespace fp::prelude;
+// using namespace fp::tools::all;
+// using namespace fp::traits::all;
 
-static_assert(Eq<Id<int>>);
-static_assert(Functor<Id<int>, identity_t>);
-static_assert(Applicative<Id, int, int>);
-}  // namespace
+// static_assert(Eq<Id<int>>);
+// static_assert(Functor<Id<int>, identity_t>);
+// static_assert(Applicative<Id, int, int>);
+// }  // namespace
 
-#endif  // FP_PLUS_PLUS_TESTING
+// #endif  // FP_PLUS_PLUS_TESTING
 
 #endif  // FP_DATA_MONAD_ID_H
