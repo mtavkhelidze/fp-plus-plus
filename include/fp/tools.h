@@ -52,7 +52,7 @@ inline constexpr bool fp_is_instance =
   __type_class_instance<std::decay_t<TC>>::value > 0;
 
 template <typename TC>
-concept Instance = fp_is_instance<TC>;
+concept AnyInstance = fp_is_instance<TC>;
 
 template <typename TC>
 inline constexpr bool fp_is_unary_instance =
@@ -73,12 +73,14 @@ inline constexpr std::size_t fp_get_instance_arity =
   __type_class_instance<std::decay_t<TC>>::value;
 
 template <typename TC>
-inline constexpr bool fp_has_apply = fp_is_instance<TC> && requires() {
-    { TC::apply() };
-};
+inline constexpr bool fp_has_no_copy = !std::is_copy_constructible_v<TC>;
 
 template <typename TC>
-concept HasApply = fp_has_apply<TC>;
+inline constexpr bool fp_has_no_move = !std::is_move_constructible_v<TC>;
+
+template <typename TC, typename A>
+inline constexpr bool fp_has_no_direct_constructor =
+  !std::constructible_from<TC, A>;
 
 }  // namespace fp::tools::instance
 namespace fp::tools::rebind {
@@ -133,6 +135,9 @@ using namespace fp::tools::inner_type::__internal;
 /// If given TC<A>, access A
 template <UnaryInstance TC>
 using fp_inner_type = typename __extract_inner_type<std::decay_t<TC>>::type;
+
+template <UnaryInstance TC, typename A>
+inline constexpr bool fp_is_inner_type = std::same_as<fp_inner_type<TC>, A>;
 
 /// Given two instances, check if their inner types are the same (i.e.
 /// std::optional<int> and std::vectro<double> will result in false)
@@ -240,33 +245,7 @@ template <typename F, typename A>
 using fp_kvalue_type = fp_inner_type<fp_kvalue<F, A>>;
 
 }  // namespace fp::tools::kleisli_arrow
-namespace fp::tools::object {
-using namespace fp::tools::instance;
-using namespace fp::tools::inner_type;
 
-template <typename TC>
-inline constexpr bool fp_has_no_direct_constructor =
-  !std::constructible_from<TC, fp_inner_type<TC>>;
-template <typename TC>
-inline constexpr bool fp_has_no_copy = !std::is_copy_constructible_v<TC>;
-template <typename TC>
-inline constexpr bool fp_has_no_move = !std::is_move_constructible_v<TC>;
-
-template <typename TC>
-inline constexpr bool fp_is_not_constructible =
-  fp_has_no_direct_constructor<TC> && fp_has_no_copy<TC> && fp_has_no_move<TC>;
-
-template <typename TC>
-inline constexpr bool fp_is_unary_object = requires {
-    typename fp_inner_type<TC>;
-    requires(fp_is_not_constructible<TC>);
-    { TC::apply(std::declval<fp_inner_type<TC>>()) } -> std::same_as<TC>;
-};
-
-template <typename TC>
-concept Object = fp_is_unary_object<TC>;
-
-}  // namespace fp::tools::object
 namespace fp::tools::all {
 using namespace arrow;
 using namespace inner_type;
@@ -275,6 +254,5 @@ using namespace instance;
 using namespace kleisli_arrow;
 using namespace make_pair_type;
 using namespace rebind;
-using namespace object;
 }  // namespace fp::tools::all
 #endif  // FP_TOOLS_H

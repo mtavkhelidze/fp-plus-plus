@@ -30,7 +30,28 @@ enable_clang_tidy()
 
 message(STATUS "PROJECT_BINARY_DIR: ${PROJECT_BINARY_DIR}")
 
-add_library(${PROJECT_NAME} INTERFACE)
+add_library(
+    ${PROJECT_NAME}
+    INTERFACE
+    include/fp/data/data.h
+    include/fp/data/monad/id.h
+    include/fp/fp.h
+    include/fp/internal/box.h
+    include/fp/internal/storage_box.h
+    include/fp/internal/storage_stack.h
+    include/fp/internal/storage.h
+    include/fp/operators.h
+    include/fp/prelude.h
+    include/fp/tools.h
+    include/fp/traits/applicative.h
+    include/fp/traits/eq.h
+    include/fp/traits/functor.h
+    include/fp/traits/monoid.h
+    include/fp/traits/object.h
+    include/fp/traits/semigroup.h
+    include/fp/traits/traits.h
+    # include/fp/traits/monad.h
+)
 target_include_directories(
     ${PROJECT_NAME}
     INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>

@@ -1,0 +1,4 @@
+# Ignore macOS system leaks
+leak:_xpc_collect_images
+leak:_libxpc_initializer
+leak:_fetchInitializingClassList

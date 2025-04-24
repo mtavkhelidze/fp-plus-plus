@@ -10,6 +10,7 @@
 #include <fp/traits/eq.h>
 #include <fp/traits/functor.h>
 #include <fp/traits/monoid.h>
+// #include <fp/traits/object.h>
 #include <fp/traits/semigroup.h>
 
 namespace fp::traits::all {
@@ -17,6 +18,7 @@ using namespace applicative;
 using namespace eq;
 using namespace functor;
 using namespace monoid;
+// using namespace object;
 using namespace semigroup;
 }  // namespace fp::traits::all
 #endif  // FP_TRAITS_TRAITS_H
