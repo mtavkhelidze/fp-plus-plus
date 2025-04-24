@@ -5,8 +5,8 @@ flowchart TD
     User[End user code] -- create via apply --> CRTP
     subgraph CRTP
         data["DataClass&lt;A&gt;"] --> SP["StorageProvider&lt;A&gt;"]
-        SP -- complex type A --> Boxed["BoxedStorage&lt;Storage, A&gt;"]
-        SP -- fundamental type A --> Stack["StackStorage&lt;Storage, A&gt;"]
+        SP -- complex type A --> Boxed["StorageBox&lt;Storage, A&gt;"]
+        SP -- fundamental type A --> Stack["StorageStack&lt;Storage, A&gt;"]
         Boxed:::boxed
         Stack:::stack
     end
