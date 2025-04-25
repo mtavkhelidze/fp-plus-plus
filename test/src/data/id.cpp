@@ -1,7 +1,13 @@
 // NOLINTBEGIN:cppcoreguidelines-avoid-magic-numbers
 #include <fp/data/id.h>
+#include <fp/operators.h>
 #include <fp/prelude/pure.h>
+#include <fp/traits/eq.h>
 #include <gtest/gtest.h>
+
+using namespace fp::operators::all;
+using namespace fp::prelude;
+using namespace fp::traits::eq;
 
 template <typename T>
 using Id = fp::data::monad::id::Id<T>;
@@ -15,10 +21,13 @@ TEST(Monad_Id, construction) {
     ASSERT_TRUE(id.has_value());
     ASSERT_EQ(id.value(), 10);
 }
-// TEST(Monad_Id, functor_laws_map_identity) {  // laws
-//     auto a = pure<Id>(10);
-//     // ASSERT_TRUE(a == b);
-// }
+
+TEST(Monad_Id, is_Eq) {
+    static_assert(Eq<Id<int>>);
+    auto a = pure<Id>(10);
+    auto b = pure<Id>(10);
+    ASSERT_TRUE(a == b);
+}
 
 // TEST(Monad_Id, functor_laws_map_composition) {  // laws
 //     auto a = pure<Id>(10);

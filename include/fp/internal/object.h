@@ -56,6 +56,10 @@ struct Object : private Backend<Data, A>::type {
     }
     // Eq
     inline auto equals(const Object& other) const noexcept -> bool {
+        static_assert(
+          std::equality_comparable<A>,
+          "The type A must support operator== to use equals()."
+        );
         return this->value() == other.value();
     }
 #ifdef FP_PLUS_PLUS_TESTING

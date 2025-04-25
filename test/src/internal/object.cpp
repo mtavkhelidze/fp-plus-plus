@@ -38,11 +38,20 @@ TEST(Object, empty_data) {
     EXPECT_EQ(da.value(), nothing);
 }
 
-TEST(Object, id_Eq) {
+TEST(Object, id_Eq_fundamental) {
     static_assert(fp::traits::eq::Eq<DataClass<int>>);
     DataClass da1 = pure<DataClass>(42);
     DataClass da2 = pure<DataClass>(42);
     DataClass da3 = pure<DataClass>(24);
+    EXPECT_TRUE(da1 == da2);
+    EXPECT_TRUE(da1 != da3);
+}
+
+TEST(Object, id_Eq_complex) {
+    static_assert(fp::traits::eq::Eq<DataClass<std::vector<int>>>);
+    DataClass da1 = pure<DataClass>(std::vector{1, 2, 3});
+    DataClass da2 = pure<DataClass>(std::vector{1, 2, 3});
+    DataClass da3 = pure<DataClass>(std::vector{3, 2, 1});
     EXPECT_TRUE(da1 == da2);
     EXPECT_TRUE(da1 != da3);
 }
