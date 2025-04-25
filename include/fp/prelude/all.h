@@ -17,6 +17,7 @@
 #include <fp/tools/cast.h>
 
 namespace fp::prelude {
+// promote those to top
 using namespace fp::data::nothing;
 using namespace fp::tools::cast;
 }  // namespace fp::prelude

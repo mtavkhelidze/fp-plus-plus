@@ -34,8 +34,7 @@ TEST(StorageProvider, backend_choice) {
 }
 
 TEST(StorageProvider, empty_data) {
-    int arr[] = {};
-    DataClass da = pure<DataClass>(arr);
+    DataClass da = pure<DataClass>(nothing);
     EXPECT_TRUE(da.is_box());
-    // EXPECT_EQ(da.value().size(), 0);
+    EXPECT_EQ(da.value(), nothing);
 }
