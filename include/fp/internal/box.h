@@ -5,11 +5,11 @@
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
-
 #include <fp/data/nothing.h>
 #include <fp/prelude/defs.h>
 
 #include <cstddef>
+#include <iostream>
 #include <memory>
 #include <optional>
 #include <variant>
@@ -88,6 +88,7 @@ struct FP_ALIGN_PACKED_16 Box {
     template <typename U, std::size_t N>
         requires(!std::same_as<std::decay_t<U>, char>)
     Box(const U (&arr)[N]) {
+        std::cerr << "Box(const U (&arr)[N]) " << N << "\n";
         T v(std::begin(arr), std::end(arr));
         data = std::make_shared<T>(v);
     }
