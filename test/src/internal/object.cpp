@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 
 using namespace fp::internal::box;
+
 using namespace fp::prelude;
 
 template <template <typename> typename Data, typename A>

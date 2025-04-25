@@ -48,8 +48,7 @@ struct Object : private Backend<Data, A>::type {
     static auto apply(T&& value) -> Data<fp_cast<T>> {
         return Data{Base::put(value)};
     }
-
-    inline auto have_value() const noexcept -> bool {  //
+    inline auto has_value() const noexcept -> bool {  //
         return !this->empty();
     }
     inline auto value() const noexcept -> const A& {  //

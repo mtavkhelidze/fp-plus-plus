@@ -1,17 +1,24 @@
 // NOLINTBEGIN:cppcoreguidelines-avoid-magic-numbers
-#include <fp/fp.h>
+#include <fp/data/id.h>
+#include <fp/prelude/pure.h>
 #include <gtest/gtest.h>
 
-using namespace fp::traits::all;
-using namespace fp::data::monad::id;
+template <typename T>
+using Id = fp::data::monad::id::Id<T>;
 
-TEST(Monad_Id, functor_laws_map_identity) {  // laws
-    auto a = pure<Id>(10);
+using namespace fp::prelude;
 
-    // auto b = a.map(fp::identity);
-
-    // ASSERT_TRUE(a == b);
+TEST(Monad_Id, construction) {
+    // Proforma
+    auto id = pure<Id>(10);
+    ASSERT_TRUE(id.is_stack());
+    ASSERT_TRUE(id.has_value());
+    ASSERT_EQ(id.value(), 10);
 }
+// TEST(Monad_Id, functor_laws_map_identity) {  // laws
+//     auto a = pure<Id>(10);
+//     // ASSERT_TRUE(a == b);
+// }
 
 // TEST(Monad_Id, functor_laws_map_composition) {  // laws
 //     auto a = pure<Id>(10);

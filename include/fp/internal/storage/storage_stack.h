@@ -44,10 +44,10 @@ struct StorageStack {
     explicit StorageStack(A &&v) : value(v) {}
 
     StorageStack() = delete;
-    StorageStack(const StorageStack &) noexcept = default;
+    StorageStack(const StorageStack &) noexcept = delete;
     StorageStack(StorageStack &&) noexcept = delete;
     StorageStack &operator=(const StorageStack &) noexcept = delete;
-    StorageStack &operator=(StorageStack &&) noexcept = default;
+    StorageStack &operator=(StorageStack &&) noexcept = delete;
 
   protected:
     constexpr auto get() const noexcept -> const A & { return value; }
