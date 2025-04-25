@@ -8,14 +8,11 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/internal/storage/storage_provider.h>
-#include <fp/tools.h>
 
 namespace fp::data::monad::id {
 
 template <template <typename> typename TC, typename A>
 using StorageProvider = fp::internal::storage::StorageProvider<TC, A>;
-
-using namespace fp::tools::arrow;
 
 template <typename A>
 struct Id : public StorageProvider<Id, A> {

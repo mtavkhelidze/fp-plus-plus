@@ -7,7 +7,7 @@
 #include "data/data.h"
 #include "operators.h"
 #include "prelude/prelude.h"
-#include "tools.h"
+#include "tools/tools.h"
 #include "traits/traits.h"
 
 #undef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
