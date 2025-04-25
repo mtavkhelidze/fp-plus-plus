@@ -46,8 +46,7 @@ using fp_binary_arrow_result_v =
 }  // namespace fp::tools::arrow
 
 namespace fp::tools::arrow {
-
-using namespace instance;
+using namespace fp::tools::instance;
 using namespace inner_type;
 
 template <typename F, typename A>

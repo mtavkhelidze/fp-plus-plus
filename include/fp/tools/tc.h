@@ -21,7 +21,7 @@ namespace __internal {
 
 /// Obtain a type that T becomes after put into @ref{fp::internal::box::Box<T>}
 template <typename T>
-using tc = typename __internal::__fp_type_cast<T>::type;
+using fp_cast = typename __internal::__fp_type_cast<T>::type;
 
 namespace __internal {
 

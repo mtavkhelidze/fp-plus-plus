@@ -43,6 +43,7 @@ namespace __internal {
     };
     template <template <typename, typename> typename TC, typename A, typename B>
     struct __type_class_binary_instance<TC<A, B>> : std::true_type {};
+
 }  // namespace __internal
 using namespace fp::tools::instance::__internal;
 
@@ -51,11 +52,11 @@ inline constexpr bool fp_is_instance =
   __type_class_instance<std::decay_t<TC>>::value > 0;
 
 template <typename TC>
-concept AnyInstance = fp_is_instance<TC>;
-
-template <typename TC>
 inline constexpr bool fp_is_unary_instance =
   __type_class_unary_instance<std::decay_t<TC>>::value;
+
+template <typename TC>
+concept AnyInstance = fp_is_instance<TC>;
 
 template <typename TC>
 concept UnaryInstance = fp_is_unary_instance<TC>;

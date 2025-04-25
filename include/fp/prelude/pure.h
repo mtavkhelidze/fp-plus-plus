@@ -11,8 +11,8 @@
 namespace fp::prelude {
 
 template <template <typename> class DataClass, typename T>
-auto pure(T&& value) -> DataClass<fp::tools::tc::tc<T>> {
-    using NT = fp::tools::tc::tc<T>;
+auto pure(T&& value) -> DataClass<fp::tools::tc::fp_cast<T>> {
+    using NT = fp::tools::tc::fp_cast<T>;
     return DataClass<NT>::apply(std::forward<T>(value));
 }
 }  // namespace fp::prelude
