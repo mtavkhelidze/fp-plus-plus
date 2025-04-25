@@ -14,9 +14,10 @@
 #include <fp/prelude/identity.h>
 #include <fp/prelude/pipe.h>
 #include <fp/prelude/pure.h>
+#include <fp/tools/cast.h>
 
 namespace fp::prelude {
 using namespace fp::data::nothing;
-using namespace fp::tools::tc;
+using namespace fp::tools::cast;
 }  // namespace fp::prelude
 #endif  // FP_PRELUDE_H

@@ -10,7 +10,7 @@
 #include <fp/prelude/dollar.h>
 #include <fp/prelude/dot.h>
 #include <fp/prelude/pipe.h>
-#include <fp/traits/traits.h>
+#include <fp/traits/all.h>
 
 namespace fp::operators::semigroup {
 using namespace prelude;

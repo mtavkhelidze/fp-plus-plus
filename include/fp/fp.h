@@ -4,11 +4,11 @@
 
 #define FP_PLUS_PLUS_INCLUDED_FROM_FP_FP 1  // NOLINT
 
-#include "data/data.h"
+#include "data/all.h"
 #include "operators.h"
-#include "prelude/prelude.h"
-#include "tools/tools.h"
-#include "traits/traits.h"
+#include "prelude/all.h"
+#include "tools/all.h"
+#include "traits/all.h"
 
 #undef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 

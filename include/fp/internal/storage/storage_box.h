@@ -7,7 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/internal/box.h>
-#include <fp/tools/tools.h>
+#include <fp/tools/all.h>
 
 namespace fp::internal::storage {
 /**

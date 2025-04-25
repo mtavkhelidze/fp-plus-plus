@@ -7,7 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/prelude/identity.h>
-#include <fp/tools/tools.h>
+#include <fp/tools/all.h>
 #include <fp/traits/functor.h>
 
 namespace fp::traits::applicative {

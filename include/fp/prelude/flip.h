@@ -6,7 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/tools/tools.h>
+#include <fp/tools/all.h>
 
 namespace fp::prelude {
 using namespace fp::tools::arrow;

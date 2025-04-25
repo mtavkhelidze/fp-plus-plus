@@ -13,7 +13,7 @@
 #include <type_traits>
 #include <vector>
 
-namespace fp::tools::tc {
+namespace fp::tools::cast {
 namespace __internal {
     template <typename T>
     struct __fp_type_cast;
@@ -113,5 +113,5 @@ namespace __internal {
 
 }  // namespace __internal
 
-}  // namespace fp::tools::tc
+}  // namespace fp::tools::cast
 #endif  // FP_TOOLS_TC_H
