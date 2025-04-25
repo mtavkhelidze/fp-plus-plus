@@ -1,5 +1,5 @@
 #include <fp/internal/box.h>
-#include <fp/internal/object/object.h>
+#include <fp/internal/object.h>
 #include <fp/prelude/pure.h>
 #include <gtest/gtest.h>
 
