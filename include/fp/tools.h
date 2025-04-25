@@ -6,10 +6,14 @@
 #error "This file must be included from <fp::fp.h>
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/data/nothing.h>
+
 #include <concepts>
 #include <cstddef>
 #include <type_traits>
 #include <utility>
+#include <vector>
+
 namespace fp::tools::instance {
 namespace __internal {
     template <typename T>
@@ -245,6 +249,96 @@ template <typename F, typename A>
 using fp_kvalue_type = fp_inner_type<fp_kvalue<F, A>>;
 
 }  // namespace fp::tools::kleisli_arrow
+namespace fp::tools::tc {
+
+namespace __internal {
+
+    template <typename T>
+    struct __fp_type_cast_spec {
+        using type = std::decay_t<T>;
+    };
+
+    // const char* / char* → std::string
+    template <>
+    struct __fp_type_cast_spec<const char*> {
+        using type = std::string;
+    };
+
+    template <>
+    struct __fp_type_cast_spec<char*> {
+        using type = std::string;
+    };
+
+    // char arrays → std::string
+    template <std::size_t N>
+    struct __fp_type_cast_spec<const char (&)[N]> {
+        using type = std::string;
+    };
+
+    template <std::size_t N>
+    struct __fp_type_cast_spec<char (&)[N]> {
+        using type = std::string;
+    };
+
+    // U[N] (non-char) → std::vector<U>
+    template <typename U, std::size_t N>
+        requires(!std::same_as<std::decay_t<U>, char>)
+    struct __fp_type_cast_spec<U[N]> {
+        using type = std::vector<std::decay_t<U>>;
+    };
+
+    template <typename U, std::size_t N>
+        requires(!std::same_as<std::decay_t<U>, char>)
+    struct __fp_type_cast_spec<const U (&)[N]> {
+        using type = std::vector<std::decay_t<U>>;
+    };
+
+    // std::array<T, N> → std::vector<T>
+    template <typename T, std::size_t N>
+    struct __fp_type_cast_spec<std::array<T, N>> {
+        using type = std::vector<std::decay_t<T>>;
+    };
+
+    // std::tuple<U...> → tuple<decay_t<U>...>
+    template <typename... Ts>
+    struct __fp_type_cast_spec<std::tuple<Ts...>> {
+        using type = std::tuple<std::decay_t<Ts>...>;
+    };
+
+    // std::pair<A, B> → pair<decay_t<A>, decay_t<B>>
+    template <typename A, typename B>
+    struct __fp_type_cast_spec<std::pair<A, B>> {
+        using type = std::pair<std::decay_t<A>, std::decay_t<B>>;
+    };
+
+    // void / nullptr → Nothing
+    template <>
+    struct __fp_type_cast_spec<void> {
+        using type = fp::data::nothing::Nothing;
+    };
+
+    template <>
+    struct __fp_type_cast_spec<std::nullptr_t> {
+        using type = fp::data::nothing::Nothing;
+    };
+
+    // std::optional<void> → std::optional<Nothing>
+    template <>
+    struct __fp_type_cast_spec<std::optional<void>> {
+        using type = std::optional<fp::data::nothing::Nothing>;
+    };
+
+    // Main dispatch (removes cvref and applies the mapping)
+    template <typename T>
+    struct __fp_type_cast : __fp_type_cast_spec<std::remove_cvref_t<T>> {};
+
+}  // namespace __internal
+
+/// Obtain a type that T becomes after put into @ref{fp::internal::box::Box<T>}
+template <typename T>
+using tc = typename __internal::__fp_type_cast<T>::type;
+
+}  // namespace fp::tools::tc
 
 namespace fp::tools::all {
 using namespace arrow;
@@ -254,5 +348,6 @@ using namespace instance;
 using namespace kleisli_arrow;
 using namespace make_pair_type;
 using namespace rebind;
+using namespace tc;
 }  // namespace fp::tools::all
 #endif  // FP_TOOLS_H

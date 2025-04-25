@@ -1,17 +1,12 @@
+#include <fp/fp.h>
 
-template <template <typename> typename TC, typename T>
-struct CRTPBase {
-    T t;
-    CRTPBase(T t) : t(t) {}
-};
+#include <iostream>
+#include <ostream>
 
-template <typename T>
-struct CRTPDerived : public CRTPBase<CRTPDerived, T> {
-    using Base = CRTPBase<CRTPDerived, T>;
-    using Base::Base;
-};
+using namespace fp;
 
 auto main() -> int {  //
-    CRTPDerived<int> derived(10);
+    Nothing n = nothing;
+    std::cout << n << std::endl;
     return 0;
 }

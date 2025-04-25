@@ -6,8 +6,9 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/tools.h>
+
 #include <type_traits>
-#include <utility>
 
 namespace fp::internal::storage {
 
@@ -20,40 +21,48 @@ namespace fp::internal::storage {
  * container via @ref{StorageProvider} selector template.
  *
  * ## Constraints:
- * - StackStorage instances can only be created via the static `store()` method.
+ * - StorageStack
+ *  instances can only be created via the static `store()` method.
  * - Copying and moving are both allowed as the underlying value is trivially
  *   copyable.
  * - - Values are accessed via `getOrElse(alternative)`, though the alternative
- * is never used. (see @ref{fp::internal::storage::BoxStorage} for different
+ * is never used. (see @ref{fp::internal::storage::StorageBox} for different
  * case)
  *
  * Do not construct or manipulate this unless you know what you're doing.
  */
-template <template <typename> typename Master, typename A>
+template <template <typename> class Container, typename A>
     requires std::is_fundamental_v<A>
-struct StackStorage {
+struct StorageStack {
   private:
+    template <typename TC, typename T>
+    using rebind = fp::tools::rebind::fp_rebind<TC, T>;
+
     A value;
 
-  protected:
-    explicit StackStorage(A v) : value(v) {}
-    StackStorage(const StackStorage&) noexcept = default;
-    StackStorage(StackStorage&&) noexcept = delete;
-    StackStorage& operator=(const StackStorage&) noexcept = delete;
-    StackStorage& operator=(StackStorage&&) noexcept = default;
+  private:
+    explicit StorageStack(A &&v) : value(v) {}
 
+    StorageStack() = delete;
+    StorageStack(const StorageStack &) noexcept = default;
+    StorageStack(StorageStack &&) noexcept = delete;
+    StorageStack &operator=(const StorageStack &) noexcept = delete;
+    StorageStack &operator=(StorageStack &&) noexcept = default;
+
+  protected:
+    constexpr auto get() const noexcept -> const A & { return value; }
+
+    inline constexpr auto empty() const noexcept -> bool { return false; }
     template <typename T>
-    static auto store(T&& x) -> Master<std::decay_t<T>> {
-        return Master<std::decay_t<T>>(std::forward<std::decay_t<T>>(x));
+    static auto put(T &&value) {
+        using U = std::decay_t<T>;
+        using Derived = rebind<Container<A>, U>;
+        return Derived{std::move(value)};
     }
 
-  public:
-    auto getOrElse(const A&) const -> A { return value; }
-
 #ifdef FP_PLUS_PLUS_TESTING
-  public:
-    static constexpr const char* _backend_tag() { return "StackStorage"; }
-    constexpr const char* backend_tag() const { return _backend_tag(); }
+  protected:
+    static constexpr const char *_tag = "StorageStack";
 #endif
 };
 }  // namespace fp::internal::storage

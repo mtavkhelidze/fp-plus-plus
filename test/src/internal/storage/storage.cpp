@@ -1,5 +1,10 @@
+#include <fp/internal/box.h>
 #include <fp/internal/storage/storage_provider.h>
+#include <fp/prelude/pure.h>
 #include <gtest/gtest.h>
+
+using namespace fp::internal::box;
+using namespace fp::prelude;
 
 template <template <typename> typename Data, typename A>
 using StorageProvider = fp::internal::storage::StorageProvider<Data, A>;
@@ -9,16 +14,23 @@ struct DataClass : public StorageProvider<DataClass, A> {
     using StorageProvider<DataClass, A>::StorageProvider;
 
     template <typename T>
-    static auto apply(T&& value) -> const DataClass {
-        return DataClass{DataClass::store(std::forward<T>(value))};
+    static auto apply(T&& value) {
+        return DataClass{DataClass::store(value)};
     }
-    auto getValue() const { return this->retrieve(); }
+    auto value() const { return this->retrieve(); }
 };
 
-TEST(Storage_Fundamental, uses_stack_storage) {
-    auto c = DataClass<int>::apply(0);
-    EXPECT_EQ(c.getValue(), 0);
-    EXPECT_TRUE(c.is_box());
+TEST(StorageProvider, backend_choice) {
+    int arr[] = {1, 2, 3};
+    DataClass da1 = pure<DataClass>(arr);
+    EXPECT_TRUE(da1.is_box());
+    EXPECT_FALSE(da1.is_stack());
+    EXPECT_EQ(da1.value().at(2), 3);
+
+    DataClass da2 = pure<DataClass>(42);
+    EXPECT_FALSE(da2.is_box());
+    EXPECT_TRUE(da2.is_stack());
+    EXPECT_EQ(da2.value(), 42);
 }
 
 // TEST(Storage_Complex, uses_box_storage) {

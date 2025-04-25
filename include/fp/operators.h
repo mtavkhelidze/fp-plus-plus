@@ -7,7 +7,9 @@
 // NOLINTNEXTLINE:llvm-header-guard
 #define FP_OPERATORS_H
 
-#include <fp/prelude.h>
+#include <fp/prelude/dollar.h>
+#include <fp/prelude/dot.h>
+#include <fp/prelude/pipe.h>
 #include <fp/traits/traits.h>
 
 namespace fp::operators::semigroup {

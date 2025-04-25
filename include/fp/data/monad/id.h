@@ -8,7 +8,6 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/internal/storage/storage_provider.h>
-#include <fp/prelude.h>
 #include <fp/tools.h>
 
 namespace fp::data::monad::id {

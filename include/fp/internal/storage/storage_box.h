@@ -1,6 +1,5 @@
 #ifndef FP_INTERNAL_BOX_STORAGE_H
 #define FP_INTERNAL_BOX_STORAGE_H
-#include <utility>
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -8,12 +7,9 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/internal/box.h>
+#include <fp/tools.h>
 
 namespace fp::internal::storage {
-
-template <typename TC, typename T>
-using rebind = fp::tools::rebind::fp_rebind<TC, T>;
-
 /**
  * Internal boxed value storage abstraction.
  *
@@ -40,6 +36,9 @@ using rebind = fp::tools::rebind::fp_rebind<TC, T>;
 template <template <typename> class Container, typename A>
 struct StorageBox {
   private:
+    template <typename TC, typename T>
+    using rebind = fp::tools::rebind::fp_rebind<TC, T>;
+
     using Box = fp::internal::box::Box<A>;
     Box box;
 

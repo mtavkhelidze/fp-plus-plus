@@ -6,21 +6,17 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/prelude.h>
+#include <fp/data/nothing.h>
+#include <fp/prelude/defs.h>
 
-#include <array>
 #include <cstddef>
-#include <iterator>
 #include <memory>
 #include <optional>
-#include <string>
-#include <tuple>
-#include <type_traits>
 #include <variant>
 #include <vector>
 
 namespace fp::internal::box {
-using Nothing = fp::prelude::Nothing;
+using namespace fp::data::nothing;
 
 /**
  * Pure type value holder box.
@@ -90,7 +86,7 @@ struct FP_ALIGN_PACKED_16 Box {
 
     // c-style array, not char*
     template <typename U, std::size_t N>
-        requires(!std::same_as<std::decay<U>, char>)
+        requires(!std::same_as<std::decay_t<U>, char>)
     Box(const U (&arr)[N]) {
         T v(std::begin(arr), std::end(arr));
         data = std::make_shared<T>(v);
@@ -123,7 +119,7 @@ Box(const U&) -> Box<std::decay_t<U>>;
 Box(const char*) -> Box<std::string>;
 
 template <typename U, std::size_t N>
-    requires(std::same_as<std::decay<U>, char>)
+    requires(std::same_as<std::decay_t<U>, char>)
 Box(const U (&)[N]) -> Box<std::string>;
 
 // c-style arrays, bar char*

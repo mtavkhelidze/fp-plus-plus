@@ -10,7 +10,8 @@ set(TEST_SRC
     # src/data/monad/id.cpp
     src/internal/box.cpp
     # src/internal/box/box_get.cpp
-    src/internal/storage.cpp
+    src/internal/storage/storage.cpp
+    # src/internal/storage/storage_box.cpp
     # src/operators.cpp
     # # src/traits/monoid.cpp
     # src/traits/eq.cpp
