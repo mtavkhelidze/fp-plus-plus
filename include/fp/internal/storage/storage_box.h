@@ -9,7 +9,7 @@
 #include <fp/internal/box.h>
 #include <fp/tools/all.h>
 
-namespace fp::internal::object {
+namespace fp::internal::storage {
 /**
  * Internal boxed value storage abstraction.
  *

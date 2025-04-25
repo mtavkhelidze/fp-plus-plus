@@ -10,7 +10,7 @@
 
 #include <type_traits>
 
-namespace fp::internal::object {
+namespace fp::internal::storage {
 
 /**
  * Internal stack-based, zero-overhead storage abstraction for values of
@@ -65,5 +65,5 @@ struct StorageStack {
     static constexpr const char *_tag = "StorageStack";
 #endif
 };
-}  // namespace fp::internal::object
+}  // namespace fp::internal::storage
 #endif  // FP_INTERNAL_STACK_STORAGE_H

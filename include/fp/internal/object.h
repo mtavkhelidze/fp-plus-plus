@@ -7,8 +7,8 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/internal/object/storage_box.h>
-#include <fp/internal/object/storage_stack.h>
+#include <fp/internal/storage/storage_box.h>
+#include <fp/internal/storage/storage_stack.h>
 #include <fp/tools/cast.h>
 
 #include <type_traits>
@@ -26,12 +26,12 @@ struct __backend;
 
 template <template <typename> typename TC, typename A>
 struct __backend<TC, A, true> {
-    using type = StorageStack<TC, A>;
+    using type = fp::internal::storage::StorageStack<TC, A>;
 };
 
 template <template <typename> typename TC, typename A>
 struct __backend<TC, A, false> {
-    using type = StorageBox<TC, A>;
+    using type = fp::internal::storage::StorageBox<TC, A>;
 };
 
 template <template <typename> typename TC, typename A>
