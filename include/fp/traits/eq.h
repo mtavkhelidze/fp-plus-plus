@@ -15,18 +15,6 @@ concept Eq = requires(E a, E b) {
     { a.equals(b) } -> std::convertible_to<bool>;
 };
 
-template <Eq A>
-constexpr auto operator==(const A& a, const A& b) noexcept(noexcept(a.equals(b))
-) -> bool {
-    return a.equals(b);
-}
-
-template <Eq A>
-constexpr auto operator!=(const A& a, const A& b) noexcept(noexcept(a.equals(b))
-) -> bool {
-    return !a.equals(b);
-}
-
 }  // namespace fp::traits::eq
 
 #endif  // FP_TRAITS_EQ_H

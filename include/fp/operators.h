@@ -10,25 +10,38 @@
 #include <fp/prelude/dollar.h>
 #include <fp/prelude/dot.h>
 #include <fp/prelude/pipe.h>
-#include <fp/traits/all.h>
+#include <fp/traits/eq.h>
+#include <fp/traits/semigroup.h>
+
+namespace fp::operators::eq {
+
+template <traits::eq::Eq A>
+constexpr auto operator==(const A& a, const A& b) noexcept(noexcept(a.equals(b))
+) -> bool {
+    return a.equals(b);
+}
+
+template <traits::eq::Eq A>
+constexpr auto operator!=(const A& a, const A& b) noexcept(noexcept(a.equals(b))
+) -> bool {
+    return !a.equals(b);
+}
+}  // namespace fp::operators::eq
 
 namespace fp::operators::semigroup {
-using namespace prelude;
-using namespace traits::semigroup;
 
-template <Semigroup M>
+template <traits::semigroup::Semigroup M>
 constexpr auto operator+(M&& lhs, M&& rhs) {
     return combine(std::forward<M>(lhs), std::forward<M>(rhs));
 }
 
-template <Semigroup M>
+template <traits::semigroup::Semigroup M>
 constexpr auto operator+(const M& lhs, const M& rhs) {
     return combine(lhs, rhs);
 }
 }  // namespace fp::operators::semigroup
 
 namespace fp::operators::composition {
-using namespace prelude;
 template <typename F, typename G>
 constexpr auto operator*(F&& f, G&& g) {
     return dot(std::forward<F>(f), std::forward<G>(g));
@@ -46,8 +59,9 @@ constexpr auto operator>=(A a, auto&& f) {
 };  // namespace fp::operators::composition
 
 namespace fp::operators::all {
-using namespace fp::operators::composition;
-using namespace fp::operators::semigroup;
+using namespace composition;
+using namespace eq;
+using namespace semigroup;
 }  // namespace fp::operators::all
 
 #endif  // FP_OPERATORS_H

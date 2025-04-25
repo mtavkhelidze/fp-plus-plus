@@ -9,7 +9,7 @@ set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
     src/data/id.cpp
     # src/internal/box.cpp
-    # src/internal/object.cpp
+    src/internal/object.cpp
     # src/operators.cpp
     # src/tools.cpp
     # src/operators.cpp

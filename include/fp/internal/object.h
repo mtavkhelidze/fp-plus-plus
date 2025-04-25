@@ -54,6 +54,10 @@ struct Object : private Backend<Data, A>::type {
     inline auto value() const noexcept -> const A& {  //
         return this->get();
     }
+    // Eq
+    inline auto equals(const Object& other) const noexcept -> bool {
+        return this->value() == other.value();
+    }
 #ifdef FP_PLUS_PLUS_TESTING
   public:
     inline constexpr auto is_box() -> bool {
