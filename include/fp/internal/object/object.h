@@ -7,12 +7,16 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/internal/storage/storage_box.h>
-#include <fp/internal/storage/storage_stack.h>
+#include <fp/internal/object/storage_box.h>
+#include <fp/internal/object/storage_stack.h>
+#include <fp/tools/cast.h>
 
 #include <type_traits>
 
-namespace fp::internal::storage {
+namespace fp::internal::object {
+
+template <typename T>
+using fp_cast = fp::tools::cast::fp_cast<T>;
 
 template <
   template <typename> typename TC,
@@ -34,23 +38,22 @@ template <template <typename> typename TC, typename A>
 using Backend = __backend<TC, A>;
 
 template <template <typename> typename Data, typename A>
-struct StorageProvider : private Backend<Data, A>::type {
+struct Object : private Backend<Data, A>::type {
   private:
     using Base = Backend<Data, A>::type;
     using Base::Base;
 
-    // this foreces the coomon interface onto Backends
-  protected:
+  public:
+    template <typename T>
+    static auto apply(T&& value) -> Data<fp_cast<T>> {
+        return Data{Base::put(value)};
+    }
+
     inline auto have_value() const noexcept -> bool {  //
         return !this->empty();
     }
-    inline auto retrieve() const noexcept -> const A& {  //
+    inline auto value() const noexcept -> const A& {  //
         return this->get();
-    }
-    inline static constexpr auto store(
-      auto&& x
-    ) noexcept(std::is_nothrow_move_constructible_v<A>) {  //
-        return Base::put(x);
     }
 #ifdef FP_PLUS_PLUS_TESTING
   public:
@@ -62,6 +65,6 @@ struct StorageProvider : private Backend<Data, A>::type {
     }
 #endif  // FP_PLUS_PLUS_TESTING
 };
-};  // namespace fp::internal::storage
+};  // namespace fp::internal::object
 
 #endif  // FP_INTERNAL_STORAGE_H

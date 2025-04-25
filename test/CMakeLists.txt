@@ -9,7 +9,6 @@ set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
     src/tools/cast.cpp
     src/internal/storage/storage.cpp 
-    src/internal/storage/storage_box.cpp
     
     # src/data/monad/id.cpp src/internal/box.cpp src/internal/box/box_get.cpp
     # src/operators.cpp # src/traits/monoid.cpp src/traits/eq.cpp

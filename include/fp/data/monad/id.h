@@ -7,17 +7,17 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/internal/storage/storage_provider.h>
+#include <fp/internal/object/object.h>
 
 namespace fp::data::monad::id {
 
 template <template <typename> typename TC, typename A>
-using StorageProvider = fp::internal::storage::StorageProvider<TC, A>;
+using Object = fp::internal::object::Object<TC, A>;
 
 template <typename A>
-struct Id : public StorageProvider<Id, A> {
+struct Id : public Object<Id, A> {
   private:
-    using Base = StorageProvider<Id, A>;
+    using Base = Object<Id, A>;
     using Base::Base;
 
   public:

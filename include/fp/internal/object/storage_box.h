@@ -9,13 +9,13 @@
 #include <fp/internal/box.h>
 #include <fp/tools/all.h>
 
-namespace fp::internal::storage {
+namespace fp::internal::object {
 /**
  * Internal boxed value storage abstraction.
  *
  * This class provides a uniform behavior layer for storing values inside a Box.
  * It is not intended for direct use. Instead, it is designed to be inherited
- * by functional containers like @ref{fp::internal::storage::StorageProvider}
+ * by functional containers like @ref{fp::internal::storage::Object}
  * using CRTP.
  *
  * ## Constraints:
