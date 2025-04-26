@@ -15,7 +15,7 @@ namespace fp::prelude {
 /// Function composition operator (similar to . in Haskell). dot(f, g) is
 /// equivalent to f(g(x)).
 template <typename F, typename G>
-constexpr auto dot(F&& lhs, G&& rhs) noexcept {
+constexpr auto compose(F&& lhs, G&& rhs) noexcept {
     return [lhs = std::forward<F>(lhs), rhs = std::forward<G>(rhs)](
              auto&& a
            ) constexpr noexcept -> decltype(auto)

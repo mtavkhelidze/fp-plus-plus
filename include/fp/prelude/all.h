@@ -7,9 +7,9 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/data/nothing.h>
+#include <fp/prelude/compose.h>
 #include <fp/prelude/defs.h>
 #include <fp/prelude/dollar.h>
-#include <fp/prelude/dot.h>
 #include <fp/prelude/flip.h>
 #include <fp/prelude/identity.h>
 #include <fp/prelude/pipe.h>

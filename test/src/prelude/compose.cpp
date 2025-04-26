@@ -1,5 +1,4 @@
 #include <fp/operators/composition.h>
-#include <fp/prelude/dot.h>
 #include <fp/prelude/identity.h>
 #include <gtest/gtest.h>
 

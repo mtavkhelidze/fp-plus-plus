@@ -63,7 +63,7 @@ constexpr auto kleisli_compose(F &&f, G &&g) {
  */
 template <template <typename> typename TC>
 inline constexpr auto liftM = []<typename F>(F &&f) {
-    return fp::operators::dot(pure<TC>, std::forward<F>(f));
+    return fp::operators::compose(pure<TC>, std::forward<F>(f));
 };
 
 }  // namespace fp::traits::monad

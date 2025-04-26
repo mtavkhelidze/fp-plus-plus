@@ -12,7 +12,7 @@ namespace fp::prelude {
  * pipe(a, f) is equivalent to `f(a)`.
  */
 template <typename A>
-constexpr auto pipe(A a, auto&& f) noexcept(noexcept(f(a))) -> decltype(f(a)) {
+constexpr auto pipe(A a, auto&& f) -> decltype(auto) {
     return f(a);
 }
 }  // namespace fp::prelude
