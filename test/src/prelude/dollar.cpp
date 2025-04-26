@@ -6,7 +6,7 @@
 using namespace fp::test;
 using namespace fp::operators::composition;
 
-// &= like $ in Haskell
+// &= like `$` in Haskell
 TEST(Prelude_Dollar_Operator, works_with_different_types) {
     auto actual = int_to_string &= square &= 2;
     auto expected = "4";

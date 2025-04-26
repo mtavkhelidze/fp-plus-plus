@@ -11,6 +11,7 @@ set(TEST_SRC
     src/internal/object.cpp
     src/prelude/compose.cpp
     src/prelude/dollar.cpp
+    src/prelude/flip.cpp
     src/prelude/pipe.cpp
 
     # src/internal/box.cpp

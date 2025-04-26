@@ -14,19 +14,19 @@
 
 namespace fp::operators::composition {
 
-/// Alias for fp::prelude::dollar
+/// Alias for @ref{fp::prelude::dollar}
 inline constexpr auto operator&=(auto&& f, auto&& a) noexcept {
     return fp::prelude::dollar(
       std::forward<decltype(f)>(f), std::forward<decltype(a)>(a)
     );
 }
-/// Alias for fp::prelude::compose
+/// Alias for @ref{fp::prelude::compose}
 inline constexpr auto operator*(auto&& f, auto&& g) noexcept {
     return fp::prelude::compose(
       std::forward<decltype(f)>(f), std::forward<decltype(g)>(g)
     );
 }
-/// Reverse of fp::prelude::compose, like | in Haskell
+/// Reverse of @ref{fp::prelude::compose}, like `|` in Haskell
 inline constexpr auto operator|(auto&& f, auto&& g) noexcept {
     return fp::prelude::compose(
       std::forward<decltype(g)>(g), std::forward<decltype(f)>(f)
