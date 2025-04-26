@@ -10,6 +10,7 @@ set(TEST_SRC
     src/data/id.cpp
     src/internal/object.cpp
     src/prelude/dollar.cpp
+    src/prelude/dot.cpp
 
     # src/internal/box.cpp
     # src/operators.cpp

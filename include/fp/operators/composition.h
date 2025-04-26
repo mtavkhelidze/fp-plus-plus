@@ -11,21 +11,20 @@
 #include <fp/prelude/pipe.h>
 #include <fp/tools/arrow.h>
 
-#include <concepts>
 #include <utility>
 
 namespace fp::operators::composition {
-using namespace fp::prelude;
 
 inline constexpr auto operator&=(auto&& f, auto&& a) noexcept {
-    return dollar(std::forward<decltype(f)>(f), std::forward<decltype(a)>(a));
+    return fp::prelude::dollar(
+      std::forward<decltype(f)>(f), std::forward<decltype(a)>(a)
+    );
 }
 
-template <typename F, typename G>
-inline constexpr auto operator*(
-  std::invocable<F> auto&& f, std::invocable<G> auto&& g
-) {
-    return dot(std::forward<F>(f), std::forward<G>(g));
+inline constexpr auto operator*(auto&& f, auto&& g) {
+    return fp::prelude::dot(
+      std::forward<decltype(f)>(f), std::forward<decltype(g)>(g)
+    );
 }
 
 template <typename A>
