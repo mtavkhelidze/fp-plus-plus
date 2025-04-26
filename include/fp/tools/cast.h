@@ -18,13 +18,11 @@ namespace __internal {
     template <typename T>
     struct __fp_type_cast;
 }
-
 /// Obtain a type that T becomes after put into @ref{fp::internal::box::Box<T>}
 template <typename T>
 using fp_cast = typename __internal::__fp_type_cast<T>::type;
 
 namespace __internal {
-
     template <typename T>
     struct __fp_type_cast_spec {
         using type = std::decay_t<T>;
@@ -112,6 +110,5 @@ namespace __internal {
     struct __fp_type_cast : __fp_type_cast_spec<std::remove_cvref_t<T>> {};
 
 }  // namespace __internal
-
 }  // namespace fp::tools::cast
 #endif  // FP_TOOLS_TC_H

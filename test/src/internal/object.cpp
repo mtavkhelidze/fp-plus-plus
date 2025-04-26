@@ -6,8 +6,9 @@
 #include <fp/traits/eq.h>
 #include <gtest/gtest.h>
 
-using namespace fp::operators::eq;
 using namespace fp::data::nothing;
+
+using namespace fp::operators::eq;
 using namespace fp::prelude;
 
 template <template <typename> typename Data, typename A>
