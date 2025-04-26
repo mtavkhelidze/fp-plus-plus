@@ -5,7 +5,7 @@
 #define FP_PLUS_PLUS_INCLUDED_FROM_FP_FP 1  // NOLINT
 
 #include "data/all.h"
-#include "operators.h"
+#include "operators/all.h"
 #include "prelude/all.h"
 #include "tools/all.h"
 #include "traits/all.h"

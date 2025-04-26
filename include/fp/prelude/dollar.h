@@ -9,13 +9,13 @@
 #include <concepts>
 
 namespace fp::prelude {
-/**
- * Function application operator (similar to $ in Haskell). Equivalent to
- * `f(a)`.
- */
+
+/// Function application operator (similar to $ in Haskell). Equivalent to *
+/// `f(a)`.
 template <typename A>
-constexpr auto dollar(std::invocable<A> auto f, A a) noexcept(noexcept(f(a)))
-  -> decltype(f(a)) {
+inline constexpr auto dollar(std::invocable<A> auto f, A a) noexcept(
+  noexcept(f(a))
+) -> decltype(f(a)) {
     return f(a);
 }
 }  // namespace fp::prelude

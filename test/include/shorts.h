@@ -1,3 +1,5 @@
+#ifndef FP_TEST_INCLUDE__SHORTS_H_
+#define FP_TEST_INCLUDE__SHORTS_H_
 #pragma once
 
 #include <iostream>
@@ -23,3 +25,5 @@ constexpr auto square = [](int x) { return x * x; };
 constexpr auto triple = [](int x) { return x * 3; };
 
 }  // namespace fp::test
+
+#endif  // FP_TEST_INCLUDE__SHORTS_H_

@@ -1,9 +1,10 @@
 #include <fp/data/nothing.h>
 #include <fp/internal/box.h>
 #include <fp/internal/object.h>
-#include <fp/operators.h>
+#include <fp/operators/all.h>
 #include <fp/prelude/pure.h>
 #include <fp/traits/eq.h>
+
 #include <gtest/gtest.h>
 
 using namespace fp::data::nothing;

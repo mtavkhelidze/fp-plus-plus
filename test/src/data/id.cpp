@@ -1,6 +1,6 @@
 // NOLINTBEGIN:cppcoreguidelines-avoid-magic-numbers
 #include <fp/data/id.h>
-#include <fp/operators.h>
+#include <fp/operators/all.h>
 #include <fp/prelude/pure.h>
 #include <fp/traits/eq.h>
 #include <gtest/gtest.h>
