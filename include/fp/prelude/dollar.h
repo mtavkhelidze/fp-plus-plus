@@ -6,17 +6,15 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <concepts>
+#include <fp/tools/arrow.h>
 
 namespace fp::prelude {
 
 /// Function application operator (similar to $ in Haskell). Equivalent to *
 /// `f(a)`.
-template <typename A>
-inline constexpr auto dollar(std::invocable<A> auto f, A a) noexcept(
-  noexcept(f(a))
-) -> decltype(f(a)) {
-    return f(a);
+template <typename A, fp::tools::arrow::Arrow<A> F>
+inline constexpr auto dollar(F&& f, A&& a) noexcept -> decltype(auto) {
+    return std::forward<F>(f)(std::forward<A>(a));
 }
 }  // namespace fp::prelude
 
