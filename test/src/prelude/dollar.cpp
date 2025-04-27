@@ -1,10 +1,12 @@
 #include <fp/operators/composition.h>
+#include <fp/prelude/identity.h>
 #include <gtest/gtest.h>
 
 #include "shorts.h"
 
 using namespace fp::test;
 using namespace fp::operators::composition;
+using namespace fp::prelude;
 
 // &= like `$` in Haskell
 TEST(Prelude_Dollar_Operator, works_with_different_types) {
@@ -14,6 +16,12 @@ TEST(Prelude_Dollar_Operator, works_with_different_types) {
     EXPECT_EQ(actual, expected);
 }
 
+TEST(Prelude_Dollar_Operator, works_with_identity) {
+    auto actual = identity &= 42;
+    auto expected = 42;
+
+    EXPECT_EQ(actual, expected);
+}
 TEST(Prelude_Dollar_Operator, works_with_primitive_type) {
     auto actual = square &= 2;
     auto expected = 4;

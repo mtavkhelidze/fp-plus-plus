@@ -24,7 +24,7 @@ TEST(Prelude_Flip, flips_lambda) {
     ASSERT_DOUBLE_EQ(flipped_divide(2.0, 10.0), 5.0);
 }
 
-TEST(Prelude_Flip, flips_move_only_functor) {
+TEST(Prelude_Flip, flips_move_only) {
     auto flipped_adder = flip(MoveOnlyAdder{});
     ASSERT_EQ(flipped_adder(3, 4), 7);
 }
