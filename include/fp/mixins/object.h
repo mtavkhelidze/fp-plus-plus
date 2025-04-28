@@ -43,7 +43,7 @@ using Backend = __backend<TC, A>;
 template <template <typename> typename Data, typename A>
 struct Object : private Backend<Data, A>::type {
   private:
-    using Base = Backend<Data, A>::type;
+    using Base = typename Backend<Data, A>::type;
     using Base::Base;
 
   public:

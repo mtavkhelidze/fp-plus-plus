@@ -11,7 +11,7 @@
 namespace fp::prelude {
 
 template <typename T>
-using fp_cast = fp::tools::cast::fp_cast<T>;
+using fp_cast = tools::cast::fp_cast<T>;
 
 template <template <typename> class DataClass, typename T>
 auto pure(T&& value) -> DataClass<fp_cast<T>> {

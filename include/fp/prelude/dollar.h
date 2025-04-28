@@ -12,7 +12,7 @@ namespace fp::prelude {
 
 /// Function application operator (similar to $ in Haskell). Equivalent to *
 /// `f(a)`.
-template <typename A, fp::tools::arrow::Arrow<A> F>
+template <typename A, tools::arrow::Arrow<A> F>
 inline constexpr auto dollar(F&& f, A&& a) noexcept -> decltype(auto) {
     return std::forward<F>(f)(std::forward<A>(a));
 }

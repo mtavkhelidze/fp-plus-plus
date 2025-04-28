@@ -16,7 +16,7 @@
 #include <vector>
 
 namespace fp::internal::box {
-using namespace fp::data::nothing;
+using Nothing = fp::data::nothing::Nothing;
 
 /**
  * Pure type value holder box.
@@ -34,7 +34,7 @@ template <typename T, typename... Ts>
 struct FP_ALIGN_PACKED_16 Box {
   private:
     std::variant<std::shared_ptr<T>> data;
-    static constexpr Nothing __nothing = Nothing();
+    static constexpr auto __nothing = Nothing();
 
   public:
     using kind = T;
@@ -87,7 +87,7 @@ struct FP_ALIGN_PACKED_16 Box {
     // c-style array, not char*
     template <typename U, std::size_t N>
         requires(!std::same_as<std::decay_t<U>, char>)
-    Box(const U (&arr)[N]) {
+    explicit Box(const U (&arr)[N]) {
         T v(std::begin(arr), std::end(arr));
         data = std::make_shared<T>(v);
     }
@@ -96,7 +96,7 @@ struct FP_ALIGN_PACKED_16 Box {
         requires(
           std::is_same_v<T, std::tuple<std::decay_t<U>, std::decay_t<Us>...>>
         )
-    Box(U&& u, Us&&... us) {
+    explicit Box(U&& u, Us&&... us) {
         T t(u, us...);
         data = std::make_shared<T>(t);
     }

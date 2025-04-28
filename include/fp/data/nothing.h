@@ -12,20 +12,20 @@
 
 namespace fp::data::nothing {
 struct __nothing {
-    inline constexpr auto operator==(const __nothing&) const -> bool {
+    constexpr auto operator==(const __nothing&) const -> bool {
         return true;
     }
-    inline constexpr auto operator!=(const __nothing&) const -> bool {
+    constexpr auto operator!=(const __nothing&) const -> bool {
         return false;
     }
-    inline constexpr auto operator<=>(const __nothing&) const
+    constexpr auto operator<=>(const __nothing&) const
       -> std::strong_ordering {
         return std::strong_ordering::equal;
     }
-    inline auto to_string() const -> std::string {
+    auto to_string() const -> std::string {
         return std::string("Nothing");
     }
-    inline friend std::ostream& operator<<(
+    friend std::ostream& operator<<(
       std::ostream& os, const __nothing& n
     ) {
         return os << n.to_string();

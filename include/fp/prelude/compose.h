@@ -16,17 +16,17 @@ namespace fp::prelude {
 /// equivalent to f(g(x)).
 template <typename F, typename G>
 constexpr auto compose(F&& lhs, G&& rhs) noexcept {
-    return [lhs = std::forward<F>(lhs), rhs = std::forward<G>(rhs)](
-             auto&& a
+    return [lhs = std::forward<F>(lhs), rhs = std::forward<G>(rhs)]<typename A>(
+             A&& a
            ) constexpr noexcept -> decltype(auto)
                requires(
-                 fp::tools::arrow::Arrow<G, decltype(a)>
-                 && fp::tools::arrow::Arrow<
-                   F,                                                 //
-                   fp::tools::arrow::fp_arrow_result<G, decltype(a)>  //
-                   >                                                  //
+                 tools::arrow::Arrow<G, A>
+                 && tools::arrow::Arrow<
+                   F,                                   //
+                   tools::arrow::fp_arrow_result<G, A>  //
+                   >                                    //
                )
-    { return lhs(rhs(std::forward<decltype(a)>(a))); };
+    { return lhs(rhs(std::forward<A>(a))); };
 }
 }  // namespace fp::prelude
 #endif  // FP_PRELUDE_DOT_H
