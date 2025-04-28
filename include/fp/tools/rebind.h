@@ -9,7 +9,6 @@
 #include <fp/tools/instance.h>
 
 namespace fp::tools::rebind {
-using namespace fp::tools::instance;
 
 namespace __internal {
     template <typename T>
@@ -27,19 +26,18 @@ namespace __internal {
         using type = TC<std::decay_t<C>, std::decay_t<D>>;
     };
 }  // namespace __internal
-using namespace fp::tools::rebind::__internal;
 
 /// Transform TC<A> into TC<B>
 template <typename TC, typename B>
-    requires(fp_is_unary_instance<TC>)
+    requires(instance::fp_is_unary_instance<TC>)
 using fp_rebind =
-  typename __rebind_instance<std::decay_t<TC>>::template type<B>;
+  typename __internal::__rebind_instance<std::decay_t<TC>>::template type<B>;
 
 /// Transform TC<A, B> into TC<C, D>
 template <typename TC, typename C, typename D>
-    requires(fp_is_binary_instance<TC>)
+    requires(instance::fp_is_binary_instance<TC>)
 using fp_rebind_binary =
-  typename __rebind_instance<std::decay_t<TC>>::template type<C, D>;
+  typename __internal::__rebind_instance<std::decay_t<TC>>::template type<C, D>;
 
 }  // namespace fp::tools::rebind
 

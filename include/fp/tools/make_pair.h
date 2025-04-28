@@ -12,8 +12,6 @@
 
 namespace fp::tools::make_pair {
 
-using namespace fp::tools::instance;
-
 namespace __internal {
     template <typename T>
     struct __make_pair_type {};
@@ -24,12 +22,11 @@ namespace __internal {
         using second = std::decay_t<B>;
     };
 }  // namespace __internal
-using namespace fp::tools::make_pair::__internal;
 
 template <typename T>
 using fp_make_pair_type = std::pair<
-  typename __make_pair_type<std::decay_t<T>>::first,
-  typename __make_pair_type<std::decay_t<T>>::second>;
+  typename __internal::__make_pair_type<std::decay_t<T>>::first,
+  typename __internal::__make_pair_type<std::decay_t<T>>::second>;
 }  // namespace fp::tools::make_pair
 
 #endif  // FP_TOOLS_MAKE_PAIR_H

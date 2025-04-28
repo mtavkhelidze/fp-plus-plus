@@ -45,15 +45,14 @@ namespace __internal {
     struct __type_class_binary_instance<TC<A, B>> : std::true_type {};
 
 }  // namespace __internal
-using namespace fp::tools::instance::__internal;
 
 template <typename TC>
 inline constexpr bool fp_is_instance =
-  __type_class_instance<std::decay_t<TC>>::value > 0;
+  __internal::__type_class_instance<std::decay_t<TC>>::value > 0;
 
 template <typename TC>
 inline constexpr bool fp_is_unary_instance =
-  __type_class_unary_instance<std::decay_t<TC>>::value;
+  __internal::__type_class_unary_instance<std::decay_t<TC>>::value;
 
 template <typename TC>
 concept AnyInstance = fp_is_instance<TC>;
@@ -63,14 +62,14 @@ concept UnaryInstance = fp_is_unary_instance<TC>;
 
 template <typename TC>
 inline constexpr bool fp_is_binary_instance =
-  __type_class_binary_instance<std::decay_t<TC>>::value;
+  __internal::__type_class_binary_instance<std::decay_t<TC>>::value;
 
 template <typename TC>
 concept BinaryInstance = fp_is_binary_instance<TC>;
 
 template <typename TC>
-inline constexpr std::size_t fp_get_instance_arity =
-  __type_class_instance<std::decay_t<TC>>::value;
+inline constexpr std::size_t fp_instance_arity =
+  __internal::__type_class_instance<std::decay_t<TC>>::value;
 
 template <typename TC>
 inline constexpr bool fp_has_no_copy = !std::is_copy_constructible_v<TC>;

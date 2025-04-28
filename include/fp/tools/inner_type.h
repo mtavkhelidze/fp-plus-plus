@@ -12,8 +12,6 @@
 
 namespace fp::tools::inner_type {
 
-using namespace instance;
-
 namespace __internal {
     template <typename T>
     struct __extract_inner_type {};
@@ -23,18 +21,18 @@ namespace __internal {
         using type = std::decay_t<A>;
     };
 }  // namespace __internal
-using namespace fp::tools::inner_type::__internal;
 
 /// If given TC<A>, access A
-template <UnaryInstance TC>
-using fp_inner_type = typename __extract_inner_type<std::decay_t<TC>>::type;
+template <instance::UnaryInstance TC>
+using fp_inner_type =
+  typename __internal::__extract_inner_type<std::decay_t<TC>>::type;
 
-template <UnaryInstance TC, typename A>
+template <instance::UnaryInstance TC, typename A>
 inline constexpr bool fp_is_inner_type = std::same_as<fp_inner_type<TC>, A>;
 
 /// Given two instances, check if their inner types are the same (i.e.
 /// std::optional<int> and std::vectro<double> will result in false)
-template <UnaryInstance TA, UnaryInstance TB>
+template <instance::UnaryInstance TA, instance::UnaryInstance TB>
 inline constexpr bool fp_is_same_inner_type = std::
   same_as<fp_inner_type<std::decay_t<TA>>, fp_inner_type<std::decay_t<TB>>>;
 

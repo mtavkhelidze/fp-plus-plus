@@ -10,21 +10,17 @@
 
 namespace fp::tools::instance_with {
 
-using namespace fp::tools::inner_type;
-
 namespace __internal {
     template <typename TA, typename TB>
     struct __is_instance_with {
-        static constexpr bool value = std::same_as<TA, fp_inner_type<TB>>;
+        static constexpr bool value =
+          std::same_as<TA, inner_type::fp_inner_type<TB>>;
     };
 }  // namespace __internal
-using namespace fp::tools::instance_with::__internal;
 
-template <UnaryInstance TA, UnaryInstance TB>
+template <instance::UnaryInstance TA, instance::UnaryInstance TB>
 inline constexpr bool fp_is_instance_with =
-  fp_is_unary_instance<TA>
-  && fp_is_instance<TB>
-  && __is_instance_with<std::decay_t<TA>, std::decay_t<TB>>::value;
+  __internal::__is_instance_with<std::decay_t<TA>, std::decay_t<TB>>::value;
 
 template <typename TA, typename TB>
 concept InstanceWith = fp_is_instance_with<TA, TB>;

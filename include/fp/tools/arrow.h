@@ -47,13 +47,11 @@ using fp_binary_arrow_result_v =
 }  // namespace fp::tools::arrow
 
 namespace fp::tools::arrow {
-using namespace fp::tools::instance;
-using namespace inner_type;
 
 template <typename F, typename A>
     requires Arrow<F, A>
 inline constexpr bool fp_is_kleisli_arrow =
-  fp_is_instance<fp_arrow_result<F, A>>;
+  instance::fp_is_instance<fp_arrow_result<F, A>>;
 
 template <typename F, typename A>
 concept KleisliArrow = fp_is_kleisli_arrow<F, A>;
@@ -64,7 +62,7 @@ using fp_kvalue = fp_arrow_result<F, A>;
 
 template <typename F, typename A>
     requires KleisliArrow<F, A>
-using fp_kvalue_type = fp_inner_type<fp_kvalue<F, A>>;
+using fp_kvalue_type = inner_type::fp_inner_type<fp_kvalue<F, A>>;
 
 }  // namespace fp::tools::arrow
 
