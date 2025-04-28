@@ -58,11 +58,12 @@ concept KleisliArrow = fp_is_kleisli_arrow<F, A>;
 
 template <typename F, typename A>
     requires KleisliArrow<F, A>
-using fp_kvalue = fp_arrow_result<F, A>;
+using fp_kleisli_arrow_value = fp_arrow_result<F, A>;
 
 template <typename F, typename A>
     requires KleisliArrow<F, A>
-using fp_kvalue_type = inner_type::fp_inner_type<fp_kvalue<F, A>>;
+using fp_kleisli_arrow_value_type =
+  inner_type::fp_inner_type<fp_kleisli_arrow_value<F, A>>;
 
 }  // namespace fp::tools::arrow
 
