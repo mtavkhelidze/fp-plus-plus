@@ -13,7 +13,7 @@
 
 #include <type_traits>
 
-namespace fp::internal::object {
+namespace fp::mixins::object {
 
 template <typename T>
 using fp_cast = fp::tools::cast::fp_cast<T>;
@@ -26,12 +26,12 @@ struct __backend;
 
 template <template <typename> typename TC, typename A>
 struct __backend<TC, A, true> {
-    using type = storage::StorageStack<TC, A>;
+    using type = internal::storage::StorageStack<TC, A>;
 };
 
 template <template <typename> typename TC, typename A>
 struct __backend<TC, A, false> {
-    using type = storage::StorageBox<TC, A>;
+    using type = internal::storage::StorageBox<TC, A>;
 };
 
 template <template <typename> typename TC, typename A>

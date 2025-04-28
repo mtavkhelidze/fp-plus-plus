@@ -7,12 +7,12 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/internal/object.h>
+#include <fp/mixins/object.h>
 
 namespace fp::data::monad::id {
 
 template <template <typename> typename TC, typename A>
-using Object = fp::internal::object::Object<TC, A>;
+using Object = mixins::object::Object<TC, A>;
 
 template <typename A>
 struct Id : public Object<Id, A> {

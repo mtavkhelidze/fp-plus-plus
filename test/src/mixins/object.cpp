@@ -1,10 +1,9 @@
 #include <fp/data/nothing.h>
 #include <fp/internal/box.h>
-#include <fp/internal/object.h>
+#include <fp/mixins/object.h>
 #include <fp/operators/all.h>
 #include <fp/prelude/pure.h>
 #include <fp/traits/eq.h>
-
 #include <gtest/gtest.h>
 
 using namespace fp::data::nothing;
@@ -13,7 +12,7 @@ using namespace fp::operators::eq;
 using namespace fp::prelude;
 
 template <template <typename> typename Data, typename A>
-using Object = fp::internal::object::Object<Data, A>;
+using Object = fp::mixins::object::Object<Data, A>;
 
 template <typename A>
 struct DataClass : Object<DataClass, A> {
