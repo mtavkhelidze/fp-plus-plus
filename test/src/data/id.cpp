@@ -28,15 +28,15 @@ TEST(Monad_Id, is_Eq) {
     auto b = pure<Id>(10);
     ASSERT_TRUE(a == b);
 }
-
+//
 // TEST(Monad_Id, functor_laws_map_composition) {  // laws
 //     auto a = pure<Id>(10);
 //     auto f = [](int x) { return x + 1; };
 //     auto g = [](int x) { return x * 2; };
-
+//
 //     auto left = a.map([&](int x) { return f(g(x)); });
 //     auto right = a.map(g).map(f);
-
+//
 //     ASSERT_TRUE(left == right);
 // }
 // TEST(Monad_Id, implicit_conversion_to_inner_type) {

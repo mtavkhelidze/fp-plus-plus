@@ -36,7 +36,7 @@ template <template <typename> class Container, typename A>
 struct StorageStack {
   private:
     template <typename TC, typename T>
-    using rebind = fp::tools::rebind::fp_rebind<TC, T>;
+    using rebind = tools::rebind::fp_rebind<TC, T>;
 
     A value;
 
@@ -52,8 +52,9 @@ struct StorageStack {
   protected:
     constexpr auto get() const noexcept -> const A & { return value; }
 
-    inline constexpr auto empty() const noexcept -> bool { return false; }
-    template <typename T>
+    constexpr auto empty() const noexcept -> bool { return false; }
+
+  template <typename T>
     static auto put(T &&value) {
         using U = std::decay_t<T>;
         using Derived = rebind<Container<A>, U>;

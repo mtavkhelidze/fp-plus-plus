@@ -15,7 +15,7 @@ template <template <typename> typename TC, typename A>
 using Object = mixins::object::Object<TC, A>;
 
 template <typename A>
-struct Id : public Object<Id, A> {
+struct Id : Object<Id, A> {
   private:
     using Base = Object<Id, A>;
     using Base::Base;

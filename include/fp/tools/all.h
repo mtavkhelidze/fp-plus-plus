@@ -7,6 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/data/nothing.h>
+#include <fp/tools/apply.h>
 #include <fp/tools/arrow.h>
 #include <fp/tools/cast.h>
 #include <fp/tools/instance.h>
@@ -15,6 +16,7 @@
 #include <fp/tools/rebind.h>
 
 namespace fp::tools::all {
+using namespace apply;
 using namespace arrow;
 using namespace cast;
 using namespace inner_type;

@@ -40,16 +40,16 @@ using Backend = __backend<TC, A>;
 /**
  * Mixin for objects with storage backend and ::apply.
  */
-template <template <typename> typename Data, typename A>
-struct Object : private Backend<Data, A>::type {
+template <template <typename> typename DataClass, typename A>
+struct Object : private Backend<DataClass, A>::type {
   private:
-    using Base = typename Backend<Data, A>::type;
+    using Base = typename Backend<DataClass, A>::type;
     using Base::Base;
 
   public:
     template <typename T>
-    static constexpr auto apply(T&& value) -> Data<fp_cast<T>> {
-        return Data{Base::put(value)};
+    static constexpr auto apply(T&& value) -> DataClass<fp_cast<T>> {
+        return DataClass{Base::put(value)};
     }
     constexpr auto has_value() const noexcept -> bool {  //
         return !this->empty();
@@ -75,6 +75,6 @@ struct Object : private Backend<Data, A>::type {
     }
 #endif  // FP_PLUS_PLUS_TESTING
 };
-};  // namespace fp::internal::object
+};  // namespace fp::mixins::object
 
 #endif  // FP_INTERNAL_STORAGE_H
