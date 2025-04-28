@@ -37,6 +37,9 @@ struct __backend<TC, A, false> {
 template <template <typename> typename TC, typename A>
 using Backend = __backend<TC, A>;
 
+/**
+ * Mixin for with storage backend and ::apply.
+ */
 template <template <typename> typename Data, typename A>
 struct Object : private Backend<Data, A>::type {
   private:
