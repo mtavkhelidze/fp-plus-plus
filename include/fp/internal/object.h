@@ -26,12 +26,12 @@ struct __backend;
 
 template <template <typename> typename TC, typename A>
 struct __backend<TC, A, true> {
-    using type = fp::internal::storage::StorageStack<TC, A>;
+    using type = storage::StorageStack<TC, A>;
 };
 
 template <template <typename> typename TC, typename A>
 struct __backend<TC, A, false> {
-    using type = fp::internal::storage::StorageBox<TC, A>;
+    using type = storage::StorageBox<TC, A>;
 };
 
 template <template <typename> typename TC, typename A>
@@ -45,17 +45,17 @@ struct Object : private Backend<Data, A>::type {
 
   public:
     template <typename T>
-    static auto apply(T&& value) -> Data<fp_cast<T>> {
+    static constexpr auto apply(T&& value) -> Data<fp_cast<T>> {
         return Data{Base::put(value)};
     }
-    inline auto has_value() const noexcept -> bool {  //
+    constexpr auto has_value() const noexcept -> bool {  //
         return !this->empty();
     }
-    inline auto value() const noexcept -> const A& {  //
+    constexpr auto value() const noexcept -> const A& {  //
         return this->get();
     }
     // Eq
-    inline auto equals(const Object& other) const noexcept -> bool {
+    constexpr auto equals(const Object& other) const noexcept -> bool {
         static_assert(
           std::equality_comparable<A>,
           "The type A must support operator== to use equals()."
@@ -64,10 +64,10 @@ struct Object : private Backend<Data, A>::type {
     }
 #ifdef FP_PLUS_PLUS_TESTING
   public:
-    inline constexpr auto is_box() -> bool {
+    constexpr auto is_box() const -> bool {
         return strcmp(this->_tag, "StorageBox") == 0;
     }
-    inline constexpr auto is_stack() -> bool {
+    constexpr auto is_stack() const -> bool {
         return strcmp(this->_tag, "StorageStack") == 0;
     }
 #endif  // FP_PLUS_PLUS_TESTING
