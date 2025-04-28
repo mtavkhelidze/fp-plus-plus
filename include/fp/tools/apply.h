@@ -13,14 +13,11 @@
 namespace fp::tools::apply {
 
 template <template <typename> typename TC, typename A>
-inline constexpr bool fp_has_apply = requires(A&& a) {
+concept fp_has_apply = requires(A&& a) {
     {
         TC<cast::fp_cast<A>>::apply(std::forward<A>(a))
     } -> std::same_as<TC<cast::fp_cast<A>>>;
 };
-
-template <template <typename> typename TC, typename A>
-concept HasApply = fp_has_apply<TC, A>;
 
 }  // namespace fp::tools::apply
 #endif  // FP_TOOLS_APPLY_H

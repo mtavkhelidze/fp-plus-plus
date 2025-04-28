@@ -12,12 +12,15 @@
 namespace fp::prelude {
 
 template <typename T>
-using fp_cast = tools::cast::fp_cast<T>;
+using cast = tools::cast::fp_cast<T>;
 
-template <template <typename> class DataClass, typename T>
-    requires fp::tools::apply::fp_has_apply<DataClass, T>
-auto pure(T&& value) -> DataClass<fp_cast<T>> {
-    using NT = fp_cast<T>;
+template <template <typename> class TC, typename T>
+concept HasApply = tools::apply::fp_has_apply<TC, T>;
+
+template <template <typename> typename DataClass, typename T>
+    requires HasApply<DataClass, T>
+auto pure(T&& value) -> DataClass<cast<T>> {
+    using NT = cast<T>;
     return DataClass<NT>::apply(std::forward<T>(value));
 }
 }  // namespace fp::prelude
