@@ -13,7 +13,14 @@
 namespace fp::tools::storage {
 
 template <template <typename> typename TC, typename A>
-concept fp_has_apply = requires(A&& a) {
+concept HasValue = requires(A&& a) {
+    {
+        TC<cast::fp_cast<A>>::apply(std::forward<A>(a))
+    } -> std::same_as<TC<cast::fp_cast<A>>>;
+};
+
+template <template <typename> typename TC, typename A>
+concept HasApply = requires(A&& a) {
     {
         TC<cast::fp_cast<A>>::apply(std::forward<A>(a))
     } -> std::same_as<TC<cast::fp_cast<A>>>;

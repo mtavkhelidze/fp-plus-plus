@@ -6,8 +6,8 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/tools/apply.h>
 #include <fp/tools/cast.h>
+#include <fp/tools/storage.h>
 
 namespace fp::prelude {
 
@@ -15,7 +15,7 @@ template <typename T>
 using cast = tools::cast::fp_cast<T>;
 
 template <template <typename> class TC, typename T>
-concept HasApply = tools::storage::fp_has_apply<TC, T>;
+concept HasApply = tools::storage::HasApply<TC, T>;
 
 template <template <typename> typename DataClass, typename T>
     requires HasApply<DataClass, T>
