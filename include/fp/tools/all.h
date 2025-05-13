@@ -16,7 +16,6 @@
 #include <fp/tools/rebind.h>
 
 namespace fp::tools::all {
-using namespace apply;
 using namespace arrow;
 using namespace cast;
 using namespace inner_type;
@@ -24,5 +23,6 @@ using namespace instance_with;
 using namespace instance;
 using namespace make_pair;
 using namespace rebind;
+using namespace storage;
 }  // namespace fp::tools::all
 #endif  // FP_TOOLS_H

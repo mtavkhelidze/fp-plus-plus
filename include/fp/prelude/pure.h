@@ -15,7 +15,7 @@ template <typename T>
 using cast = tools::cast::fp_cast<T>;
 
 template <template <typename> class TC, typename T>
-concept HasApply = tools::apply::fp_has_apply<TC, T>;
+concept HasApply = tools::storage::fp_has_apply<TC, T>;
 
 template <template <typename> typename DataClass, typename T>
     requires HasApply<DataClass, T>

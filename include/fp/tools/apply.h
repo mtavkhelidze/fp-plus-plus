@@ -10,7 +10,7 @@
 
 #include <utility>
 
-namespace fp::tools::apply {
+namespace fp::tools::storage {
 
 template <template <typename> typename TC, typename A>
 concept fp_has_apply = requires(A&& a) {
@@ -19,5 +19,5 @@ concept fp_has_apply = requires(A&& a) {
     } -> std::same_as<TC<cast::fp_cast<A>>>;
 };
 
-}  // namespace fp::tools::apply
+}  // namespace fp::tools::storage
 #endif  // FP_TOOLS_APPLY_H
