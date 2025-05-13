@@ -13,7 +13,7 @@
 
 #include <type_traits>
 
-namespace fp::mixins::apply {
+namespace fp::mixins::storage {
 
 template <typename T>
 using fp_cast = fp::tools::cast::fp_cast<T>;
@@ -41,7 +41,7 @@ using Backend = __backend<TC, A>;
  * Mixin for objects with storage backend and ::apply.
  */
 template <template <typename> typename DataClass, typename A>
-struct WithApply : private Backend<DataClass, A>::type {
+struct WithStorage : private Backend<DataClass, A>::type {
   private:
     using Base = typename Backend<DataClass, A>::type;
     using Base::Base;
@@ -58,7 +58,7 @@ struct WithApply : private Backend<DataClass, A>::type {
         return this->get();
     }
     // Eq
-    constexpr auto equals(const WithApply& other) const noexcept -> bool {
+    constexpr auto equals(const WithStorage& other) const noexcept -> bool {
         static_assert(
           std::equality_comparable<A>,
           "The type A must support operator== to use equals()."
@@ -75,6 +75,6 @@ struct WithApply : private Backend<DataClass, A>::type {
     }
 #endif  // FP_PLUS_PLUS_TESTING
 };
-};  // namespace fp::mixins::object
+};  // namespace fp::mixins::storage
 
 #endif  // FP_INTERNAL_STORAGE_H

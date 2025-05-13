@@ -1,6 +1,6 @@
 #include <fp/data/nothing.h>
 #include <fp/internal/box.h>
-#include <fp/mixins/apply.h>
+#include <fp/mixins/storage.h>
 #include <fp/operators/all.h>
 #include <fp/prelude/pure.h>
 #include <fp/traits/eq.h>
@@ -12,11 +12,11 @@ using namespace fp::operators::eq;
 using namespace fp::prelude;
 
 template <template <typename> typename Data, typename A>
-using WithApply = fp::mixins::apply::WithApply<Data, A>;
+using WithStorage = fp::mixins::storage::WithStorage<Data, A>;
 
 template <typename A>
-struct DataClass : WithApply<DataClass, A> {
-    using WithApply<DataClass, A>::WithApply;
+struct DataClass : WithStorage<DataClass, A> {
+    using WithStorage<DataClass, A>::WithStorage;
 };
 
 TEST(Mixin_WithApply, backend_choice) {
