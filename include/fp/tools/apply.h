@@ -14,11 +14,8 @@
 namespace fp::tools::storage {
 
 template <typename TC>
-using inner_type = fp::tools::inner_type::fp_inner_type<TC>;
-
-template <typename TC>
-concept HasValue = requires(TC tc) {
-    { tc.value() } -> std::same_as<cast::fp_cast<inner_type<TC>>>;
+concept HasValue = requires(TC tc, inner_type::fp_inner_type<TC>&& a) {
+    { tc.value() } -> std::same_as<cast::fp_cast<decltype(a)>>;
 };
 
 template <template <typename> typename TC, typename A>

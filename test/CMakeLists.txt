@@ -8,6 +8,7 @@ target_compile_options(rapidcheck INTERFACE -Wno-deprecated-declarations)
 set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
     src/data/id.cpp
+    src/mixins/eq.cpp
     src/mixins/storage.cpp
     src/prelude/compose.cpp
     src/prelude/dollar.cpp
