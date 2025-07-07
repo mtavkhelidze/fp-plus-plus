@@ -41,6 +41,6 @@ TEST(Monad_Id_Box, is_Eq) {
 // }
 TEST(Monad_Id_Box, implicit_conversion_to_inner_type) {
     const Id<std::string> x = pure<Id>(std::string("abc"));
-    const auto n = x.value();
+    const std::string n = x.value();
     ASSERT_EQ(n, "abc");
 }
