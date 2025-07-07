@@ -12,7 +12,7 @@
 namespace fp::data::monad::id {
 
 template <template <typename> typename TC, typename A>
-using Object = mixins::storage::WithStorage<TC, A>;
+using Object = mixins::storage::WithValue<TC, A>;
 
 template <typename A>
 struct Id : Object<Id, A> {

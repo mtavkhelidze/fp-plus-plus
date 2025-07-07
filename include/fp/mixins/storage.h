@@ -41,7 +41,7 @@ using Backend = __backend<TC, A>;
  * Mixin for objects with storage backend and ::apply.
  */
 template <template <typename> typename DataClass, typename A>
-struct WithStorage : private Backend<DataClass, A>::type {
+struct WithValue : private Backend<DataClass, A>::type {
   private:
     using Base = typename Backend<DataClass, A>::type;
     using Base::Base;
@@ -58,7 +58,7 @@ struct WithStorage : private Backend<DataClass, A>::type {
         return this->get();
     }
     // Eq
-    constexpr auto equals(const WithStorage& other) const noexcept -> bool {
+    constexpr auto equals(const WithValue& other) const noexcept -> bool {
         static_assert(
           std::equality_comparable<A>,
           "The type A must support operator== to use equals()."

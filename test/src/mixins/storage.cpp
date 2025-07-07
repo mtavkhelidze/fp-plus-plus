@@ -12,11 +12,11 @@ using namespace fp::operators::eq;
 using namespace fp::prelude;
 
 template <template <typename> typename Data, typename A>
-using WithStorage = fp::mixins::storage::WithStorage<Data, A>;
+using WithValue = fp::mixins::storage::WithValue<Data, A>;
 
 template <typename A>
-struct DataClass : WithStorage<DataClass, A> {
-    using WithStorage<DataClass, A>::WithStorage;
+struct DataClass : WithValue<DataClass, A> {
+    using WithValue<DataClass, A>::WithValue;
 };
 
 TEST(Mixin_WithApply, backend_choice) {

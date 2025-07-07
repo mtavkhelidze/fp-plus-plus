@@ -9,3 +9,5 @@ scratch.cpp
 * copy*
 .idea/
 cmake-build-debug/
+*~
+todo.org
