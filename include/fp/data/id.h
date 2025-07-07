@@ -7,35 +7,25 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/mixins/map.h>
 #include <fp/mixins/value.h>
 
 namespace fp::data::monad::id {
 
 template <template <typename> typename TC, typename A>
-using Object = mixins::storage::WithValue<TC, A>;
+using WithValue = mixins::storage::WithValue<TC, A>;
+
+template <template <typename> typename TC, typename A>
+using WithMap = mixins::map::WithMap<TC, A>;
 
 template <typename A>
-struct Id : Object<Id, A> {
+struct Id
+    : WithValue<Id, A>
+    , WithMap<Id, A> {
   private:
-    using Base = Object<Id, A>;
+    using Base = WithValue<Id, A>;
     using Base::Base;
-
-    // Eq
-    // [[nodiscard]] auto equals(const Id& other) const -> bool {
-    //     const auto a = this->get();
-    //     const auto b = other.get();
-    //     return a == b;
-    // }
-
-    // // Functor
-    // template <Arrow<A> F>
-    // [[nodiscard]] auto map(F&& f) const {
-    //     if (!this->empty()) {
-    //         auto v = this->get();
-    //         return this->apply(std::forward<F>(f)(v));
-    //     }
-    //     return this->apply(this->get());
-    // }
+    using WithMap<Id, A>::map;
 };
 
 }  // namespace fp::data::monad::id
