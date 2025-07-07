@@ -7,7 +7,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/mixins/storage.h>
+#include <fp/mixins/value.h>
 
 namespace fp::data::monad::id {
 

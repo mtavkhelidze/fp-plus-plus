@@ -1,6 +1,6 @@
 #include <fp/data/nothing.h>
 #include <fp/internal/box.h>
-#include <fp/mixins/storage.h>
+#include <fp/mixins/value.h>
 #include <fp/operators/all.h>
 #include <fp/prelude/pure.h>
 #include <fp/traits/eq.h>
