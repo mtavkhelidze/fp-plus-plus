@@ -3,12 +3,12 @@
 | data      | Id            | yes         | yes    |                         |
 | data      | Nothing       | yes         | yes    |                         |
 | internal  | Box           | yes         | yes    | Fundamental alue holder |
-| internal  | storage_box   | yes         | no     |                         |
+| internal  | storage_box   | yes         | yes    | Tested with Id          |
 | internal  | storage_stack | yes         | yes    | Tested with Id          |
-| mixins    | WithEquals    | yes         | yes     |                         |
+| mixins    | WithEquals    | yes         | yes    |                         |
 | mixins    | WithFlatMap   | no          | no     |                         |
 | mixins    | WithMap       | no          | no     |                         |
-| mixins    | WithValue     | yes         | yes     |                         |
+| mixins    | WithValue     | yes         | yes    |                         |
 | operators | composition   | no          | no     |                         |
 | operators | eq            | no          | no     |                         |
 | operators | semigroup     | no          | no     |                         |

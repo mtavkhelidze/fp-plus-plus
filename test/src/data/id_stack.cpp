@@ -14,7 +14,7 @@ using Id = fp::data::monad::id::Id<T>;
 
 using namespace fp::prelude;
 
-TEST(Monad_Id, construction) {
+TEST(Monad_Id_Stack, construction) {
     // Proforma
     auto id = pure<Id>(10);
     ASSERT_TRUE(id.is_stack());
@@ -22,7 +22,7 @@ TEST(Monad_Id, construction) {
     ASSERT_EQ(id.value(), 10);
 }
 
-TEST(Monad_Id, is_Eq) {
+TEST(Monad_Id_Stack, is_Eq) {
     static_assert(Eq<Id<int>>);
     auto a = pure<Id>(10);
     auto b = pure<Id>(10);
