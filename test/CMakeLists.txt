@@ -16,6 +16,7 @@ set(TEST_SRC
     src/prelude/flip.cpp
     src/prelude/pipe.cpp
     src/tools/cast.cpp
+    src/tools/map.cpp
     src/tools/value.cpp
 )
 

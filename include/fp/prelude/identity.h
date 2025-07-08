@@ -6,13 +6,11 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <utility>
-
 namespace fp::prelude {
 struct __identity {
     template <typename A>
-    constexpr auto operator()(A&& value) const noexcept -> A {
-        return std::forward<A>(value);
+    constexpr A operator()(A value) const noexcept {
+        return value;
     }
 };
 

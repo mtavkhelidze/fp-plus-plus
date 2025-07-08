@@ -8,6 +8,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/tools/arrow.h>
+#include <fp/tools/cast.h>
 #include <fp/tools/inner_type.h>
 #include <fp/tools/rebind.h>
 #include <fp/tools/value.h>
@@ -24,7 +25,8 @@ struct WithMap {
     [[nodiscard]] constexpr auto map(F&& f) const {
         using Inner = typename DataClass::value_type;
         using Result = tools::arrow::fp_arrow_result<F, Inner>;
-        using Rebind = tools::rebind::fp_rebind<DataClass, Result>;
+        using Rebind =
+          tools::rebind::fp_rebind<DataClass, tools::cast::fp_cast<Result>>;
         return Rebind::apply(
           std::invoke(
             std::forward<F>(f), static_cast<const DataClass&>(*this).value()

@@ -12,6 +12,7 @@
 #include <fp/tools/instance.h>
 #include <fp/tools/instance_with.h>
 #include <fp/tools/make_pair.h>
+#include <fp/tools/map.h>
 #include <fp/tools/rebind.h>
 #include <fp/tools/value.h>
 
@@ -22,6 +23,7 @@ using namespace inner_type;
 using namespace instance_with;
 using namespace instance;
 using namespace make_pair;
+using namespace map;
 using namespace rebind;
 using namespace value;
 }  // namespace fp::tools::all
