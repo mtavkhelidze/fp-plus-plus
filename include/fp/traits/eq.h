@@ -11,8 +11,8 @@
 namespace fp::traits::eq {
 
 template <typename E>
-concept Eq = requires(E&& a, E&& b) {
-    { a.equals(b) } -> std::convertible_to<bool>;
+concept Eq = requires(const E& a, const E& b) {
+    { a.equals(b) } -> std::same_as<bool>;
 };
 
 }  // namespace fp::traits::eq

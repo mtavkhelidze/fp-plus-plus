@@ -1,22 +1,19 @@
 #include <fp/data/nothing.h>
 #include <fp/mixins/value.h>
-#include <fp/operators/eq.h>
 #include <fp/prelude/pure.h>
-#include <fp/traits/eq.h>
 #include <fp/traits/value.h>
 #include <gtest/gtest.h>
 
 using namespace fp::data::nothing;
 
 using namespace fp::prelude;
-using namespace fp::operators::eq;
 
-template <template <typename> typename Data, typename A>
-using WithValue = fp::mixins::value::WithValue<Data, A>;
+template <typename Data>
+using WithValue = fp::mixins::value::WithValue<Data>;
 
 template <typename A>
-struct TestStruct : WithValue<TestStruct, A> {
-    using Base = WithValue<TestStruct, A>;
+struct TestStruct : WithValue<TestStruct<A>> {
+    using Base = WithValue<TestStruct<A>>;
     using Base::Base;
 };
 
@@ -37,24 +34,6 @@ TEST(Mixin_WithValue, empty) {
     TestStruct const da = pure<TestStruct>(nothing);
     EXPECT_TRUE(da.is_box());
     EXPECT_EQ(da.value(), nothing);
-}
-
-TEST(Mixin_WithValue, is_Eq_complex) {
-    static_assert(fp::traits::eq::Eq<TestStruct<std::vector<int>>>);
-    TestStruct const da1 = pure<TestStruct>(std::vector{1, 2, 3});
-    TestStruct const da2 = pure<TestStruct>(std::vector{1, 2, 3});
-    TestStruct const da3 = pure<TestStruct>(std::vector{3, 2, 1});
-    EXPECT_TRUE(da1 == da2);
-    EXPECT_TRUE(da1 != da3);
-}
-
-TEST(Mixin_WithValue, is_Eq_fundamental) {
-    static_assert(fp::traits::eq::Eq<TestStruct<int>>);
-    TestStruct const da1 = pure<TestStruct>(42);
-    TestStruct const da2 = pure<TestStruct>(42);
-    TestStruct const da3 = pure<TestStruct>(24);
-    EXPECT_TRUE(da1 == da2);
-    EXPECT_TRUE(da1 != da3);
 }
 
 TEST(Mixin_WithValue, static_apply_direct) {

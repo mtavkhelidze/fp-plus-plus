@@ -33,9 +33,11 @@ namespace fp::internal::storage {
  * Do not construct or manipulate this class directly. It is a low-level utility
  * with intentionally restricted interface, optimized for functional semantics.
  */
-template <template <typename> class Container, typename A>
+template <class Container>
 struct StorageBox {
   private:
+    using A = fp::tools::inner_type::fp_inner_type<Container>;
+
     template <typename TC, typename T>
     using rebind = fp::tools::rebind::fp_rebind<TC, T>;
 
@@ -59,7 +61,7 @@ struct StorageBox {
     static auto put(T&& value) {
         auto box = Box{std::forward<T>(value)};
         using U = typename decltype(box)::kind;
-        using Derived = rebind<Container<A>, U>;
+        using Derived = rebind<Container, U>;
         return Derived{std::move(box)};
     }
 

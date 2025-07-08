@@ -6,6 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/tools/inner_type.h>
 #include <fp/tools/rebind.h>
 
 #include <type_traits>
@@ -31,10 +32,12 @@ namespace fp::internal::storage {
  *
  * Do not construct or manipulate this unless you know what you're doing.
  */
-template <template <typename> class Container, typename A>
-    requires std::is_fundamental_v<A>
+template <class Container>
+    requires std::is_fundamental_v<
+      fp::tools::inner_type::fp_inner_type<Container>>
 struct StorageStack {
   private:
+    using A = fp::tools::inner_type::fp_inner_type<Container>;
     template <typename TC, typename T>
     using rebind = tools::rebind::fp_rebind<TC, T>;
 
@@ -54,10 +57,10 @@ struct StorageStack {
 
     constexpr auto empty() const noexcept -> bool { return false; }
 
-  template <typename T>
+    template <typename T>
     static auto put(T &&value) {
         using U = std::decay_t<T>;
-        using Derived = rebind<Container<A>, U>;
+        using Derived = rebind<Container, U>;
         return Derived{std::move(value)};
     }
 

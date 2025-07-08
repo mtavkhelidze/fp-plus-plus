@@ -18,53 +18,46 @@ template <typename T>
 using fp_cast = fp::tools::cast::fp_cast<T>;
 
 template <
-  template <typename> typename TC,
-  typename A,
-  bool = std::is_fundamental_v<A>>
+  typename TC,
+  bool = std::is_fundamental_v<fp::tools::inner_type::fp_inner_type<TC>>>
 struct __backend;
 
-template <template <typename> typename TC, typename A>
-struct __backend<TC, A, true> {
-    using type = internal::storage::StorageStack<TC, A>;
+template <typename TC>
+struct __backend<TC, true> {
+    using type = internal::storage::StorageStack<TC>;
 };
 
-template <template <typename> typename TC, typename A>
-struct __backend<TC, A, false> {
-    using type = internal::storage::StorageBox<TC, A>;
+template <typename TC>
+struct __backend<TC, false> {
+    using type = internal::storage::StorageBox<TC>;
 };
 
-template <template <typename> typename TC, typename A>
-using Backend = __backend<TC, A>;
+template <typename TC>
+using Backend = __backend<TC>;
 
 /**
  * Mixin for objects with storage backend and ::apply.
  */
-template <template <typename> typename DataClass, typename A>
-struct WithValue : private Backend<DataClass, A>::type {
+template <typename DataClass>
+struct WithValue : private Backend<DataClass>::type {
   private:
-    using Base = typename Backend<DataClass, A>::type;
+    using Base = typename Backend<DataClass>::type;
     using Base::Base;
 
   public:
-    using value_type = A;
+    using value_type = fp_cast<fp::tools::inner_type::fp_inner_type<DataClass>>;
+
     template <typename T>
-    static constexpr auto apply(T&& value) -> DataClass<fp_cast<T>> {
+    static constexpr auto apply(T&& value) -> DataClass {
         return DataClass{Base::put(std::forward<T>(value))};
     }
     constexpr auto has_value() const noexcept -> bool {  //
         return !this->empty();
     }
-    constexpr auto value() const noexcept -> const A& {  //
+    constexpr auto value() const noexcept -> const value_type& {  //
         return this->get();
     }
-    // Eq
-    constexpr auto equals(const WithValue& other) const noexcept -> bool {
-        static_assert(
-          std::equality_comparable<A>,
-          "The type A must support operator== to use equals()."
-        );
-        return this->value() == other.value();
-    }
+
 #ifdef FP_PLUS_PLUS_TESTING
   public:
     constexpr auto is_box() const -> bool {
