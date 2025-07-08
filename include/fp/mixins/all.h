@@ -6,9 +6,11 @@
 #error "This file must be included from "<fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/mixins/eq.h>
 #include <fp/mixins/value.h>
 
 namespace fp::mixins::all {
+using namespace eq;
 using namespace value;
 }  // namespace fp::mixins::all
 

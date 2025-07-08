@@ -13,7 +13,8 @@ namespace fp::mixins::eq {
 
 template <class DataClass>
 struct WithEq {
-    constexpr auto equals(const DataClass& other) const noexcept -> bool {
+    [[nodiscard]] constexpr auto equals(const DataClass& other) const noexcept
+      -> bool {
         static_assert(
           fp::traits::value::HasValue<DataClass>,
           "WithEq requires DataClass to implement .value()"

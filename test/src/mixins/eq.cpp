@@ -6,16 +6,18 @@
 #include <fp/traits/eq.h>
 #include <gtest/gtest.h>
 
-using namespace fp::prelude;
+using namespace fp::mixins::eq;
+using namespace fp::mixins::value;
 using namespace fp::operators::eq;
+using namespace fp::prelude;
 using namespace fp::traits::eq;
 
 template <typename A>
 struct TestStruct
-    : fp::mixins::value::WithValue<TestStruct<A>>
-    , fp::mixins::eq::WithEq<TestStruct<A>> {
+    : WithValue<TestStruct<A>>
+    , WithEq<TestStruct<A>> {
   private:
-    using Base = fp::mixins::value::WithValue<TestStruct<A>>;
+    using Base = WithValue<TestStruct<A>>;
     using Base::Base;
 };
 
@@ -27,7 +29,7 @@ TEST(Mixin_WithEq, is_Eq) {  //
     ASSERT_TRUE(a.equals(b));
 }
 
-TEST(Mixin_WithValue, is_Eq_complex) {
+TEST(Mixin_WithEq, is_Eq_complex) {
     static_assert(fp::traits::eq::Eq<TestStruct<std::vector<int>>>);
     TestStruct const da1 = pure<TestStruct>(std::vector{1, 2, 3});
     TestStruct const da2 = pure<TestStruct>(std::vector{1, 2, 3});
@@ -36,7 +38,7 @@ TEST(Mixin_WithValue, is_Eq_complex) {
     EXPECT_TRUE(da1 != da3);
 }
 
-TEST(Mixin_WithValue, is_Eq_fundamental) {
+TEST(Mixin_WithEq, is_Eq_fundamental) {
     static_assert(fp::traits::eq::Eq<TestStruct<int>>);
     TestStruct const da1 = pure<TestStruct>(42);
     TestStruct const da2 = pure<TestStruct>(42);

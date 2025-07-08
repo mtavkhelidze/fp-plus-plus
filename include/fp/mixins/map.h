@@ -7,21 +7,30 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/tools/storage.h>
+#include <fp/tools/arrow.h>
+#include <fp/tools/inner_type.h>
+#include <fp/tools/rebind.h>
+#include <fp/traits/value.h>
+
+#include <functional>
 
 namespace fp::mixins::map {
 
-template <template <typename> typename DataClass, typename A>
+template <typename DataClass>
 struct WithMap {
     template <typename F>
-        requires tools::storage::HasValue<DataClass<A>>
-              && tools::storage::HasApply<
-                   DataClass,
-                   decltype(std::declval<F>()(std::declval<A>()))>
+        requires traits::value::HasValue<DataClass>
+              && traits::value::HasApply<DataClass>
+              && tools::arrow::
+                   Arrow<F, tools::inner_type::fp_inner_type<DataClass>>
     [[nodiscard]] constexpr auto map(F&& f) const {
-        using Result = decltype(std::forward<F>(f)(std::declval<A>()));
-        return DataClass<Result>::apply(
-          std::forward<F>(f)(static_cast<const DataClass<A>&>(*this).value())
+        using Inner = typename DataClass::value_type;
+        using Result = tools::arrow::fp_arrow_result<F, Inner>;
+        using Rebind = tools::rebind::fp_rebind<DataClass, Result>;
+        return Rebind::apply(
+          std::invoke(
+            std::forward<F>(f), static_cast<const DataClass&>(*this).value()
+          )
         );
     }
 };
