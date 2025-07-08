@@ -47,9 +47,10 @@ struct WithValue : private Backend<DataClass, A>::type {
     using Base::Base;
 
   public:
+    using value_type = A;
     template <typename T>
     static constexpr auto apply(T&& value) -> DataClass<fp_cast<T>> {
-        return DataClass{Base::put(value)};
+        return DataClass{Base::put(std::forward<T>(value))};
     }
     constexpr auto has_value() const noexcept -> bool {  //
         return !this->empty();
