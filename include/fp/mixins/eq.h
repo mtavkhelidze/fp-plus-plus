@@ -8,14 +8,15 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/mixins/value.h>
-#include <fp/tools/inner_type.h>
 
 namespace fp::mixins::eq {
 
-template <template <typename> typename DataClass>
-struct WithEq
-    : fp::mixins::value::
-        WithValue<DataClass, fp::tools::inner_type::fp_inner_type<DataClass>> {
+template <typename DataClass>
+struct WithEq : fp::mixins::value::WithValue<DataClass> {
+  private:
+    using Base = fp::mixins::value::WithValue<DataClass>;
+    using Base::Base;
+
   public:
     constexpr auto equals(const WithEq& other) const noexcept -> bool {
         return static_cast<const DataClass*>(this)->value()

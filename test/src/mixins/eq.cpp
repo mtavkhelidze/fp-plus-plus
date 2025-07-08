@@ -1,21 +1,26 @@
 
 #include <fp/mixins/eq.h>
-#include <fp/mixins/value.h>
 #include <fp/operators/eq.h>
+#include <fp/prelude/pure.h>
 #include <fp/traits/eq.h>
 #include <gtest/gtest.h>
 
-template <typename A>
-struct DataClass;
+using namespace fp::prelude;
+using namespace fp::operators::eq;
+using namespace fp::traits::eq;
 
 template <typename A>
-struct DataClass
-    : fp::mixins::value::WithValue<DataClass, A>
-    , fp::mixins::eq::WithEq<DataClass<A>> {};
+struct TestStruct : fp::mixins::eq::WithEq<TestStruct<A>> {
+  private:
+    using Base = fp::mixins::eq::WithEq<TestStruct<A>>;
+    using Base::Base;
+};
+
+TEST(Mixin_WithEq, traits) { static_assert(Eq<TestStruct<int>>); }
 
 TEST(Mixin_WithEq, is_Eq) {  //
-    auto a = DataClass<int>{._value = 10};
-    auto b = DataClass<int>{._value = 10};
+    auto a = pure<TestStruct>(10);
+    auto b = pure<TestStruct>(10);
     ASSERT_TRUE(a.equals(b));
 }
 
