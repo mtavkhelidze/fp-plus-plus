@@ -8,22 +8,30 @@
 
 #include <fp/tools/cast.h>
 #include <fp/tools/inner_type.h>
+#include <fp/tools/rebind.h>
 
 #include <utility>
 
 namespace fp::tools::value {
 
+template <typename T>
+using cast = fp::tools::cast::fp_cast<T>;
+
 template <typename TC>
 using inner_type = fp::tools::inner_type::fp_inner_type<TC>;
 
-template <typename T>
-concept HasValue = requires(T t) {
-    { t.value() };
+template <typename TC, typename A>
+using rebind = fp::tools::rebind::fp_rebind<TC, A>;
+
+template <typename TC>
+concept HasValue = requires(TC t) {
+    { t.value() } -> std::same_as<const inner_type<TC>&>;
 };
 
-template <typename T>
-concept HasApply =
-  requires(tools::inner_type::fp_inner_type<T> arg) { T::apply(arg); };
+template <typename TC>
+concept HasApply = requires(inner_type<TC> arg) {
+    { TC::apply(arg) } -> std::same_as<rebind<TC, cast<inner_type<TC>>>>;
+};
 
 }  // namespace fp::tools::value
 #endif  // FP_TOOLS_APPLY_H
