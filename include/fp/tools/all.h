@@ -13,7 +13,7 @@
 #include <fp/tools/instance_with.h>
 #include <fp/tools/make_pair.h>
 #include <fp/tools/rebind.h>
-#include <fp/tools/storage.h>
+#include <fp/tools/value.h>
 
 namespace fp::tools::all {
 using namespace arrow;
@@ -23,6 +23,6 @@ using namespace instance_with;
 using namespace instance;
 using namespace make_pair;
 using namespace rebind;
-using namespace storage;
+using namespace value;
 }  // namespace fp::tools::all
 #endif  // FP_TOOLS_H

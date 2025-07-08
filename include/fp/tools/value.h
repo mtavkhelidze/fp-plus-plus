@@ -11,22 +11,19 @@
 
 #include <utility>
 
-namespace fp::tools::storage {
+namespace fp::tools::value {
 
 template <typename TC>
 using inner_type = fp::tools::inner_type::fp_inner_type<TC>;
 
-template <typename TC>
-concept HasValue = requires(TC tc) {
-    { tc.value() } -> std::same_as<cast::fp_cast<inner_type<TC>>>;
+template <typename T>
+concept HasValue = requires(T t) {
+    { t.value() };
 };
 
-template <template <typename> typename TC, typename A>
-concept HasApply = requires(A&& a) {
-    {
-        TC<cast::fp_cast<A>>::apply(std::forward<A>(a))
-    } -> std::same_as<TC<cast::fp_cast<A>>>;
-};
+template <typename T>
+concept HasApply =
+  requires(tools::inner_type::fp_inner_type<T> arg) { T::apply(arg); };
 
-}  // namespace fp::tools::storage
+}  // namespace fp::tools::value
 #endif  // FP_TOOLS_APPLY_H

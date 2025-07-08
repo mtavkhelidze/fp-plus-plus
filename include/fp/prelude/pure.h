@@ -7,18 +7,15 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/tools/cast.h>
-#include <fp/tools/storage.h>
+#include <fp/tools/value.h>
 
 namespace fp::prelude {
 
 template <typename T>
 using cast = tools::cast::fp_cast<T>;
 
-template <template <typename> class TC, typename T>
-concept HasApply = tools::storage::HasApply<TC, T>;
-
 template <template <typename> typename DataClass, typename T>
-    requires HasApply<DataClass, T>
+    requires tools::value::HasApply<DataClass<cast<T>>>
 auto pure(T&& value) -> DataClass<cast<T>> {
     using NT = cast<T>;
     return DataClass<NT>::apply(std::forward<T>(value));

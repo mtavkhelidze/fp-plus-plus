@@ -1,12 +1,12 @@
 #include <fp/data/nothing.h>
 #include <fp/mixins/value.h>
 #include <fp/prelude/pure.h>
-#include <fp/traits/value.h>
+#include <fp/tools/value.h>
 #include <gtest/gtest.h>
 
 using namespace fp::data::nothing;
-
 using namespace fp::prelude;
+using namespace fp::tools::value;
 
 template <typename Data>
 using WithValue = fp::mixins::value::WithValue<Data>;
@@ -43,8 +43,8 @@ TEST(Mixin_WithValue, static_apply_direct) {
 }
 
 TEST(Mixin_WithValue, traits) {
-    static_assert(fp::traits::value::HasApply<TestStruct<int>>);
-    static_assert(fp::traits::value::HasValue<TestStruct<int>>);
+    static_assert(HasApply<TestStruct<int>>);
+    static_assert(HasValue<TestStruct<int>>);
 }
 
 TEST(Mixin_WithValue, value_type_alias) {
