@@ -1,5 +1,4 @@
 #ifndef FP_INTERNAL_STORAGE_H
-
 #define FP_INTERNAL_STORAGE_H
 #pragma once
 
@@ -13,7 +12,7 @@
 
 #include <type_traits>
 
-namespace fp::mixins::storage {
+namespace fp::mixins::value {
 
 template <typename T>
 using fp_cast = fp::tools::cast::fp_cast<T>;
@@ -76,6 +75,6 @@ struct WithValue : private Backend<DataClass, A>::type {
     }
 #endif  // FP_PLUS_PLUS_TESTING
 };
-};  // namespace fp::mixins::storage
+};  // namespace fp::mixins::value
 
 #endif  // FP_INTERNAL_STORAGE_H

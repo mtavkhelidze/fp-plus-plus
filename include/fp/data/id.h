@@ -13,7 +13,7 @@
 namespace fp::data::monad::id {
 
 template <template <typename> typename TC, typename A>
-using WithValue = mixins::storage::WithValue<TC, A>;
+using WithValue = mixins::value::WithValue<TC, A>;
 
 template <template <typename> typename TC, typename A>
 using WithMap = mixins::map::WithMap<TC, A>;

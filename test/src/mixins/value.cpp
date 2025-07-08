@@ -12,7 +12,7 @@ using namespace fp::prelude;
 using namespace fp::operators::eq;
 
 template <template <typename> typename Data, typename A>
-using WithValue = fp::mixins::storage::WithValue<Data, A>;
+using WithValue = fp::mixins::value::WithValue<Data, A>;
 
 template <typename A>
 struct TestStruct : WithValue<TestStruct, A> {
