@@ -44,6 +44,7 @@ struct StorageBox {
     using Box = fp::internal::box::Box<A>;
     Box box;
 
+  protected:
     explicit StorageBox(Box&& box) noexcept : box(std::move(box)) {}
 
     StorageBox() noexcept = delete;

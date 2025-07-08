@@ -43,7 +43,7 @@ struct StorageStack {
 
     A value;
 
-  private:
+  protected:
     explicit StorageStack(A &&v) : value(v) {}
 
     StorageStack() = delete;

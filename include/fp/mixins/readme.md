@@ -28,3 +28,28 @@ backend at runtime.
 #### Prelude
 
 * pure
+
+## WithEq
+
+### Description
+
+`WithEq` is a mixin that provides value-based equality comparison by building on
+top of `WithValue`.  
+It uses the CRTP pattern to define an `equals` method that compares the
+underlying values of the derived type instances.
+
+This mixin exposes constructors by inheriting them from `WithValue` and can be
+combined with other mixins to extend functionality.  
+It does not define operators itself, focusing solely on the core equality logic.
+
+### Mixins
+
+* WithEq (inherits from `WithValue`)
+
+#### Traits
+
+* Eq (provides `.equals()` method)
+
+### Prelude
+
+* Supports use with `pure` through `WithValue`'s `apply` method.

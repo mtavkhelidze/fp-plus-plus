@@ -1,5 +1,6 @@
 
 #include <fp/mixins/eq.h>
+#include <fp/mixins/value.h>
 #include <fp/operators/eq.h>
 #include <fp/prelude/pure.h>
 #include <fp/traits/eq.h>
@@ -10,9 +11,11 @@ using namespace fp::operators::eq;
 using namespace fp::traits::eq;
 
 template <typename A>
-struct TestStruct : fp::mixins::eq::WithEq<TestStruct<A>> {
+struct TestStruct
+    : fp::mixins::value::WithValue<TestStruct<A>>
+    , fp::mixins::eq::WithEq<TestStruct<A>> {
   private:
-    using Base = fp::mixins::eq::WithEq<TestStruct<A>>;
+    using Base = fp::mixins::value::WithValue<TestStruct<A>>;
     using Base::Base;
 };
 
