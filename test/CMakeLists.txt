@@ -11,13 +11,16 @@ set(TEST_SRC
     src/data/id_stack.cpp
     src/internal/box.cpp
     src/mixins/eq.cpp
+    src/mixins/flat_map.cpp
+    src/mixins/map.cpp
+    src/mixins/value.cpp
     src/prelude/compose.cpp
     src/prelude/dollar.cpp
     src/prelude/flip.cpp
+    src/prelude/lift.cpp
     src/prelude/pipe.cpp
+    src/prelude/pure.cpp
     src/tools/cast.cpp
-    src/tools/map.cpp
-    src/tools/value.cpp
 )
 
 # find_untracked_files("${TEST_SRC}" src "*.cpp")

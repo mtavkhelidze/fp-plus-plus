@@ -10,6 +10,7 @@
 #include <fp/tools/cast.h>
 #include <fp/tools/inner_type.h>
 #include <fp/tools/rebind.h>
+#include <fp/tools/value.h>
 
 #include <utility>
 
@@ -30,11 +31,14 @@ using arrow_result = tools::arrow::fp_arrow_result<F, A>;
 // Strict HasMap concept:
 template <typename TC, typename F>
 concept HasMap =
-  tools::arrow::Arrow<F, inner_type<TC>> && requires(TC self, F f) {
-      {
-          self.map(f)
-      } -> std::same_as<rebind<TC, arrow_result<F, inner_type<TC>>>>;
-  };
+  fp::tools::value::HasValue<TC>
+  && fp::tools::value::HasApply<TC>
+  && tools::arrow::Arrow<F, inner_type<TC>>
+  && requires(TC self, F f) {
+         {
+             self.map(f)
+         } -> std::same_as<rebind<TC, arrow_result<F, inner_type<TC>>>>;
+     };
 
 }  // namespace fp::tools::map
 #endif  // FP_TOOLS_MAP_H

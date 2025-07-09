@@ -29,7 +29,7 @@ concept HasValue = requires(TC t) {
 };
 
 template <typename TC>
-concept HasApply = requires(inner_type<TC> arg) {
+concept HasApply = HasValue<TC> && requires(inner_type<TC> arg) {
     { TC::apply(arg) } -> std::same_as<rebind<TC, cast<inner_type<TC>>>>;
 };
 

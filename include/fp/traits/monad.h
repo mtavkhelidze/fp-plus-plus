@@ -35,26 +35,14 @@ inline constexpr auto pure = []<typename T>(T &&t)
 { return TC<std::decay_t<T>>{std::forward<T>(t)}; };
 
 /**
- * `lift`: Lifts a normal function `f` into the monadic context by applying it
- * and then wrapping the result using `pure`.
- */
-template <template <typename> typename TC, typename F>
-constexpr auto lift(F &&f) {
-    return
-      [f = std::forward<F>(f)](auto &&x) constexpr noexcept(
-        noexcept(pure<TC>(f(std::forward<decltype(x)>(x))))
-      ) -> decltype(auto) { return pure<TC>(f(std::forward<decltype(x)>(x))); };
-};
-
-/**
  * Kleisli composition operator. Composes two Kleisli arrows.
  */
 template <typename F, typename G>
 constexpr auto kleisli_compose(F &&f, G &&g) {
     return [f = std::forward<F>(f), g = std::forward<G>(g)]<typename X>(
              X &&x
-           ) constexpr noexcept(noexcept(f(std::forward<X>(x)).flatMap(g))
-           ) -> decltype(auto) { return f(std::forward<X>(x)).flatMap(g); };
+           ) constexpr noexcept(noexcept(f(std::forward<X>(x)).flatMap(g)))
+             -> decltype(auto) { return f(std::forward<X>(x)).flatMap(g); };
 }
 
 /**

@@ -1,47 +1,46 @@
-#include <fp/mixins/map.h>
+#include <fp/mixins/flat_map.h>
 #include <fp/mixins/value.h>
 #include <fp/prelude/identity.h>
+#include <fp/prelude/lift.h>
 #include <fp/prelude/pure.h>
-#include <fp/tools/map.h>
-#include <fp/tools/value.h>
 #include <gtest/gtest.h>
 
 #include <string>
 #include <vector>
 
-using namespace fp::mixins::map;
 using namespace fp::mixins::value;
+using namespace fp::mixins::flat_map;
 using namespace fp::prelude;
 using namespace fp::tools::map;
-using namespace fp::tools::value;
 
 template <typename A>
 struct TestStruct
     : WithValue<TestStruct<A>>
-    , WithMap<TestStruct<A>> {
+    , WithFlatMap<TestStruct<A>> {
     using Base = WithValue<TestStruct<A>>;
     using Base::Base;
 };
 
-TEST(Mixin_WithMap, simple_map) {
+TEST(Mixin_WithFlatMap, simple_map) {
     auto val = pure<TestStruct>(10);
-    auto mapped = val.map([](int x) { return x * 2; });
+    auto mapped = val.flatMap([](int x) { return pure<TestStruct>(x * 2); });
     static_assert(std::is_same_v<decltype(mapped), TestStruct<int>>);
     EXPECT_EQ(mapped.value(), 20);
 }
 
-TEST(Mixin_WithMap, map_identity) {
+TEST(Mixin_WithFlatMap, map_identity) {
     auto val = pure<TestStruct>(std::string("hello"));
-    auto mapped = val.map([](const std::string& s) { return s; });
+    auto mapped =
+      val.flatMap([](const std::string& s) { return pure<TestStruct>(s); });
     EXPECT_EQ(mapped.value(), "hello");
 }
 
-TEST(Mixin_WithMap, map_complex_type) {
+TEST(Mixin_WithFlatMap, map_complex_type) {
     auto val = pure<TestStruct>(std::vector<int>{1, 2, 3});
-    auto mapped = val.map([](const std::vector<int>& v) {
+    auto mapped = val.flatMap([](const std::vector<int>& v) {
         std::vector<int> copy = v;
         copy.push_back(4);
-        return copy;
+        return pure<TestStruct>(copy);
     });
     static_assert(
       std::is_same_v<decltype(mapped), TestStruct<std::vector<int>>>
@@ -50,15 +49,13 @@ TEST(Mixin_WithMap, map_complex_type) {
     EXPECT_EQ(mapped.value().back(), 4);
 }
 
-TEST(Mixin_WithMap, static_assert_traits) {
-    static_assert(HasValue<TestStruct<int>>);
-    static_assert(HasApply<TestStruct<int>>);
-    static_assert(
-      HasMap<TestStruct<int>, decltype([](int x) { return x + 1; })>
-    );
-}
+// TEST(Mixin_WithFlatMap, static_assert_traits) {
+//     static_assert(
+//       HasMap<TestStruct<int>, decltype([](int x) { return x + 1; })>
+//     );
+// }
 
-TEST(Mixin_WithMap, value_type_alias) {
+TEST(Mixin_WithFlatMap, value_type_alias) {
     static_assert(std::is_same_v<typename TestStruct<int>::value_type, int>);
     static_assert(
       std::is_same_v<
@@ -67,25 +64,25 @@ TEST(Mixin_WithMap, value_type_alias) {
 }
 
 struct Doubler {
-    int operator()(int x) const { return x * 2; }
+    TestStruct<int> operator()(int x) const { return pure<TestStruct>(x * 2); }
 };
 
-int triple(int x) { return x * 3; }
+static TestStruct<int> triple(int x) { return pure<TestStruct>(x * 3); }
 
-TEST(Mixin_WithMap, map_with_callable_struct) {
+TEST(Mixin_WithFlatMap, map_with_callable_struct) {
     auto val = pure<TestStruct>(5);
-    auto mapped = val.map(Doubler{});
+    auto mapped = val.flatMap(Doubler{});
     EXPECT_EQ(mapped.value(), 10);
 }
 
-TEST(Mixin_WithMap, map_with_function_pointer) {
+TEST(Mixin_WithFlatMap, map_with_function_pointer) {
     auto val = pure<TestStruct>(7);
-    auto mapped = val.map(triple);
+    auto mapped = val.flatMap(triple);
     EXPECT_EQ(mapped.value(), 21);
 }
 
-TEST(Mixin_WithMap, map_law_identity) {
+TEST(Mixin_WithFlatMap, map_law_identity) {
     auto val = pure<TestStruct>(42);
-    auto mapped = val.map(identity);
+    auto mapped = val.flatMap(lift<TestStruct>(identity));
     EXPECT_EQ(mapped.value(), val.value());
 }
