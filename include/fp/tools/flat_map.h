@@ -1,5 +1,5 @@
-#ifndef FP_TOOLS_MAP_H
-#define FP_TOOLS_MAP_H
+#ifndef FP_TOOLS_FLAT_MAP_H
+#define FP_TOOLS_FLAT_MAP_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -12,9 +12,7 @@
 #include <fp/tools/rebind.h>
 #include <fp/tools/value.h>
 
-#include <utility>
-
-namespace fp::tools::map {
+namespace fp::tools::flat_map {
 
 template <typename T>
 using cast = fp::tools::cast::fp_cast<T>;
@@ -26,18 +24,15 @@ template <typename TC, typename A>
 using rebind = fp::tools::rebind::fp_rebind<TC, A>;
 
 template <typename F, typename A>
-using arrow_result = tools::arrow::fp_arrow_result<F, A>;
+using kleisli_result = tools::arrow::fp_kleisli_arrow_result<F, A>;
 
-// Strict HasMap concept:
 template <typename TC, typename F>
-concept HasMap =
-  fp::tools::value::HasApply<TC>
-  && tools::arrow::Arrow<F, inner_type<TC>>
-  && requires(TC self, F f) {
-         {
-             self.map(f)
-         } -> std::same_as<rebind<TC, arrow_result<F, inner_type<TC>>>>;
-     };
-
-}  // namespace fp::tools::map
-#endif  // FP_TOOLS_MAP_H
+concept HasFlatMap = fp::tools::value::HasApply<TC>
+                  && tools::arrow::KleisliArrow<F, inner_type<TC>>
+                  && requires(TC self, F f) {
+                         {
+                             self.flatMap(f)
+                         } -> std::same_as<kleisli_result<F, inner_type<TC>>>;
+                     };
+}  // namespace fp::tools::flat_map
+#endif  // FP_TOOLS_FLAT_MAP_H

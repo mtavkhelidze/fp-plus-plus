@@ -3,6 +3,7 @@
 #include <fp/prelude/identity.h>
 #include <fp/prelude/lift.h>
 #include <fp/prelude/pure.h>
+#include <fp/tools/flat_map.h>
 #include <gtest/gtest.h>
 
 #include <string>
@@ -11,7 +12,7 @@
 using namespace fp::mixins::value;
 using namespace fp::mixins::flat_map;
 using namespace fp::prelude;
-using namespace fp::tools::map;
+using namespace fp::tools::flat_map;
 
 template <typename A>
 struct TestStruct
@@ -49,11 +50,11 @@ TEST(Mixin_WithFlatMap, map_complex_type) {
     EXPECT_EQ(mapped.value().back(), 4);
 }
 
-// TEST(Mixin_WithFlatMap, static_assert_traits) {
-//     static_assert(
-//       HasMap<TestStruct<int>, decltype([](int x) { return x + 1; })>
-//     );
-// }
+TEST(Mixin_WithFlatMap, static_assert_traits) {
+    static_assert(HasFlatMap<TestStruct<int>, decltype([](int x) {
+                                 return pure<TestStruct>(x + 1);
+                             })>);
+}
 
 TEST(Mixin_WithFlatMap, value_type_alias) {
     static_assert(std::is_same_v<typename TestStruct<int>::value_type, int>);
