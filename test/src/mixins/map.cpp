@@ -3,7 +3,6 @@
 #include <fp/prelude/identity.h>
 #include <fp/prelude/pure.h>
 #include <fp/tools/map.h>
-#include <fp/tools/value.h>
 #include <gtest/gtest.h>
 
 #include <string>

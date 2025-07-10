@@ -30,6 +30,9 @@ target_compile_definitions(${PROJECT_NAME}_test PRIVATE FP_PLUS_PLUS_TESTING)
 target_compile_definitions(
     ${PROJECT_NAME}_test PRIVATE FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 )
+target_compile_definitions(
+    ${PROJECT_NAME}_test PRIVATE CMAKE_EXPORT_COMPILE_COMMANDS
+)
 # target_compile_options(${PROJECT_NAME}_test PRIVATE -fsanitize=address)
 # target_link_options(${PROJECT_NAME}_test PRIVATE -fsanitize=address)
 
