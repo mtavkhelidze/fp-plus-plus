@@ -12,13 +12,12 @@
 
 namespace fp::data::monad::id {
 
-template <typename TC>
-using WithValue = mixins::value::WithValue<TC>;
-
 template <typename A>
-struct Id : WithValue<Id<A>> {
+struct Id
+    : fp::mixins::value::WithValue<Id<A>>
+    , fp::mixins::map::WithMap<Id<A>> {
   private:
-    using Base = WithValue<Id>;
+    using Base = fp::mixins::value::WithValue<Id>;
     using Base::Base;
 };
 

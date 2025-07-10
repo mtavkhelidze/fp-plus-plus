@@ -7,7 +7,7 @@ target_compile_options(rapidcheck INTERFACE -Wno-deprecated-declarations)
 
 set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
-    src/data/id_box.cpp
+    src/data/id.cpp
     src/data/id_stack.cpp
     src/internal/box.cpp
     src/mixins/eq.cpp

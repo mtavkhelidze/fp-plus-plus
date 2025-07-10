@@ -6,13 +6,12 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/prelude/identity.h>
 #include <fp/tools/arrow.h>
 #include <fp/tools/cast.h>
 #include <fp/tools/inner_type.h>
 #include <fp/tools/rebind.h>
 #include <fp/tools/value.h>
-
-#include <utility>
 
 namespace fp::tools::map {
 
@@ -29,7 +28,7 @@ template <typename F, typename A>
 using arrow_result = tools::arrow::fp_arrow_result<F, A>;
 
 // Strict HasMap concept:
-template <typename TC, typename F>
+template <typename TC, typename F = fp::prelude::identity_t>
 concept HasMap =
   fp::tools::value::HasApply<TC>
   && tools::arrow::Arrow<F, inner_type<TC>>
