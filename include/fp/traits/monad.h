@@ -6,53 +6,31 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/meta.h>
-#include <fp/operators.h>
-
-#include <concepts>
-#include <type_traits>
+#include <fp/tools/flat_map.h>
+#include <fp/traits/applicative.h>
 
 namespace fp::traits::monad {
-/**
- * Concept representing a lawful Monad, requiring `pure` and `flatMap`
- * support.
- */
-template <template <typename> typename TC, typename T>
-concept Monad = requires(TC<std::decay_t<T>> c, T t) {
-    { pure<TC>(t) } -> std::same_as<TC<std::decay_t<T>>>;
-    {
-        // NOLINTNEXTLINE(cppcoreguidelines-rvalue-reference-param-not-moved)
-        c.flatMap([](T &&x) { return pure<TC>(x); })
-    } -> std::same_as<TC<std::decay_t<T>>>;
-};
-}  // namespace fp::traits::monad
-
-namespace fp::traits::monad {
-
-template <template <typename> typename TC>
-inline constexpr auto pure = []<typename T>(T &&t)
-    requires(std::is_constructible_v<TC<std::decay_t<T>>, T>)
-{ return TC<std::decay_t<T>>{std::forward<T>(t)}; };
-
-/**
- * Kleisli composition operator. Composes two Kleisli arrows.
- */
-template <typename F, typename G>
-constexpr auto kleisli_compose(F &&f, G &&g) {
-    return [f = std::forward<F>(f), g = std::forward<G>(g)]<typename X>(
-             X &&x
-           ) constexpr noexcept(noexcept(f(std::forward<X>(x)).flatMap(g)))
-             -> decltype(auto) { return f(std::forward<X>(x)).flatMap(g); };
-}
-
-/**
- *  Lifts a function `f` into the monadic context by composing it with
- * `pure<TC>`, where `TC` is the monadic type constructor.
- */
-template <template <typename> typename TC>
-inline constexpr auto liftM = []<typename F>(F &&f) {
-    return fp::operators::compose(pure<TC>, std::forward<F>(f));
-};
-
+/// Concept representing a lawful Monad.
+///
+/// A Monad must:
+/// - Be an Applicative (i.e. support `map` and `pure`)
+/// - Support `flatMap`, which applies a function returning the same context
+///
+/// This models the traditional monadic structure:
+/// - `pure(a)` lifts a value into the monad
+/// - `flatMap(ma, f)` applies a function `f: A -> M<B>` to `ma: M<A>`
+///
+/// In FP++, `Applicative` implies `Functor`, and `HasFlatMap` ensures
+/// proper Kleisli-style composition.
+///
+/// Equivalent to:
+/// ```haskell
+/// class Monad m where
+///   return :: a -> m a
+///   (>>=)  :: m a -> (a -> m b) -> m b
+/// ```
+template <typename TC>
+concept Monad =
+  traits::applicative::Applicative<TC> && tools::flat_map::HasFlatMap<TC>;
 }  // namespace fp::traits::monad
 #endif  // FP_TRAITS_MONAD_H
