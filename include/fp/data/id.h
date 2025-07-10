@@ -7,6 +7,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/mixins/eq.h>
 #include <fp/mixins/flat_map.h>
 #include <fp/mixins/map.h>
 #include <fp/mixins/value.h>
@@ -30,7 +31,8 @@ template <typename A>
 struct Id
     : fp::mixins::value::WithValue<Id<A>>
     , fp::mixins::map::WithMap<Id<A>>
-    , fp::mixins::flat_map::WithFlatMap<Id<A>> {
+    , fp::mixins::flat_map::WithFlatMap<Id<A>>
+    , fp::mixins::eq::WithEq<Id<A>> {
   private:
     using Base = fp::mixins::value::WithValue<Id>;
     using Base::Base;
