@@ -17,6 +17,7 @@ set(TEST_SRC
     src/prelude/compose.cpp
     src/prelude/dollar.cpp
     src/prelude/flip.cpp
+    src/prelude/fmap.cpp
     src/prelude/lift.cpp
     src/prelude/pipe.cpp
     src/prelude/pure.cpp

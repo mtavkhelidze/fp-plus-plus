@@ -8,6 +8,8 @@
 
 #include <fp/tools/map.h>
 
+#include <type_traits>
+
 namespace fp::traits::functor {
 /**
  * Functor is a type class that abstracts over type constructors that can be
@@ -15,7 +17,7 @@ namespace fp::traits::functor {
  * `Future`.
  */
 template <typename T>
-concept Functor = fp::tools::map::HasMap<T>;
+concept Functor = fp::tools::map::HasMap<std::remove_cvref_t<T>>;
 
 }  // namespace fp::traits::functor
 

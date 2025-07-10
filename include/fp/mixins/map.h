@@ -22,7 +22,7 @@ struct WithMap {
               && tools::value::HasApply<DataClass>
               && tools::arrow::
                    Arrow<F, tools::inner_type::fp_inner_type<DataClass>>
-    [[nodiscard]] constexpr auto map(F&& f) const {
+    [[nodiscard]] constexpr auto map(F&& f) const noexcept {
         using Inner = typename DataClass::value_type;
         using Result = tools::arrow::fp_arrow_result<F, Inner>;
         using Rebind =

@@ -11,6 +11,7 @@
 #include <fp/prelude/defs.h>
 #include <fp/prelude/dollar.h>
 #include <fp/prelude/flip.h>
+#include <fp/prelude/fmap.h>
 #include <fp/prelude/identity.h>
 #include <fp/prelude/pipe.h>
 #include <fp/prelude/pure.h>
