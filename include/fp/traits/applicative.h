@@ -6,23 +6,24 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/prelude/identity.h>
-#include <fp/tools/all.h>
 #include <fp/traits/functor.h>
 
 namespace fp::traits::applicative {
-using namespace fp::prelude;
-using namespace fp::tools::all;
-using namespace fp::traits::functor;
-/**
- * Applicative extends @ref{Functor} with `an` ap and `pure` method.
- */
-template <template <typename> typename FA, typename A, typename B>
-concept Applicative = fp_is_unary_instance<FA<A>>
-                   && Functor<FA<A>, identity_t>
-                   && requires(FA<A> fa, FA<B> fb, A a) {
-                          { pure<FA>(a) } -> std::same_as<FA<A>>;
-                      };
+
+/// In FP++, `Functor` (defined via `HasMap`) implies the presence of
+/// `HasApply`. This means any Functor also supports the `pure` operation via
+/// `HasApply`. Therefore, every Functor in FP++ is also an Applicative by
+/// construction.
+///
+/// The chain is:
+/// - `HasApply` requires the type to have an `apply` static method for `pure`
+/// - `HasMap` requires `HasApply` and `map` method
+/// - `Functor` concept is defined as `HasMap`
+///
+/// This ensures that the free function `pure<DataClass>(x)` works for all
+/// Functors, making Functor and Applicative concepts overlap in FP++.
+template <typename T>
+concept Applicative = traits::functor::Functor<T>;
 
 }  // namespace fp::traits::applicative
 
