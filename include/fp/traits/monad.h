@@ -6,7 +6,9 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/prelude/pure.h>
 #include <fp/tools/flat_map.h>
+#include <fp/tools/inner_type.h>
 #include <fp/traits/applicative.h>
 
 namespace fp::traits::monad {
@@ -30,7 +32,10 @@ namespace fp::traits::monad {
 ///   (>>=)  :: m a -> (a -> m b) -> m b
 /// ```
 template <typename TC>
-concept Monad =
-  traits::applicative::Applicative<TC> && tools::flat_map::HasFlatMap<TC>;
+concept Monad = traits::applicative::Applicative<TC> && requires {
+    typename fp::tools::inner_type::fp_inner_type<TC>;
+    requires tools::flat_map::HasFlatMap<
+      TC, std::function<TC(fp::tools::inner_type::fp_inner_type<TC>)>>;
+};
 }  // namespace fp::traits::monad
 #endif  // FP_TRAITS_MONAD_H

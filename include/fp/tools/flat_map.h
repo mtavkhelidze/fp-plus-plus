@@ -7,6 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/prelude/identity.h>
+#include <fp/prelude/pure.h>
 #include <fp/tools/arrow.h>
 #include <fp/tools/cast.h>
 #include <fp/tools/inner_type.h>
@@ -27,7 +28,7 @@ using rebind = fp::tools::rebind::fp_rebind<TC, A>;
 template <typename F, typename A>
 using kleisli_result = tools::arrow::fp_kleisli_arrow_result<F, A>;
 
-template <typename TC, typename F = prelude::identity_t>
+template <typename TC, typename F>
 concept HasFlatMap = fp::tools::value::HasApply<TC>
                   && tools::arrow::KleisliArrow<F, inner_type<TC>>
                   && requires(TC self, F f) {
