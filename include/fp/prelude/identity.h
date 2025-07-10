@@ -7,6 +7,8 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 namespace fp::prelude {
+/// Identity function: returns its argument unchanged.
+/// `identity(x)` is equivalent to `x`.
 struct __identity {
     template <typename A>
     constexpr A operator()(A value) const noexcept {

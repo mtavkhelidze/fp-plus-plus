@@ -8,7 +8,6 @@
 
 #include <fp/data/nothing.h>
 #include <fp/prelude/compose.h>
-#include <fp/prelude/defs.h>
 #include <fp/prelude/dollar.h>
 #include <fp/prelude/flip.h>
 #include <fp/prelude/fmap.h>

@@ -12,6 +12,9 @@
 
 namespace fp::prelude {
 
+/// Generic `fmap` for any Functor.
+/// Applies function `f` to the contents of `fa`.
+/// Equivalent to `fa.map(f)` but in free function form.
 template <traits::functor::Functor FA, typename F>
     requires tools::arrow::Arrow<F, tools::inner_type::fp_inner_type<FA>>
 constexpr static auto fmap(FA&& fa, F&& f) {

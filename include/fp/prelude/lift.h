@@ -11,10 +11,19 @@
 #include <utility>
 
 namespace fp::prelude {
-/**
- * `lift`: Lifts a normal function `f` into the monadic context by applying it
- * and then wrapping the result using `pure`.
- */
+/// `lift`: Lifts a function `f` into the context of a type constructor `TC`.
+///
+/// Given a normal function `f: A -> B`, `lift<TC>(f)` returns a function
+/// `A -> TC<B>` by applying `f` to the argument and then wrapping the result
+/// with `pure<TC>`.
+///
+/// This is useful for applying functions inside functors or monads.
+///
+/// Example:
+/// ```
+/// auto lifted = lift<Id>([](int x) { return x + 1; });
+/// auto result = lifted(5); // result is Id<int> containing 6
+/// ```
 template <template <typename> typename TC, typename F>
 constexpr auto lift(F &&f) {
     return

@@ -12,8 +12,14 @@
 
 namespace fp::prelude {
 
-/// Function composition operator (similar to . in Haskell). dot(f, g) is
-/// equivalent to f(g(x)).
+/// Compose two functions: `compose(f, g)(x)` is `f(g(x))`
+///
+/// Constraints:
+/// - `g` must be an Arrow from A
+/// - `f` must be an Arrow from `g(A)`
+///
+/// This is equivalent to the Haskell `(.)` operator.
+/// Also known as `f ∘ g`, or `andThen` in some languages.
 template <typename F, typename G>
 constexpr auto compose(F&& lhs, G&& rhs) noexcept {
     return [lhs = std::forward<F>(lhs), rhs = std::forward<G>(rhs)]<typename A>(

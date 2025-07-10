@@ -10,9 +10,8 @@
 
 namespace fp::prelude {
 
-/**
- * Flip function arguments: flip(f)(a, b) == f(b, a)
- */
+/// Flip the first two arguments of a binary function.
+/// `flip(f)(a, b)` is equivalent to `f(b, a)`
 template <typename F>
 constexpr auto flip(F&& f) {
     return [f = std::forward<F>(f)]<typename A, typename B>(
