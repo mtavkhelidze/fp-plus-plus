@@ -1,5 +1,5 @@
-#ifndef FP_PRELUDE_DOT_H
-#define FP_PRELUDE_DOT_H
+#ifndef FP_PRELUDE_COMPOSE_H
+#define FP_PRELUDE_COMPOSE_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -13,8 +13,7 @@
 namespace fp::prelude {
 
 /// Compose two functions: `compose(f, g)(x)` is `f(g(x))`
-///
-/// Constraints:
+/// Constraints
 /// - `g` must be an Arrow from A
 /// - `f` must be an Arrow from `g(A)`
 ///
@@ -35,4 +34,4 @@ constexpr auto compose(F&& lhs, G&& rhs) noexcept {
     { return lhs(rhs(std::forward<A>(a))); };
 }
 }  // namespace fp::prelude
-#endif  // FP_PRELUDE_DOT_H
+#endif  // FP_PRELUDE_COMPOSE_H

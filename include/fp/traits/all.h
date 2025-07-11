@@ -1,5 +1,5 @@
-#ifndef FP_TRAITS_TRAITS_H
-#define FP_TRAITS_TRAITS_H
+#ifndef FP_TRAITS_ALL_H
+#define FP_TRAITS_ALL_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -12,12 +12,12 @@
 // #include <fp/traits/monad.h>
 // #include <fp/traits/semigroup.h>
 
-namespace fp::traits::all {
+namespace fp::traits {
 // using namespace applicative;
 // using namespace eq;
 using namespace functor;
 // using namespace monad;
 // using namespace object;
 // using namespace semigroup;
-}  // namespace fp::traits::all
-#endif  // FP_TRAITS_TRAITS_H
+}  // namespace fp::traits
+#endif  // FP_TRAITS_ALL_H

@@ -1,5 +1,5 @@
-#ifndef FP_TYPES_ALL_H
-#define FP_TYPES_ALL_H
+#ifndef FP_CORE_TYPES_H
+#define FP_CORE_TYPES_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -11,15 +11,15 @@
 #include <fp/tools/instance.h>
 #include <fp/tools/rebind.h>
 
-namespace fp::types::__ {
+namespace fp::core::types::__ {
 using fp::tools::arrow::Arrow;
 using fp::tools::arrow::fp_arrow_result;
 using fp::tools::inner_type::fp_inner_type;
 using fp::tools::instance::UnaryInstance;
 using fp::tools::rebind::fp_rebind;
-}  // namespace fp::types::__
+}  // namespace fp::core::types::__
 
-namespace fp::types {
+namespace fp::core::types {
 
 template <__::UnaryInstance F>
 struct Functor {
@@ -29,5 +29,5 @@ struct Functor {
     static auto map(const F& fa, Fn&& f) -> __::fp_rebind<F, B>;
 };
 
-}  // namespace fp::types
-#endif  // FP_TYPES_ALL_H
+}  // namespace fp::core::types
+#endif  // FP_CORE_TYPES_H

@@ -4,7 +4,7 @@
 
 #define FP_PLUS_PLUS_INCLUDED_FROM_FP_FP 1  // NOLINT
 
-#include "data/all.h"
+#include "core/all.h"
 #include "operators/all.h"
 #include "prelude/all.h"
 #include "tools/all.h"
@@ -13,7 +13,7 @@
 #undef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 namespace fp {
-using namespace data::all;
+using namespace core;
 using namespace prelude;
 }  // namespace fp
 #endif  // FP_FP_H

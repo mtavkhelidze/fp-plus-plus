@@ -1,5 +1,5 @@
-#ifndef FP_DATA_MONAD_ID_H
-#define FP_DATA_MONAD_ID_H
+#ifndef FP_CORE_ID_H
+#define FP_CORE_ID_H
 
 #pragma once
 
@@ -7,13 +7,13 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/core/types.h>
 #include <fp/mixins/value.h>
 #include <fp/prelude/pure.h>
-#include <fp/types/all.h>
 
 #include <utility>
 
-namespace fp::data::id {
+namespace fp::core {
 
 template <typename A>
 struct Id : fp::mixins::value::WithValue<Id<A>> {
@@ -24,15 +24,15 @@ struct Id : fp::mixins::value::WithValue<Id<A>> {
   public:
     template <typename Fn>
     auto map(Fn&& f) const {
-        return fp::types::Functor<Id>::map(*this, std::forward<Fn>(f));
+        return fp::core::types::Functor<Id>::map(*this, std::forward<Fn>(f));
     }
 };
 
-}  // namespace fp::data::id
+}  // namespace fp::core
 
-namespace fp::types {
+namespace fp::core::types {
 template <typename A>
-struct Functor<fp::data::id::Id<A>> {
+struct Functor<Id<A>> {
     template <
       __::Arrow<A> Fn,
       typename B = __::fp_arrow_result<Fn, A>,
@@ -40,12 +40,10 @@ struct Functor<fp::data::id::Id<A>> {
     [[nodiscard]]
     static constexpr auto map(F&& fa, Fn&& f) noexcept(
       noexcept(f(std::forward<F>(fa).value()))
-    ) -> fp::data::id::Id<B> {
-        return fp::prelude::pure<fp::data::id::Id>(
-          f(std::forward<F>(fa).value())
-        );
+    ) -> Id<B> {
+        return fp::prelude::pure<Id>(f(std::forward<F>(fa).value()));
     }
 };
-}  // namespace fp::types
+}  // namespace fp::core::types
 
-#endif  // FP_DATA_MONAD_ID_H
+#endif  // FP_CORE_ID_H

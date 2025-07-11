@@ -6,7 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/types/all.h>
+#include <fp/core/types.h>
 
 namespace fp::traits::functor {
 template <typename F>
@@ -18,7 +18,7 @@ concept HasMap = requires(F self) {
 
 template <typename F>
 concept HasFunctor = requires {
-    { fp::types::Functor<F>::map };
+    { fp::core::types::Functor<F>::map };
 };
 
 template <typename F>

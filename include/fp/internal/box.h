@@ -6,7 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/data/nothing.h>
+#include <fp/core/nothing.h>
 #include <fp/prelude/defs.h>
 
 #include <cstddef>
@@ -16,7 +16,7 @@
 #include <vector>
 
 namespace fp::internal::box {
-using Nothing = fp::data::nothing::Nothing;
+using fp::core::Nothing;
 
 /**
  * Pure type value holder box.
