@@ -7,27 +7,28 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/tools/arrow.h>
+#include <fp/tools/cast.h>
 #include <fp/tools/inner_type.h>
-#include <fp/tools/instance.h>
 #include <fp/tools/rebind.h>
-
-namespace fp::core::types::__ {
-using fp::tools::arrow::Arrow;
-using fp::tools::arrow::fp_arrow_result;
-using fp::tools::inner_type::fp_inner_type;
-using fp::tools::instance::UnaryInstance;
-using fp::tools::rebind::fp_rebind;
-}  // namespace fp::core::types::__
+#include <fp/tools/value.h>
 
 namespace fp::core::types {
 
-template <__::UnaryInstance F>
+template <typename FA>
+    requires fp::tools::value::HasValue<FA> && fp::tools::value::HasApply<FA>
 struct Functor {
-    template <
-      __::Arrow<__::fp_inner_type<F>> Fn,
-      typename B = __::fp_arrow_result<Fn, __::fp_inner_type<F>>>
-    static auto map(const F& fa, Fn&& f) -> __::fp_rebind<F, B>;
+    static constexpr auto map(FA&& fa) {
+        return [&]<typename F>(F&& f)
+            requires fp::tools::arrow::fp_is_arrow<
+              F, fp::tools::inner_type::fp_inner_type<FA>>
+        {
+            using Inner = typename FA::value_type;
+            using Result = fp::tools::arrow::fp_arrow_result<F, Inner>;
+            using Rebind = fp::tools::rebind::fp_rebind<
+              FA, fp::tools::cast::fp_cast<Result>>;
+            return Rebind::apply(std::invoke(std::forward<F>(f), fa.value()));
+        };
+    }
 };
-
 }  // namespace fp::core::types
 #endif  // FP_CORE_TYPES_H

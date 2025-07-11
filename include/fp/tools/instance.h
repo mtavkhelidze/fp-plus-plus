@@ -44,6 +44,14 @@ namespace __internal {
     template <template <typename, typename> typename TC, typename A, typename B>
     struct __type_class_binary_instance<TC<A, B>> : std::true_type {};
 
+    template <typename>
+    struct __type_class_unary_template;
+
+    template <template <typename> typename TC, typename A>
+    struct __type_class_unary_template<TC<A>> {
+        template <typename X>
+        using type = TC<X>;
+    };
 }  // namespace __internal
 
 template <typename TC>
@@ -81,5 +89,11 @@ template <typename TC, typename A>
 inline constexpr bool fp_has_no_direct_constructor =
   !std::constructible_from<TC, A>;
 
+template <typename T>
+struct fp_unary_template_type {
+    template <typename X>
+    using type = typename __internal::__type_class_unary_template<
+      std::decay_t<T>>::template type<X>;
+};
 }  // namespace fp::tools::instance
 #endif  // FP_TOOLS_INSTANCE_H

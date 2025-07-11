@@ -8,7 +8,7 @@ target_compile_options(rapidcheck INTERFACE -Wno-deprecated-declarations)
 set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
     src/core/id.cpp
-    # src/internal/box.cpp
+    src/internal/box.cpp
     # src/mixins/eq.cpp
     # src/mixins/flat_map.cpp
     # src/mixins/map.cpp

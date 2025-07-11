@@ -7,22 +7,20 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/core/types.h>
+#include <fp/prelude/identity.h>
+#include <fp/tools/inner_type.h>
 
 namespace fp::traits::functor {
 template <typename F>
 concept HasMap = requires(F self) {
-    {
-        self.map([](auto&& x) { return x; })
-    };
+    { self.map(fp::prelude::identity) };
 };
 
 template <typename F>
-concept HasFunctor = requires {
-    { fp::core::types::Functor<F>::map };
-};
+concept HasFunctor = requires { typename fp::core::types::Functor<F>; };
 
 template <typename F>
-concept IsFunctor = HasFunctor<F> || HasMap<F>;
+concept IsFunctor = HasFunctor<F>;  // || HasMap<F>;
 }  // namespace fp::traits::functor
 
 #endif  // FP_TRAITS_FUNCTOR_H

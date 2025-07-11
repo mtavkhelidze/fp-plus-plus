@@ -9,7 +9,6 @@
 
 #include <fp/core/types.h>
 #include <fp/mixins/value.h>
-#include <fp/prelude/pure.h>
 
 #include <utility>
 
@@ -23,27 +22,12 @@ struct Id : fp::mixins::value::WithValue<Id<A>> {
 
   public:
     template <typename Fn>
-    auto map(Fn&& f) const {
-        return fp::core::types::Functor<Id>::map(*this, std::forward<Fn>(f));
+    auto map(Fn&& f) {
+        return fp::core::types::Functor<Id>::map(static_cast<Id&&>(*this))(
+          std::forward<Fn>(f)
+        );
     }
 };
-
 }  // namespace fp::core
-
-namespace fp::core::types {
-template <typename A>
-struct Functor<Id<A>> {
-    template <
-      __::Arrow<A> Fn,
-      typename B = __::fp_arrow_result<Fn, A>,
-      typename F>
-    [[nodiscard]]
-    static constexpr auto map(F&& fa, Fn&& f) noexcept(
-      noexcept(f(std::forward<F>(fa).value()))
-    ) -> Id<B> {
-        return fp::prelude::pure<Id>(f(std::forward<F>(fa).value()));
-    }
-};
-}  // namespace fp::core::types
 
 #endif  // FP_CORE_ID_H
