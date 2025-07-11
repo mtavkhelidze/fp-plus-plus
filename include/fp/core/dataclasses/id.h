@@ -1,5 +1,5 @@
-#ifndef FP_CORE_ID_H
-#define FP_CORE_ID_H
+#ifndef FP_CORE_DATACLASSES_ID_H
+#define FP_CORE_DATACLASSES_ID_H
 
 #pragma once
 
@@ -7,12 +7,10 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/core/types.h>
+#include <fp/core/typeclasses/all.h>
 #include <fp/mixins/value.h>
 
-#include <utility>
-
-namespace fp::core {
+namespace fp::core::dataclasses {
 
 template <typename A>
 struct Id : fp::mixins::value::WithValue<Id<A>> {
@@ -23,15 +21,14 @@ struct Id : fp::mixins::value::WithValue<Id<A>> {
   public:
     template <typename Fn>
     auto map(Fn&& f) {
-        return fp::core::types::Functor<Id>::map(static_cast<Id&&>(*this))(
-          std::forward<Fn>(f)
-        );
+        return fp::core::typeclasses::Functor<
+          Id>::map(static_cast<Id&&>(*this))(std::forward<Fn>(f));
     }
 
     auto equals(const Id& other) const -> bool {
-        return fp::core::types::Eq<Id>::eq(*this, other);
+        return fp::core::typeclasses::Eq<Id>::eq(*this, other);
     }
 };
-}  // namespace fp::core
+}  // namespace fp::core::dataclasses
 
-#endif  // FP_CORE_ID_H
+#endif  // FP_CORE_DATACLASSES_ID_H

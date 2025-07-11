@@ -1,6 +1,6 @@
-#ifndef FP_CORE_NOTHING_H
+#ifndef FP_CORE_DATACLASSES_NOTHING_H
 
-#define FP_CORE_NOTHING_H
+#define FP_CORE_DATACLASSES_NOTHING_H
 
 #pragma once
 
@@ -10,7 +10,7 @@
 
 #include <string>
 
-namespace fp::core {
+namespace fp::core::dataclasses {
 struct __nothing {
     constexpr auto operator==(const __nothing&) const -> bool { return true; }
     constexpr auto operator!=(const __nothing&) const -> bool { return false; }
@@ -24,6 +24,6 @@ struct __nothing {
 };
 using Nothing = __nothing;
 auto constexpr nothing = __nothing{};
-}  // namespace fp::core
+}  // namespace fp::core::dataclasses
 
-#endif  // FP_CORE_NOTHING_H
+#endif  // FP_CORE_DATACLASSES_NOTHING_H
