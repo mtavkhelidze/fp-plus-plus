@@ -31,4 +31,15 @@ struct Functor {
     }
 };
 }  // namespace fp::core::types
+
+namespace fp::core::types {
+template <typename A>
+    requires fp::tools::value::HasValue<A>
+struct Eq {
+    static constexpr auto equals(A&& a1, A&& a2) -> bool {
+        return a1.value() == a2.value();
+    }
+};
+
+}  // namespace fp::core::types
 #endif  // FP_CORE_TYPES_H
