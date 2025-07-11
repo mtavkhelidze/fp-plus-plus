@@ -7,37 +7,45 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/mixins/eq.h>
-#include <fp/mixins/flat_map.h>
-#include <fp/mixins/map.h>
 #include <fp/mixins/value.h>
+#include <fp/prelude/pure.h>
+#include <fp/types/all.h>
 
-namespace fp::data::monad::id {
+#include <utility>
 
-/// The Identity monad.
-///
-/// A minimal wrapper around a single value. Useful as a baseline Monad that
-/// does nothing, but allows testing and use of generic Monad, Functor, and
-/// Applicative abstractions.
-///
-/// `Id<A>`:
-/// - is a Functor (`map`)
-/// - is an Applicative (`pure` via `apply`)
-/// - is a Monad (`flatMap`)
-///
-/// Algebraically, this models the identity function: `Id(a).map(f) == Id(f(a))`
+namespace fp::data::id {
 
 template <typename A>
-struct Id
-    : fp::mixins::value::WithValue<Id<A>>
-    , fp::mixins::map::WithMap<Id<A>>
-    , fp::mixins::flat_map::WithFlatMap<Id<A>>
-    , fp::mixins::eq::WithEq<Id<A>> {
+struct Id : fp::mixins::value::WithValue<Id<A>> {
   private:
     using Base = fp::mixins::value::WithValue<Id>;
     using Base::Base;
+
+  public:
+    template <typename Fn>
+    auto map(Fn&& f) const {
+        return fp::types::Functor<Id>::map(*this, std::forward<Fn>(f));
+    }
 };
 
-}  // namespace fp::data::monad::id
+}  // namespace fp::data::id
+
+namespace fp::types {
+template <typename A>
+struct Functor<fp::data::id::Id<A>> {
+    template <
+      __::Arrow<A> Fn,
+      typename B = __::fp_arrow_result<Fn, A>,
+      typename F>
+    [[nodiscard]]
+    static constexpr auto map(F&& fa, Fn&& f) noexcept(
+      noexcept(f(std::forward<F>(fa).value()))
+    ) -> fp::data::id::Id<B> {
+        return fp::prelude::pure<fp::data::id::Id>(
+          f(std::forward<F>(fa).value())
+        );
+    }
+};
+}  // namespace fp::types
 
 #endif  // FP_DATA_MONAD_ID_H

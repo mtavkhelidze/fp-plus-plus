@@ -9,7 +9,7 @@
 #include <fp/data/id.h>
 
 namespace fp::data::all {
-using namespace monad::id;
+using namespace id;
 }  // namespace fp::data::all
 
 #endif  // FP_DATA_DATA_H

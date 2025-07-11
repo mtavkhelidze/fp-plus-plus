@@ -15,10 +15,23 @@ namespace fp::prelude {
 /// Generic `fmap` for any Functor.
 /// Applies function `f` to the contents of `fa`.
 /// Equivalent to `fa.map(f)` but in free function form.
-template <traits::functor::Functor FA, typename F>
-    requires tools::arrow::Arrow<F, tools::inner_type::fp_inner_type<FA>>
-constexpr static auto fmap(FA&& fa, F&& f) {
-    return std::forward<FA>(fa).map(std::forward<F>(f));
+template <typename F, typename Fn>
+    requires tools::arrow::Arrow<Fn, tools::inner_type::fp_inner_type<F>>
+constexpr static auto fmap(F&& fa, Fn&& f) {
+    if constexpr (requires {
+                      fp::types::Functor<std::remove_cvref_t<F>>::map(fa, f);
+                  }) {
+        return fp::types::Functor<std::remove_cvref_t<F>>::map(
+          std::forward<F>(fa), std::forward<Fn>(f)
+        );
+    } else if constexpr (requires { fa.map(f); }) {
+        return std::forward<F>(fa).map(std::forward<Fn>(f));
+    } else {
+        static_assert(
+          sizeof(F) == 0,
+          "fmap: No suitable Functor instance or .map() found for given type"
+        );
+    }
 }
 
 }  // namespace fp::prelude
