@@ -20,25 +20,23 @@ using fp::core::Nothing;
 
 /**
  * Generic value holder (`Box`) that wraps a value of type `T`, enforcing
- * ownership and immutability.
+ * shared ownership and idiot-resistant immutability.
  *
- * - The boxed value is heap-allocated and owned by the `Box`.
- * - Direct modification or access to the raw value is not allowed—only `get()`
- * is exposed.
- * - Copying is disallowed to preserve ownership semantics; move construction
- * and move assignment are allowed.
- * - If constructed from a pointer, the `Box` manages the pointer itself, but
- * not the lifetime of the memory it may point to—except in the case of smart
- * pointers.
- * - For pointer types, `Box<T>` stores a shared pointer to a copy of the
- * pointer (not deep copy of pointee).
- * - Special handling is provided for C-style arrays, tuples, and null/empty
- * constructs.
+ * - The boxed value is heap-allocated and managed via `shared_ptr<const T>`.
+ * - Once boxed, the value cannot be modified through any API exposed by `Box`.
+ * - This prevents accidental or intentional mutation through normal usage.
+ * - True immutability depends on `T` not exposing mutating behavior via
+ *   `mutable` fields or internal `const_cast` tricks.
+ * - Copying is disallowed to preserve value semantics and uniqueness of intent;
+ *   move construction and move assignment are allowed.
+ * - Special constructors handle pointer types, tuples, C-style arrays, and
+ * null.
+ * - This approach prioritizes immutability-by-design over absolute enforcement.
  */
 template <typename T>
 struct FP_ALIGN_PACKED_16 Box {
   private:
-    std::shared_ptr<T> data;
+    std::shared_ptr<const T> data;
     static constexpr auto __nothing = Nothing();
 
   public:
@@ -91,7 +89,10 @@ struct FP_ALIGN_PACKED_16 Box {
 
     // c-style array, not char*
     template <typename U, std::size_t N>
-        requires(!std::same_as<std::decay_t<U>, char>)
+        requires(
+          !std::same_as<std::decay_t<U>, char>
+          && requires(const U (&a)[N]) { T(std::begin(a), std::end(a)); }
+        )
     explicit Box(const U (&arr)[N]) {
         T v(std::begin(arr), std::end(arr));
         data = std::make_shared<T>(v);
