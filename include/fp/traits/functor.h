@@ -6,7 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/core/typeclasses/functor.h>
+#include <fp/core/types/functor.h>
 #include <fp/prelude/identity.h>
 #include <fp/tools/inner_type.h>
 
@@ -17,7 +17,7 @@ concept HasMap = requires(F self) {
 };
 
 template <typename F>
-concept HasFunctor = requires { typename fp::core::typeclasses::Functor<F>; };
+concept HasFunctor = requires { typename fp::core::types::Functor<F>; };
 
 template <typename F>
 concept IsFunctor = HasFunctor<F>;  // || HasMap<F>;

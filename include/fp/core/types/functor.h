@@ -12,7 +12,7 @@
 #include <fp/tools/rebind.h>
 #include <fp/tools/value.h>
 
-namespace fp::core::typeclasses {
+namespace fp::core::types {
 
 template <typename FA>
     requires fp::tools::value::HasValue<FA> && fp::tools::value::HasApply<FA>
@@ -30,6 +30,6 @@ struct Functor {
         };
     }
 };
-}  // namespace fp::core::typeclasses
+}  // namespace fp::core::types
 
 #endif  // FP_CORE_TYPECLASSES_FUNCTOR_H

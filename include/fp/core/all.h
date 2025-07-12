@@ -6,12 +6,12 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/core/dataclasses/all.h>
-#include <fp/core/typeclasses/all.h>
+#include <fp/core/data/all.h>
+#include <fp/core/types/all.h>
 
 namespace fp::core {
-using namespace typeclasses;
-using namespace dataclasses;
+using namespace types;
+using namespace data;
 }  // namespace fp::core
 
 #endif  // FP_CORE_ALL_H

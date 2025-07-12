@@ -7,10 +7,10 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/core/typeclasses/all.h>
+#include <fp/core/types/all.h>
 #include <fp/mixins/value.h>
 
-namespace fp::core::dataclasses {
+namespace fp::core::data {
 
 template <typename A>
 struct Id : fp::mixins::value::WithValue<Id<A>> {
@@ -21,14 +21,15 @@ struct Id : fp::mixins::value::WithValue<Id<A>> {
   public:
     template <typename Fn>
     auto map(Fn&& f) {
-        return fp::core::typeclasses::Functor<
-          Id>::map(static_cast<Id&&>(*this))(std::forward<Fn>(f));
+        return fp::core::types::Functor<Id>::map(static_cast<Id&&>(*this))(
+          std::forward<Fn>(f)
+        );
     }
 
     auto equals(const Id& other) const -> bool {
-        return fp::core::typeclasses::Eq<Id>::eq(*this, other);
+        return fp::core::types::Eq<Id>::eq(*this, other);
     }
 };
-}  // namespace fp::core::dataclasses
+}  // namespace fp::core::data
 
 #endif  // FP_CORE_DATACLASSES_ID_H

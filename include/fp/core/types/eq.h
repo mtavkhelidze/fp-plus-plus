@@ -8,7 +8,7 @@
 
 #include <fp/tools/value.h>
 
-namespace fp::core::typeclasses {
+namespace fp::core::types {
 template <typename A>
     requires fp::tools::value::HasValue<A>
 struct Eq {
@@ -17,5 +17,5 @@ struct Eq {
     }
 };
 
-}  // namespace fp::core::typeclasses
+}  // namespace fp::core::types
 #endif  // FP_CORE_TYPECLASSES_EQ_H
