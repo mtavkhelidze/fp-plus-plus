@@ -11,27 +11,25 @@
 
 namespace fp::internal::storage {
 /**
- * Internal boxed value storage abstraction.
+ * Internal boxed value storage abstraction (`StorageBox`).
  *
- * This class provides a uniform behavior layer for storing values inside a Box.
- * It is not intended for direct use. Instead, it is designed to be inherited
- * by functional containers like @ref{fp::internal::storage::Object}
- * using CRTP.
+ * This class provides a uniform interface for value storage within `Box`,
+ * intended for use via CRTP in functional containers (e.g.,
+ * `fp::internal::storage::Object`).
  *
  * ## Constraints:
- * - BoxedStorage instances can only be created via the static `store()` method.
- * - Underlying value is always stored as a move-only `Box<A>`.
- * - Copying is allowed: performs a deep copy of the stored value (if any).
- * - Moving transfers ownership of the Box.
+ * - Instances must be created via the static `put()` method.
+ * - Values are stored as move-only `Box<A>` instances.
+ * - Deep copying is allowed (if the value supports it); moving transfers
+ * ownership.
  *
  * ## Access:
- * - Values can only be accessed via `getOrElse(const A&)`, which safely returns
- *   the stored value if present or the fallback alternative.
- * - No reference access or mutation is allowed post-construction.
+ * - Values are only accessible via `getOrElse(const A&)` or `get()`.
+ * - No direct mutation or reference access is allowed after construction.
  *
  * ## Note:
- * Do not construct or manipulate this class directly. It is a low-level utility
- * with intentionally restricted interface, optimized for functional semantics.
+ * This is a low-level utility with a restricted API, optimized for functional
+ * composition. It should not be constructed or used directly.
  */
 template <class Container>
 struct StorageBox {

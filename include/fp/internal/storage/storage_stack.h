@@ -14,23 +14,22 @@
 namespace fp::internal::storage {
 
 /**
- * Internal stack-based, zero-overhead storage abstraction for values of
- * fundamental types (i.e.int, char).
+ * Zero-overhead, stack-based storage for fundamental types (e.g., int, char).
  *
- * This struct is not intended for direct construction — values must be created
- * via the static `store()` method. The struct must be used by `Master`
- * container via @ref{Object} selector template.
+ * Used internally by functional containers via the `Object` selector.
  *
  * ## Constraints:
- * - StorageStack
- *  instances can only be created via the static `store()` method.
- * - Copying and moving are both allowed as the underlying value is trivially
- *   copyable.
- * - - Values are accessed via `getOrElse(alternative)`, though the alternative
- * is never used. (see @ref{fp::internal::storage::StorageBox} for different
- * case)
+ * - Only fundamental types are supported (enforced via concept check).
+ * - Instances must be created via the static `put()` method.
+ * - Copying and moving are both allowed, since the value is trivially copyable.
  *
- * Do not construct or manipulate this unless you know what you're doing.
+ * ## Access:
+ * - Use `getOrElse(...)` to retrieve the value, though the fallback is ignored.
+ * - No direct construction is allowed; intended for internal use only.
+ *
+ * ## Note:
+ * Do not construct or manipulate this class unless you understand the internal
+ * storage and trait system used by the library.
  */
 template <class Container>
     requires std::is_fundamental_v<

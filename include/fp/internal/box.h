@@ -19,21 +19,26 @@ namespace fp::internal::box {
 using fp::core::Nothing;
 
 /**
- * Pure type value holder box.
+ * Generic value holder (`Box`) that wraps a value of type `T`, enforcing
+ * ownership and immutability.
  *
- * stored value is owned by Box: value or its type cannot be modified, direct
- * access to it is gone and is only available via `get`.
- *
- * Box cannot be copied. To create a copy, create a new box.
- *
- * For some convinience, Box can be moved.
- * When passed a pointer, Box only manages the pointer itself, not the memory
- * region it may point to.
+ * - The boxed value is heap-allocated and owned by the `Box`.
+ * - Direct modification or access to the raw value is not allowed—only `get()`
+ * is exposed.
+ * - Copying is disallowed to preserve ownership semantics; move construction
+ * and move assignment are allowed.
+ * - If constructed from a pointer, the `Box` manages the pointer itself, but
+ * not the lifetime of the memory it may point to—except in the case of smart
+ * pointers.
+ * - For pointer types, `Box<T>` stores a shared pointer to a copy of the
+ * pointer (not deep copy of pointee).
+ * - Special handling is provided for C-style arrays, tuples, and null/empty
+ * constructs.
  */
-template <typename T, typename... Ts>
+template <typename T>
 struct FP_ALIGN_PACKED_16 Box {
   private:
-    std::variant<std::shared_ptr<T>> data;
+    std::shared_ptr<T> data;
     static constexpr auto __nothing = Nothing();
 
   public:
@@ -42,7 +47,7 @@ struct FP_ALIGN_PACKED_16 Box {
     // --- Accessors
     [[nodiscard]]
     constexpr auto get() const -> const T& {
-        return *std::get<std::shared_ptr<T>>(data).get();
+        return *data;
     }
     constexpr auto empty() const -> bool {
         if constexpr (std::is_same_v<T, Nothing>) {
