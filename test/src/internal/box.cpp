@@ -12,7 +12,8 @@ using ::testing::Test;
 using namespace fp::internal::box;
 
 TEST(Box_Construction, literal_initialization_list_to_tuple) {
-    // list members must be of the same time, or it will go into std::tuple
+    // If multiple arguments are provided and their types are heterogeneous, Box
+    // will deduce a std::tuple<Ts...>
     const int x = 10;
     const int& y = x;
     auto box3 = Box{1, x, y};
@@ -23,17 +24,18 @@ TEST(Box_Construction, literal_initialization_list_to_tuple) {
     auto v3 = box3.get();
     static_assert(std::is_same<std::tuple<int, int, int>, decltype(v3)>::value);
 
-    auto misha = Box(1);
-    EXPECT_EQ(std::get<0>(v3), 1);
-    EXPECT_EQ(std::get<1>(v3), x);
-    EXPECT_EQ(std::get<2>(v3), y);
+    auto misha = Box(1);  // This line seems unrelated to the assertions below,
+                          // consider removing if not testing misha directly
+    ASSERT_EQ(std::get<0>(v3), 1);
+    ASSERT_EQ(std::get<1>(v3), x);
+    ASSERT_EQ(std::get<2>(v3), y);
 
     auto box1 = Box{x};
     static_assert(std::is_same_v<int, decltype(box1)::kind>);
 
     auto v1 = box1.get();
     static_assert(std::is_same_v<int, decltype(v1)>);
-    EXPECT_EQ(v1, x);
+    ASSERT_EQ(v1, x);
 }
 
 TEST(Box_Construction, literal_fundamental) {
@@ -46,6 +48,7 @@ TEST(Box_Construction, literal_fundamental) {
     static_assert(std::is_same_v<double, decltype(box2)::kind>);
     ASSERT_EQ(box2.get(), 1);
 
+    // Implicit conversion from double to int for testing type resolution
     const int& y = x;
     auto box3 = Box(y);
     static_assert(std::is_same_v<int, decltype(box3)::kind>);
@@ -55,7 +58,7 @@ TEST(Box_Construction, literal_fundamental) {
 TEST(Box_Construction, literal_string) {
     Box box1("hello");
     static_assert(std::is_same_v<std::string, decltype(box1)::kind>);
-    ASSERT_TRUE(strcmp(box1.get().c_str(), "hello") == 0);
+    ASSERT_EQ(box1.get(), "hello");
 
     auto str = "hello";
     auto& str_ref = str;
@@ -64,20 +67,41 @@ TEST(Box_Construction, literal_string) {
     ASSERT_EQ(box2.get(), "hello");
 }
 
-TEST(Box_Construction, nothing_empty) {
-    auto box1 = Box();
-    static_assert(std::is_same_v<Nothing, decltype(box1)::kind>);
+TEST(Box_Construction, nothing_and_nullptr_distinction) {
+    // Test Box() -> Box<Nothing>
+    auto nothing_box_default = Box();
+    static_assert(std::is_same_v<Nothing, decltype(nothing_box_default)::kind>);
+    ASSERT_TRUE(nothing_box_default.empty());
+    ASSERT_EQ(nothing_box_default.get(), Nothing());
 
-    auto x1 = box1.get();
-    ASSERT_TRUE(box1.empty());
-    ASSERT_EQ(x1, Nothing());
+    // Test Box(nullptr) -> Box<Nothing>
+    auto nothing_box_nullptr = Box(nullptr);
+    static_assert(std::is_same_v<Nothing, decltype(nothing_box_nullptr)::kind>);
+    ASSERT_TRUE(nothing_box_nullptr.empty());
+    ASSERT_EQ(nothing_box_nullptr.get(), Nothing());
 
-    auto box2 = Box(nullptr);
-    static_assert(std::is_same_v<Nothing, decltype(box2)::kind>);
+    // Test explicit Box<std::nullptr_t>(nullptr)
+    auto explicit_null_box = Box<std::nullptr_t>(nullptr);
+    static_assert(
+      std::is_same_v<std::nullptr_t, decltype(explicit_null_box)::kind>
+    );
+    ASSERT_FALSE(
+      explicit_null_box.empty()
+    );  // A Box<nullptr_t> is not "empty" in the Nothing sense
+    ASSERT_EQ(explicit_null_box.get(), nullptr);
 
-    auto x2 = box2.get();
-    ASSERT_TRUE(box2.empty());
-    ASSERT_EQ(x2, Nothing());
+    // Test Box with a null shared_ptr
+    std::shared_ptr<int> null_int_ptr = nullptr;
+    auto box_null_shared_ptr = Box<std::shared_ptr<int>>(null_int_ptr);
+    static_assert(
+      std::is_same_v<std::shared_ptr<int>, decltype(box_null_shared_ptr)::kind>
+    );
+    ASSERT_FALSE(
+      box_null_shared_ptr.empty()
+    );  // A Box<shared_ptr<int>> is not "empty" in the Nothing sense
+    ASSERT_EQ(
+      box_null_shared_ptr.get(), nullptr
+    );  // The contained shared_ptr is null
 }
 
 TEST(Box_Construction, literal_c_arrays) {
@@ -87,20 +111,21 @@ TEST(Box_Construction, literal_c_arrays) {
 
     auto v1 = box1.get();
     static_assert(std::is_same_v<std::vector<int>, decltype(v1)>);
-    EXPECT_EQ(v1[0], 1);
-    EXPECT_EQ(v1[1], 2);
-    EXPECT_EQ(v1[2], 3);
+    ASSERT_EQ(v1[0], 1);
+    ASSERT_EQ(v1[1], 2);
+    ASSERT_EQ(v1[2], 3);
 
     std::string arr2[] = {"one", "two", "three"};
     auto box2 = Box(arr2);
-    static_assert(std::is_same_v<std::vector<std::string>, decltype(box2)::kind>
+    static_assert(
+      std::is_same_v<std::vector<std::string>, decltype(box2)::kind>
     );
 
     auto v2 = box2.get();
     static_assert(std::is_same_v<std::vector<std::string>, decltype(v2)>);
-    EXPECT_EQ(v2[0], "one");
-    EXPECT_EQ(v2[1], "two");
-    EXPECT_EQ(v2[2], "three");
+    ASSERT_EQ(v2[0], "one");
+    ASSERT_EQ(v2[1], "two");
+    ASSERT_EQ(v2[2], "three");
 }
 
 TEST(Box_Construction, literal_varargs) {
@@ -110,8 +135,9 @@ TEST(Box_Construction, literal_varargs) {
     auto a = "hello";
 
     auto box1 = Box(x, y, z, a);
-    static_assert(std::is_same_v<
-                  std::tuple<int, int*, int, const char*>, decltype(box1)::kind>
+    static_assert(
+      std::is_same_v<
+        std::tuple<int, int*, int, const char*>, decltype(box1)::kind>
     );
     auto t1 = box1.get();
     ASSERT_EQ(std::get<0>(t1), x);
@@ -120,8 +146,9 @@ TEST(Box_Construction, literal_varargs) {
     ASSERT_EQ(std::get<3>(t1), a);
 
     auto box2 = Box{x, y, z, a};
-    static_assert(std::is_same_v<
-                  std::tuple<int, int*, int, const char*>, decltype(box2)::kind>
+    static_assert(
+      std::is_same_v<
+        std::tuple<int, int*, int, const char*>, decltype(box2)::kind>
     );
     auto t2 = box2.get();
     ASSERT_EQ(std::get<0>(t2), x);
