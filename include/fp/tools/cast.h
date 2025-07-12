@@ -6,7 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/core/dataclasses/nothing.h>
+#include <fp/core/nothing.h>
 
 #include <string>
 #include <tuple>
@@ -91,18 +91,18 @@ namespace __internal {
     // void / nullptr → Nothing
     template <>
     struct __fp_type_cast_spec<void> {
-        using type = fp::core::dataclasses::Nothing;
+        using type = fp::core::Nothing;
     };
 
     template <>
     struct __fp_type_cast_spec<std::nullptr_t> {
-        using type = fp::core::dataclasses::Nothing;
+        using type = fp::core::Nothing;
     };
 
     // std::optional<void> → std::optional<Nothing>
     template <>
     struct __fp_type_cast_spec<std::optional<void>> {
-        using type = std::optional<fp::core::dataclasses::Nothing>;
+        using type = std::optional<fp::core::Nothing>;
     };
 
     // Main dispatch (removes cvref and applies the mapping)

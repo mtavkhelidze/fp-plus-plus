@@ -8,6 +8,5 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/core/dataclasses/id.h>
-#include <fp/core/dataclasses/nothing.h>
 
 #endif  // FP_CORE_DATACLASSES_ALL_H
