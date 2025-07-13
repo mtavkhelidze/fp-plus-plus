@@ -11,6 +11,7 @@ set(TEST_SRC
     # src/core/types/functor.cpp
     src/internal/box.cpp
     src/internal/storage_box.cpp
+    src/internal/storage_stack.cpp
     # src/mixins/eq.cpp
     # src/mixins/flat_map.cpp
     # src/mixins/map.cpp

@@ -41,14 +41,16 @@ struct StorageBox {
     using Box = fp::internal::box::Box<A>;  // Box is now copyable, not movable
     Box box;                                // Internal Box member
 
+  public:
+    StorageBox() noexcept : box() {}
+    ~StorageBox() noexcept = default;
+
   protected:
     explicit StorageBox(const Box& b) noexcept : box(b) {}
     StorageBox(const StorageBox& other) noexcept = default;
     inline StorageBox& operator=(const StorageBox& other) noexcept = default;
 
-    ~StorageBox() noexcept = default;
-    StorageBox() noexcept = delete;
-    StorageBox(StorageBox&& other) noexcept = delete;
+    StorageBox(StorageBox&&) noexcept = delete;
     StorageBox& operator=(StorageBox&&) noexcept = delete;
 
   protected:

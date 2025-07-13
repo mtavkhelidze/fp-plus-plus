@@ -1,5 +1,6 @@
 #include <fp/core/all.h>
 #include <fp/internal/storage/storage_box.h>
+#include <fp/tools/all.h>
 #include <gtest/gtest.h>
 
 #include <string>
@@ -7,6 +8,7 @@
 
 using namespace fp::internal::storage;
 using namespace fp::core;
+using namespace fp::tools;
 
 template <typename A>
 struct TestStruct : StorageBox<TestStruct<A>> {
@@ -14,10 +16,10 @@ struct TestStruct : StorageBox<TestStruct<A>> {
     using Base::Base;
 
     static auto store(auto&& x) -> auto {
-        return StorageBox<TestStruct<A>>::put(std::forward<decltype(x)>(x));
+        return Base::put(std::forward<decltype(x)>(x));
     }
 
-    auto value() const { return this->get(); }
+    auto value() const -> auto& { return this->get(); }
     auto has_value() const { return !this->empty(); }
 };
 
@@ -30,39 +32,47 @@ TEST(StorageBox, const_accessors) {
 
 TEST(StorageBox, copy_assignment_is_shallow) {
     auto a = TestStruct<std::string>::store(std::string("foo"));
+    // Get the address of the string data in 'a'
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdangling-gsl"
-    auto ap = (unsigned long)(a.value().c_str());
+    auto a_ptr = (unsigned long)(a.value().c_str());
 #pragma clang diagnostic pop
 
     TestStruct<std::string> b =
       TestStruct<std::string>::store(std::string("bar"));
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdangling-gsl"
-    auto bp = (unsigned long)(b.value().c_str());
-#pragma clang diagnostic pop
 
     b = a;  // copy assignment
 
     EXPECT_TRUE(b.has_value());
-    EXPECT_EQ(b.value(), a.value());
-    EXPECT_EQ(bp, ap);
+    EXPECT_EQ(b.value(), a.value());  // Content is equal ("foo")
+    EXPECT_EQ((unsigned long)(b.value().c_str()), a_ptr);
 }
 
-TEST(StorageBox, copy_box) {
-    auto a = TestStruct<std::string>::store(std::string("hello"));
+TEST(StorageBox, multiple_copies_share_data) {  // Renamed for clarity
+    auto a = TestStruct<std::string>::store(std::string("copytest"));
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdangling-gsl"
+    auto a_ptr = (unsigned long)(a.value().c_str());
+#pragma clang diagnostic pop
+
     auto b = a;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdangling-gsl"
+    auto b_ptr = (unsigned long)(b.value().c_str());  // Should be same as a_ptr
+#pragma clang diagnostic pop
 
-    EXPECT_TRUE(b.has_value());
+    auto c = b;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdangling-gsl"
+    auto c_ptr = (unsigned long)(c.value().c_str());  // Should be same as a_ptr
+#pragma clang diagnostic pop
+
     EXPECT_EQ(a.value(), b.value());
-    EXPECT_NE(a.value().c_str(), b.value().c_str());
-}
+    EXPECT_EQ(b.value(), c.value());
 
-TEST(StorageBox, default_constructor_deleted) {
-    // Can't compile, but test with static_assert
-    static_assert(
-      !std::is_default_constructible_v<StorageBox<TestStruct<int>>>
-    );
+    EXPECT_EQ(a_ptr, b_ptr);
+    EXPECT_EQ(b_ptr, c_ptr);
+    EXPECT_EQ(a_ptr, c_ptr);
 }
 
 TEST(StorageBox, doesnt_allow_move) {
@@ -81,25 +91,6 @@ TEST(StorageBox, empty_box_behavior) {
     ASSERT_TRUE(box.has_value());
 }
 
-TEST(StorageBox, multiple_copies_are_distinct) {
-    auto a = TestStruct<std::string>::store(std::string("copytest"));
-    auto b = a;
-    auto c = b;
-
-    EXPECT_EQ(a.value(), b.value());
-    EXPECT_EQ(b.value(), c.value());
-
-    EXPECT_NE(a.value().c_str(), b.value().c_str());
-    EXPECT_NE(b.value().c_str(), c.value().c_str());
-    EXPECT_NE(a.value().c_str(), c.value().c_str());
-}
-
-TEST(StorageBox, move_operations_deleted_runtime_check) {
-    // Cannot test at runtime but static_assert confirms no move
-    static_assert(!std::is_move_constructible_v<StorageBox<TestStruct<int>>>);
-    static_assert(!std::is_move_assignable_v<StorageBox<TestStruct<int>>>);
-}
-
 TEST(StorageBox, not_empty_after_put) {
     auto box = TestStruct<std::string>::store(std::string("hello"));
     EXPECT_TRUE(box.has_value());
@@ -111,24 +102,23 @@ TEST(StorageBox, put_and_get_complex_type) {
 }
 
 TEST(StorageBox, self_copy_assignment_explicit) {
-    auto box = TestStruct<int>::store(123);
+    auto box = TestStruct<std::string>::store(std::string("abc"));
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wself-assign-overloaded"
     box = box;
 #pragma clang diagnostic pop
     EXPECT_TRUE(box.has_value());
-    EXPECT_EQ(box.value(), 123);
+    EXPECT_EQ(box.value(), "abc");
 }
 
 TEST(StorageBox, self_copy_assignment_is_safe) {
-    auto a = TestStruct<int>::store(42);
-// we do this check already in operator=
+    auto a = TestStruct<std::string>::store(std::string("safe"));
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wself-assign-overloaded"
     a = a;
 #pragma clang diagnostic pop
     EXPECT_TRUE(a.has_value());
-    EXPECT_EQ(a.value(), 42);
+    EXPECT_EQ(a.value(), "safe");
 }
 
 TEST(StorageBox, works_with_various_types) {
@@ -147,4 +137,13 @@ TEST(StorageBox, works_with_various_types) {
     auto point_box = TestStruct<Point>::store(Point{1, 2});
     EXPECT_EQ(point_box.value().x, 1);
     EXPECT_EQ(point_box.value().y, 2);
+}
+
+TEST(StorageBox, default_constructs_empty_with_correct_type) {
+    TestStruct<const std::string&> box;
+    EXPECT_FALSE(box.has_value());
+    static_assert(
+      std::same_as<
+        decltype(std::declval<decltype(box)>().value()), const std::string&>
+    );
 }
