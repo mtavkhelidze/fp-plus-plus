@@ -16,10 +16,10 @@ concept HasMap = requires(F self) {
     { self.map(fp::prelude::identity) };
 };
 
-template <typename F>
+template <template <typename> typename F>
 concept HasFunctor = requires { typename fp::core::types::Functor<F>; };
 
-template <typename F>
+template <template <typename> typename F>
 concept IsFunctor = HasFunctor<F>;  // || HasMap<F>;
 }  // namespace fp::traits::functor
 

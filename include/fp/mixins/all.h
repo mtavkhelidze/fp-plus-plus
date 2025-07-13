@@ -9,9 +9,9 @@
 #include <fp/mixins/eq.h>
 #include <fp/mixins/value.h>
 
-namespace fp::mixins::all {
+namespace fp::mixins {
 using namespace eq;
 using namespace value;
-}  // namespace fp::mixins::all
+}  // namespace fp::mixins
 
 #endif  // FP_MIXINS_ALL_H

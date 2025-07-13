@@ -14,21 +14,29 @@
 
 namespace fp::core::types {
 
-template <typename FA>
-    requires fp::tools::value::HasValue<FA> && fp::tools::value::HasApply<FA>
+template <template <typename> typename FA>
 struct Functor {
-    static constexpr auto map(FA&& fa) {
-        return [&]<typename F>(F&& f)
-            requires fp::tools::arrow::fp_is_arrow<
-              F, fp::tools::inner_type::fp_inner_type<FA>>
+    template <typename A>
+    static constexpr auto map = []<typename F>(F&& f) {
+        return [f = std::forward<F>(f)](auto&& fa) mutable -> decltype(auto)
+                   requires fp::tools::value::HasValue<
+                              std::remove_reference_t<decltype(fa)>>
+                         && fp::tools::value::HasApply<
+                              std::remove_reference_t<decltype(fa)>>
+                         && fp::tools::arrow::fp_is_arrow<
+                              F, typename std::remove_reference_t<
+                                   decltype(fa)>::value_type>
         {
-            using Inner = typename FA::value_type;
+            using FAType = std::remove_reference_t<decltype(fa)>;
+            using Inner = typename FAType::value_type;
             using Result = fp::tools::arrow::fp_arrow_result<F, Inner>;
-            using Rebind = fp::tools::rebind::fp_rebind<
-              FA, fp::tools::cast::fp_cast<Result>>;
-            return Rebind::apply(std::invoke(std::forward<F>(f), fa.value()));
+            return FA<Result>::apply(
+              std::invoke(
+                std::forward<F>(f), std::forward<decltype(fa)>(fa).value()
+              )
+            );
         };
-    }
+    };
 };
 }  // namespace fp::core::types
 

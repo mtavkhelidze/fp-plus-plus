@@ -54,9 +54,7 @@ struct WithValue : private Backend<DataClass>::type {
     constexpr auto has_value() const noexcept -> bool {  //
         return !this->empty();
     }
-    constexpr auto value() const noexcept -> const value_type& {  //
-        return this->get();
-    }
+    constexpr value_type value() const noexcept { return this->get(); }
 
 #ifdef FP_PLUS_PLUS_TESTING
   public:

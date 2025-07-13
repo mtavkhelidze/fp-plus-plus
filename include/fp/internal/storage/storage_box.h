@@ -19,17 +19,14 @@ namespace fp::internal::storage {
  *
  * ## Constraints:
  * - Instances must be created via the static `put()` method.
- * - Values are stored as move-only `Box<A>` instances.
- * - Deep copying is allowed (if the value supports it); moving transfers
- * ownership.
- *
- * ## Access:
- * - Values are only accessible via `getOrElse(const A&)` or `get()`.
- * - No direct mutation or reference access is allowed after construction.
- *
- * ## Note:
- * This is a low-level utility with a restricted API, optimized for functional
- * composition. It should not be constructed or used directly.
+ * - Values are stored as immutable `Box<A>` instances.
+ * - The underlying `Box` manages data immutability via `shared_ptr<const A>`.
+ * - **Copying is supported:** creates a fresh `Box` from the stored value.
+ * - **Moving is disallowed** to enforce stability and copy semantics.
+ * - Access to the stored value is only via `const` methods returning
+ * references.
+ * - No mutation or non-const references are permitted.
+ * - Low-level utility optimized for functional composition and immutability.
  */
 template <class Container>
 struct StorageBox {
@@ -43,16 +40,25 @@ struct StorageBox {
     Box box;
 
   protected:
+    explicit StorageBox(const StorageBox& other) noexcept
+        : box(Box{other.get()}) {}
+
+    inline StorageBox& operator=(const StorageBox& other) noexcept {
+        if (this != &other) {
+            box = Box{other.get()};
+        }
+        return *this;
+    }
+
+  private:
     explicit StorageBox(Box&& box) noexcept : box(std::move(box)) {}
 
     StorageBox() noexcept = delete;
-    StorageBox(const StorageBox& other) noexcept = delete;
     StorageBox(StorageBox&& other) noexcept = delete;
-    StorageBox& operator=(const StorageBox&) noexcept = delete;
     StorageBox& operator=(StorageBox&&) noexcept = delete;
 
   protected:
-    constexpr auto get() const noexcept -> const A& { return box.get(); }
+    inline constexpr auto get() const noexcept -> const A& { return box.get(); }
 
     inline constexpr auto empty() const noexcept -> bool { return box.empty(); }
 

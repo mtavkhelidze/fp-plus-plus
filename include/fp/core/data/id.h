@@ -21,8 +21,8 @@ struct Id : fp::mixins::value::WithValue<Id<A>> {
   public:
     template <typename Fn>
     auto map(Fn&& f) {
-        return fp::core::types::Functor<Id>::map(static_cast<Id&&>(*this))(
-          std::forward<Fn>(f)
+        return fp::core::types::Functor<Id>::map<A>(std::forward<Fn>(f))(
+          static_cast<Id&&>(*this)
         );
     }
 

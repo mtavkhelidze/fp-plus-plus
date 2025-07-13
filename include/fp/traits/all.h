@@ -9,6 +9,7 @@
 // #include <fp/traits/applicative.h>
 // #include <fp/traits/eq.h>
 #include <fp/traits/functor.h>
+#include <fp/traits/value.h>
 // #include <fp/traits/monad.h>
 // #include <fp/traits/semigroup.h>
 
@@ -19,5 +20,6 @@ using namespace functor;
 // using namespace monad;
 // using namespace object;
 // using namespace semigroup;
+using namespace value;
 }  // namespace fp::traits
 #endif  // FP_TRAITS_ALL_H
