@@ -8,14 +8,14 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/core/types/all.h>
-#include <fp/mixins/value.h>
+#include <fp/internal/mixins/value.h>
 
 namespace fp::core::data {
 
 template <typename A>
-struct Id : fp::mixins::value::WithValue<Id<A>> {
+struct Id : fp ::internal::mixins::value::WithValue<Id<A>> {
   private:
-    using Base = fp::mixins::value::WithValue<Id>;
+    using Base = fp::internal::mixins::value::WithValue<Id>;
     using Base::Base;
 
   public:
