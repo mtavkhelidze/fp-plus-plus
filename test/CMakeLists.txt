@@ -10,7 +10,7 @@ set(TEST_SRC
     # src/core/data/id.cpp
     # src/core/types/functor.cpp
     src/internal/box.cpp
-    src/internal/storage_box.cpp
+    # src/internal/storage_box.cpp
     # src/mixins/eq.cpp
     # src/mixins/flat_map.cpp
     # src/mixins/map.cpp

@@ -27,8 +27,10 @@ using fp::core::Nothing;
  * - This prevents accidental or intentional mutation through normal usage.
  * - True immutability depends on `T` not exposing mutating behavior via
  *   `mutable` fields or internal `const_cast` tricks.
- * - Copying is disallowed to preserve value semantics and uniqueness of intent;
- *   move construction and move assignment are allowed.
+ * - Move construction and move assignment are disallowed to preserve
+ * immutability and clarity of ownership.
+ * - Copying is allowed and cheap, as it only increments the reference count of
+ * the underlying `shared_ptr`.
  * - Special constructors handle pointer types, tuples, C-style arrays, and
  * null.
  * - This approach prioritizes immutability-by-design over absolute enforcement.
@@ -108,10 +110,10 @@ struct FP_ALIGN_PACKED_16 Box {
     }
     // --- Other constructors
     ~Box() = default;
-    auto operator=(Box&&) noexcept -> Box& = default;
-    auto operator=(const Box&) -> Box& = delete;
-    Box(Box&&) noexcept = default;
-    Box(const Box&) = delete;
+    auto operator=(Box&&) noexcept -> Box& = delete;
+    auto operator=(const Box&) -> Box& = default;
+    Box(Box&&) noexcept = delete;
+    Box(const Box&) = default;
 };  // namespace fp::internal::box
 
 // Anything
