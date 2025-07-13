@@ -186,17 +186,16 @@ TEST(Box_Construction, move_only_rvalue_and_smart_ptr) {
 }
 
 TEST(Box_Construction, nothing_and_nullptr_distinction) {
-    // Test Box() -> Box<Nothing>
-    auto nothing_box_default = Box();
-    static_assert(std::is_same_v<Nothing, decltype(nothing_box_default)::kind>);
-    ASSERT_TRUE(nothing_box_default.empty());
-    ASSERT_EQ(nothing_box_default.get(), Nothing());
+    // Box<int>() — no value, but type is int
+    Box<int> empty_box;
+    static_assert(std::is_same_v<int, decltype(empty_box)::kind>);
+    ASSERT_TRUE(empty_box.empty());
 
-    // Test Box(nullptr) -> Box<Nothing>
-    auto nothing_box_nullptr = Box(nullptr);
-    static_assert(std::is_same_v<Nothing, decltype(nothing_box_nullptr)::kind>);
-    ASSERT_TRUE(nothing_box_nullptr.empty());
-    ASSERT_EQ(nothing_box_nullptr.get(), Nothing());
+    // Box<int*>(nullptr) — has value, value is null pointer
+    Box<int*> null_ptr_box(nullptr);
+    static_assert(std::is_same_v<int*, decltype(null_ptr_box)::kind>);
+    ASSERT_FALSE(null_ptr_box.empty());
+    ASSERT_EQ(null_ptr_box.get(), nullptr);
 
     // Test explicit Box<std::nullptr_t>(nullptr)
     auto explicit_null_box = Box<std::nullptr_t>(nullptr);

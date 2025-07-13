@@ -6,17 +6,14 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/core/nothing.h>
 #include <fp/prelude/defs.h>
 
 #include <cstddef>
 #include <memory>
 #include <optional>
-#include <variant>
 #include <vector>
 
 namespace fp::internal::box {
-using fp::core::Nothing;
 
 /**
  * Generic value holder (`Box`) that wraps a value of type `T`, enforcing
@@ -28,18 +25,25 @@ using fp::core::Nothing;
  * - True immutability depends on `T` not exposing mutating behavior via
  *   `mutable` fields or internal `const_cast` tricks.
  * - Move construction and move assignment are disallowed to preserve
- * immutability and clarity of ownership.
+ *   immutability and clarity of ownership.
  * - Copying is allowed and cheap, as it only increments the reference count of
- * the underlying `shared_ptr`.
+ *   the underlying `shared_ptr`.
  * - Special constructors handle pointer types, tuples, C-style arrays, and
- * null.
+ *   null.
  * - This approach prioritizes immutability-by-design over absolute enforcement.
+ *
+ * Note on raw pointers:
+ * - When boxing raw pointers (e.g., `T*`), `Box` stores a copy of the pointer
+ *   value but does NOT take ownership of the pointee.
+ * - The caller remains responsible for managing the lifetime and deleting the
+ *   allocated memory if applicable.
+ * - To enable automatic lifetime management, prefer boxing `std::shared_ptr`
+ *   or `std::unique_ptr` instead of raw pointers.
  */
 template <typename T>
 struct FP_ALIGN_PACKED_16 Box {
   private:
     std::shared_ptr<const T> data;
-    static constexpr auto __nothing = Nothing();
 
   public:
     using kind = T;
@@ -49,13 +53,7 @@ struct FP_ALIGN_PACKED_16 Box {
     constexpr auto get() const -> const T& {
         return *data;
     }
-    constexpr auto empty() const -> bool {
-        if constexpr (std::is_same_v<T, Nothing>) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    constexpr auto empty() const -> bool { return !data; }
     // --- constructors
 
     // Value (not pointer)
@@ -74,11 +72,6 @@ struct FP_ALIGN_PACKED_16 Box {
         requires(std::is_pointer_v<T>)
         : data(std::make_shared<T>(std::move(ptr))) {}
 
-    // Pointer: null
-    explicit Box(std::nullopt_t)
-        requires(std::is_null_pointer_v<T>)
-        : data(std::make_shared<Nothing>(__nothing)) {}
-
     // Move-only
     explicit Box(T&& t)
         requires(
@@ -87,7 +80,7 @@ struct FP_ALIGN_PACKED_16 Box {
         : data{std::make_shared<T>(std::move(t))} {}
 
     // nothing (default comes here)
-    explicit Box() : data(std::make_shared<Nothing>(__nothing)) {}
+    explicit Box() : data(nullptr) {}
 
     // c-style array, not char*
     template <typename U, std::size_t N>
@@ -139,10 +132,5 @@ Box(const U (&)[N]) -> Box<std::vector<std::decay_t<U>>>;
 template <typename U, typename... Us>
     requires(sizeof...(Us) > 0)
 Box(U&&, Us&&...) -> Box<std::tuple<std::decay_t<U>, std::decay_t<Us>...>>;
-
-// Empty box
-Box() -> Box<Nothing>;
-Box(std::nullptr_t) -> Box<Nothing>;
-
 }  // namespace fp::internal::box
 #endif  // FP_KERNEL_BOX_H

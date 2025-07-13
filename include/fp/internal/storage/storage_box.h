@@ -21,8 +21,10 @@ namespace fp::internal::storage {
  * - Instances must be created via the static `put()` method.
  * - Values are stored as immutable `Box<A>` instances.
  * - The underlying `Box` manages data immutability via `shared_ptr<const A>`.
- * - **Copying is supported:** creates a fresh `Box` from the stored value.
- * - **Moving is disallowed** to enforce stability and copy semantics.
+ * - **Copying is supported:** creates a new `StorageBox` instance that
+ * shallow-copies its internal `Box` member, thus sharing the underlying
+ * immutable value.
+ * - **Moving is disallowed** to enforce stability and strict copy semantics.
  * - Access to the stored value is only via `const` methods returning
  * references.
  * - No mutation or non-const references are permitted.
@@ -36,23 +38,15 @@ struct StorageBox {
     template <typename TC, typename T>
     using rebind = fp::tools::rebind::fp_rebind<TC, T>;
 
-    using Box = fp::internal::box::Box<A>;
-    Box box;
+    using Box = fp::internal::box::Box<A>;  // Box is now copyable, not movable
+    Box box;                                // Internal Box member
 
   protected:
-    explicit StorageBox(const StorageBox& other) noexcept
-        : box(Box{other.get()}) {}
+    explicit StorageBox(const Box& b) noexcept : box(b) {}
+    StorageBox(const StorageBox& other) noexcept = default;
+    inline StorageBox& operator=(const StorageBox& other) noexcept = default;
 
-    inline StorageBox& operator=(const StorageBox& other) noexcept {
-        if (this != &other) {
-            box = Box{other.get()};
-        }
-        return *this;
-    }
-
-  private:
-    explicit StorageBox(Box&& box) noexcept : box(std::move(box)) {}
-
+    ~StorageBox() noexcept = default;
     StorageBox() noexcept = delete;
     StorageBox(StorageBox&& other) noexcept = delete;
     StorageBox& operator=(StorageBox&&) noexcept = delete;
@@ -64,10 +58,16 @@ struct StorageBox {
 
     template <typename T>
     static auto put(T&& value) {
-        auto box = Box{std::forward<T>(value)};
-        using U = typename decltype(box)::kind;
+        // Create the Box. Box's constructor will handle the value.
+        // The Box itself is not movable, so we can't std::move it here
+        // if the Derived constructor takes an rvalue Box.
+        // Instead, we pass it by const reference, triggering a copy of the Box.
+        auto new_box = Box{std::forward<T>(value)};
+        using U = typename decltype(new_box)::kind;
         using Derived = rebind<Container, U>;
-        return Derived{std::move(box)};
+        return Derived{
+          new_box
+        };  // Pass by const ref, which calls StorageBox(const Box& b)
     }
 
 #ifdef FP_PLUS_PLUS_TESTING
@@ -76,5 +76,6 @@ struct StorageBox {
 #endif
 };
 
-#endif  // FP_INTERNAL_STORAGE_BOX_H
 }  // namespace fp::internal::storage
+
+#endif  // FP_INTERNAL_STORAGE_BOX_H
