@@ -23,7 +23,7 @@ struct __nothing {
     }
 };
 using Nothing = __nothing;
-auto constexpr nothing = __nothing{};
+Nothing constexpr nothing = __nothing{};
 }  // namespace fp::core
 
 #endif  // FP_CORE_NOTHING_H

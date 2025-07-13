@@ -10,12 +10,12 @@ set(TEST_SRC
     # src/core/data/id.cpp
     # src/core/types/functor.cpp
     src/internal/box.cpp
-    src/internal/storage_box.cpp
-    src/internal/storage_stack.cpp
+    src/internal/storage/storage_box.cpp
+    src/internal/storage/storage_stack.cpp
+    src/internal/mixins/value.cpp
     # src/mixins/eq.cpp
     # src/mixins/flat_map.cpp
     # src/mixins/map.cpp
-    # src/mixins/value.cpp
     # src/prelude/compose.cpp
     # src/prelude/dollar.cpp
     # src/prelude/flip.cpp

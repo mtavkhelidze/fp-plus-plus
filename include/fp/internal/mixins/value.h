@@ -12,7 +12,7 @@
 
 #include <type_traits>
 
-namespace fp::internal::mixins::value {
+namespace fp::internal::mixins {
 
 template <typename T>
 using fp_cast = fp::tools::cast::fp_cast<T>;
@@ -45,8 +45,6 @@ struct WithValue : private Backend<DataClass>::type {
     using Base::Base;
 
   public:
-    using value_type = fp_cast<fp::tools::inner_type::fp_inner_type<DataClass>>;
-
     template <typename T>
     static constexpr auto apply(T&& value) -> DataClass {
         return DataClass{Base::put(std::forward<T>(value))};
@@ -54,7 +52,7 @@ struct WithValue : private Backend<DataClass>::type {
     constexpr auto has_value() const noexcept -> bool {  //
         return !this->empty();
     }
-    constexpr value_type value() const noexcept { return this->get(); }
+    constexpr auto value() const noexcept -> auto& { return this->get(); }
 
 #ifdef FP_PLUS_PLUS_TESTING
   public:
@@ -66,6 +64,6 @@ struct WithValue : private Backend<DataClass>::type {
     }
 #endif  // FP_PLUS_PLUS_TESTING
 };
-};  // namespace fp::internal::mixins::value
+};  // namespace fp::internal::mixins
 
 #endif  // FP_INTERNAL_MIXINS_VALUE_H

@@ -13,9 +13,9 @@
 namespace fp::core::data {
 
 template <typename A>
-struct Id : fp ::internal::mixins::value::WithValue<Id<A>> {
+struct Id : fp ::internal::mixins::WithValue<Id<A>> {
   private:
-    using Base = fp::internal::mixins::value::WithValue<Id>;
+    using Base = fp::internal::mixins::WithValue<Id>;
     using Base::Base;
 
   public:
