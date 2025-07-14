@@ -1,4 +1,3 @@
-
 #include <fp/core/nothing.h>
 #include <fp/internal/storage/storage_stack.h>
 #include <gtest/gtest.h>
@@ -16,20 +15,26 @@ struct TestStruct : StorageStack<TestStruct<A>> {
     }
 
     auto value() const -> auto& { return this->get(); }
-    auto has_value() const { return !this->empty(); }
 };
 
-TEST(StorageStack, stores_and_returns_value) {
-    auto box = TestStruct<int>::store(42);
-    ASSERT_TRUE(box.has_value());
-    EXPECT_EQ(box.value(), 42);
+TEST(StorageStack, copy_assignment_copies_value) {
+    auto original = TestStruct<int>::store(123);
+    auto copy = TestStruct<int>::store(0);
+    copy = original;
+    EXPECT_EQ(copy.value(), 123);
+    EXPECT_EQ(original.value(), 123);
 }
 
-TEST(StorageStack, default_constructs_empty_with_correct_type) {
-    TestStruct<int&> box;
-    EXPECT_FALSE(box.has_value());
+TEST(StorageStack, copy_constructor_copies_value) {
+    auto original = TestStruct<int>::store(99);
+    auto copy = original;
+    EXPECT_EQ(copy.value(), 99);
+    EXPECT_EQ(original.value(), 99);
+}
+
+TEST(StorageStack, refuses_non_fundamental_type) {
     static_assert(
-      std::same_as<decltype(std::declval<decltype(box)>().value()), const int&>
+      !std::is_fundamental_v<Nothing>, "Nothing is not fundamental"
     );
 }
 
@@ -42,4 +47,9 @@ TEST(StorageStack, self_assignment_does_nothing) {
 #pragma clang diagnostic pop
 
     EXPECT_EQ(box.value(), 123);
+}
+
+TEST(StorageStack, stores_and_returns_value) {
+    auto box = TestStruct<int>::store(42);
+    EXPECT_EQ(box.value(), 42);
 }

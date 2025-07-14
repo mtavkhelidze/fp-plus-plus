@@ -14,23 +14,10 @@
 namespace fp::internal::storage {
 
 /**
- * Zero-overhead, stack-based storage for fundamental types (e.g., int, char).
+ * Copy-only, always-initialized storage for fundamental types only.
  *
- * Used internally by functional containers via the `Object` selector.
- *
- * ## Constraints:
- * - Only fundamental types are supported (enforced via concept check).
- * - Instances must be created via the static `put()` method.
- * - **Copying is allowed; moving is disallowed** to enforce strict copy
- * semantics.
- *
- * ## Access:
- * - Use `getOrElse(...)` to retrieve the value, though the fallback is ignored.
- * - No direct construction is allowed; intended for internal use only.
- *
- * ## Note:
- * Do not construct or manipulate this class unless you understand the internal
- * storage and trait system used by the library.
+ * No move operations allowed.
+ * Construction requires a value; no empty state is possible.
  */
 template <class Container>
     requires std::is_fundamental_v<
@@ -38,51 +25,30 @@ template <class Container>
 struct StorageStack {
   private:
     using A = fp::tools::inner_type::fp_inner_type<Container>;
-    template <typename TC, typename T>
-    using rebind = tools::rebind::fp_rebind<TC, T>;
-
     A value;
-    bool has_value = false;  // Tracks if a value has been stored
-
-  public:
-    // Default constructor: creates an empty StorageStack
-    StorageStack() noexcept : has_value(false) {}
-
-    // Destructor (defaulted)
-    ~StorageStack() noexcept = default;
 
   protected:
-    // Constructor for 'put()': takes rvalue, moves into 'value' (for semantic
-    // correctness)
-    explicit StorageStack(A &&v) noexcept
-        : value(std::move(v)), has_value(true) {}
+    StorageStack(const StorageStack &other) noexcept : value(other.value) {}
+    inline StorageStack &operator=(const StorageStack &other) noexcept {
+        value = other.value;
+        return *this;
+    }
+    ~StorageStack() noexcept = default;
 
-    // Copy constructor (defaulted): performs bitwise copy of A
-    StorageStack(const StorageStack &) noexcept = default;
+  private:
+    explicit StorageStack(A &&v) noexcept : value(std::forward<A>(v)) {}
 
-    // Copy assignment operator (defaulted): performs bitwise copy of A
-    inline StorageStack &operator=(const StorageStack &) noexcept = default;
-
-    // Explicitly delete move constructor and move assignment operator
+    StorageStack() noexcept = delete;
     StorageStack(StorageStack &&) noexcept = delete;
     StorageStack &operator=(StorageStack &&) noexcept = delete;
 
   protected:
-    // Accessor for the value
-    constexpr auto get() const noexcept -> const A & {
-        // Assert or handle if value is not present, though higher layers should
-        // check empty() first
-        return value;
-    }
-
-    // Checks if the StorageStack holds a value
-    constexpr auto empty() const noexcept -> bool { return !this->has_value; }
+    constexpr auto get() const noexcept -> const A & { return value; }
 
     template <typename T>
     static auto put(T &&value) {
         using U = std::decay_t<T>;
-        using Derived = rebind<Container, U>;
-        // Calls StorageStack(A&& v) constructor, which moves 'value'
+        using Derived = fp::tools::rebind::fp_rebind<Container, U>;
         return Derived{std::forward<T>(value)};
     }
 
