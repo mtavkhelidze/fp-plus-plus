@@ -10,8 +10,12 @@
 
 namespace fp::prelude {
 
-/// Flip the first two arguments of a binary function.
-/// `flip(f)(a, b)` is equivalent to `f(b, a)`
+/**
+ * Flips the first two arguments of a binary function.
+ *
+ * Given a function `f(a, b)`, `flip(f)(a, b)` returns `f(b, a)`.
+ * Useful for reordering arguments in pipelines or point-free style.
+ */
 template <typename F>
 constexpr auto flip(F&& f) {
     return [f = std::forward<F>(f)]<typename A, typename B>(

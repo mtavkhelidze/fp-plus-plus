@@ -18,7 +18,7 @@ set(TEST_SRC
     # src/mixins/map.cpp
     # src/prelude/compose.cpp
     # src/prelude/dollar.cpp
-    # src/prelude/flip.cpp
+    src/prelude/flip.cpp
     # src/prelude/fmap.cpp
     src/prelude/lift.cpp
     src/prelude/pipe.cpp
