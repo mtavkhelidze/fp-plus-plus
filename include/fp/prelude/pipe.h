@@ -7,8 +7,11 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 namespace fp::prelude {
-/// Pipe operator (similar to `|>` in Elm, used for chaining).
-/// `pipe(a, f)` is equivalent to `f(a)`.
+/**
+ * Pipe operator (similar to `|>` in Elm, used for chaining).
+ *
+ * `pipe(a, f)` is equivalent to `f(a)`; useful for function chaining.
+ */
 template <typename A>
 constexpr auto pipe(A a, auto&& f) -> decltype(auto) {
     return f(a);

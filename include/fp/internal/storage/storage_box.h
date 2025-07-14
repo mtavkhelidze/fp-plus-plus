@@ -1,5 +1,5 @@
-#ifndef FP_INTERNAL_BOX_STORAGE_H
-#define FP_INTERNAL_BOX_STORAGE_H
+#ifndef FP_INTERNAL_STORAGE_BOX_H
+#define FP_INTERNAL_STORAGE_BOX_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -8,32 +8,24 @@
 
 #include <fp/internal/box.h>
 #include <fp/tools/all.h>
+#include <fp/tools/inner_type.h>
+#include <fp/tools/rebind.h>
+
+#include <type_traits>
 
 namespace fp::internal::storage {
 /**
- * Internal boxed value storage abstraction.
+ * StorageBox: Immutable boxed value storag for non-trivial typese.
  *
- * This class provides a uniform behavior layer for storing values inside a Box.
- * It is not intended for direct use. Instead, it is designed to be inherited
- * by functional containers like @ref{fp::internal::storage::Object}
- * using CRTP.
- *
- * ## Constraints:
- * - BoxedStorage instances can only be created via the static `store()` method.
- * - Underlying value is always stored as a move-only `Box<A>`.
- * - Copying is allowed: performs a deep copy of the stored value (if any).
- * - Moving transfers ownership of the Box.
- *
- * ## Access:
- * - Values can only be accessed via `getOrElse(const A&)`, which safely returns
- *   the stored value if present or the fallback alternative.
- * - No reference access or mutation is allowed post-construction.
- *
- * ## Note:
- * Do not construct or manipulate this class directly. It is a low-level utility
- * with intentionally restricted interface, optimized for functional semantics.
+ * - No move operations allowed.
+ * - Copy operations allowed.
+ * - Constructed only via static put().
+ * - Always contains a valid boxed value; no empty state.
  */
 template <class Container>
+    requires(
+      !std::is_fundamental_v<fp::tools::inner_type::fp_inner_type<Container>>
+    )
 struct StorageBox {
   private:
     using A = fp::tools::inner_type::fp_inner_type<Container>;
@@ -41,29 +33,29 @@ struct StorageBox {
     template <typename TC, typename T>
     using rebind = fp::tools::rebind::fp_rebind<TC, T>;
 
-    using Box = fp::internal::box::Box<A>;
-    Box box;
+    using Box = fp::internal::box::Box<A>;  // Box is now copyable, not movable
+    Box box;                                // Internal Box member
 
   protected:
-    explicit StorageBox(Box&& box) noexcept : box(std::move(box)) {}
+    explicit StorageBox(const Box& b) noexcept : box(b) {}
+    StorageBox(const StorageBox& other) noexcept = default;
+    inline StorageBox& operator=(const StorageBox& other) noexcept = default;
+    ~StorageBox() noexcept = default;
 
+  private:
     StorageBox() noexcept = delete;
-    StorageBox(const StorageBox& other) noexcept = delete;
-    StorageBox(StorageBox&& other) noexcept = delete;
-    StorageBox& operator=(const StorageBox&) noexcept = delete;
+    StorageBox(StorageBox&&) noexcept = delete;
     StorageBox& operator=(StorageBox&&) noexcept = delete;
 
   protected:
-    constexpr auto get() const noexcept -> const A& { return box.get(); }
-
-    inline constexpr auto empty() const noexcept -> bool { return box.empty(); }
+    inline constexpr auto get() const noexcept -> const A& { return box.get(); }
 
     template <typename T>
     static auto put(T&& value) {
         auto box = Box{std::forward<T>(value)};
         using U = typename decltype(box)::kind;
         using Derived = rebind<Container, U>;
-        return Derived{std::move(box)};
+        return Derived{box};
     }
 
 #ifdef FP_PLUS_PLUS_TESTING
@@ -72,5 +64,6 @@ struct StorageBox {
 #endif
 };
 
-#endif  // FP_INTERNAL_BOX_STORAGE_H
 }  // namespace fp::internal::storage
+
+#endif  // FP_INTERNAL_STORAGE_BOX_H

@@ -1,5 +1,5 @@
-#ifndef FP_INTERNAL_STORAGE_H
-#define FP_INTERNAL_STORAGE_H
+#ifndef FP_INTERNAL_MIXINS_VALUE_H
+#define FP_INTERNAL_MIXINS_VALUE_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -8,14 +8,10 @@
 
 #include <fp/internal/storage/storage_box.h>
 #include <fp/internal/storage/storage_stack.h>
-#include <fp/tools/cast.h>
 
 #include <type_traits>
 
-namespace fp::mixins::value {
-
-template <typename T>
-using fp_cast = fp::tools::cast::fp_cast<T>;
+namespace fp::internal::mixins {
 
 template <
   typename TC,
@@ -45,18 +41,11 @@ struct WithValue : private Backend<DataClass>::type {
     using Base::Base;
 
   public:
-    using value_type = fp_cast<fp::tools::inner_type::fp_inner_type<DataClass>>;
-
     template <typename T>
     static constexpr auto apply(T&& value) -> DataClass {
         return DataClass{Base::put(std::forward<T>(value))};
     }
-    constexpr auto has_value() const noexcept -> bool {  //
-        return !this->empty();
-    }
-    constexpr auto value() const noexcept -> const value_type& {  //
-        return this->get();
-    }
+    constexpr auto value() const noexcept -> auto& { return this->get(); }
 
 #ifdef FP_PLUS_PLUS_TESTING
   public:
@@ -68,6 +57,6 @@ struct WithValue : private Backend<DataClass>::type {
     }
 #endif  // FP_PLUS_PLUS_TESTING
 };
-};  // namespace fp::mixins::value
+};  // namespace fp::internal::mixins
 
-#endif  // FP_INTERNAL_STORAGE_H
+#endif  // FP_INTERNAL_MIXINS_VALUE_H

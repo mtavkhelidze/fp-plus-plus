@@ -6,19 +6,21 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/tools/map.h>
-
-#include <type_traits>
+#include <fp/core/types/functor.h>
+#include <fp/prelude/identity.h>
+#include <fp/tools/inner_type.h>
 
 namespace fp::traits::functor {
-/**
- * Functor is a type class that abstracts over type constructors that can be
- * `map'-ed over. Examples of such type constructors are `List`, `Option`, and
- * `Future`.
- */
-template <typename T>
-concept Functor = fp::tools::map::HasMap<std::remove_cvref_t<T>>;
+template <typename F>
+concept HasMap = requires(F self) {
+    { self.map(fp::prelude::identity) };
+};
 
+template <template <typename> typename F>
+concept HasFunctor = requires { typename fp::core::types::Functor<F>; };
+
+template <template <typename> typename F>
+concept IsFunctor = HasFunctor<F>;  // || HasMap<F>;
 }  // namespace fp::traits::functor
 
 #endif  // FP_TRAITS_FUNCTOR_H

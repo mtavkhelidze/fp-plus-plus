@@ -10,8 +10,6 @@
 #include <fp/tools/inner_type.h>
 #include <fp/tools/rebind.h>
 
-#include <utility>
-
 namespace fp::tools::value {
 
 template <typename T>

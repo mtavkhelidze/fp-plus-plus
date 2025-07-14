@@ -1,5 +1,5 @@
-#ifndef FP_INTERNAL_STACK_STORAGE_H
-#define FP_INTERNAL_STACK_STORAGE_H
+#ifndef FP_INTERNAL_STORAGE_STACK_H
+#define FP_INTERNAL_STORAGE_STACK_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -14,23 +14,10 @@
 namespace fp::internal::storage {
 
 /**
- * Internal stack-based, zero-overhead storage abstraction for values of
- * fundamental types (i.e.int, char).
+ * Copy-only, always-initialized storage for fundamental types only.
  *
- * This struct is not intended for direct construction — values must be created
- * via the static `store()` method. The struct must be used by `Master`
- * container via @ref{Object} selector template.
- *
- * ## Constraints:
- * - StorageStack
- *  instances can only be created via the static `store()` method.
- * - Copying and moving are both allowed as the underlying value is trivially
- *   copyable.
- * - - Values are accessed via `getOrElse(alternative)`, though the alternative
- * is never used. (see @ref{fp::internal::storage::StorageBox} for different
- * case)
- *
- * Do not construct or manipulate this unless you know what you're doing.
+ * No move operations allowed.
+ * Construction requires a value; no empty state is possible.
  */
 template <class Container>
     requires std::is_fundamental_v<
@@ -38,30 +25,31 @@ template <class Container>
 struct StorageStack {
   private:
     using A = fp::tools::inner_type::fp_inner_type<Container>;
-    template <typename TC, typename T>
-    using rebind = tools::rebind::fp_rebind<TC, T>;
-
     A value;
 
   protected:
-    explicit StorageStack(A &&v) : value(v) {}
+    StorageStack(const StorageStack &other) noexcept : value(other.value) {}
+    inline StorageStack &operator=(const StorageStack &other) noexcept {
+        value = other.value;
+        return *this;
+    }
+    ~StorageStack() noexcept = default;
 
-    StorageStack() = delete;
-    StorageStack(const StorageStack &) noexcept = delete;
+  private:
+    explicit StorageStack(A &&v) noexcept : value(std::forward<A>(v)) {}
+
+    StorageStack() noexcept = delete;
     StorageStack(StorageStack &&) noexcept = delete;
-    StorageStack &operator=(const StorageStack &) noexcept = delete;
     StorageStack &operator=(StorageStack &&) noexcept = delete;
 
   protected:
     constexpr auto get() const noexcept -> const A & { return value; }
 
-    constexpr auto empty() const noexcept -> bool { return false; }
-
     template <typename T>
     static auto put(T &&value) {
         using U = std::decay_t<T>;
-        using Derived = rebind<Container, U>;
-        return Derived{std::move(value)};
+        using Derived = fp::tools::rebind::fp_rebind<Container, U>;
+        return Derived{std::forward<T>(value)};
     }
 
 #ifdef FP_PLUS_PLUS_TESTING
@@ -70,4 +58,5 @@ struct StorageStack {
 #endif
 };
 }  // namespace fp::internal::storage
-#endif  // FP_INTERNAL_STACK_STORAGE_H
+
+#endif  // FP_INTERNAL_STORAGE_STACK_H

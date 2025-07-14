@@ -11,3 +11,4 @@ scratch.cpp
 cmake-build-debug/
 *~
 todo.org
+*.log

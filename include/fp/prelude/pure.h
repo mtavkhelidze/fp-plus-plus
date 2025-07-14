@@ -14,17 +14,17 @@ namespace fp::prelude {
 template <typename T>
 using cast = tools::cast::fp_cast<T>;
 
-/// `pure`: Inject a value into the context of a type constructor `DataClass`.
-///
-/// Given a value `x` of type `T`, `pure<DataClass>(x)` wraps it into
-/// `DataClass<T>` using `DataClass<T>::apply`.
-///
-/// This is the fundamental operation for Applicative functors and Monads.
-///
-/// Example:
-/// ```cpp
-/// auto idValue = pure<Id>(42); // Id<int> containing 42
-/// ```
+/**
+ * Injects a value into the context of a type constructor `DataClass`.
+ *
+ * `pure<DataClass>(x)` wraps the value `x` into a `DataClass<T>` by calling
+ * `DataClass<T>::apply(x)`, where `T` is the normalized form of the value type.
+ *
+ * This function is fundamental for Applicative and Monad abstractions.
+ *
+ * Example:
+ *   auto idValue = pure<Id>(42); // Id<int> containing 42
+ */
 template <template <typename> typename DataClass, typename T>
     requires tools::value::HasApply<DataClass<cast<T>>>
 auto pure(T&& value) -> DataClass<cast<T>> {
