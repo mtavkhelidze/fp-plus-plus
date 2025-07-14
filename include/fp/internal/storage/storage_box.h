@@ -7,7 +7,6 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/internal/box.h>
-#include <fp/tools/all.h>
 #include <fp/tools/inner_type.h>
 #include <fp/tools/rebind.h>
 

@@ -9,7 +9,6 @@
 #include <fp/tools/arrow.h>
 #include <fp/tools/cast.h>
 #include <fp/tools/instance.h>
-#include <fp/tools/instance_with.h>
 #include <fp/tools/make_pair.h>
 #include <fp/tools/rebind.h>
 
@@ -17,7 +16,6 @@ namespace fp::tools::all {
 using namespace arrow;
 using namespace cast;
 using namespace inner_type;
-using namespace instance_with;
 using namespace instance;
 using namespace make_pair;
 using namespace rebind;

@@ -8,8 +8,6 @@
 
 #include <fp/tools/instance.h>
 
-#include <concepts>
-
 namespace fp::tools::inner_type {
 
 namespace __internal {
@@ -23,16 +21,18 @@ namespace __internal {
 }  // namespace __internal
 
 /// If given TC<A>, access A
-template <instance::UnaryInstance TC>
+template <typename TC>
+    requires instance::fp_is_unary_instance<TC>
 using fp_inner_type =
   typename __internal::__extract_inner_type<std::decay_t<TC>>::type;
 
-template <instance::UnaryInstance TC, typename A>
+template <typename TC, typename A>
+    requires instance::fp_is_unary_instance<TC>
 inline constexpr bool fp_is_inner_type = std::same_as<fp_inner_type<TC>, A>;
 
-/// Given two instances, check if their inner types are the same (i.e.
-/// std::optional<int> and std::vectro<double> will result in false)
-template <instance::UnaryInstance TA, instance::UnaryInstance TB>
+template <typename TA, typename TB>
+    requires(instance::fp_is_unary_instance<TA>
+             && instance::fp_is_unary_instance<TB>)
 inline constexpr bool fp_is_same_inner_type = std::
   same_as<fp_inner_type<std::decay_t<TA>>, fp_inner_type<std::decay_t<TB>>>;
 

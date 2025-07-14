@@ -10,6 +10,13 @@
 
 namespace fp::traits::arrow {
 template <typename F, typename A>
-concept Arrow = fp::tools::arrow::fp_is_arrow<F, A>;
-}
+concept Arrow = tools::arrow::fp_is_arrow<F, A>;
+
+template <typename F, typename A, typename B>
+concept BinaryArrow = tools::arrow::fp_is_binary_arrow<F, A, B>;
+
+template <typename F, typename A>
+concept KleisliArrow = tools::arrow::fp_is_kleisli_arrow<F, A>;
+
+}  // namespace fp::traits::arrow
 #endif  // FP_TRAITS_ARROW_H

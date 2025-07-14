@@ -63,17 +63,8 @@ inline constexpr bool fp_is_unary_instance =
   __internal::__type_class_unary_instance<std::decay_t<TC>>::value;
 
 template <typename TC>
-concept AnyInstance = fp_is_instance<TC>;
-
-template <typename TC>
-concept UnaryInstance = fp_is_unary_instance<TC>;
-
-template <typename TC>
 inline constexpr bool fp_is_binary_instance =
   __internal::__type_class_binary_instance<std::decay_t<TC>>::value;
-
-template <typename TC>
-concept BinaryInstance = fp_is_binary_instance<TC>;
 
 template <typename TC>
 inline constexpr std::size_t fp_instance_arity =
