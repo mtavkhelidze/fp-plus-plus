@@ -6,7 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/tools/arrow.h>
+#include <fp/internal/tools/arrow.h>
 #include <fp/traits/arrow.h>
 
 #include <utility>
@@ -27,10 +27,7 @@ constexpr auto compose(F&& lhs, G&& rhs) noexcept {
            ) constexpr noexcept -> decltype(auto)
                requires(
                  traits::arrow::Arrow<G, A>
-                 && traits::arrow::Arrow<
-                   F,                                   //
-                   tools::arrow::fp_arrow_result<G, A>  //
-                   >                                    //
+                 && traits::arrow::Arrow<F, tools::arrow::fp_arrow_result<G, A>>
                )
     { return lhs(rhs(std::forward<A>(a))); };
 }

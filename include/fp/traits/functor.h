@@ -7,8 +7,8 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/core/types/functor.h>
+#include <fp/internal/tools/inner_type.h>
 #include <fp/prelude/identity.h>
-#include <fp/tools/inner_type.h>
 
 namespace fp::traits::functor {
 template <typename F>

@@ -7,7 +7,6 @@
 #include "core/all.h"
 #include "operators/all.h"
 #include "prelude/all.h"
-#include "tools/all.h"
 #include "traits/all.h"
 
 #undef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP

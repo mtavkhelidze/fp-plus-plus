@@ -1,6 +1,5 @@
 #include <fp/core/all.h>
 #include <fp/internal/storage/storage_box.h>
-#include <fp/tools/all.h>
 #include <gtest/gtest.h>
 
 #include <string>
@@ -8,7 +7,6 @@
 
 using namespace fp::internal::storage;
 using namespace fp::core;
-using namespace fp::tools;
 
 template <typename A>
 struct TestStruct : StorageBox<TestStruct<A>> {

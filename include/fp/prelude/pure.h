@@ -6,7 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/tools/cast.h>
+#include <fp/internal/tools/cast.h>
 #include <fp/traits/value.h>
 
 namespace fp::prelude {

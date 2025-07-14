@@ -6,10 +6,10 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/tools/arrow.h>
-#include <fp/tools/cast.h>
-#include <fp/tools/inner_type.h>
-#include <fp/tools/rebind.h>
+#include <fp/internal/tools/arrow.h>
+#include <fp/internal/tools/cast.h>
+#include <fp/internal/tools/inner_type.h>
+#include <fp/internal/tools/rebind.h>
 #include <fp/traits/value.h>
 
 namespace fp::core::types {

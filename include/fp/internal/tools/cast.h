@@ -18,7 +18,24 @@ namespace __internal {
     template <typename T>
     struct __fp_type_cast;
 }
-/// Obtain a type that T becomes after put into @ref{fp::internal::box::Box<T>}
+
+/**
+ * `fp_cast` is a compile-time type normalization utility.
+ *
+ * Given a type `T`, `fp_cast<T>` produces a canonical form of `T` by:
+ * - Removing const, volatile, and reference qualifiers.
+ * - Converting C-style strings (`char*`, `const char*`, char arrays) to
+ * `std::string`.
+ * - Converting C-style arrays (excluding char arrays) to `std::vector` of
+ * element type.
+ * - Converting `void` and `nullptr_t` to `fp::core::Nothing`.
+ * - Converting `std::array<T, N>` to `std::vector<T>`.
+ * - Converting `std::tuple` with elements to a tuple of `remove_cvref_t`
+ * elements.
+ *
+ * This helps achieve uniform and safer handling of various input types
+ * within the functional programming abstractions of the library.
+ */
 template <typename T>
 using fp_cast = typename __internal::__fp_type_cast<T>::type;
 

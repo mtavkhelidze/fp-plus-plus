@@ -6,11 +6,9 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/internal/box.h>
-#include <fp/tools/inner_type.h>
-#include <fp/tools/rebind.h>
-
-#include <type_traits>
+#include <fp/internal/storage/box.h>
+#include <fp/internal/tools/inner_type.h>
+#include <fp/internal/tools/rebind.h>
 
 namespace fp::internal::storage {
 /**
@@ -32,8 +30,8 @@ struct StorageBox {
     template <typename TC, typename T>
     using rebind = fp::tools::rebind::fp_rebind<TC, T>;
 
-    using Box = fp::internal::box::Box<A>;  // Box is now copyable, not movable
-    Box box;                                // Internal Box member
+    using Box = fp::internal::storage::box::Box<A>;
+    Box box;
 
   protected:
     explicit StorageBox(const Box& b) noexcept : box(b) {}

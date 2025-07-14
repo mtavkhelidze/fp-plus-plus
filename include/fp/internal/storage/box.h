@@ -13,7 +13,7 @@
 #include <optional>
 #include <vector>
 
-namespace fp::internal::box {
+namespace fp::internal::storage::box {
 
 /**
  * Generic value holder (`Box`) that wraps a value of type `T`, enforcing
@@ -132,5 +132,5 @@ Box(const U (&)[N]) -> Box<std::vector<std::decay_t<U>>>;
 template <typename U, typename... Us>
     requires(sizeof...(Us) > 0)
 Box(U&&, Us&&...) -> Box<std::tuple<std::decay_t<U>, std::decay_t<Us>...>>;
-}  // namespace fp::internal::box
+}  // namespace fp::internal::storage::box
 #endif  // FP_KERNEL_BOX_H

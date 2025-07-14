@@ -1,4 +1,4 @@
-#include <fp/internal/box.h>
+#include <fp/internal/storage/box.h>
 #include <gtest/gtest.h>
 
 #include <cstddef>
@@ -9,7 +9,7 @@
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers, hicpp-no-array-decay)
 using ::testing::Test;
-using namespace fp::internal::box;
+using namespace fp::internal::storage::box;
 
 TEST(Box_Construction, callable_lambda_expression) {
     // lambda expression
