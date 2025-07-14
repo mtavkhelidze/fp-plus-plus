@@ -8,14 +8,10 @@
 
 #include <fp/internal/storage/storage_box.h>
 #include <fp/internal/storage/storage_stack.h>
-#include <fp/tools/cast.h>
 
 #include <type_traits>
 
 namespace fp::internal::mixins {
-
-template <typename T>
-using fp_cast = fp::tools::cast::fp_cast<T>;
 
 template <
   typename TC,
@@ -48,9 +44,6 @@ struct WithValue : private Backend<DataClass>::type {
     template <typename T>
     static constexpr auto apply(T&& value) -> DataClass {
         return DataClass{Base::put(std::forward<T>(value))};
-    }
-    constexpr auto has_value() const noexcept -> bool {  //
-        return !this->empty();
     }
     constexpr auto value() const noexcept -> auto& { return this->get(); }
 

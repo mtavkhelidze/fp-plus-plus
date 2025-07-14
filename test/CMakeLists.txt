@@ -12,7 +12,7 @@ set(TEST_SRC
     src/internal/box.cpp
     src/internal/storage/storage_box.cpp
     src/internal/storage/storage_stack.cpp
-    # src/internal/mixins/value.cpp
+    src/internal/mixins/value.cpp
     # src/mixins/eq.cpp
     # src/mixins/flat_map.cpp
     # src/mixins/map.cpp
