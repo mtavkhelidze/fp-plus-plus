@@ -9,21 +9,21 @@ set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
     # src/core/data/id.cpp
     # src/core/types/functor.cpp
-    src/internal/box.cpp
-    src/internal/storage/storage_box.cpp
-    src/internal/storage/storage_stack.cpp
-    src/internal/mixins/value.cpp
     # src/mixins/eq.cpp
     # src/mixins/flat_map.cpp
     # src/mixins/map.cpp
+    # src/prelude/fmap.cpp
+    src/internal/mixins/value.cpp
+    src/internal/storage/box.cpp
+    src/internal/storage/storage_box.cpp
+    src/internal/storage/storage_stack.cpp
+    src/internal/tools/cast.cpp
     src/prelude/compose.cpp
     src/prelude/dollar.cpp
     src/prelude/flip.cpp
-    # src/prelude/fmap.cpp
     src/prelude/lift.cpp
     src/prelude/pipe.cpp
     src/prelude/pure.cpp
-    # src/tools/cast.cpp
 )
 
 # find_untracked_files("${TEST_SRC}" src "*.cpp")

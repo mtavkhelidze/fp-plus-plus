@@ -7,125 +7,12 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/core/nothing.h>
+#include <fp/internal/storage/box.h>
 
-#include <string>
-#include <tuple>
 #include <type_traits>
-#include <vector>
 
 namespace fp::tools::cast {
-namespace __internal {
-    template <typename T>
-    struct __fp_type_cast;
-}
-
-/**
- * `fp_cast` is a compile-time type normalization utility.
- *
- * Given a type `T`, `fp_cast<T>` produces a canonical form of `T` by:
- * - Removing const, volatile, and reference qualifiers.
- * - Converting C-style strings (`char*`, `const char*`, char arrays) to
- * `std::string`.
- * - Converting C-style arrays (excluding char arrays) to `std::vector` of
- * element type.
- * - Converting `void` and `nullptr_t` to `fp::core::Nothing`.
- * - Converting `std::array<T, N>` to `std::vector<T>`.
- * - Converting `std::tuple` with elements to a tuple of `remove_cvref_t`
- * elements.
- *
- * This helps achieve uniform and safer handling of various input types
- * within the functional programming abstractions of the library.
- */
 template <typename T>
-using fp_cast = typename __internal::__fp_type_cast<T>::type;
-
-namespace __internal {
-    template <typename T>
-    struct __fp_type_cast_spec {
-        using type = std::decay_t<T>;
-    };
-
-    // const char* / char* → std::string
-    template <>
-    struct __fp_type_cast_spec<const char*> {
-        using type = std::string;
-    };
-
-    template <>
-    struct __fp_type_cast_spec<char*> {
-        using type = std::string;
-    };
-
-    // char arrays → std::string
-    template <std::size_t N>
-    struct __fp_type_cast_spec<const char (&)[N]> {
-        using type = std::string;
-    };
-
-    template <std::size_t N>
-    struct __fp_type_cast_spec<char (&)[N]> {
-        using type = std::string;
-    };
-
-    // U[N] (non-char) → std::vector<U>
-    template <typename U, std::size_t N>
-        requires(!std::same_as<std::decay_t<U>, char>)
-    struct __fp_type_cast_spec<U[N]> {
-        using type = std::vector<std::decay_t<U>>;
-    };
-
-    template <typename U, std::size_t N>
-        requires(!std::same_as<std::decay_t<U>, char>)
-    struct __fp_type_cast_spec<const U (&)[N]> {
-        using type = std::vector<std::decay_t<U>>;
-    };
-
-    // U[0] (non-char) → std::vector<U>
-    template <typename U, std::size_t N>
-        requires(sizeof(N) == 0 && !std::same_as<std::decay_t<U>, char>)
-    struct __fp_type_cast_spec<U[N]> {
-        using type = std::vector<std::decay_t<U>>;
-    };
-
-    template <typename U, std::size_t N>
-        requires(sizeof(N) == 0 && !std::same_as<std::decay_t<U>, char>)
-    struct __fp_type_cast_spec<const U (&)[N]> {
-        using type = std::vector<std::decay_t<U>>;
-    };
-
-    // std::array<T, N> → std::vector<T>
-    template <typename T, std::size_t N>
-    struct __fp_type_cast_spec<std::array<T, N>> {
-        using type = std::vector<std::decay_t<T>>;
-    };
-
-    // std::tuple<U...> → tuple<U...>
-    template <typename... Ts>
-    struct __fp_type_cast_spec<std::tuple<Ts...>> {
-        using type = std::tuple<std::remove_cvref_t<Ts>...>;
-    };
-
-    // void / nullptr → Nothing
-    template <>
-    struct __fp_type_cast_spec<void> {
-        using type = fp::core::Nothing;
-    };
-
-    template <>
-    struct __fp_type_cast_spec<std::nullptr_t> {
-        using type = fp::core::Nothing;
-    };
-
-    // std::optional<void> → std::optional<Nothing>
-    template <>
-    struct __fp_type_cast_spec<std::optional<void>> {
-        using type = std::optional<fp::core::Nothing>;
-    };
-
-    // Main dispatch (removes cvref and applies the mapping)
-    template <typename T>
-    struct __fp_type_cast : __fp_type_cast_spec<std::remove_cvref_t<T>> {};
-
-}  // namespace __internal
-}  // namespace fp::tools::cast
+using fp_cast = typename fp::internal::storage::box::Box<std::decay_t<T>>::kind;
+}
 #endif  // FP_TOOLS_TC_H

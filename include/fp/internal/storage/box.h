@@ -10,7 +10,6 @@
 
 #include <cstddef>
 #include <memory>
-#include <optional>
 #include <vector>
 
 namespace fp::internal::storage::box {

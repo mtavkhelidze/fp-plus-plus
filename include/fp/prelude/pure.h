@@ -11,9 +11,6 @@
 
 namespace fp::prelude {
 
-template <typename T>
-using cast = tools::cast::fp_cast<T>;
-
 /**
  * Injects a value into the context of a type constructor `DataClass`.
  *
@@ -26,9 +23,9 @@ using cast = tools::cast::fp_cast<T>;
  *   auto idValue = pure<Id>(42); // Id<int> containing 42
  */
 template <template <typename> typename DataClass, typename T>
-    requires traits::value::HasApply<DataClass<cast<T>>>
-auto pure(T&& value) -> DataClass<cast<T>> {
-    using NT = cast<T>;
+    requires traits::value::HasApply<DataClass<tools::cast::fp_cast<T>>>
+auto pure(T&& value) -> DataClass<tools::cast::fp_cast<T>> {
+    using NT = tools::cast::fp_cast<T>;
     return DataClass<NT>::apply(std::forward<T>(value));
 }
 }  // namespace fp::prelude
