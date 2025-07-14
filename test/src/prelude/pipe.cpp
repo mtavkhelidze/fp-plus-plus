@@ -1,11 +1,11 @@
-#include <fp/operators/composition.h>
+#include <fp/operators/all.h>
 #include <fp/prelude/identity.h>
 #include <gtest/gtest.h>
 
 #include "shorts.h"
 
 using namespace fp::test;
-using namespace fp::operators::composition;
+using namespace fp::operators;
 using namespace fp::prelude;
 
 // like | in Haskell
