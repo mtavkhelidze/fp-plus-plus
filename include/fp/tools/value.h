@@ -23,7 +23,7 @@ using rebind = fp::tools::rebind::fp_rebind<TC, A>;
 
 template <typename TC>
 concept HasValue = requires(TC t) {
-    { t.value() } -> std::same_as<cast<inner_type<TC>>>;
+    { t.value() } -> std::same_as<const cast<inner_type<TC>>&>;
 };
 
 template <typename TC>

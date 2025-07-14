@@ -22,7 +22,7 @@ set(TEST_SRC
     # src/prelude/fmap.cpp
     # src/prelude/lift.cpp
     # src/prelude/pipe.cpp
-    # src/prelude/pure.cpp
+    src/prelude/pure.cpp
     # src/tools/cast.cpp
 )
 
