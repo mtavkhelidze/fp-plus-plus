@@ -9,7 +9,7 @@ using namespace fp::operators::composition;
 using namespace fp::prelude;
 
 // like | in Haskell
-TEST(Prelude_Pipe_Operator, is_reverse_of_compose) {
+TEST(Prelude_Pipe, is_reverse_of_compose) {
     auto initial = 2;
     auto f = increment * triple;
     auto g = triple | increment;
@@ -19,7 +19,7 @@ TEST(Prelude_Pipe_Operator, is_reverse_of_compose) {
     EXPECT_EQ(actual_f, actual_g);
 }
 
-TEST(Prelude_Pipe_Operator, works_with_multiple_chained_functions) {
+TEST(Prelude_Pipe, works_with_multiple_chained_functions) {
     auto initial = 2;
     auto increment = [](int x) { return x + 1; };
     auto triple = [](int x) { return x * 3; };

@@ -1,10 +1,10 @@
-#include <fp/mixins/value.h>
+#include <fp/internal/mixins/value.h>
 #include <fp/prelude/lift.h>
 #include <fp/prelude/pure.h>
 #include <gtest/gtest.h>
 
 using namespace fp::prelude;
-using namespace fp::mixins::value;
+using namespace fp::internal::mixins;
 
 template <typename A>
 struct TestStruct : WithValue<TestStruct<A>> {
