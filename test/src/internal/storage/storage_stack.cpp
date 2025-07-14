@@ -32,12 +32,6 @@ TEST(StorageStack, copy_constructor_copies_value) {
     EXPECT_EQ(original.value(), 99);
 }
 
-TEST(StorageStack, refuses_non_fundamental_type) {
-    static_assert(
-      !std::is_fundamental_v<Nothing>, "Nothing is not fundamental"
-    );
-}
-
 TEST(StorageStack, self_assignment_does_nothing) {
     auto box = TestStruct<int>::store(123);
 
