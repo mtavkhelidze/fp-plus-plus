@@ -14,27 +14,18 @@
 
 namespace fp::core::types {
 
-template <template <typename> typename FA>
+template <template <typename> typename F>
 struct Functor {
     template <typename A>
-    static constexpr auto map = []<typename F>(F&& f) {
-        return [f = std::forward<F>(f)](auto&& fa) mutable -> decltype(auto)
-                   requires fp::traits::value::HasValue<
-                              std::remove_reference_t<decltype(fa)>>
-                         && fp::traits::value::HasApply<
-                              std::remove_reference_t<decltype(fa)>>
-                         && fp::tools::arrow::fp_is_arrow<
-                              F, typename std::remove_reference_t<
-                                   decltype(fa)>::value_type>
+    static constexpr auto map = []<typename Fn>(const Fn& f) {
+        return
+          [f = std::forward<Fn>(f)](const F<A>& fa) mutable -> decltype(auto)
+              requires fp::traits::value::HasValue<F<A>>
+                    && fp::traits::value::HasApply<F<A>>
+                    && fp::tools::arrow::fp_is_arrow<Fn, A>
         {
-            using FAType = std::remove_reference_t<decltype(fa)>;
-            using Inner = typename FAType::value_type;
-            using Result = fp::tools::arrow::fp_arrow_result<F, Inner>;
-            return FA<Result>::apply(
-              std::invoke(
-                std::forward<F>(f), std::forward<decltype(fa)>(fa).value()
-              )
-            );
+            using Result = fp::tools::arrow::fp_arrow_result<Fn, A>;
+            return F<Result>::apply(f, fa.value());
         };
     };
 };
