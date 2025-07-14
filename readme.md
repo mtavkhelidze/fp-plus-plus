@@ -5,7 +5,7 @@ C++20 Functional Programming Header-Only Library
 
 - [Usage](#usage)
 - [Installation](#installation)
-- [Documentation](#docu)
+- [Documentation](#documentation)
 - [Building and Testing](#building-and-testing)
 - [License](#license)
 
