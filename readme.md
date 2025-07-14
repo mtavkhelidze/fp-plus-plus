@@ -30,9 +30,9 @@ g++ -Iinclude -o fp_test main.cpp -std=c++20 -g -O0
 ```
 ## Documentation
 
-Documentation is _incomplete_.
+Documentation is _incomplete_. Most of the readme files are totally bogus.
 
-* There is some documentation in [HOWTO](./howto.md).
+## Building and Testing
 
 ```bash
 cmake -B build -S .
