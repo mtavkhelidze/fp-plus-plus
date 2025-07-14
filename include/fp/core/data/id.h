@@ -27,7 +27,7 @@ struct Id : fp ::internal::mixins::WithValue<Id<A>> {
     }
 
     auto equals(const Id& other) const -> bool {
-        return fp::core::types::Eq<Id>::eq(*this, other);
+        return fp::core::types::Eq<Id>::equals(*this, other);
     }
 };
 }  // namespace fp::core::data

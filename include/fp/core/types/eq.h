@@ -9,10 +9,15 @@
 #include <fp/traits/value.h>
 
 namespace fp::core::types {
-template <typename A>
-    requires fp::traits::value::HasValue<A>
+/**
+ * Eq typeclass for unary type constructors like Id, Option, etc.
+ * Provides Eq<F>::equals<A> -> bool
+ */
+template <template <typename> typename F>
 struct Eq {
-    static constexpr auto equals(A&& a1, A&& a2) -> bool {
+    template <typename A>
+        requires fp::traits::value::HasValue<F<A>>
+    static constexpr auto equals(const F<A>& a1, const F<A>& a2) -> bool {
         return a1.value() == a2.value();
     }
 };

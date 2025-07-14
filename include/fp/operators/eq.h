@@ -6,21 +6,23 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/core/types/eq.h>
 #include <fp/traits/eq.h>
 
 namespace fp::operators::eq {
 
-template <traits::eq::Eq A>
-constexpr auto operator==(const A& a, const A& b) noexcept(noexcept(a.equals(b))
-) -> bool {
-    return a.equals(b);
+template <template <typename> typename F, typename A>
+    requires traits::eq::HasEq<F>
+constexpr auto operator==(const F<A>& a, const F<A>& b) noexcept -> bool {
+    return core::types::Eq<F>::equals(a, b);
 }
 
-template <traits::eq::Eq A>
-constexpr auto operator!=(const A& a, const A& b) noexcept(noexcept(a.equals(b))
-) -> bool {
-    return !a.equals(b);
+template <template <typename> typename F, typename A>
+    requires traits::eq::HasEq<F>
+constexpr auto operator!=(const F<A>& a, const F<A>& b) noexcept -> bool {
+    return !core::types::Eq<F>::equals(a, b);
 }
+
 }  // namespace fp::operators::eq
 
 #endif  // FP_OPERATORS_EQ_H

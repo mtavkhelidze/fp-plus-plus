@@ -9,7 +9,6 @@ set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
     # src/core/data/id.cpp
     # src/core/types/functor.cpp
-    # src/mixins/eq.cpp
     # src/mixins/flat_map.cpp
     # src/mixins/map.cpp
     # src/prelude/fmap.cpp
@@ -24,6 +23,7 @@ set(TEST_SRC
     src/prelude/lift.cpp
     src/prelude/pipe.cpp
     src/prelude/pure.cpp
+    src/core/types/eq.cpp
 )
 
 # find_untracked_files("${TEST_SRC}" src "*.cpp")
