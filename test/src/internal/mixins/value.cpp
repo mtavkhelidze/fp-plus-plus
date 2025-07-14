@@ -1,8 +1,8 @@
 #include <fp/core/nothing.h>
 #include <fp/internal/mixins/value.h>
 #include <fp/prelude/pure.h>
-#include <fp/tools/value.h>
 #include <fp/traits/all.h>
+#include <fp/traits/value.h>
 #include <gtest/gtest.h>
 
 using namespace fp::core;

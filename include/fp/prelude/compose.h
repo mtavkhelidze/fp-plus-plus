@@ -7,6 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/tools/arrow.h>
+#include <fp/traits/arrow.h>
 
 #include <utility>
 
@@ -25,8 +26,8 @@ constexpr auto compose(F&& lhs, G&& rhs) noexcept {
              A&& a
            ) constexpr noexcept -> decltype(auto)
                requires(
-                 tools::arrow::Arrow<G, A>
-                 && tools::arrow::Arrow<
+                 traits::arrow::Arrow<G, A>
+                 && traits::arrow::Arrow<
                    F,                                   //
                    tools::arrow::fp_arrow_result<G, A>  //
                    >                                    //

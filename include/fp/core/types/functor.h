@@ -10,7 +10,7 @@
 #include <fp/tools/cast.h>
 #include <fp/tools/inner_type.h>
 #include <fp/tools/rebind.h>
-#include <fp/tools/value.h>
+#include <fp/traits/value.h>
 
 namespace fp::core::types {
 
@@ -19,9 +19,9 @@ struct Functor {
     template <typename A>
     static constexpr auto map = []<typename F>(F&& f) {
         return [f = std::forward<F>(f)](auto&& fa) mutable -> decltype(auto)
-                   requires fp::tools::value::HasValue<
+                   requires fp::traits::value::HasValue<
                               std::remove_reference_t<decltype(fa)>>
-                         && fp::tools::value::HasApply<
+                         && fp::traits::value::HasApply<
                               std::remove_reference_t<decltype(fa)>>
                          && fp::tools::arrow::fp_is_arrow<
                               F, typename std::remove_reference_t<

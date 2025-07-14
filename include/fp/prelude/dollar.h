@@ -6,7 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/tools/arrow.h>
+#include <fp/traits/arrow.h>
 
 namespace fp::prelude {
 
@@ -23,7 +23,7 @@ namespace fp::prelude {
  * Example:
  *   auto result = dollar([](int x) { return x + 1; }, 41); // => 42
  */
-template <typename A, tools::arrow::Arrow<A> F>
+template <typename A, traits::arrow::Arrow<A> F>
 inline constexpr auto dollar(F&& f, A&& a) noexcept -> decltype(auto) {
     return std::forward<F>(f)(std::forward<A>(a));
 }
