@@ -7,9 +7,6 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/tools/arrow.h>
-#include <fp/tools/cast.h>
-#include <fp/tools/inner_type.h>
-#include <fp/tools/rebind.h>
 #include <fp/traits/value.h>
 
 namespace fp::core::types {
@@ -18,7 +15,7 @@ template <template <typename> typename F>
 struct Functor {
     template <typename A>
     static constexpr auto map = []<typename Fn>(Fn&& f) {
-        return [f](const F<A>& fa) mutable -> decltype(auto)
+        return [f = std::forward<Fn>(f)](const F<A>& fa) -> decltype(auto)
                    requires fp::traits::value::HasValue<F<A>>
                          && fp::traits::value::HasApply<F<A>>
                          && fp::tools::arrow::fp_is_arrow<Fn, A>

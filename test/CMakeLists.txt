@@ -11,7 +11,8 @@ set(TEST_SRC
     # src/core/types/functor.cpp
     # src/mixins/flat_map.cpp
     # src/mixins/map.cpp
-    # src/prelude/fmap.cpp
+    src/core/types/eq.cpp
+    src/core/types/functor.cpp
     src/internal/mixins/value.cpp
     src/internal/storage/box.cpp
     src/internal/storage/storage_box.cpp
@@ -20,11 +21,10 @@ set(TEST_SRC
     src/prelude/compose.cpp
     src/prelude/dollar.cpp
     src/prelude/flip.cpp
+    src/prelude/fmap.cpp
     src/prelude/lift.cpp
     src/prelude/pipe.cpp
     src/prelude/pure.cpp
-    src/core/types/eq.cpp
-    src/core/types/functor.cpp
 )
 
 # find_untracked_files("${TEST_SRC}" src "*.cpp")
