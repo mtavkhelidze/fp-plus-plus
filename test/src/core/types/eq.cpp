@@ -4,12 +4,14 @@
 #include <fp/internal/mixins/eq.h>
 #include <fp/operators/all.h>
 #include <fp/prelude/all.h>
+#include <fp/traits/all.h>
 #include <gtest/gtest.h>
 
 using namespace fp::core;
 using namespace fp::internal::mixins;
 using namespace fp::prelude;
 using namespace fp::operators;
+using namespace fp::traits;
 
 template <typename A>
 struct TestStruct : WithValue<TestStruct<A>> {
@@ -36,4 +38,9 @@ TEST(Types_Eq, operator_not_equals) {
     auto a = pure<TestStruct>(42);
     auto b = pure<TestStruct>(43);
     ASSERT_TRUE(a != b);
+}
+
+TEST(Types_Eq, has_and_is_traits) {
+    static_assert(HasEq<TestStruct>);
+    // static_assert(IsFunctor<TestStruct<int>>);
 }
