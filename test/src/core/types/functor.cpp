@@ -16,6 +16,11 @@ struct TestStruct : WithValue<TestStruct<A>> {
   private:
     using Base = WithValue<TestStruct<A>>;
     using Base::Base;
+
+  public:
+    auto map(auto& f) -> TestStruct {
+        return fp::core::Functor<TestStruct>::map<A>(f)(*this);
+    }
 };
 
 TEST(Types_Functor_Laws, identity) {
@@ -41,5 +46,5 @@ TEST(Types_Functor_Laws, composition) {
 
 TEST(Types_Functor, has_and_is_traits) {
     static_assert(HasFunctor<TestStruct>);
-    // static_assert(IsFunctor<TestStruct<int>>);
+    static_assert(IsFunctor<TestStruct>);
 }

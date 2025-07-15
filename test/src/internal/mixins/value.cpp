@@ -1,4 +1,4 @@
-#include <fp/core/nothing.h>
+#include <fp/core/all.h>
 #include <fp/internal/mixins/value.h>
 #include <fp/prelude/pure.h>
 #include <fp/traits/all.h>

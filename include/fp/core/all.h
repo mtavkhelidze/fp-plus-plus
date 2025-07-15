@@ -7,7 +7,9 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/core/data/all.h>
+#include <fp/core/nothing.h>
 #include <fp/core/types/all.h>
+#include <fp/core/whatever.h>
 
 namespace fp::core {
 using namespace types;

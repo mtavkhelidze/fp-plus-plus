@@ -18,6 +18,11 @@ struct TestStruct : WithValue<TestStruct<A>> {
   private:
     using Base = WithValue<TestStruct<A>>;
     using Base::Base;
+
+  public:
+    auto equals(const TestStruct<A>& other) const -> bool {
+        return fp::core::Eq<TestStruct>::equals(*this, other);
+    }
 };
 
 TEST(Types_Eq, typeclass_equals) {
@@ -42,5 +47,5 @@ TEST(Types_Eq, operator_not_equals) {
 
 TEST(Types_Eq, has_and_is_traits) {
     static_assert(HasEq<TestStruct>);
-    // static_assert(IsFunctor<TestStruct<int>>);
+    static_assert(IsEq<TestStruct>);
 }

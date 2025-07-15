@@ -7,6 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/core/types/functor.h>
+#include <fp/core/whatever.h>
 #include <fp/prelude/identity.h>
 #include <fp/tools/inner_type.h>
 #include <fp/traits/arrow.h>
@@ -15,9 +16,9 @@ namespace fp::traits::functor {
 template <template <typename> typename F>
 concept HasFunctor = requires { typename fp::core::types::Functor<F>; };
 
-template <typename FA>
-concept IsFunctor = requires(FA fa) {
-    { fa.map(fp::prelude::identity) } -> std::same_as<FA>;
+template <template <typename> typename F>
+concept IsFunctor = HasFunctor<F> && requires(F<fp::core::Whatever> fa) {
+    { fa.map(fp::prelude::identity) } -> std::same_as<F<fp::core::Whatever>>;
 };
 
 }  // namespace fp::traits::functor

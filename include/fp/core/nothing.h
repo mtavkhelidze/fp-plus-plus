@@ -1,5 +1,4 @@
 #ifndef FP_CORE_NOTHING_H
-
 #define FP_CORE_NOTHING_H
 
 #pragma once
