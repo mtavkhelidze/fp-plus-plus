@@ -7,10 +7,6 @@ target_compile_options(rapidcheck INTERFACE -Wno-deprecated-declarations)
 
 set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
-    # src/core/data/id.cpp
-    # src/core/types/functor.cpp
-    # src/mixins/flat_map.cpp
-    # src/mixins/map.cpp
     src/core/types/eq.cpp
     src/core/types/functor.cpp
     src/internal/mixins/value.cpp
@@ -25,6 +21,7 @@ set(TEST_SRC
     src/prelude/lift.cpp
     src/prelude/pipe.cpp
     src/prelude/pure.cpp
+    src/prelude/tuple.cpp
 )
 
 # find_untracked_files("${TEST_SRC}" src "*.cpp")

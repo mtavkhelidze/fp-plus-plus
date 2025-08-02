@@ -10,7 +10,7 @@
 #include <fp/tools/inner_type.h>
 #include <fp/tools/instance.h>
 #include <fp/tools/make_pair.h>
-#include <fp/tools/pair.h>
 #include <fp/tools/rebind.h>
+#include <fp/tools/tuple.h>
 
 #endif  // FP_TOOLS_ALL_H

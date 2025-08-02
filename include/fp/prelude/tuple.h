@@ -7,6 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/core/types/tuple.h>
+#include <fp/traits/tuple.h>
 
 #include <type_traits>
 
@@ -18,5 +19,14 @@ constexpr auto tuple(A&& a, B&& b)
     return std::make_pair(std::forward<A>(a), std::forward<B>(b));
 }
 
+template <traits::tuple::IsTuple T>
+constexpr auto first(const T& t) -> auto {
+    return std::get<0>(t);
+}
+
+template <traits::tuple::IsTuple T>
+constexpr auto second(const T& t) -> auto {
+    return std::get<1>(t);
+}
 }  // namespace fp::prelude
 #endif  // FP_PRELUDE_TUPLE_H
