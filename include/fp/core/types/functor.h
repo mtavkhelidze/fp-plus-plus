@@ -1,5 +1,5 @@
-#ifndef FP_CORE_TYPECLASSES_FUNCTOR_H
-#define FP_CORE_TYPECLASSES_FUNCTOR_H
+#ifndef FP_CORE_TYPES_FUNCTOR_H
+#define FP_CORE_TYPES_FUNCTOR_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -27,4 +27,4 @@ struct Functor {
 };
 }  // namespace fp::core::types
 
-#endif  // FP_CORE_TYPECLASSES_FUNCTOR_H
+#endif  // FP_CORE_TYPES_FUNCTOR_H

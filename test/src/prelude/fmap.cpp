@@ -1,13 +1,10 @@
 // NOLINTBEGIN:cppcoreguidelines-avoid-magic-numbers
 
-#include <fp/core/all.h>
-#include <fp/internal/mixins/value.h>
-#include <fp/prelude/all.h>
+#include <fp/fp.h>
 #include <gtest/gtest.h>
 
-using namespace fp::core;
+using namespace fp;
 using namespace fp::internal::mixins;
-using namespace fp::prelude;
 
 template <typename A>
 struct TestStruct : WithValue<TestStruct<A>> {

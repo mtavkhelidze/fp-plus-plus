@@ -41,6 +41,13 @@ struct WithValue : private Backend<DataClass>::type {
     using Base::Base;
 
   public:
+    /**
+     * This is a static constructor similar to Scala's `apply`, allowing
+     * creation of DataClass instances via `DataClass::apply(value)`.
+     *
+     * Note: This is not related to the `Applicative::pure` typeclass function,
+     * though it may be used internally by `pure`.
+     */
     template <typename T>
     static constexpr auto apply(T&& value) -> DataClass {
         return DataClass{Base::put(std::forward<T>(value))};

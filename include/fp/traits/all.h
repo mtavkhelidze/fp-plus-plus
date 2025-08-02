@@ -11,6 +11,7 @@
 #include <fp/traits/eq.h>
 #include <fp/traits/functor.h>
 #include <fp/traits/instance.h>
+#include <fp/traits/tuple.h>
 #include <fp/traits/value.h>
 // #include <fp/traits/monad.h>
 // #include <fp/traits/semigroup.h>
@@ -20,5 +21,9 @@ using namespace eq;
 using namespace functor;
 using namespace instance;
 using namespace value;
+using namespace tuple;
+// using namespace monad;
+// using namespace applicative;
+// using namespace semigroup;
 }  // namespace fp::traits
 #endif  // FP_TRAITS_ALL_H

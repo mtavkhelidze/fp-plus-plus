@@ -1,8 +1,7 @@
-#include <fp/internal/mixins/value.h>
-#include <fp/prelude/pure.h>
+#include <fp/fp.h>
 #include <gtest/gtest.h>
 
-using namespace fp::prelude;
+using namespace fp;
 using namespace fp::internal::mixins;
 
 template <typename A>

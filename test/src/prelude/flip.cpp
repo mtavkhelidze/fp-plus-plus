@@ -1,7 +1,7 @@
-#include <fp/prelude/flip.h>
+#include <fp/fp.h>
 #include <gtest/gtest.h>
 
-using namespace fp::prelude;
+using namespace fp;
 
 auto difference = [](int a, int b) { return a - b; };
 

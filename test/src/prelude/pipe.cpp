@@ -1,12 +1,11 @@
-#include <fp/operators/all.h>
-#include <fp/prelude/identity.h>
+#include <fp/fp.h>
 #include <gtest/gtest.h>
 
 #include "shorts.h"
 
-using namespace fp::test;
+using namespace fp;
 using namespace fp::operators;
-using namespace fp::prelude;
+using namespace fp::test;
 
 // like | in Haskell
 TEST(Prelude_Pipe, is_reverse_of_compose) {

@@ -11,8 +11,10 @@
 #include <fp/prelude/flip.h>
 #include <fp/prelude/fmap.h>
 #include <fp/prelude/identity.h>
+#include <fp/prelude/lift.h>
 #include <fp/prelude/pipe.h>
 #include <fp/prelude/pure.h>
+#include <fp/prelude/tuple.h>
 #include <fp/tools/cast.h>
 
 namespace fp::prelude {
