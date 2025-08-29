@@ -59,8 +59,7 @@ flowchart TD
     Mixin -->|adds instance methods to| Traits
     Traits -->|used by free functions| Prelude
     Prelude -->|used for syntactic sugar| Operators
-    Mixin -->|requires| Data
-    Core -->|requires| Data
+    Data -->|requires WithValue| Mixin
 ```
 
 ### Special `WithValue`, `WithApply`, and `pure` Case
