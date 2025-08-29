@@ -9,12 +9,10 @@
 
 #include <fp/operators/composition.h>
 #include <fp/operators/eq.h>
-#include <fp/operators/semigroup.h>
 
 namespace fp::operators {
 using namespace composition;
 using namespace eq;
-using namespace semigroup;
 }  // namespace fp::operators
 
 #endif  // FP_OPERATORS_H

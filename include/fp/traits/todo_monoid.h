@@ -12,7 +12,7 @@
 
 namespace fp::traits::monoid {
 /**
- * @brief Monoid extends the power of \ref Semigroup by providing an identity
+ * Monoid extends Semigroup by providing an identity
  * element.
  *
  * The `empty` function must be a static member function returning a value of

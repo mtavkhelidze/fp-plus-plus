@@ -8,6 +8,7 @@
 
 #include <fp/core/types/eq.h>
 #include <fp/core/types/functor.h>
+#include <fp/core/types/semigroupal.h>
 #include <fp/core/types/tuple.h>
 
 #endif  // FP_CORE_TYPES_ALL_H
