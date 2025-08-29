@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Usage](#usage)
+- [Code Organization](#code-organization)
 - [Type Naming Conventions](#type-naming-conventions)
 - [Installation](#installation)
 - [Documentation](#documentation)
@@ -16,16 +17,75 @@
 - There are no dependencies; it just works.
 - For examples of usage, take a look at the `*.cpp` files in the `test`
   directory.
-- Use it at your own risk. :)
+- Use it responsibly and at your own discretion.
+
+## Code Organization
+
+In FP++, typeclasses are organized to separate core definitions, mixins,
+traits,  
+and syntactic sugar.
 
 ## Type Naming Conventions
 
-FP++ uses specific conventions for naming types to improve code clarity and consistency:
-
 - `T` denotes a raw C++ type, such as `const int&` or `double*`.
-- `A` represents a normalized FP type, which is typically a wrapped or adapted version of a raw type.
-- `F` stands for type constructors, which are templates or higher-kinded types that produce types when applied.
+- `A` represents a normalized FP type, which is typically a wrapped or adapted
+  version of a raw type.
+- `F` stands for type constructors, which are templates or higher-kinded types
+  that produce types when applied.
 - `Fn` usually indicates a unary arrow (function).
+
+### External Usage
+
+The following table summarizes the components involved in defining and using a  
+typeclass `TC` for a datatype `F` and an `operation` on `F[A]`.
+
+| Component      | Location                  | Description                                                                           |
+|----------------|---------------------------|---------------------------------------------------------------------------------------|
+| Core Typeclass | `core/types/TC.h`         | Provides `TC<F>::method`                                                              |
+| Instances      | `core/data/TC.h`          | Provides `TC` instances, e.g., `Id`, `Option`, etc.                                   |
+| Mixins         | `core/mixins/operation.h` | Given `TC<F>`, provides `F<A>.operation` as an instance method                        |
+| Traits         | `traits/TC.h`             | Defines concepts `HasTC` (constructible `TC<F>`) and `IsTC` (`F<A>` has `.operation`) |
+| Prelude        | `prelude/operation.h`     | Defines a free function `operation` on `F[_]`                                         |
+| Operators      | `operators/operation.h`   | Provides syntactic sugar for the `operation` free function                            |
+
+```mermaid
+flowchart TD
+    Core["Core Typeclass\ncore/types/TC.h"]
+    Data["Instances\ncore/data/TC.h"]
+    Mixin["Mixin\ncore/mixins/TC.h"]
+    Traits["Traits\ntraits/TC.h"]
+    Prelude["Prelude\nprelude/operation.h"]
+    Operators["Operators\noperators/operation.h"]
+    Core -->|provides methods to| Mixin
+    Mixin -->|adds instance methods to| Traits
+    Traits -->|used by free functions| Prelude
+    Prelude -->|used for syntactic sugar| Operators
+    Mixin -->|requires| Data
+    Core -->|requires| Data
+```
+
+### Special `WithValue`, `WithApply`, and `pure` Case
+
+Mixins `WithValue` and `WithApply`, along with the free function `pure`, are
+special in that they are not tied to a specific typeclass; instead, they must be
+implemented by any datatype to enable storage and manipulation of values.
+
+| Item        | Provides                                               |
+|-------------|--------------------------------------------------------|
+| `WithValue` | Instance method `.value()` to extract the stored value |
+| `WithApply` | Static internal method `::apply(fab)` used by `pure`   |
+| `pure`      | Free function `pure<F>(a)` to wrap a value             |
+
+### Testing
+
+The directory structure under `tests/` mirrors that of `core/`,  
+`traits/`, `prelude/`, and  
+`operators/` under `include/fp`.
+
+| Directory                     | Tests                          |
+|-------------------------------|--------------------------------|
+| `tests/core/types/TC.cpp`     | Mixins, typeclass laws, traits |
+| `tests/prelude/operation.cpp` | Free functions and operators   |
 
 ## Installation
 
