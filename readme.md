@@ -49,12 +49,12 @@ typeclass `TC` for a datatype `F` and an `operation` on `F[A]`.
 
 ```mermaid
 flowchart TD
-    Core["Core Typeclass\ncore/types/TC.h"]
-    Data["Instances\ncore/data/TC.h"]
-    Mixin["Mixin\ncore/mixins/TC.h"]
-    Traits["Traits\ntraits/TC.h"]
-    Prelude["Prelude\nprelude/operation.h"]
-    Operators["Operators\noperators/operation.h"]
+    Core[Core Typeclass\ncore/types/TC.h]
+    Data[Instances\ncore/data/TC.h]
+    Mixin[Mixin\ncore/mixins/TC.h]
+    Traits[Traits\ntraits/TC.h]
+    Prelude[Prelude\nprelude/operation.h]
+    Operators[Operators\noperators/operation.h]
     Core -->|provides methods to| Mixin
     Mixin -->|adds instance methods to| Traits
     Traits -->|used by free functions| Prelude
