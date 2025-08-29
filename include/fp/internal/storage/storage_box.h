@@ -47,6 +47,13 @@ struct StorageBox {
   protected:
     inline constexpr auto get() const noexcept -> const A& { return box.get(); }
 
+    /**
+     * Boxes a raw value of type T, normalizing it to the FP type U (A),
+     *        rebinds the container to U, and returns the derived container.
+     *
+     * T - raw C++ type of the value to be boxed.
+     * U (A) - normalized FP type stored inside the Box.
+     */
     template <typename T>
     static auto put(T&& value) {
         auto box = Box{std::forward<T>(value)};

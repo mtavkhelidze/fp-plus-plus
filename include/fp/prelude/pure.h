@@ -12,21 +12,25 @@
 namespace fp::prelude {
 
 /**
- * Injects a value into the context of a type constructor `DataClass`.
+ * Lift a value into the context of a type constructor `F`.
  *
- * `pure<DataClass>(x)` wraps the value `x` into a `DataClass<T>` by calling
- * `DataClass<T>::apply(x)`, where `T` is the normalized form of the value type.
+ * `pure<F>(x)` wraps the raw C++ value `x` (type `T`) into the FP-normalized
+ * type `A` and then calls `F<A>::apply(x)`.
  *
- * This function is fundamental for Applicative and Monad abstractions.
+ * Here:
+ *   - `T` is the original C++ type of the value.
+ *   - `A` is the FP-normalized type used inside the type constructor `F`.
+ *
+ * This corresponds to the `pure` method in Applicative/Monad abstractions.
  *
  * Example:
  *   auto idValue = pure<Id>(42); // Id<int> containing 42
  */
-template <template <typename> typename DataClass, typename T>
-    requires traits::value::HasApply<DataClass<tools::cast::fp_cast<T>>>
-auto pure(T&& value) -> DataClass<tools::cast::fp_cast<T>> {
-    using NT = tools::cast::fp_cast<T>;
-    return DataClass<NT>::apply(std::forward<T>(value));
+template <template <typename> typename F, typename T>
+    requires traits::value::HasApply<F<tools::cast::fp_cast<T>>>
+auto pure(T&& value) -> F<tools::cast::fp_cast<T>> {
+    using A = tools::cast::fp_cast<T>;
+    return F<A>::apply(std::forward<T>(value));
 }
 }  // namespace fp::prelude
 #endif  // FP_PRELUDE_PURE_H

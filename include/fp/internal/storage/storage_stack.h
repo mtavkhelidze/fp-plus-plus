@@ -28,25 +28,33 @@ struct StorageStack {
     A value;
 
   protected:
-    StorageStack(const StorageStack &other) noexcept : value(other.value) {}
-    inline StorageStack &operator=(const StorageStack &other) noexcept {
+    StorageStack(const StorageStack& other) noexcept : value(other.value) {}
+    inline StorageStack& operator=(const StorageStack& other) noexcept {
         value = other.value;
         return *this;
     }
     ~StorageStack() noexcept = default;
 
   private:
-    explicit StorageStack(A &&v) noexcept : value(std::forward<A>(v)) {}
+    explicit StorageStack(A&& v) noexcept : value(std::forward<A>(v)) {}
 
     StorageStack() noexcept = delete;
-    StorageStack(StorageStack &&) noexcept = delete;
-    StorageStack &operator=(StorageStack &&) noexcept = delete;
+    StorageStack(StorageStack&&) noexcept = delete;
+    StorageStack& operator=(StorageStack&&) noexcept = delete;
 
   protected:
-    constexpr auto get() const noexcept -> const A & { return value; }
+    constexpr auto get() const noexcept -> const A& { return value; }
 
+    /**
+     * Constructs the derived container from a raw C++ type `T`.
+     *
+     * Here, `T` is the raw C++ type used as input,
+     * and `U` is the normalized FP type (decayed `T`).
+     * The function returns an instance of the derived container,
+     * i.e., `fp_rebind<Container, U>`.
+     */
     template <typename T>
-    static auto put(T &&value) {
+    static auto put(T&& value) {
         using U = std::decay_t<T>;
         using Derived = fp::tools::rebind::fp_rebind<Container, U>;
         return Derived{std::forward<T>(value)};
@@ -54,7 +62,7 @@ struct StorageStack {
 
 #ifdef FP_PLUS_PLUS_TESTING
   protected:
-    static constexpr const char *_tag = "StorageStack";
+    static constexpr const char* _tag = "StorageStack";
 #endif
 };
 }  // namespace fp::internal::storage

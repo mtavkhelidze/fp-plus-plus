@@ -34,23 +34,23 @@ using Backend = __backend<TC>;
 /**
  * Mixin for objects with storage backend and ::apply.
  */
-template <typename DataClass>
-struct WithValue : private Backend<DataClass>::type {
+template <typename F>
+struct WithValue : private Backend<F>::type {
   private:
-    using Base = typename Backend<DataClass>::type;
+    using Base = typename Backend<F>::type;
     using Base::Base;
 
   public:
     /**
-     * This is a static constructor similar to Scala's `apply`, allowing
-     * creation of DataClass instances via `DataClass::apply(value)`.
+     * Constructs an instance of F from a raw C++ value of type T using the
+     * backend storage returning F<A>.
      *
-     * Note: This is not related to the `Applicative::pure` typeclass function,
-     * though it may be used internally by `pure`.
+     * Example:
+     *   auto val = F::apply(42);  // Constructs F<int> from int 42
      */
     template <typename T>
-    static constexpr auto apply(T&& value) -> DataClass {
-        return DataClass{Base::put(std::forward<T>(value))};
+    static constexpr auto apply(T&& value) -> F {
+        return F{Base::put(std::forward<T>(value))};
     }
     constexpr auto value() const noexcept -> auto& { return this->get(); }
 
