@@ -4,7 +4,6 @@
 
 - [Usage](#usage)
 - [Code Organization](#code-organization)
-- [Type Naming Conventions](#type-naming-conventions)
 - [Installation](#installation)
 - [Documentation](#documentation)
 - [Building and Testing](#building-and-testing)
@@ -25,7 +24,7 @@ In FP++, typeclasses are organized to separate core definitions, mixins,
 traits,  
 and syntactic sugar.
 
-## Type Naming Conventions
+### Type Naming Conventions
 
 - `T` denotes a raw C++ type, such as `const int&` or `double*`.
 - `A` represents a normalized FP type, which is typically a wrapped or adapted
