@@ -9,7 +9,7 @@
 
 #include <fp/core/types/eq.h>
 
-namespace fp::mixins::eq {
+namespace fp::core::mixins {
 
 template <template <typename> typename F, typename A>
 struct WithEq {
@@ -21,6 +21,6 @@ struct WithEq {
     }
 };
 
-}  // namespace fp::mixins::eq
+}  // namespace fp::core::mixins
 
 #endif  // FP_MIXINS_EQ_H

@@ -11,7 +11,7 @@
 
 #include <type_traits>
 
-namespace fp::internal::mixins {
+namespace fp::core::mixins {
 
 template <
   typename TC,
@@ -64,6 +64,6 @@ struct WithValue : private Backend<F>::type {
     }
 #endif  // FP_PLUS_PLUS_TESTING
 };
-};  // namespace fp::internal::mixins
+};  // namespace fp::core::mixins
 
 #endif  // FP_INTERNAL_MIXINS_VALUE_H

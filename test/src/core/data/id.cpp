@@ -1,7 +1,5 @@
 // NOLINTBEGIN:cppcoreguidelines-avoid-magic-numbers
-#include <fp/core/all.h>
-#include <fp/prelude/all.h>
-#include <fp/traits/all.h>
+#include <fp/fp.h>
 #include <gtest/gtest.h>
 
 using namespace fp::core;

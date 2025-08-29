@@ -12,9 +12,9 @@
 #include <fp/tools/cast.h>
 #include <fp/tools/inner_type.h>
 #include <fp/tools/rebind.h>
-#include <fp/tools/value.h>
+#include <fp/traits/value.h>
 
-namespace fp::tools::flat_map {
+namespace fp::traits::flat_map {
 
 template <typename T>
 using cast = fp::tools::cast::fp_cast<T>;
@@ -29,12 +29,13 @@ template <typename F, typename A>
 using kleisli_result = tools::arrow::fp_kleisli_arrow_result<F, A>;
 
 template <typename TC, typename F>
-concept HasFlatMap = fp::tools::value::HasApply<TC>
-                  && tools::arrow::KleisliArrow<F, inner_type<TC>>
+concept HasFlatMap = fp::traits::value::HasApply<TC>
+                  && fp::traits::value::HasValue<TC>
+                  && fp::tools::arrow::KleisliArrow<F, inner_type<TC>>
                   && requires(TC self, F f) {
                          {
                              self.flatMap(f)
                          } -> std::same_as<kleisli_result<F, inner_type<TC>>>;
                      };
-}  // namespace fp::tools::flat_map
+}  // namespace fp::traits::flat_map
 #endif  // FP_TOOLS_FLAT_MAP_H

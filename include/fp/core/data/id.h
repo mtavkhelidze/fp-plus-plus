@@ -7,15 +7,15 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/core/mixins/value.h>
 #include <fp/core/types/all.h>
-#include <fp/internal/mixins/value.h>
 
 namespace fp::core::data {
 
 template <typename A>
-struct Id : fp ::internal::mixins::WithValue<Id<A>> {
+struct Id : fp ::core::mixins::WithValue<Id<A>> {
   private:
-    using Base = fp::internal::mixins::WithValue<Id>;
+    using Base = fp::core::mixins::WithValue<Id>;
     using Base::Base;
 
   public:

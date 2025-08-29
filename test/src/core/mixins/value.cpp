@@ -1,15 +1,10 @@
-#include <fp/core/all.h>
-#include <fp/internal/mixins/value.h>
-#include <fp/prelude/pure.h>
-#include <fp/traits/all.h>
-#include <fp/traits/value.h>
+#include <fp/fp.h>
 #include <gtest/gtest.h>
 
 using namespace fp::core;
+using namespace fp::core::mixins;
+using namespace fp::prelude;
 using namespace fp::traits;
-using namespace fp::prelude;
-using namespace fp::prelude;
-using namespace fp::internal::mixins;
 
 template <typename A>
 struct TestStruct : WithValue<TestStruct<A>> {

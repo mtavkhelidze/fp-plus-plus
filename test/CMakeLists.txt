@@ -7,13 +7,12 @@ target_compile_options(rapidcheck INTERFACE -Wno-deprecated-declarations)
 
 set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
+    src/core/mixins/value.cpp
     src/core/types/eq.cpp
     src/core/types/functor.cpp
-    src/internal/mixins/value.cpp
     src/internal/storage/box.cpp
     src/internal/storage/storage_box.cpp
     src/internal/storage/storage_stack.cpp
-    src/internal/tools/cast.cpp
     src/prelude/compose.cpp
     src/prelude/dollar.cpp
     src/prelude/flip.cpp
@@ -22,6 +21,7 @@ set(TEST_SRC
     src/prelude/pipe.cpp
     src/prelude/pure.cpp
     src/prelude/tuple.cpp
+    src/tools/cast.cpp
 )
 
 # find_untracked_files("${TEST_SRC}" src "*.cpp")

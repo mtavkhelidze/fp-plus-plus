@@ -1,16 +1,12 @@
 // NOLINTBEGIN:cppcoreguidelines-avoid-magic-numbers
 
-#include <fp/core/all.h>
-#include <fp/internal/mixins/eq.h>
-#include <fp/prelude/all.h>
-#include <fp/traits/all.h>
+#include <fp/fp.h>
 #include <gtest/gtest.h>
 
 using namespace fp::core;
-using namespace fp::internal::mixins;
+using namespace fp::core::mixins;
 using namespace fp::prelude;
 using namespace fp::traits;
-using namespace fp::mixins::eq;
 
 template <typename A>
 struct TestStruct

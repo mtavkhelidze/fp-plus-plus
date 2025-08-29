@@ -1,6 +1,4 @@
-#include <fp/core/all.h>
-#include <fp/internal/storage/box.h>
-#include <fp/prelude/all.h>
+#include <fp/fp.h>
 #include <gtest/gtest.h>
 
 using namespace fp::prelude;

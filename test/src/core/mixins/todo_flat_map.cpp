@@ -1,16 +1,10 @@
-#include <fp/mixins/flat_map.h>
-#include <fp/mixins/value.h>
-#include <fp/prelude/identity.h>
-#include <fp/prelude/lift.h>
-#include <fp/prelude/pure.h>
-#include <fp/tools/flat_map.h>
+#include <fp/fp.h>
 #include <gtest/gtest.h>
 
 #include <string>
 #include <vector>
 
-using namespace fp::mixins::value;
-using namespace fp::mixins::flat_map;
+using namespace fp::core::mixins;
 using namespace fp::prelude;
 using namespace fp::tools::flat_map;
 

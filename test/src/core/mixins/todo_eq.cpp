@@ -1,21 +1,16 @@
 
-#include <fp/mixins/eq.h>
-#include <fp/mixins/value.h>
-#include <fp/operators/eq.h>
-#include <fp/prelude/pure.h>
-#include <fp/traits/eq.h>
+#include <fp/fp.h>
 #include <gtest/gtest.h>
 
-using namespace fp::mixins::eq;
-using namespace fp::mixins::value;
+using namespace fp::core::mixins;
 using namespace fp::operators::eq;
 using namespace fp::prelude;
-using namespace fp::traits::eq;
+using namespace fp::traits;
 
 template <typename A>
 struct TestStruct
     : WithValue<TestStruct<A>>
-    , WithEq<TestStruct<A>> {
+    , WithEq<TestStruct, A> {
   private:
     using Base = WithValue<TestStruct<A>>;
     using Base::Base;

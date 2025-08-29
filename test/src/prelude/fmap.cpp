@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 
 using namespace fp;
-using namespace fp::internal::mixins;
+using namespace fp::core::mixins;
 
 template <typename A>
 struct TestStruct : WithValue<TestStruct<A>> {
