@@ -8,12 +8,13 @@
 
 #include <fp/prelude/compose.h>
 #include <fp/prelude/dollar.h>
+#include <fp/prelude/equals.h>
 #include <fp/prelude/flip.h>
 #include <fp/prelude/fmap.h>
 #include <fp/prelude/identity.h>
 #include <fp/prelude/lift.h>
 #include <fp/prelude/pipe.h>
-#include <fp/prelude/product.h>
+// #include <fp/prelude/product.h>
 #include <fp/prelude/pure.h>
 #include <fp/prelude/tuple.h>
 #include <fp/tools/cast.h>

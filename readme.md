@@ -39,7 +39,7 @@ The following table summarizes the components involved in defining and using a
 typeclass `TC` for a datatype `F` and an `operation` on `F[A]`.
 
 | Component      | Location                  | Description                                                                           |
-|----------------|---------------------------|---------------------------------------------------------------------------------------|
+| -------------- | ------------------------- | ------------------------------------------------------------------------------------- |
 | Core Typeclass | `core/types/TC.h`         | Provides `TC<F>::method`                                                              |
 | Instances      | `core/data/TC.h`          | Provides `TC` instances, e.g., `Id`, `Option`, etc.                                   |
 | Mixins         | `core/mixins/operation.h` | Given `TC<F>`, provides `F<A>.operation` as an instance method                        |
@@ -69,7 +69,7 @@ special in that they are not tied to a specific typeclass; instead, they must be
 implemented by any datatype to enable storage and manipulation of values.
 
 | Item        | Provides                                               |
-|-------------|--------------------------------------------------------|
+| ----------- | ------------------------------------------------------ |
 | `WithValue` | Instance method `.value()` to extract the stored value |
 | `WithApply` | Static internal method `::apply(fab)` used by `pure`   |
 | `pure`      | Free function `pure<F>(a)` to wrap a value             |
@@ -81,9 +81,22 @@ The directory structure under `tests/` mirrors that of `core/`,
 `operators/` under `include/fp`.
 
 | Directory                     | Tests                          |
-|-------------------------------|--------------------------------|
+| ----------------------------- | ------------------------------ |
 | `tests/core/types/TC.cpp`     | Mixins, typeclass laws, traits |
 | `tests/prelude/operation.cpp` | Free functions and operators   |
+
+### Development Checklist
+
+For typeclass TC and TC::operation
+
+- core/types/tc.h → define `TC<F>` with static `operation`
+- core/mixins/operation.h → add instance method `.equals` via mixin
+  `WithOperation` which uses `TC::operation`
+- traits/tc.h → define `HasTC` and `IsTC` concepts
+- prelude/operation.h → free function `operation`
+- operators/operation.h → `operator` for `operation`, if it makes sense
+- tests/core/types/tc.cpp → test mixin and laws
+- tests/prelude/operation.cpp → test free `operation` and operators
 
 ## Installation
 

@@ -7,22 +7,20 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/traits/value.h>
+#include <fp/core/types/eq.h>
 
 namespace fp::mixins::eq {
 
-template <class DataClass>
+template <template <typename> typename F, typename A>
 struct WithEq {
-    [[nodiscard]] constexpr auto equals(const DataClass& other) const noexcept
+    [[nodiscard]] constexpr auto equals(const F<A>& other) const noexcept
       -> bool {
-        static_assert(
-          fp::traits::value::HasValue<DataClass>,
-          "WithEq requires DataClass to implement .value()"
+        return fp::core::types::Eq<F>::equals(
+          static_cast<const F<A>&>(*this), other
         );
-        return static_cast<const DataClass*>(this)->value() == other.value();
     }
 };
 
-};  // namespace fp::mixins::eq
+}  // namespace fp::mixins::eq
 
 #endif  // FP_MIXINS_EQ_H
