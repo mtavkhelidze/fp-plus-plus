@@ -10,7 +10,7 @@
 #include <fp/core/mixins/value.h>
 #include <fp/core/types/all.h>
 
-namespace fp::core::data {
+namespace fp::core::data::id {
 
 template <typename A>
 struct Id : fp ::core::mixins::WithValue<Id<A>> {
@@ -30,6 +30,6 @@ struct Id : fp ::core::mixins::WithValue<Id<A>> {
         return fp::core::types::Eq<Id>::equals(*this, other);
     }
 };
-}  // namespace fp::core::data
+}  // namespace fp::core::data::id
 
 #endif  // FP_CORE_DATACLASSES_ID_H

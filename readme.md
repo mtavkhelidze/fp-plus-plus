@@ -98,6 +98,25 @@ For typeclass TC and TC::operation
 - tests/core/types/tc.cpp → test mixin and laws
 - tests/prelude/operation.cpp → test free `operation` and operators
 
+### Namespacing
+
+```mermaid
+flowchart LR
+    fp[fp]
+    fp -->|using| fp_core
+    fp_core -->|using| fp_core_data
+    fp_core -->|using| fp_core_types
+    subgraph FP
+        direction TB
+        fp_core[fp::core]
+    end
+    subgraph Core
+        direction TB
+        fp_core_data[fp::core::data]
+        fp_core_types[fp::core::types]
+    end
+```
+
 ## Installation
 
 1. Clone this repository.
