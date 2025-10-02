@@ -1,5 +1,5 @@
-#ifndef FP_CORE_TYPES_ALL_H
-#define FP_CORE_TYPES_ALL_H
+#ifndef FP_CORE_TYPES_H
+#define FP_CORE_TYPES_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -11,4 +11,4 @@
 #include <fp/core/types/semigroupal.h>
 #include <fp/core/types/tuple.h>
 
-#endif  // FP_CORE_TYPES_ALL_H
+#endif  // FP_CORE_TYPES_H

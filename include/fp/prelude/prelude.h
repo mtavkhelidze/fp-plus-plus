@@ -1,5 +1,5 @@
-#ifndef FP_PRELUDE_ALL_H
-#define FP_PRELUDE_ALL_H
+#ifndef FP_PRELUDE_H
+#define FP_PRELUDE_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -23,4 +23,4 @@ namespace fp::prelude {
 // hoist fp_cast
 using namespace fp::tools::cast;
 }  // namespace fp::prelude
-#endif  // FP_PRELUDE_ALL_H
+#endif  // FP_PRELUDE_H

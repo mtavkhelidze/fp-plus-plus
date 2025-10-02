@@ -1,5 +1,5 @@
-#ifndef FP_TRAITS_ALL_H
-#define FP_TRAITS_ALL_H
+#ifndef FP_TRAITS_H
+#define FP_TRAITS_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -28,4 +28,4 @@ using namespace semigroupal;
 using namespace tuple;
 using namespace value;
 }  // namespace fp::traits
-#endif  // FP_TRAITS_ALL_H
+#endif  // FP_TRAITS_H

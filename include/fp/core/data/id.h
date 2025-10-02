@@ -7,8 +7,8 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/core/mixins/all.h>
-#include <fp/core/types/all.h>
+#include <fp/core/mixins/mixins.h>
+#include <fp/core/types/types.h>
 
 namespace fp::core::data::id {
 

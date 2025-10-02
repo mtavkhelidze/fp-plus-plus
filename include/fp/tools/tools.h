@@ -1,5 +1,5 @@
-#ifndef FP_TOOLS_ALL_H
-#define FP_TOOLS_ALL_H
+#ifndef FP_TOOLS_H
+#define FP_TOOLS_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -13,4 +13,4 @@
 #include <fp/tools/rebind.h>
 #include <fp/tools/tuple.h>
 
-#endif  // FP_TOOLS_ALL_H
+#endif  // FP_TOOLS_H

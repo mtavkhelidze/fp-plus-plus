@@ -1,4 +1,4 @@
-#include <fp/core/all.h>
+#include <fp/core/core.h>
 #include <fp/internal/storage/storage_box.h>
 #include <gtest/gtest.h>
 
