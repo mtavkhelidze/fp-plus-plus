@@ -1,13 +1,6 @@
-## C++20 Functional Programming Header-Only Library
+## FP++: C++20 Functional Programming Header-Only Library
 
 ## Table of Contents
-
-- [Usage](#usage)
-- [Code Organization](#code-organization)
-- [Installation](#installation)
-- [Documentation](#documentation)
-- [Building and Testing](#building-and-testing)
-- [License](#license)
 
 ## Usage
 
@@ -33,13 +26,11 @@ and syntactic sugar.
   that produce types when applied.
 - `Fn` usually indicates a unary arrow (function).
 
-### External Usage
-
 The following table summarizes the components involved in defining and using a  
 typeclass `TC` for a datatype `F` and an `operation` on `F[A]`.
 
 | Component      | Location                  | Description                                                                           |
-| -------------- | ------------------------- | ------------------------------------------------------------------------------------- |
+|----------------|---------------------------|---------------------------------------------------------------------------------------|
 | Core Typeclass | `core/types/TC.h`         | Provides `TC<F>::method`                                                              |
 | Instances      | `core/data/TC.h`          | Provides `TC` instances, e.g., `Id`, `Option`, etc.                                   |
 | Mixins         | `core/mixins/operation.h` | Given `TC<F>`, provides `F<A>.operation` as an instance method                        |
@@ -62,28 +53,17 @@ flowchart TD
     Data -->|requires WithValue| Mixin
 ```
 
-### Special `WithValue`, `WithApply`, and `pure` Case
+#### Special `WithValue`, `WithApply`, and `pure` Case
 
 Mixins `WithValue` and `WithApply`, along with the free function `pure`, are
 special in that they are not tied to a specific typeclass; instead, they must be
 implemented by any datatype to enable storage and manipulation of values.
 
 | Item        | Provides                                               |
-| ----------- | ------------------------------------------------------ |
+|-------------|--------------------------------------------------------|
 | `WithValue` | Instance method `.value()` to extract the stored value |
 | `WithApply` | Static internal method `::apply(fab)` used by `pure`   |
 | `pure`      | Free function `pure<F>(a)` to wrap a value             |
-
-### Testing
-
-The directory structure under `tests/` mirrors that of `core/`,  
-`traits/`, `prelude/`, and  
-`operators/` under `include/fp`.
-
-| Directory                     | Tests                          |
-| ----------------------------- | ------------------------------ |
-| `tests/core/types/TC.cpp`     | Mixins, typeclass laws, traits |
-| `tests/prelude/operation.cpp` | Free functions and operators   |
 
 ### Development Checklist
 
@@ -116,6 +96,17 @@ flowchart LR
         fp_core_types[fp::core::types]
     end
 ```
+
+### Testing
+
+The directory structure under `tests/` mirrors that of `core/`,  
+`traits/`, `prelude/`, and  
+`operators/` under `include/fp`.
+
+| Directory                     | Tests                          |
+|-------------------------------|--------------------------------|
+| `tests/core/types/TC.cpp`     | Mixins, typeclass laws, traits |
+| `tests/prelude/operation.cpp` | Free functions and operators   |
 
 ## Installation
 
