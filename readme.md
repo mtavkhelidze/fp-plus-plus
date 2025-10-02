@@ -14,8 +14,7 @@
 ## Code Organization
 
 In FP++, typeclasses are organized to separate core definitions, mixins,
-traits,  
-and syntactic sugar.
+traits,and syntactic sugar.
 
 ### Type Naming Conventions
 
@@ -77,6 +76,13 @@ For typeclass TC and TC::operation
 - operators/operation.h → `operator` for `operation`, if it makes sense
 - tests/core/types/tc.cpp → test mixin and laws
 - tests/prelude/operation.cpp → test free `operation` and operators
+
+#### Done so far
+
+| TC      | Mixin   | Trait                 | Operation | Test Core | Test Prelude |
+|---------|---------|-----------------------|-----------|-----------|--------------|
+| Eq      | WithEq  | HasEq, IsEq           | equals    | Yes       | Yes          |
+| Functor | WithMap | HasFunctor, IsFunctor | fmap      |           |              |
 
 ### Namespacing
 
