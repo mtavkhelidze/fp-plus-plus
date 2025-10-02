@@ -1,5 +1,5 @@
-#ifndef FP_MIXINS_FLAT_MAP_H
-#define FP_MIXINS_FLAT_MAP_H
+#ifndef FP_MIXINS_WITH_FLAT_MAP_H
+#define FP_MIXINS_WITH_FLAT_MAP_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -25,4 +25,4 @@ struct WithFlatMap {
     }
 };
 }  // namespace fp::core::mixins
-#endif  // FP_MIXINS_FLAT_MAP_H
+#endif  // FP_MIXINS_WITH_FLAT_MAP_H

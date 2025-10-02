@@ -7,7 +7,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/core/mixins/value.h>
+#include <fp/core/mixins/all.h>
 #include <fp/core/types/all.h>
 
 namespace fp::core::data::id {

@@ -1,6 +1,5 @@
-#ifndef FP_MIXINS_EQ_H
-
-#define FP_MIXINS_EQ_H
+#ifndef FP_MIXINS_WITH_EQ_H
+#define FP_MIXINS_WITH_EQ_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -23,4 +22,4 @@ struct WithEq {
 
 }  // namespace fp::core::mixins
 
-#endif  // FP_MIXINS_EQ_H
+#endif  // FP_MIXINS_WITH_EQ_H
