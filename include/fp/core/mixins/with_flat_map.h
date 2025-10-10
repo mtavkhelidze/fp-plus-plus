@@ -9,14 +9,14 @@
 #include <fp/tools/arrow.h>
 #include <fp/tools/inner_type.h>
 #include <fp/traits/arrow.h>
-#include <fp/traits/value.h>
+#include <fp/traits/has_value.h>
 
 namespace fp::core::mixins {
 template <typename DataClass>
 struct WithFlatMap {
     template <typename F>
-        requires traits::value::HasValue<DataClass>
-              && traits::arrow::
+        requires traits::HasValue<DataClass>
+              && traits::
                    KleisliArrow<F, tools::inner_type::fp_inner_type<DataClass>>
     [[nodiscard]] constexpr auto flatMap(F&& f) const {
         return std::invoke(

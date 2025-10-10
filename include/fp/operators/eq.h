@@ -7,18 +7,18 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/core/types/eq.h>
-#include <fp/traits/eq.h>
+#include <fp/traits/traits.h>
 
 namespace fp::operators::eq {
 
 template <template <typename> typename F, typename A>
-    requires traits::eq::HasEq<F>
+    requires traits::HasEq<F>
 constexpr auto operator==(const F<A>& a, const F<A>& b) noexcept -> bool {
     return core::types::Eq<F>::equals(a, b);
 }
 
 template <template <typename> typename F, typename A>
-    requires traits::eq::HasEq<F>
+    requires traits::HasEq<F>
 constexpr auto operator!=(const F<A>& a, const F<A>& b) noexcept -> bool {
     return !core::types::Eq<F>::equals(a, b);
 }

@@ -1,4 +1,4 @@
-## FP++: C++20 Functional Programming Header-Only Library
+## FP++: Functional Programming Header-Only C++20 Library
 
 ## Table of Contents
 
@@ -11,38 +11,40 @@
   directory.
 - Use it responsibly and at your own discretion.
 
-## Code Organization
+## Code Conventions
 
-In FP++, typeclasses are organized to separate core definitions, mixins,
-traits,and syntactic sugar.
+FP++ is organized to separate its core definitions, typeclasses, mixins, traits,
+prelude, and syntactic sugar.
 
-### Type Naming Conventions
+#### Type Notation
 
 - `T` denotes a raw C++ type, such as `const int&` or `double*`.
-- `A` represents a normalized FP type, which is typically a wrapped or adapted
+- `A` represents a *normalized* FP type, which is typically a wrapped or adapted
   version of a raw type.
 - `F` stands for type constructors, which are templates or higher-kinded types
   that produce types when applied.
 - `Fn` usually indicates a unary arrow (function).
 
+#### Code Structure
+
 The following table summarizes the components involved in defining and using a  
 typeclass `TC` for a datatype `F` and an `operation` on `F[A]`.
 
-| Component      | Location                  | Description                                                                           |
-|----------------|---------------------------|---------------------------------------------------------------------------------------|
-| Core Typeclass | `core/types/TC.h`         | Provides `TC<F>::method`                                                              |
-| Instances      | `core/data/TC.h`          | Provides `TC` instances, e.g., `Id`, `Option`, etc.                                   |
-| Mixins         | `core/mixins/operation.h` | Given `TC<F>`, provides `F<A>.operation` as an instance method                        |
-| Traits         | `traits/TC.h`             | Defines concepts `HasTC` (constructible `TC<F>`) and `IsTC` (`F<A>` has `.operation`) |
-| Prelude        | `prelude/operation.h`     | Defines a free function `operation` on `F[_]`                                         |
-| Operators      | `operators/operation.h`   | Provides syntactic sugar for the `operation` free function                            |
+| Component      | Location                | Description                                                                           |
+|----------------|-------------------------|---------------------------------------------------------------------------------------|
+| Core Typeclass | `core/types/tc.h`       | Provides `TC<F>::operation`                                                           |
+| Instances      | `data/<type>.h`         | Data types like `Id`, `Option` that implement typeclass instance methods.             |
+| Mixins         | `core/mixins/with_tc.h` | Given `TC<F>`, provides `F<A>.operation` as an instance method                        |
+| Traits         | `traits/has_tc.h`       | Defines concepts `HasTC` (constructible `TC<F>`) and `IsTC` (`F<A>` has `.operation`) |
+| Prelude        | `prelude/operation.h`   | Defines a free function `operation` on `F[_]`                                         |
+| Operators      | `operators/operation.h` | Provides syntactic sugar for the `operation` free function                            |
 
 ```mermaid
 flowchart TD
-    Core[Core Typeclass<br/>core/types/TC.h]
-    Data[Instances<br/>core/data/TC.h]
-    Mixin[Mixin<br/>core/mixins/TC.h]
-    Traits[Traits<br/>traits/TC.h]
+    Core[Core Typeclass<br/>core/types/tc.h]
+    Data[Instances<br/>data/type.h]
+    Mixin[Mixin<br/>core/mixins/with_tc.h]
+    Traits[Traits<br/>traits/has_tc.h]
     Prelude[Prelude<br/>prelude/operation.h]
     Operators[Operators<br/>operators/operation.h]
     Core -->|provides methods to| Mixin
@@ -54,7 +56,7 @@ flowchart TD
 
 #### Special `WithValue`, `WithApply`, and `pure` Case
 
-Mixins `WithValue` and `WithApply`, along with the free function `pure`, are
+The mixins `WithValue` and `WithApply`, along with the free function `pure`, are
 special in that they are not tied to a specific typeclass; instead, they must be
 implemented by any datatype to enable storage and manipulation of values.
 
@@ -64,27 +66,27 @@ implemented by any datatype to enable storage and manipulation of values.
 | `WithApply` | Static internal method `::apply(fab)` used by `pure`   |
 | `pure`      | Free function `pure<F>(a)` to wrap a value             |
 
-### Development Checklist
+#### Development Checklist
 
 For typeclass TC and TC::operation
 
-- core/types/tc.h → define `TC<F>` with static `operation`
-- core/mixins/operation.h → add instance method `.equals` via mixin
-  `WithOperation` which uses `TC::operation`
-- traits/tc.h → define `HasTC` and `IsTC` concepts
-- prelude/operation.h → free function `operation`
-- operators/operation.h → `operator` for `operation`, if it makes sense
-- tests/core/types/tc.cpp → test mixin and laws
-- tests/prelude/operation.cpp → test free `operation` and operators
+1. `core/types/tc.h`: define `TC<F>` with static `TC::operation`
+2. `core/mixins/with_tc.h`: add instance method `.equals` via mixin
+   `WithOperation` which uses `TC::operation`
+3. `traits/has_tc.h`: define `HasTC` and `IsTC` concepts
+4. `prelude/operation.h`: free function `operation`
+5. `operators/operation.h`: `operator` for `operation`, if it makes sense
+6. `tests/core/types/tc.cpp`: test mixin and laws
+7. `tests/prelude/operation.cpp`: test free `operation` and operators
 
 #### Done so far
 
-| TC      | Mixin   | Trait                 | Operation | Test Core | Test Prelude |
+| TC      | Mixin   | Traits                | Operation | Test Core | Test Prelude |
 |---------|---------|-----------------------|-----------|-----------|--------------|
 | Eq      | WithEq  | HasEq, IsEq           | equals    | Yes       | Yes          |
 | Functor | WithMap | HasFunctor, IsFunctor | fmap      |           |              |
 
-### Namespacing
+#### Namespacing
 
 ```mermaid
 flowchart LR
@@ -103,7 +105,7 @@ flowchart LR
     end
 ```
 
-### Testing
+#### Testing
 
 The directory structure under `tests/` mirrors that of `core/`,  
 `traits/`, `prelude/`, and  
@@ -120,6 +122,8 @@ The directory structure under `tests/` mirrors that of `core/`,
 2. Copy the `fp` directory from `include` into your include path.
 3. Include the library with `#include <fp/fp.h>`.
 4. Compile with a C++20-compliant compiler.
+
+Requires a C++20-compatible compiler (tested with GCC 13 and Clang 16).
 
 ```bash
 g++ -Iinclude -o fp_test main.cpp -std=c++20 -g -O0
@@ -141,3 +145,12 @@ ctest --test-dir build
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 for details.
+
+## Inspired By
+
+- [*Functional Programming in Scala, Second
+  Edition*](https://www.amazon.com/dp/1617290653) by Paul Chiusano and Rúnar
+  Bjarnason
+- [*Haskell in Depth*](https://www.amazon.com/dp/1617297572) by Vitaly
+  Bragilevsky
+- [*Cats*](https://typelevel.org/cats/) & [*Cats Effect*](https://typelevel.org/cats-effect/)

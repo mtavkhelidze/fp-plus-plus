@@ -11,16 +11,16 @@
 #include <fp/tools/inner_type.h>
 #include <fp/tools/rebind.h>
 #include <fp/traits/arrow.h>
-#include <fp/traits/value.h>
+#include <fp/traits/has_value.h>
 
 namespace fp::core::mixins {
 
 template <typename DataClass>
 struct WithMap {
     template <typename F>
-        requires traits::value::HasValue<DataClass>
-              && traits::value::HasApply<DataClass>
-              && fp::traits::arrow::
+        requires traits::HasValue<DataClass>
+              && traits::HasApply<DataClass>
+              && fp::traits::
                    Arrow<F, tools::inner_type::fp_inner_type<DataClass>>
     [[nodiscard]] constexpr auto map(F&& f) const noexcept {
         using Inner = typename DataClass::value_type;

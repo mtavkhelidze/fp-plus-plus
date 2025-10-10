@@ -9,7 +9,7 @@
 
 #include <fp/tools/instance.h>
 
-namespace fp::traits::instance {
+namespace fp::traits {
 
 template <typename TC>
 concept AnyInstance = tools::instance::fp_is_instance<TC>;
@@ -20,6 +20,6 @@ concept UnaryInstance = tools::instance::fp_is_unary_instance<TC>;
 template <typename TC>
 concept BinaryInstance = tools::instance::fp_is_binary_instance<TC>;
 
-}  // namespace fp::traits::instance
+}  // namespace fp::traits
 
 #endif  // FP_TRAITS_INSTANCE_H

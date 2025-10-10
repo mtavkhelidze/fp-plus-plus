@@ -8,7 +8,7 @@
 
 #include <fp/tools/arrow.h>
 
-namespace fp::traits::arrow {
+namespace fp::traits {
 template <typename F, typename A>
 concept Arrow = tools::arrow::fp_is_arrow<F, A>;
 
@@ -18,5 +18,5 @@ concept BinaryArrow = tools::arrow::fp_is_binary_arrow<F, A, B>;
 template <typename F, typename A>
 concept KleisliArrow = tools::arrow::fp_is_kleisli_arrow<F, A>;
 
-}  // namespace fp::traits::arrow
+}  // namespace fp::traits
 #endif  // FP_TRAITS_ARROW_H

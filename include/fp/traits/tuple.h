@@ -8,10 +8,10 @@
 
 #include <fp/tools/tuple.h>
 
-namespace fp::traits::tuple {
+namespace fp::traits {
 
 template <typename T>
 concept IsTuple = tools::tuple::fp_is_tuple<T>;
-}  // namespace fp::traits::tuple
+}  // namespace fp::traits
 
 #endif  // FP_TRAITS_TUPLE_H

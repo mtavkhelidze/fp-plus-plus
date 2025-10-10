@@ -12,7 +12,7 @@
 
 #include <concepts>
 
-namespace fp::traits::value {
+namespace fp::traits {
 
 template <typename TC>
 concept HasValue = requires(TC t) {
@@ -32,5 +32,5 @@ concept HasApply =
         fp::tools::cast::fp_cast<fp::tools::inner_type::fp_inner_type<TC>>>>;
   };
 
-}  // namespace fp::traits::value
+}  // namespace fp::traits
 #endif  // FP_TRAITS_VALUE_H

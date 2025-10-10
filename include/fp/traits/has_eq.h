@@ -9,7 +9,7 @@
 #include <fp/core/types/eq.h>
 #include <fp/core/whatever.h>
 
-namespace fp::traits::eq {
+namespace fp::traits {
 
 template <template <typename> typename F>
 concept HasEq = requires { typename fp::core::types::Eq<F>; };
@@ -20,6 +20,6 @@ concept IsEq =
       { fa.equals(fb) } -> std::same_as<bool>;
   };
 
-}  // namespace fp::traits::eq
+}  // namespace fp::traits
 
 #endif  // FP_TRAITS_EQ_H

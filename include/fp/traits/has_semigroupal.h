@@ -10,7 +10,7 @@
 
 #include <concepts>
 
-namespace fp::traits::semigroupal {
+namespace fp::traits {
 
 template <template <typename...> typename F>
 concept HasSemigroupal = requires { typename fp::core::types::Semigroupal<F>; };
@@ -20,6 +20,6 @@ concept IsSemigroupal = HasSemigroupal<F> && requires(F<int> fa) {
     { fa.product(fa) } -> std::same_as<F<fp::core::types::Tuple<int, int>>>;
 };
 
-}  // namespace fp::traits::semigroupal
+}  // namespace fp::traits
 
 #endif  // FP_TRAITS_SEMIGROUPAL_H

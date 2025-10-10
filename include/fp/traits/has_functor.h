@@ -10,9 +10,8 @@
 #include <fp/core/whatever.h>
 #include <fp/prelude/identity.h>
 #include <fp/tools/inner_type.h>
-#include <fp/traits/arrow.h>
 
-namespace fp::traits::functor {
+namespace fp::traits {
 template <template <typename> typename F>
 concept HasFunctor = requires { typename fp::core::types::Functor<F>; };
 
@@ -21,6 +20,6 @@ concept IsFunctor = HasFunctor<F> && requires(F<fp::core::Whatever> fa) {
     { fa.map(fp::prelude::identity) } -> std::same_as<F<fp::core::Whatever>>;
 };
 
-}  // namespace fp::traits::functor
+}  // namespace fp::traits
 
 #endif  // FP_TRAITS_FUNCTOR_H

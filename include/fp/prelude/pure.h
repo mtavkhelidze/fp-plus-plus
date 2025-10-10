@@ -7,7 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/tools/cast.h>
-#include <fp/traits/value.h>
+#include <fp/traits/traits.h>
 
 namespace fp::prelude {
 
@@ -27,7 +27,7 @@ namespace fp::prelude {
  *   auto idValue = pure<Id>(42); // Id<int> containing 42
  */
 template <template <typename> typename F, typename T>
-    requires traits::value::HasApply<F<tools::cast::fp_cast<T>>>
+    requires traits::HasApply<F<tools::cast::fp_cast<T>>>
 auto pure(T&& value) -> F<tools::cast::fp_cast<T>> {
     using A = tools::cast::fp_cast<T>;
     return F<A>::apply(std::forward<T>(value));

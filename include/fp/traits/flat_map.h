@@ -12,7 +12,7 @@
 #include <fp/tools/cast.h>
 #include <fp/tools/inner_type.h>
 #include <fp/tools/rebind.h>
-#include <fp/traits/value.h>
+#include <fp/traits/traits.h>
 
 namespace fp::traits::flat_map {
 

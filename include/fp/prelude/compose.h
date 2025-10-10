@@ -7,7 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/tools/arrow.h>
-#include <fp/traits/arrow.h>
+#include <fp/traits/traits.h>
 
 #include <utility>
 
@@ -26,8 +26,8 @@ constexpr auto compose(F&& lhs, G&& rhs) noexcept {
              A&& a
            ) constexpr noexcept -> decltype(auto)
                requires(
-                 traits::arrow::Arrow<G, A>
-                 && traits::arrow::Arrow<F, tools::arrow::fp_arrow_result<G, A>>
+                 traits::Arrow<G, A>
+                 && traits::Arrow<F, tools::arrow::fp_arrow_result<G, A>>
                )
     { return lhs(rhs(std::forward<A>(a))); };
 }

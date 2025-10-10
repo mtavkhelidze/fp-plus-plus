@@ -9,7 +9,7 @@
 #include <fp/prelude/pure.h>
 #include <fp/tools/flat_map.h>
 #include <fp/tools/inner_type.h>
-#include <fp/traits/applicative.h>
+#include <fp/traits/traits.h>
 
 namespace fp::traits::monad {
 /// Concept representing a lawful Monad.
