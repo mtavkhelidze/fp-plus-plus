@@ -7,17 +7,20 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/prelude/equals.h>
+#include <fp/traits/has_eq.h>
 
 namespace fp::operators::equality {
 
 template <template <typename> typename F, typename A>
+    requires fp::traits::HasEq<F>
 constexpr auto operator==(const F<A>& a, const F<A>& b) noexcept -> bool {
-    return equals(a, b);
+    return prelude::equals(a, b);
 }
 
 template <template <typename> typename F, typename A>
+    requires fp::traits::HasEq<F>
 constexpr auto operator!=(const F<A>& a, const F<A>& b) noexcept -> bool {
-    return !equals(a, b);
+    return !prelude::equals(a, b);
 }
 
 }  // namespace fp::operators::equality

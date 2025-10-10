@@ -6,13 +6,13 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/traits/traits.h>
+#include <fp/core/types/eq.h>
 
 namespace fp::prelude {
 
 template <template <typename> typename F, typename A>
 constexpr auto equals(const F<A>& lhs, const F<A>& rhs) -> bool {
-    return fp::core::types::Eq<F>::eq(lhs, rhs);
+    return fp::core::types::Eq<F>::equals(lhs, rhs);
 }
 
 }  // namespace fp::prelude

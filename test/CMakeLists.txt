@@ -15,6 +15,7 @@ set(TEST_SRC
     src/internal/storage/storage_stack.cpp
     src/prelude/compose.cpp
     src/prelude/dollar.cpp
+    src/prelude/equals.cpp
     src/prelude/flip.cpp
     src/prelude/fmap.cpp
     src/prelude/lift.cpp
