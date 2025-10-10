@@ -81,10 +81,10 @@ For typeclass TC and TC::operation
 
 #### Done so far
 
-| TC      | Mixin   | Traits                | Operation | Test Core | Test Prelude |
-|---------|---------|-----------------------|-----------|-----------|--------------|
-| Eq      | WithEq  | HasEq, IsEq           | equals    | Yes       | Yes          |
-| Functor | WithMap | HasFunctor, IsFunctor | fmap      |           |              |
+| core/types/tc.h | mixins/with_tc.h | traits/has_tc.h       | prelude | Test Core | Test Prelude |
+|-----------------|------------------|-----------------------|---------|-----------|--------------|
+| Eq              | WithEq           | HasEq, IsEq           | equals  | Yes       | Yes          |
+| Functor         | WithMap          | HasFunctor, IsFunctor | fmap    |           |              |
 
 #### Namespacing
 
@@ -153,4 +153,5 @@ for details.
   Bjarnason
 - [*Haskell in Depth*](https://www.amazon.com/dp/1617297572) by Vitaly
   Bragilevsky
-- [*Cats*](https://typelevel.org/cats/) & [*Cats Effect*](https://typelevel.org/cats-effect/)
+- [*Cats*](https://typelevel.org/cats/) & [*Cats
+  Effect*](https://typelevel.org/cats-effect/)

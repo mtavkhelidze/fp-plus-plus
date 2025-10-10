@@ -8,11 +8,11 @@
 #define FP_OPERATORS_H
 
 #include <fp/operators/composition.h>
-#include <fp/operators/eq.h>
+#include <fp/operators/equality.h>
 
 namespace fp::operators {
 using namespace composition;
-using namespace eq;
+using namespace equality;
 }  // namespace fp::operators
 
 #endif  // FP_OPERATORS_H

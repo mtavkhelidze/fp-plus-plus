@@ -5,6 +5,7 @@
 #define FP_PLUS_PLUS_INCLUDED_FROM_FP_FP 1  // NOLINT
 
 #include "core/core.h"
+#include "data/data.h"
 #include "operators/operators.h"
 #include "prelude/prelude.h"
 #include "traits/traits.h"
@@ -12,6 +13,7 @@
 #undef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 namespace fp {
+using namespace data;
 using namespace core;
 using namespace prelude;
 }  // namespace fp

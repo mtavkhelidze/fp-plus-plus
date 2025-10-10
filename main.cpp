@@ -5,7 +5,7 @@
 
 using namespace fp;
 
-auto main() -> int {  //
+auto main() -> int {
     Nothing n = nothing;
     std::cout << n << std::endl;
     return 0;

@@ -6,14 +6,12 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/core/data/data.h>
 #include <fp/core/mixins/mixins.h>
 #include <fp/core/nothing.h>
 #include <fp/core/types/types.h>
 #include <fp/core/whatever.h>
 
 namespace fp::core {
-using namespace data;
 using namespace types;
 }  // namespace fp::core
 

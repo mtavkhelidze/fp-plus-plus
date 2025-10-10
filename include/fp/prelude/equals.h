@@ -6,7 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/core/types/eq.h>
+#include <fp/traits/traits.h>
 
 namespace fp::prelude {
 
