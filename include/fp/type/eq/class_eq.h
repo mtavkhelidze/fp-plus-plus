@@ -6,9 +6,9 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/traits/has_value.h>
+#include <fp/type/value/traits_value.h>
 
-namespace fp::core::types {
+namespace fp::type::classes {
 /**
  * Eq typeclass for unary type constructors like Id, Option, etc. Provides
  * Eq<F>::equals<A> -> bool
@@ -22,5 +22,5 @@ struct Eq {
     }
 };
 
-}  // namespace fp::core::types
+}  // namespace fp::type::classes
 #endif  // FP_TYPE_CLASS_EQ_H

@@ -6,8 +6,8 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/internal/storage/storage_box.h>
-#include <fp/internal/storage/storage_stack.h>
+#include <fp/internal/storage/box_storage.h>
+#include <fp/internal/storage/stack_storage.h>
 
 namespace fp::mixins {
 

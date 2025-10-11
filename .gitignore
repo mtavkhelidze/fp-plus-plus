@@ -12,5 +12,5 @@ cmake-build-debug/
 *~
 todo.org
 *.log
-Testing/
+./Testing/
 todo.md

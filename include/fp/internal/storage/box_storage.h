@@ -1,5 +1,5 @@
-#ifndef FP_INTERNAL_STORAGE_BOX_H
-#define FP_INTERNAL_STORAGE_BOX_H
+#ifndef FP_INTERNAL_STOEAGE_BOX_STORAGE_H
+#define FP_INTERNAL_STOEAGE_BOX_STORAGE_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -30,7 +30,7 @@ struct StorageBox {
     template <typename TC, typename T>
     using rebind = fp::tools::rebind::fp_rebind<TC, T>;
 
-    using Box = fp::internal::storage::box::Box<A>;
+    using Box = Box<A>;
     Box box;
 
   protected:
@@ -70,4 +70,4 @@ struct StorageBox {
 
 }  // namespace fp::internal::storage
 
-#endif  // FP_INTERNAL_STORAGE_BOX_H
+#endif  // FP_INTERNAL_STOEAGE_BOX_STORAGE_H

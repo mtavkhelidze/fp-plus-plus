@@ -1,5 +1,5 @@
-#ifndef FP_INTERNAL_STORAGE_STACK_H
-#define FP_INTERNAL_STORAGE_STACK_H
+#ifndef FP_INTERNAL_STORAGE_STACK_STORAGE_H
+#define FP_INTERNAL_STORAGE_STACK_STORAGE_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -67,4 +67,4 @@ struct StorageStack {
 };
 }  // namespace fp::internal::storage
 
-#endif  // FP_INTERNAL_STORAGE_STACK_H
+#endif  // FP_INTERNAL_STORAGE_STACK_STORAGE_H

@@ -45,4 +45,4 @@ add_executable(fp_main main.cpp)
 target_compile_definitions(fp_main PRIVATE FP_PLUS_PLUS_TESTING)
 target_include_directories(fp_main PRIVATE include)
 
-#subdirs(test)
+subdirs(test)
