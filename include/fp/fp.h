@@ -4,7 +4,7 @@
 
 #define FP_PLUS_PLUS_INCLUDED_FROM_FP_FP 1  // NOLINT
 
-#include "data/base/base.h"
+#include "data/instances.h"
 #include "type/classes.h"
 
 #undef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP

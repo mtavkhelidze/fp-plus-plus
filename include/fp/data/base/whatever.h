@@ -8,7 +8,7 @@
 
 #include <string>
 
-namespace fp::data {
+namespace fp::data::base {
 struct __whateve {
     constexpr auto operator==(const __whateve&) const -> bool { return true; }
     constexpr auto operator!=(const __whateve&) const -> bool { return false; }
@@ -22,6 +22,6 @@ struct __whateve {
 };
 using Whatever = __whateve;
 Whatever constexpr whatever = __whateve{};
-}  // namespace fp::data
+}  // namespace fp::data::base
 
 #endif  // FP_DATA_BASE_WHATEVER_H

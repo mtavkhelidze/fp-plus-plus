@@ -9,7 +9,7 @@
 
 #include <string>
 
-namespace fp::data {
+namespace fp::data::base {
 struct __nothing {
     constexpr auto operator==(const __nothing&) const -> bool { return true; }
     constexpr auto operator!=(const __nothing&) const -> bool { return false; }
@@ -23,6 +23,6 @@ struct __nothing {
 };
 using Nothing = __nothing;
 Nothing constexpr nothing = __nothing{};
-}  // namespace fp::data
+}  // namespace fp::data::base
 
 #endif  // FP_DATA_BASE_NOTHING_H
