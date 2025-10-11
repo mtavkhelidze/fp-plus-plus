@@ -8,8 +8,8 @@
 
 #include <fp/type/eq/class_eq.h>
 #include <fp/type/eq/mixins_eq.h>
-#include <fp/type/eq/ops_eq.h>
-#include <fp/type/eq/pre_eq.h>
+#include <fp/type/eq/ops_equals.h>
+#include <fp/type/eq/pre_equals.h>
 #include <fp/type/eq/traits_eq.h>
 
 #endif  // FP_TYPE_EQ_RQ_H

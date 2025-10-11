@@ -6,7 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/type/eq/pre_eq.h>
+#include <fp/type/eq/pre_equals.h>
 #include <fp/type/eq/traits_eq.h>
 
 namespace fp::operators {

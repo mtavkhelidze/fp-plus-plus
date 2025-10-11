@@ -6,7 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/type/eq/eq.h>
-#include <fp/type/value/value.h>
+#include <fp/type/eq.h>
+#include <fp/type/value.h>
 
 #endif  // FP_TYPE_CLASS_H
