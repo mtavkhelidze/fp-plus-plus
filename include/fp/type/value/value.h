@@ -7,6 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/type/value/mixins_value.h>
+#include <fp/type/value/pre_value.h>
 #include <fp/type/value/traits_value.h>
 
 #endif  // FP_TYPE_VALUE_VALUE_H

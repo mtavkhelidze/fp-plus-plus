@@ -6,9 +6,8 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/data/base/base.h>
+#include <fp/data/instances.h>
 #include <fp/type/eq/class_eq.h>
-#include <fp/type/eq/traits_eq.h>
 
 namespace fp::traits {
 

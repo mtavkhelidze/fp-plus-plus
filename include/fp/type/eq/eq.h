@@ -7,6 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/type/eq/class_eq.h>
+#include <fp/type/eq/mixins_eq.h>
 #include <fp/type/eq/ops_eq.h>
 #include <fp/type/eq/pre_eq.h>
 #include <fp/type/eq/traits_eq.h>
