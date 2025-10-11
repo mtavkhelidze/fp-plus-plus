@@ -3,17 +3,18 @@
 
 using namespace fp;
 
-auto difference = [](int a, int b) { return a - b; };
+static const auto difference = [](int a, int b) -> int { return a - b; };
 
 struct MoveOnlyAdder {
     MoveOnlyAdder() = default;
     MoveOnlyAdder(MoveOnlyAdder&&) = default;
-    MoveOnlyAdder& operator=(MoveOnlyAdder&&) = default;
+    ~MoveOnlyAdder() = default;
+    auto operator=(MoveOnlyAdder&&) -> MoveOnlyAdder& = default;
 
     MoveOnlyAdder(const MoveOnlyAdder&) = delete;
-    MoveOnlyAdder& operator=(const MoveOnlyAdder&) = delete;
+    auto operator=(const MoveOnlyAdder&) -> MoveOnlyAdder& = delete;
 
-    int operator()(int a, int b) const { return a + b; }
+    auto operator()(int a, int b) const -> int { return a + b; }
 };
 
 TEST(Prelude_Flip, flips) { ASSERT_EQ(flip(difference)(10, 1), -9); }

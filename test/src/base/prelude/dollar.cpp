@@ -7,10 +7,12 @@ using namespace fp;
 using namespace fp::operators;
 using namespace fp::test;
 
+// NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
+
 // &= like `$` in Haskell
 TEST(Prelude_Dollar, works_with_different_types) {
     auto actual = int_to_string &= square &= 2;
-    auto expected = "4";
+    const auto* expected = "4";
 
     EXPECT_EQ(actual, expected);
 }
@@ -30,7 +32,7 @@ TEST(Prelude_Dollar, works_with_primitive_type) {
 
 TEST(Prelude_Dollar, works_with_string_type) {
     auto actual = hello &= "Name";
-    auto expected = "Hello Name";
+    const auto* expected = "Hello Name";
 
     EXPECT_EQ(actual, expected);
 }
@@ -66,3 +68,4 @@ TEST(Prelude_Dollar, deep_chaining) {
 
     EXPECT_EQ(result, 7);
 }
+// NOLINTEND(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)

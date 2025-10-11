@@ -11,7 +11,7 @@ struct TestStruct : WithValue<TestStruct<A>> {
 };
 
 TEST(Prelude_Pure, pure_int) {
-    auto b = pure<TestStruct>(42);
+    auto b = pure<TestStruct>(42);  // NOLINT
     static_assert(std::is_same_v<decltype(b), TestStruct<int>>);
     EXPECT_EQ(b.value(), 42);
 }

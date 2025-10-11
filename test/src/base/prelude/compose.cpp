@@ -7,6 +7,8 @@ using namespace fp;
 using namespace fp::test;
 using namespace fp::operators;
 
+// NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
+
 // * like . in Haskell
 TEST(Prelude_compose, works_with_composition_right_to_left) {
     auto initial = 2;
@@ -35,7 +37,7 @@ TEST(Prelude_compose, works_with_identity_function) {
 }
 
 TEST(Prelude_compose, works_with_different_return_types) {
-    auto add_exclamation = [](std::string s) { return s + "!"; };
+    auto add_exclamation = [](const std::string& s) { return s + "!"; };
 
     auto actual = add_exclamation * int_to_string * increment;
     EXPECT_EQ(actual(42), "43!");
@@ -51,7 +53,7 @@ TEST(Prelude_compose, forwards_arguments_correctly) {
     auto to_string = [](const int& x) -> std::string {
         return std::to_string(x);
     };
-    auto add_suffix = [](std::string&& s) -> std::string {
+    auto add_suffix = [](const std::string&& s) -> std::string {
         return s + "_done";
     };
 
@@ -89,3 +91,4 @@ TEST(Prelude_compose, works_with_custom_functions_objects) {
     auto f = Adder{} * Multiplier{};
     EXPECT_EQ(f(2), 5);
 }
+// NOLINTEND(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)

@@ -1,5 +1,5 @@
-#ifndef FP_PRELUDE_COMPOSE_H
-#define FP_PRELUDE_COMPOSE_H
+#ifndef FP_BASE_PRELUDE_COMPOSE_H
+#define FP_BASE_PRELUDE_COMPOSE_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -8,8 +8,6 @@
 
 #include <fp/base/traits.h>
 #include <fp/tools/all.h>
-
-#include <utility>
 
 namespace fp::prelude {
 
@@ -32,4 +30,4 @@ constexpr auto compose(F&& lhs, G&& rhs) noexcept {
     { return lhs(rhs(std::forward<A>(a))); };
 }
 }  // namespace fp::prelude
-#endif  // FP_PRELUDE_COMPOSE_H
+#endif  // FP_BASE_PRELUDE_COMPOSE_H

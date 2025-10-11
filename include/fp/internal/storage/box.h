@@ -1,7 +1,6 @@
 #ifndef FP_INTERNAL_STORAGE_BOX_H
 #define FP_INTERNAL_STORAGE_BOX_H
 #pragma once
-
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -11,6 +10,8 @@
 #include <cstddef>
 #include <memory>
 #include <vector>
+
+// NOLINTBEGIN(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays)
 
 namespace fp::internal::storage {
 
@@ -52,7 +53,7 @@ struct FP_ALIGN_PACKED_16 Box {
     constexpr auto get() const -> const T& {
         return *data;
     }
-    constexpr auto empty() const -> bool { return !data; }
+    [[nodiscard]] constexpr auto empty() const -> bool { return !data; }
     // --- constructors
 
     // Value (not pointer)
@@ -97,7 +98,7 @@ struct FP_ALIGN_PACKED_16 Box {
           std::is_same_v<T, std::tuple<std::decay_t<U>, std::decay_t<Us>...>>
         )
     explicit Box(U&& u, Us&&... us) {
-        T t(u, us...);
+        T t(std::forward<U>(u), std::forward<Us>(us)...);
         data = std::make_shared<T>(t);
     }
     // --- Other constructors
@@ -131,5 +132,6 @@ Box(const U (&)[N]) -> Box<std::vector<std::decay_t<U>>>;
 template <typename U, typename... Us>
     requires(sizeof...(Us) > 0)
 Box(U&&, Us&&...) -> Box<std::tuple<std::decay_t<U>, std::decay_t<Us>...>>;
+// NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays)
 }  // namespace fp::internal::storage
 #endif  // FP_INTERNAL_STORAGE_BOX_H

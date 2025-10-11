@@ -2,6 +2,8 @@
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
+
 using namespace fp;
 using namespace fp::mixins;
 using namespace fp::traits;
@@ -39,3 +41,5 @@ TEST(Types_Eq, transitivity) {
         EXPECT_TRUE(a.equals(c));
     }
 }
+
+// NOLINTEND(misc-non-private-member-variables-in-classes,readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)

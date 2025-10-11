@@ -14,20 +14,20 @@ namespace fp::mixins {
 template <
   typename TC,
   bool = std::is_fundamental_v<fp::tools::inner_type::fp_inner_type<TC>>>
-struct __backend;
+struct _backend;
 
 template <typename TC>
-struct __backend<TC, true> {
+struct _backend<TC, true> {
     using type = internal::storage::StorageStack<TC>;
 };
 
 template <typename TC>
-struct __backend<TC, false> {
+struct _backend<TC, false> {
     using type = internal::storage::StorageBox<TC>;
 };
 
 template <typename TC>
-using Backend = __backend<TC>;
+using Backend = _backend<TC>;
 
 /**
  * Mixin for objects with storage backend and ::apply.
@@ -53,11 +53,10 @@ struct WithValue : private Backend<F>::type {
     constexpr auto value() const noexcept -> auto& { return this->get(); }
 
 #ifdef FP_PLUS_PLUS_TESTING
-  public:
-    constexpr auto is_box() const -> bool {
+    [[nodiscard]] constexpr auto is_box() const -> bool {
         return strcmp(this->_tag, "StorageBox") == 0;
     }
-    constexpr auto is_stack() const -> bool {
+    [[nodiscard]] constexpr auto is_stack() const -> bool {
         return strcmp(this->_tag, "StorageStack") == 0;
     }
 #endif  // FP_PLUS_PLUS_TESTING

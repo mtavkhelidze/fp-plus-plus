@@ -13,14 +13,14 @@ namespace fp::prelude {
  * `identity(x)` is equivalent to `x`.
  * Commonly used in functional pipelines or as a default transformation.
  */
-struct __identity {
+struct _identity {
     template <typename A>
-    constexpr A operator()(A value) const noexcept {
+    constexpr auto operator()(A value) const noexcept -> A {
         return value;
     }
 };
 
-inline constexpr __identity identity{};
+inline constexpr _identity identity{};
 using identity_t = decltype(identity);
 }  // namespace fp::prelude
 

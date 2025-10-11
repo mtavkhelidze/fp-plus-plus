@@ -8,11 +8,13 @@
 
 #include <cstddef>
 
-inline constexpr std::size_t __fp_align_16 = 16;
-inline constexpr std::size_t __fp_align_32 = 32;
+inline constexpr std::size_t fp_align_1 = 1;
+inline constexpr std::size_t fp_align_16 = 16;
+inline constexpr std::size_t fp_align_32 = 32;
 
 #define FP_PACKED [[gnu::packed]]
-#define FP_ALIGN_PACKED_16 alignas(__fp_align_16) FP_PACKED
-#define FP_ALIGN_PACKED_32 alignas(__fp_align_32) FP_PACKED
+#define FP_ALIGN_PACKED_1 alignas(fp_align_1) FP_PACKED
+#define FP_ALIGN_PACKED_16 alignas(fp_align_16) FP_PACKED
+#define FP_ALIGN_PACKED_32 alignas(fp_align_32) FP_PACKED
 
 #endif  // FP_INTERNAL_STORAGE_DEFS_H

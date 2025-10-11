@@ -1,6 +1,8 @@
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
+
 using namespace fp;
 using namespace fp::mixins;
 using namespace fp::operators;
@@ -41,3 +43,5 @@ TEST(Perators_Euqals, negative_double_equal) {
     ASSERT_FALSE(a == b);
     ASSERT_TRUE(a != b);
 }
+
+// NOLINTEND(misc-non-private-member-variables-in-classes,readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)

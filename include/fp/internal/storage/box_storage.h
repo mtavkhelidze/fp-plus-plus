@@ -36,16 +36,16 @@ struct StorageBox {
   protected:
     explicit StorageBox(const Box& b) noexcept : box(b) {}
     StorageBox(const StorageBox& other) noexcept = default;
-    inline StorageBox& operator=(const StorageBox& other) noexcept = default;
+    auto operator=(const StorageBox& other) noexcept -> StorageBox& = default;
     ~StorageBox() noexcept = default;
 
-  private:
+  public:
     StorageBox() noexcept = delete;
     StorageBox(StorageBox&&) noexcept = delete;
-    StorageBox& operator=(StorageBox&&) noexcept = delete;
+    auto operator=(StorageBox&&) noexcept -> StorageBox& = delete;
 
   protected:
-    inline constexpr auto get() const noexcept -> const A& { return box.get(); }
+    constexpr auto get() const noexcept -> const A& { return box.get(); }
 
     /**
      * Boxes a raw value of type T, normalizing it to the FP type U (A),
@@ -63,7 +63,6 @@ struct StorageBox {
     }
 
 #ifdef FP_PLUS_PLUS_TESTING
-  protected:
     static constexpr const char* _tag = "StorageBox";
 #endif
 };

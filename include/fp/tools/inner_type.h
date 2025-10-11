@@ -10,21 +10,21 @@
 
 namespace fp::tools::inner_type {
 
-namespace __internal {
+namespace _internal {
     template <typename T>
-    struct __extract_inner_type {};
+    struct _extract_inner_type {};
 
     template <template <typename> typename TC, typename A>
-    struct __extract_inner_type<TC<A>> {
+    struct _extract_inner_type<TC<A>> {
         using type = std::decay_t<A>;
     };
-}  // namespace __internal
+}  // namespace _internal
 
 /// If given TC<A>, access A
 template <typename TC>
     requires instance::fp_is_unary_instance<TC>
 using fp_inner_type =
-  typename __internal::__extract_inner_type<std::decay_t<TC>>::type;
+  typename _internal::_extract_inner_type<std::decay_t<TC>>::type;
 
 template <typename TC, typename A>
     requires instance::fp_is_unary_instance<TC>

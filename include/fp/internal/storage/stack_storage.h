@@ -29,18 +29,18 @@ struct StorageStack {
 
   protected:
     StorageStack(const StorageStack& other) noexcept : value(other.value) {}
-    inline StorageStack& operator=(const StorageStack& other) noexcept {
-        value = other.value;
-        return *this;
-    }
+    auto operator=(const StorageStack& other) noexcept
+      -> StorageStack& = default;
     ~StorageStack() noexcept = default;
 
   private:
-    explicit StorageStack(A&& v) noexcept : value(std::forward<A>(v)) {}
+    explicit StorageStack(A&& /* NOLINT */ v) noexcept
+        : value(std::forward<A>(v)) {}
 
+  public:
     StorageStack() noexcept = delete;
     StorageStack(StorageStack&&) noexcept = delete;
-    StorageStack& operator=(StorageStack&&) noexcept = delete;
+    auto operator=(StorageStack&&) noexcept -> StorageStack& = delete;
 
   protected:
     constexpr auto get() const noexcept -> const A& { return value; }
@@ -61,7 +61,6 @@ struct StorageStack {
     }
 
 #ifdef FP_PLUS_PLUS_TESTING
-  protected:
     static constexpr const char* _tag = "StorageStack";
 #endif
 };

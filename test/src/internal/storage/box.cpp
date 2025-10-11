@@ -7,27 +7,27 @@
 #include <type_traits>
 #include <vector>
 
-// NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers, hicpp-no-array-decay)
-using ::testing::Test;
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 
+using ::testing::Test;
 using namespace fp::internal::storage;
 
 TEST(Box_Copy, copy_constructor_behavior) {
     Box<std::string> a = Box("hello");
-    Box<std::string> b(a);
+    const Box<std::string>& b(a);
     ASSERT_EQ(a.get(), b.get());
 }
 
 TEST(Box_Copy, copy_semantics) {
     auto a = Box<int>(42);
-    auto b = a;
+    const auto& b = a;
     ASSERT_EQ(a.get(), b.get());
 }
 
 TEST(Box_Copy, shared_reference_count_behavior) {
     auto shared = std::make_shared<int>(99);
     auto a = Box(shared);
-    auto b = a;
+    const auto& b = a;
     ASSERT_EQ(&a.get(), &b.get());  // Should point to same shared_ptr
 }
 
@@ -66,7 +66,7 @@ TEST(Box_Construction, function_pointer) {
 }
 
 TEST(Box_Construction, literal_c_arrays) {
-    int arr1[] = {1, 2, 3};
+    int arr1[] = {1, 2, 3};  // NOLINT
     auto box1 = Box(arr1);
     static_assert(
       std::is_same_v<std::vector<int>, typename decltype(box1)::kind>
@@ -78,7 +78,7 @@ TEST(Box_Construction, literal_c_arrays) {
     ASSERT_EQ(v1[1], 2);
     ASSERT_EQ(v1[2], 3);
 
-    std::string arr2[] = {"one", "two", "three"};
+    std::string arr2[] = {"one", "two", "three"};  // NOLINT
     auto box2 = Box(arr2);
     static_assert(
       std::is_same_v<std::vector<std::string>, typename decltype(box2)::kind>
@@ -102,7 +102,7 @@ TEST(Box_Construction, literal_fundamental) {
     ASSERT_EQ(box2.get(), 1);
 
     // Implicit conversion from double to int for testing type resolution
-    const int& y = x;
+    const int& y = x;  // NOLINT
     auto box3 = Box(y);
     static_assert(std::is_same_v<int, typename decltype(box3)::kind>);
     ASSERT_EQ(box3.get(), 1);
@@ -138,7 +138,7 @@ TEST(Box_Construction, literal_string) {
     static_assert(std::is_same_v<std::string, typename decltype(box1)::kind>);
     ASSERT_EQ(box1.get(), "hello");
 
-    auto str = "hello";
+    const auto* str = "hello";
     auto& str_ref = str;
     auto box2 = Box(str_ref);
     static_assert(std::is_same_v<Box<std::string>, decltype(box2)>);
@@ -147,9 +147,9 @@ TEST(Box_Construction, literal_string) {
 
 TEST(Box_Construction, literal_varargs) {
     auto x = 10;
-    auto y = &x;
+    auto* y = &x;
     auto& z = x;
-    auto a = "hello";
+    const auto* a = "hello";
 
     auto box1 = Box(x, y, z, a);
     static_assert(
@@ -181,7 +181,7 @@ TEST(Box_Construction, literal_varargs) {
 
 TEST(Box_Construction, move_only_rvalue_and_smart_ptr) {
     // move-only type and rvalue move-only smart pointer
-    struct MoveOnly {
+    struct MoveOnly {  // NOLINT
         MoveOnly() = default;
         MoveOnly(MoveOnly&&) = default;
         MoveOnly(const MoveOnly&) = delete;
@@ -260,7 +260,7 @@ TEST(Box_Construction, reference_collapsing_behavior) {
     auto box1 = Box(ref);
     static_assert(std::is_same_v<Box<int>, decltype(box1)>);
 
-    auto box2 = Box<int>(std::move(rref));
+    auto box2 = Box<int>(rref);
     static_assert(std::is_same_v<Box<int>, decltype(box2)>);
 }
 
@@ -286,14 +286,18 @@ TEST(Box_Extra, empty_tuple) {
 
 TEST(Box_Extra, large_c_array_to_vector) {
     constexpr size_t N = 1000;
-    int arr[N];
-    for (size_t i = 0; i < N; ++i) arr[i] = static_cast<int>(i * i);
+    int arr[N];  // NOLINT
+#pragma unroll 10
+    for (size_t i = 0; i < N; ++i) {
+        arr[i] = static_cast<int>(i * i);  // NOLINT
+    }
     auto box = Box(arr);
     static_assert(
       std::is_same_v<std::vector<int>, typename decltype(box)::kind>
     );
     auto v = box.get();
     ASSERT_EQ(v.size(), N);
+#pragma unroll 10
     for (size_t i = 0; i < N; ++i) {
         ASSERT_EQ(v[i], static_cast<int>(i * i));
     }
@@ -307,4 +311,4 @@ TEST(Box_Extra, nested_box) {
     static_assert(std::is_same_v<int, decltype(inner2)>);
     ASSERT_EQ(inner2, 123);
 }
-// NOLINTEND(cppcoreguidelines-avoid-magic-numbers, hicpp-no-array-decay)
+// NOLINTEND(misc-non-private-member-variables-in-classes,readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)

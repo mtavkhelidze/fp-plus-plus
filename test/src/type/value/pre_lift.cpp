@@ -12,14 +12,14 @@ struct TestStruct : WithValue<TestStruct<A>> {
 
 TEST(Prelude_Lift, lift_double) {
     auto doubleFn = lift<TestStruct>([](int x) { return x * 2; });
-    auto result = doubleFn(21);
+    auto result = doubleFn(21);  // NOLINT
     static_assert(std::is_same_v<decltype(result), TestStruct<int>>);
     EXPECT_EQ(result.value(), 42);
 }
 
 TEST(Prelude_Lift, lift_identity) {
     auto idFn = lift<TestStruct>([](int x) { return x; });
-    auto result = idFn(10);
+    auto result = idFn(10);  // NOLINT
     EXPECT_EQ(result.value(), 10);
 }
 

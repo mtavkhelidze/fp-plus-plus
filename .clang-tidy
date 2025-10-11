@@ -1,48 +1,29 @@
-# .clang-tidy configuration file
+Checks:
+- "*"
+- -altera-struct-pack-align
+- -clang-analyzer-optin.performance.Padding
+- -fuchsia-*
+- -google-build-using-namespace
+- -google-readability-avoid-underscore-in-googletest-name
+- -llvm-include-order
+- -llvmlibc-*
+- -llvmlibc-implementation-in-namespace
+- -misc-use-anonymous-namespace
+- -readability-identifier-length
+- bugprone-*
+- clang-analyzer-*
+- llvm-header-guard
+- modernize-*
+- performance-*
+- portability-*
+- readability-*
 
-Checks: >
-  *,
-  -bugprone-reserved-identifier,
-  -clang-tidyfuchsia-*,
-  -*-dcl37-c,
-  -*-dcl51-cpp,
-  -cert-err58-cpp,
-  -fuchsia-*,
-  -google-build-using-namespace,
-  -google-readability-avoid-underscore-in-googletest-name,
-  -llvm-include-order,
-  -llvmlibc-*,
-  -llvmlibc-implementation-in-namespace,
-  -misc-use-anonymous-namespace,
-  -readability-identifier-length,
-  -readability-identifier-length.*,
-  clang-analyzer-*,
-  performance-*
-
-# readability-identifier-length.IgnoredExceptionVariableNames,
-# readability-identifier-length.MinimumExceptionNameLength,
-# readability-identifier-length.MinimumLoopCounterNameLength,
-# readability-identifier-length.MinimumParameterNameLength,
-# readability-identifier-length.MinimumVariableNameLength,
-
-
-# # Customize check options
-# CheckOptions:
-#   - key: readability-identifier-length.MinimumVariableNameLength
-#     value: 1
-#   - key: readability-identifier-length.MinimumParameterNameLength
-#     value: 1
-#   - key: readability-identifier-length.MinimumLoopCounterNameLength
-#     value: 1
-#   - key: readability-identifier-length.MinimumExceptionNameLength
-#     value: 3
-#   - key: readability-identifier-length.IgnoredExceptionVariableNames
-#     value: "e,ex"
-
-#   # Performance checks
-#   - key: performance-unnecessary-copy-in-loop.Threshold
-#     value: 1
-
-#   # Miscellaneous check options
-#   - key: clang-analyzer-core.NullDereference
-#     value: 1
+CheckOptions:
+- key: llvm-header-guard.HeaderFileExtensions
+  value: 'h;hpp'
+- key: llvm-header-guard.DefinePrefix
+  value: 'FP_'
+- key: readability-identifier-length.MinimumVariableNameLength
+  value: 1
+- key: readability-identifier-length.MinimumParameterNameLength
+  value: 1

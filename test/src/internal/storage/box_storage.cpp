@@ -1,8 +1,12 @@
 #include <fp/fp.h>
+#include <fp/internal/storage/defs.h>
 #include <gtest/gtest.h>
 
+#include <cstddef>
 #include <string>
 #include <type_traits>
+
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers,google-readability-casting,cppcoreguidelines-pro-type-cstyle-cast)
 
 using namespace fp;
 using namespace fp::internal::storage;
@@ -16,7 +20,7 @@ struct TestStruct : StorageBox<TestStruct<A>> {
         return Base::put(std::forward<decltype(x)>(x));
     }
 
-    auto value() const -> auto& { return this->get(); }
+    [[nodiscard]] auto value() const -> auto& { return this->get(); }
 };
 
 TEST(StorageBox, copy_assignment_is_shallow) {
@@ -24,21 +28,20 @@ TEST(StorageBox, copy_assignment_is_shallow) {
     // Get the address of the string data in 'a'
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdangling-gsl"
-    auto a_ptr = (unsigned long)(a.value().c_str());
+    auto a_ptr = (uint64_t)(a.value().c_str());
 #pragma clang diagnostic pop
-
     TestStruct<std::string> b =
       TestStruct<std::string>::store(std::string("bar"));
 
     b = a;  // copy assignment
 
     EXPECT_EQ(b.value(), a.value());  // Content is equal ("foo")
-    EXPECT_EQ((unsigned long)(b.value().c_str()), a_ptr);
+    EXPECT_EQ((uint64_t)(b.value().c_str()), a_ptr);
 }
 
 TEST(StorageBox, copy_constructor_preserves_value) {
     auto a = TestStruct<std::string>::store("abc");
-    auto b = a;
+    const auto& b = a;
     EXPECT_EQ(b.value(), "abc");
 }
 
@@ -63,19 +66,19 @@ TEST(StorageBox, multiple_copies_share_data) {  // Renamed for clarity
     auto a = TestStruct<std::string>::store(std::string("copytest"));
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdangling-gsl"
-    auto a_ptr = (unsigned long)(a.value().c_str());
+    auto a_ptr = (uint64_t)(a.value().c_str());
 #pragma clang diagnostic pop
 
-    auto b = a;
+    const auto& b = a;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdangling-gsl"
-    auto b_ptr = (unsigned long)(b.value().c_str());  // Should be same as a_ptr
+    auto b_ptr = (uint64_t)(b.value().c_str());  // Should be same as a_ptr
 #pragma clang diagnostic pop
 
-    auto c = b;
+    const auto& c = b;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdangling-gsl"
-    auto c_ptr = (unsigned long)(c.value().c_str());  // Should be same as a_ptr
+    auto c_ptr = (uint64_t)(c.value().c_str());  // Should be same as a_ptr
 #pragma clang diagnostic pop
 
     EXPECT_EQ(a.value(), b.value());
@@ -108,10 +111,11 @@ TEST(StorageBox, works_with_custom_struct) {
     struct MyStruct {
         int x;
         std::string y;
-        bool operator==(const MyStruct&) const = default;
+        auto operator==(const MyStruct&) const -> bool = default;
     };
 
-    MyStruct input{42, "hello"};
+    MyStruct input{.x = 42, .y = "hello"};
     auto box = TestStruct<MyStruct>::store(input);
     EXPECT_EQ(box.value(), input);
 }
+// NOLINTEND(misc-non-private-member-variables-in-classes,readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers,google-readability-casting,cppcoreguidelines-pro-type-cstyle-cast)

@@ -6,7 +6,7 @@ using namespace fp::tools;
 using namespace fp::internal::storage;
 
 template <typename T>
-constexpr void check_fp_cast_vs_box() {
+static constexpr void check_fp_cast_vs_box() {
     static_assert(
       std::is_same_v<fp_cast<T>, typename Box<std::decay_t<T>>::kind>,
       "fp_cast and Box::kind mismatch"
@@ -19,13 +19,17 @@ TEST(Tools_Cast, fp_cast_vs_box_const_int) {
     check_fp_cast_vs_box<const int>();
 }
 
-TEST(Tools_Cast, fp_cast_vs_box_char_pointer) { check_fp_cast_vs_box<char*>(); }
+TEST(Tools_Cast, fp_cast_vs_box_char_pointer) {  //
+    check_fp_cast_vs_box<char*>();
+}
 
 TEST(Tools_Cast, fp_cast_vs_box_const_char_pointer) {
     check_fp_cast_vs_box<const char*>();
 }
 
-TEST(Tools_Cast, fp_cast_vs_box_int_array) { check_fp_cast_vs_box<int[3]>(); }
+TEST(Tools_Cast, fp_cast_vs_box_int_array) {  //
+    check_fp_cast_vs_box<int[3]>();           // NOLINT
+}  // NOLINT
 
 TEST(Tools_Cast, fp_cast_vs_box_std_array) {
     check_fp_cast_vs_box<std::array<int, 4>>();
