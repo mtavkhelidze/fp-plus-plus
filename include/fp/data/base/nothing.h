@@ -1,5 +1,5 @@
-#ifndef FP_CORE_NOTHING_H
-#define FP_CORE_NOTHING_H
+#ifndef FP_DATA_BASE_NOTHING_H
+#define FP_DATA_BASE_NOTHING_H
 
 #pragma once
 
@@ -9,7 +9,7 @@
 
 #include <string>
 
-namespace fp::core {
+namespace fp::data {
 struct __nothing {
     constexpr auto operator==(const __nothing&) const -> bool { return true; }
     constexpr auto operator!=(const __nothing&) const -> bool { return false; }
@@ -23,6 +23,6 @@ struct __nothing {
 };
 using Nothing = __nothing;
 Nothing constexpr nothing = __nothing{};
-}  // namespace fp::core
+}  // namespace fp::data
 
-#endif  // FP_CORE_NOTHING_H
+#endif  // FP_DATA_BASE_NOTHING_H

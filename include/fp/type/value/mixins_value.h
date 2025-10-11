@@ -1,5 +1,5 @@
-#ifndef FP_INTERNAL_MIXINS_WITH_VALUE_H
-#define FP_INTERNAL_MIXINS_WITH_VALUE_H
+#ifndef FP_TYPE_VALUE_MIXINS_VALUE_H
+#define FP_TYPE_VALUE_MIXINS_VALUE_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -9,9 +9,7 @@
 #include <fp/internal/storage/storage_box.h>
 #include <fp/internal/storage/storage_stack.h>
 
-#include <type_traits>
-
-namespace fp::core::mixins {
+namespace fp::mixins {
 
 template <
   typename TC,
@@ -64,6 +62,6 @@ struct WithValue : private Backend<F>::type {
     }
 #endif  // FP_PLUS_PLUS_TESTING
 };
-};  // namespace fp::core::mixins
+};  // namespace fp::mixins
 
-#endif  // FP_INTERNAL_MIXINS_WITH_VALUE_H
+#endif  // FP_TYPE_VALUE_MIXINS_VALUE_H

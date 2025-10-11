@@ -1,6 +1,5 @@
-#ifndef FP_CORE_ANY_H
-#define FP_CORE_ANY_H
-
+#ifndef FP_DATA_BASE_WHATEVER_H
+#define FP_DATA_BASE_WHATEVER_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -9,7 +8,7 @@
 
 #include <string>
 
-namespace fp::core {
+namespace fp::data {
 struct __whateve {
     constexpr auto operator==(const __whateve&) const -> bool { return true; }
     constexpr auto operator!=(const __whateve&) const -> bool { return false; }
@@ -23,6 +22,6 @@ struct __whateve {
 };
 using Whatever = __whateve;
 Whatever constexpr whatever = __whateve{};
-}  // namespace fp::core
+}  // namespace fp::data
 
-#endif  // FP_CORE_ANY_H
+#endif  // FP_DATA_BASE_WHATEVER_H

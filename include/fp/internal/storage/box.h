@@ -1,12 +1,12 @@
-#ifndef FP_KERNEL_BOX_H
-#define FP_KERNEL_BOX_H
+#ifndef FP_INTERNAL_STORAGE_BOX_H
+#define FP_INTERNAL_STORAGE_BOX_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/prelude/defs.h>
+#include <fp/internal/storage/defs.h>
 
 #include <cstddef>
 #include <memory>
@@ -132,4 +132,4 @@ template <typename U, typename... Us>
     requires(sizeof...(Us) > 0)
 Box(U&&, Us&&...) -> Box<std::tuple<std::decay_t<U>, std::decay_t<Us>...>>;
 }  // namespace fp::internal::storage::box
-#endif  // FP_KERNEL_BOX_H
+#endif  // FP_INTERNAL_STORAGE_BOX_H
