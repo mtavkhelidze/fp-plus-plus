@@ -13,10 +13,15 @@ set(TEST_SRC
     src/tools/cast.cpp
     src/type/eq/class_traits_eq.cpp
     src/type/eq/pre_ops_equals.cpp
+    src/type/value/pre_lift.cpp
     src/type/value/pre_pure.cpp
+    src/base/prelude/compose.cpp
+    src/base/prelude/dollar.cpp
+    src/base/prelude/flip.cpp
+    src/base/prelude/pipe.cpp
 )
 
-# find_untracked_files("${TEST_SRC}" src "*.cpp")
+find_untracked_files("${TEST_SRC}" src "*.cpp")
 
 add_executable(${PROJECT_NAME}_test ${TEST_SRC})
 target_compile_definitions(${PROJECT_NAME}_test PRIVATE FP_PLUS_PLUS_TESTING)

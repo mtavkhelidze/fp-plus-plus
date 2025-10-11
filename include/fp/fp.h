@@ -4,9 +4,11 @@
 
 #define FP_PLUS_PLUS_INCLUDED_FROM_FP_FP 1  // NOLINT
 
-#include "data/instances.h"
-#include "tools/all.h"
-#include "type/classes.h"
+#include <fp/base/operators.h>
+#include <fp/base/prelude.h>
+#include <fp/data/instances.h>
+#include <fp/tools/all.h>
+#include <fp/type/classes.h>
 
 #undef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
