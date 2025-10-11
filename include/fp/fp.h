@@ -5,6 +5,7 @@
 #define FP_PLUS_PLUS_INCLUDED_FROM_FP_FP 1  // NOLINT
 
 #include "data/instances.h"
+#include "tools/all.h"
 #include "type/classes.h"
 
 #undef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP

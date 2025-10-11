@@ -10,7 +10,10 @@ set(TEST_SRC
     src/internal/storage/box_storage.cpp
     src/internal/storage/box.cpp
     src/internal/storage/stack_storage.cpp
-    src/type/eq/eq.cpp
+    src/tools/cast.cpp
+    src/type/eq/class_traits_eq.cpp
+    src/type/eq/pre_ops_equals.cpp
+    src/type/value/pre_pure.cpp
 )
 
 # find_untracked_files("${TEST_SRC}" src "*.cpp")

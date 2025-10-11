@@ -15,7 +15,7 @@ struct TestStruct
     using Base::Base;
 };
 
-TEST(Types_Eq, has_and_is_traits) {
+TEST(Traits_Eq, has_and_is_traits) {
     static_assert(HasEq<TestStruct>);
     static_assert(IsEq<TestStruct>);
 }
