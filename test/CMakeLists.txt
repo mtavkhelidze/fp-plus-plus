@@ -13,6 +13,7 @@ set(TEST_SRC
     src/prelude/compose.cpp
     src/prelude/dollar.cpp
     src/prelude/flip.cpp
+    src/prelude/identity.cpp
     src/prelude/pipe.cpp
     src/tools/cast.cpp
     src/type/eq_class.cpp
