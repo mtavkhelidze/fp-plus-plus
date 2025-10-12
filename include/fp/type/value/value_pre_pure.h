@@ -7,7 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/tools/cast.h>
-#include <fp/type/value/traits_value.h>
+#include <fp/type/value/value_traits.h>
 
 namespace fp::prelude {
 

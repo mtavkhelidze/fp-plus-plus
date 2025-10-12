@@ -7,7 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/data/instances.h>
-#include <fp/type/eq/class_eq.h>
+#include <fp/type/eq/eq_class.h>
 
 namespace fp::traits {
 

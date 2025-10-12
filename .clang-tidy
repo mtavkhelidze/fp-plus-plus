@@ -7,7 +7,6 @@ Checks:
 - -google-readability-avoid-underscore-in-googletest-name
 - -llvm-include-order
 - -llvmlibc-*
-- -llvmlibc-implementation-in-namespace
 - -misc-use-anonymous-namespace
 - -readability-identifier-length
 - bugprone-*
@@ -27,3 +26,7 @@ CheckOptions:
   value: 1
 - key: readability-identifier-length.MinimumParameterNameLength
   value: 1
+- key: llvm-header-guard.DefinePrefix
+  value: 'FP_'
+- key: llvm-header-guard.HeaderFileExtensions
+  value: 'h;hpp'
