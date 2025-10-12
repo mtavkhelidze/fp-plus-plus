@@ -1,5 +1,5 @@
-#ifndef FP_CORE_TYPES_FUNCTOR_H
-#define FP_CORE_TYPES_FUNCTOR_H
+#ifndef FP_TYPE_FUNCTOR_FUNCTOR_CLASS_H
+#define FP_TYPE_FUNCTOR_FUNCTOR_CLASS_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -9,7 +9,7 @@
 #include <fp/tools/arrow.h>
 #include <fp/type/value.h>
 
-namespace fp::core::types {
+namespace fp::type::classes {
 
 template <template <typename> typename F>
 struct Functor {
@@ -25,6 +25,6 @@ struct Functor {
         };
     };
 };
-}  // namespace fp::core::types
+}  // namespace fp::type::classes
 
-#endif  // FP_CORE_TYPES_FUNCTOR_H
+#endif  // FP_TYPE_FUNCTOR_FUNCTOR_CLASS_H

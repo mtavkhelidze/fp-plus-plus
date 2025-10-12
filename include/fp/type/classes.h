@@ -1,8 +1,5 @@
 #ifndef FP_TYPE_CLASSES_H
 #define FP_TYPE_CLASSES_H
-
-#ifndef FP_TYPE_CLASS_H
-#define FP_TYPE_CLASS_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -10,8 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/type/eq.h>
+#include <fp/type/functor.h>
 #include <fp/type/value.h>
 
-#endif  // FP_TYPE_CLASS_H
-
-#endif
+#endif  // FP_TYPE_CLASSES_H

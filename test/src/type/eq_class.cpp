@@ -18,8 +18,8 @@ struct TestStruct
 };
 
 TEST(Traits_Eq, has_and_is_traits) {
-    static_assert(HasEq<TestStruct>);
     static_assert(IsEq<TestStruct>);
+    static_assert(HasEquals<TestStruct>);
 }
 
 TEST(Types_Eq, reflexivity) {

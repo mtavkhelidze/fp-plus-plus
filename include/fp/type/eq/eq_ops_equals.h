@@ -12,17 +12,17 @@
 namespace fp::operators {
 
 template <template <typename> typename F, typename A>
-    requires fp::traits::HasEq<F>
+    requires fp::traits::IsEq<F>
 constexpr auto operator==(const F<A>& a, const F<A>& b) noexcept -> bool {
     return prelude::equals(a, b);
 }
 
 template <template <typename> typename F, typename A>
-    requires fp::traits::HasEq<F>
+    requires fp::traits::IsEq<F>
 constexpr auto operator!=(const F<A>& a, const F<A>& b) noexcept -> bool {
     return !prelude::equals(a, b);
 }
 
 }  // namespace fp::operators
 
-#endif // FP_TYPE_EQ_EQ_OPS_EQUALS_H
+#endif  // FP_TYPE_EQ_EQ_OPS_EQUALS_H

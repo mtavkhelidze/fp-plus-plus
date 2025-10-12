@@ -12,11 +12,11 @@
 namespace fp::traits {
 
 template <template <typename> typename F>
-concept HasEq = requires { typename fp::type::classes::Eq<F>; };
+concept IsEq = requires { typename type::classes::Eq<F>; };
 
 template <template <typename> typename F>
-concept IsEq =
-  HasEq<F> && requires(F<fp::data::Whatever> fa, F<fp::data::Whatever> fb) {
+concept HasEquals =
+  IsEq<F> && requires(F<data::Whatever> fa, F<data::Whatever> fb) {
       { fa.equals(fb) } -> std::same_as<bool>;
   };
 
