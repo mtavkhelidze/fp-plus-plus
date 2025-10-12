@@ -7,7 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/tools/arrow.h>
-#include <fp/traits/has_value.h>
+#include <fp/type/value.h>
 
 namespace fp::core::types {
 

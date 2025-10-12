@@ -28,7 +28,7 @@ namespace fp::prelude {
  */
 template <template <typename> typename F, typename T>
     requires traits::HasApply<F<tools::cast::fp_cast<T>>>
-auto pure(T&& value) -> F<tools::cast::fp_cast<T>> {
+constexpr auto pure(T&& value) -> F<tools::cast::fp_cast<T>> {
     using A = tools::cast::fp_cast<T>;
     return F<A>::apply(std::forward<T>(value));
 }

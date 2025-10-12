@@ -1,3 +1,6 @@
+#ifndef FP_TOOLS_CAST_H
+#define FP_TOOLS_CAST_H
+
 #ifndef FP_TOOLS_TC_H
 #define FP_TOOLS_TC_H
 #pragma once
@@ -14,5 +17,7 @@
 namespace fp::tools::cast {
 template <typename T>
 using fp_cast = typename fp::internal::storage::Box<std::decay_t<T>>::kind;
-}
+} // namespace fp::tools::cast
 #endif  // FP_TOOLS_TC_H
+
+#endif

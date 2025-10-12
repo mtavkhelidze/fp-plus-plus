@@ -1,5 +1,10 @@
+#ifndef FP_TOOLS_INNER_TYPE_H
+#define FP_TOOLS_INNER_TYPE_H
+
 #ifndef FP_tools_INNER_TYPE_H
 #define FP_tools_INNER_TYPE_H
+#include <type_traits>
+#include <concepts>
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -39,3 +44,5 @@ inline constexpr bool fp_is_same_inner_type = std::
 }  // namespace fp::tools::inner_type
 
 #endif  // FP_tools_INNER_TYPE_H
+
+#endif

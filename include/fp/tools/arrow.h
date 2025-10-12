@@ -1,5 +1,7 @@
 #ifndef FP_TOOLS_ARROW_H
 #define FP_TOOLS_ARROW_H
+#include <concepts>
+#include <type_traits>
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP

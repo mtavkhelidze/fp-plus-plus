@@ -1,5 +1,5 @@
-#ifndef FP_TYPE_EQ_OPS_EQ_H
-#define FP_TYPE_EQ_OPS_EQ_H
+#ifndef FP_TYPE_EQ_EQ_OPS_EQUALS_H
+#define FP_TYPE_EQ_EQ_OPS_EQUALS_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -25,4 +25,4 @@ constexpr auto operator!=(const F<A>& a, const F<A>& b) noexcept -> bool {
 
 }  // namespace fp::operators
 
-#endif  // FP_TYPE_EQ_OPS_EQ_H
+#endif // FP_TYPE_EQ_EQ_OPS_EQUALS_H

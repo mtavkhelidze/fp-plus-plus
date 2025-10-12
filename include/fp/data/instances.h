@@ -10,5 +10,5 @@
 
 namespace fp::data {
 using namespace base;
-}
+} // namespace fp::data
 #endif  // FP_DATA_INSTANCES_H

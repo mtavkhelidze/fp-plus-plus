@@ -1,3 +1,6 @@
+#ifndef FP_TYPE_VALUE_H
+#define FP_TYPE_VALUE_H
+
 #ifndef FP_TYPE_VALUE_VALUE_H
 #define FP_TYPE_VALUE_VALUE_H
 #pragma once
@@ -12,3 +15,5 @@
 #include <fp/type/value/value_traits.h>
 
 #endif  // FP_TYPE_VALUE_VALUE_H
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef FP_TYPE_CLASSES_H
+#define FP_TYPE_CLASSES_H
+
 #ifndef FP_TYPE_CLASS_H
 #define FP_TYPE_CLASS_H
 #pragma once
@@ -10,3 +13,5 @@
 #include <fp/type/value.h>
 
 #endif  // FP_TYPE_CLASS_H
+
+#endif

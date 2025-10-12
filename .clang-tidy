@@ -9,6 +9,8 @@ Checks:
 - -llvmlibc-*
 - -misc-use-anonymous-namespace
 - -readability-identifier-length
+- -portability-avoid-pragma-once
+- -clang-diagnostic-pragma-once-outside-header
 - bugprone-*
 - clang-analyzer-*
 - llvm-header-guard
@@ -20,13 +22,9 @@ Checks:
 CheckOptions:
 - key: llvm-header-guard.HeaderFileExtensions
   value: 'h;hpp'
-- key: llvm-header-guard.DefinePrefix
-  value: 'FP_'
 - key: readability-identifier-length.MinimumVariableNameLength
   value: 1
 - key: readability-identifier-length.MinimumParameterNameLength
   value: 1
-- key: llvm-header-guard.DefinePrefix
-  value: 'FP_'
-- key: llvm-header-guard.HeaderFileExtensions
-  value: 'h;hpp'
+- key: llvm-header-guard.HeaderCheckIncludePaths
+  value: 'include'

@@ -1,0 +1,49 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Clang: Fix header guard",
+            "type": "shell",
+            // The command remains the same
+            "command": "/opt/homebrew/opt/llvm/bin/clang-tidy",
+            "args": [
+                "-fix-errors",
+                "-p",
+                "-checks='llvm-header-guard'",
+                "${file}",
+                "--",
+                "-x c++",
+                "-DFP_PLUS_PLUS_INCLUDED_FROM_FP_FP",
+                "-std=c++20",
+                "-I${workspaceFolder}/include"
+            ],
+            // 6. Define the environment variable (The actual fix for the database)
+            "options": {
+                "env": {
+                    "COMPILATION_DATABASE_DIR": "${workspaceFolder}/build"
+                }
+            },
+            "group": "build",
+            "presentation": {
+                "reveal": "never",
+                "panel": "new"
+            },
+            "problemMatcher": {
+                // ... (Problem Matcher configuration remains the same)
+                "owner": "clang-tidy",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*?):(\\d+):(\\d+):\\s+(warning|error|note):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        }
+    ]
+}

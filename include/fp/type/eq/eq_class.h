@@ -1,5 +1,5 @@
-#ifndef FP_TYPE_CLASS_EQ_H
-#define FP_TYPE_CLASS_EQ_H
+#ifndef FP_TYPE_EQ_EQ_CLASS_H
+#define FP_TYPE_EQ_EQ_CLASS_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -23,4 +23,4 @@ struct Eq {
 };
 
 }  // namespace fp::type::classes
-#endif  // FP_TYPE_CLASS_EQ_H
+#endif  // FP_TYPE_EQ_EQ_CLASS_H

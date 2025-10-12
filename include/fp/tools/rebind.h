@@ -8,6 +8,8 @@
 
 #include <fp/tools/instance.h>
 
+#include <type_traits>
+
 namespace fp::tools::rebind {
 
 namespace _internal {

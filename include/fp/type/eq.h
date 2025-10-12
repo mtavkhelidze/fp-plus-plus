@@ -1,3 +1,6 @@
+#ifndef FP_TYPE_EQ_H
+#define FP_TYPE_EQ_H
+
 #ifndef FP_TYPE_EQ_RQ_H
 #define FP_TYPE_EQ_RQ_H
 #pragma once
@@ -13,3 +16,5 @@
 #include <fp/type/eq/eq_traits.h>
 
 #endif  // FP_TYPE_EQ_RQ_H
+
+#endif

@@ -1,5 +1,5 @@
-#ifndef FP_TOOLS_INSTANCE_H
-#define FP_TOOLS_INSTANCE_H
+#ifndef FP_TOOLS_INSTANCE_H_M
+#define FP_TOOLS_INSTANCE_H_M
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -7,6 +7,7 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <concepts>
+#include <cstddef>
 #include <type_traits>
 
 namespace fp::tools::instance {
