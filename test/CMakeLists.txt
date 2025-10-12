@@ -10,15 +10,15 @@ set(TEST_SRC
     src/internal/storage/box_storage.cpp
     src/internal/storage/box.cpp
     src/internal/storage/stack_storage.cpp
+    src/prelude/compose.cpp
+    src/prelude/dollar.cpp
+    src/prelude/flip.cpp
+    src/prelude/pipe.cpp
     src/tools/cast.cpp
-    src/type/eq/class_traits_eq.cpp
-    src/type/eq/pre_ops_equals.cpp
-    src/type/value/pre_lift.cpp
-    src/type/value/pre_pure.cpp
-    src/base/prelude/compose.cpp
-    src/base/prelude/dollar.cpp
-    src/base/prelude/flip.cpp
-    src/base/prelude/pipe.cpp
+    src/type/eq_class.cpp
+    src/type/eq_equals.cpp
+    src/type/value_lift.cpp
+    src/type/value_pure.cpp
 )
 
 find_untracked_files("${TEST_SRC}" src "*.cpp")
