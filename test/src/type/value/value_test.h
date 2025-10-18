@@ -4,9 +4,7 @@
 #include <fp/fp.h>
 
 template <typename A>
-struct TestStruct
-    : fp::mixins::WithValue<TestStruct<A>>
-    , fp::mixins::WithEq<TestStruct, A> {
+struct TestStruct : fp::mixins::WithValue<TestStruct<A>> {
     using Base = fp::mixins::WithValue<TestStruct<A>>;
     using Base::Base;
 };

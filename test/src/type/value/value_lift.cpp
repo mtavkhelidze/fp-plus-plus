@@ -1,14 +1,9 @@
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 
-using namespace fp;
-using namespace fp::mixins;
+#include "value_test.h"
 
-template <typename A>
-struct TestStruct : WithValue<TestStruct<A>> {
-    using Base = WithValue<TestStruct<A>>;
-    using Base::Base;
-};
+using namespace fp;
 
 TEST(Prelude_Lift, lift_double) {
     auto doubleFn = lift<TestStruct>([](int x) { return x * 2; });

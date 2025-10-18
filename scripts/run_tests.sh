@@ -18,13 +18,16 @@ else
   JOBS=1
 fi
 
-while getopts "qsvj:" opt; do
+TARGET="all"
+
+while getopts "qsvj:t:" opt; do
   case $opt in
     q) QUIET_CTEST=true ;;   # When -q is provided, set ctest to be quiet (--quiet)
     v) VERBOSE_CTEST=true ;; # When -s is provided, set ctest to be short/verbose (-V)
     g) PRINT_GAP=false ;;    # Changed to an "no-gap" flag for more common UX, or keep original logic
     j) JOBS=$OPTARG ;;
-    *) echo "Usage: $0 [-q] [-s] [-g] [-j jobs]" >&2; exit 1 ;;
+    t) TARGET=$OPTARG ;;
+    *) echo "Usage: $0 [-q] [-s] [-g] [-j jobs] [-t target]" >&2; exit 1 ;;
   esac
 done
 
@@ -32,7 +35,7 @@ if [ "$PRINT_GAP" = true ]; then
   printf "\n%.0s" {1..30}
 fi
 
-BUILD_CMD=("cmake" "--build" "build" "--target" "all" "--" "-j${JOBS}")
+BUILD_CMD=("cmake" "--build" "build" "--target" "${TARGET}" "--" "-j${JOBS}")
 CTEST_CMD=("ctest" "--test-dir=build")
 
 if [ "$VERBOSE_CTEST" = true ]; then

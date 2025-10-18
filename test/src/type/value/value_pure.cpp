@@ -1,14 +1,9 @@
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 
-using namespace fp;
-using namespace fp::mixins;
+#include "value_test.h"
 
-template <typename A>
-struct TestStruct : WithValue<TestStruct<A>> {
-    using Base = WithValue<TestStruct<A>>;
-    using Base::Base;
-};
+using namespace fp;
 
 TEST(Prelude_Pure, pure_int) {
     auto b = pure<TestStruct>(42);  // NOLINT
