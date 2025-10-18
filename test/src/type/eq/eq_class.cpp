@@ -4,18 +4,10 @@
 
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes,readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 
-using namespace fp;
-using namespace fp::mixins;
-using namespace fp::traits;
+#include "eq_test.h"
 
-template <typename A>
-struct TestStruct
-    : WithValue<TestStruct<A>>
-    , WithEq<TestStruct, A> {
-  private:
-    using Base = WithValue<TestStruct<A>>;
-    using Base::Base;
-};
+using namespace fp;
+using namespace fp::traits;
 
 TEST(Traits_Eq, has_and_is_traits) {
     static_assert(IsEq<TestStruct>);

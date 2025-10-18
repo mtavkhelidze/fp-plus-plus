@@ -3,18 +3,10 @@
 
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes,readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 
-using namespace fp;
-using namespace fp::mixins;
-using namespace fp::operators;
+#include "eq_test.h"
 
-template <typename A>
-struct TestStruct
-    : WithValue<TestStruct<A>>
-    , WithEq<TestStruct, A> {
-  private:
-    using Base = WithValue<TestStruct>;
-    using Base::Base;
-};
+using namespace fp;
+using namespace fp::operators;
 
 TEST(Prelude_Euqals, equal_values) {
     auto a = pure<TestStruct>(10);
