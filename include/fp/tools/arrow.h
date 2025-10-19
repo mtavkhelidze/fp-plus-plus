@@ -1,7 +1,5 @@
 #ifndef FP_TOOLS_ARROW_H
 #define FP_TOOLS_ARROW_H
-#include <concepts>
-#include <type_traits>
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -11,10 +9,13 @@
 #include <fp/tools/inner_type.h>
 #include <fp/tools/instance.h>
 
+#include <concepts>
+#include <type_traits>
+
 namespace fp::tools::arrow {
 
 template <typename F, typename A>
-inline constexpr bool fp_is_arrow =  //
+inline constexpr bool fp_is_arrow =
   std::invocable<F, A> && !std::is_void_v<std::invoke_result_t<F, A>>;
 
 template <typename F, typename A>

@@ -1,5 +1,5 @@
-#ifndef FP_TRAITS_VALUE_H
-#define FP_TRAITS_VALUE_H
+#ifndef FP_TYPE_VALUE_VALUE_TRAITS_H
+#define FP_TYPE_VALUE_VALUE_TRAITS_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -33,4 +33,4 @@ concept HasApply =
   };
 
 }  // namespace fp::traits
-#endif  // FP_TRAITS_VALUE_H
+#endif // FP_TYPE_VALUE_VALUE_TRAITS_H

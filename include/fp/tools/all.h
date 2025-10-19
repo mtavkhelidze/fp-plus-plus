@@ -19,4 +19,5 @@ using namespace inner_type;
 using namespace instance;
 using namespace rebind;
 }  // namespace fp::tools
+
 #endif  // FP_TOOLS_ALL_H

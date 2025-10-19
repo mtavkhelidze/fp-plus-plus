@@ -1,6 +1,7 @@
 #ifndef FP_INTERNAL_STORAGE_BOX_H
 #define FP_INTERNAL_STORAGE_BOX_H
 #pragma once
+
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -134,4 +135,5 @@ template <typename U, typename... Us>
 Box(U&&, Us&&...) -> Box<std::tuple<std::decay_t<U>, std::decay_t<Us>...>>;
 // NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays)
 }  // namespace fp::internal::storage
+
 #endif  // FP_INTERNAL_STORAGE_BOX_H

@@ -1,5 +1,5 @@
-#ifndef FP_TOOLS_INSTANCE_H_M
-#define FP_TOOLS_INSTANCE_H_M
+#ifndef FP_TOOLS_INSTANCE_H
+#define FP_TOOLS_INSTANCE_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -88,4 +88,5 @@ struct fp_unary_template_type {
       std::decay_t<T>>::template type<X>;
 };
 }  // namespace fp::tools::instance
+
 #endif  // FP_TOOLS_INSTANCE_H

@@ -1,5 +1,5 @@
-#ifndef FP_TRAITS_EQ_H
-#define FP_TRAITS_EQ_H
+#ifndef FP_TYPE_EQ_EQ_TRAITS_H
+#define FP_TYPE_EQ_EQ_TRAITS_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -22,4 +22,4 @@ concept HasEquals =
 
 }  // namespace fp::traits
 
-#endif  // FP_TRAITS_EQ_H
+#endif // FP_TYPE_EQ_EQ_TRAITS_H

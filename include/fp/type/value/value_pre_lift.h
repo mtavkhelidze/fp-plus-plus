@@ -1,5 +1,5 @@
-#ifndef FP_PRELUDE_LIFT_H
-#define FP_PRELUDE_LIFT_H
+#ifndef FP_TYPE_VALUE_VALUE_PRE_LIFT_H
+#define FP_TYPE_VALUE_VALUE_PRE_LIFT_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -31,4 +31,5 @@ constexpr auto lift(F&& f) {
       ) -> decltype(auto) { return pure<TC>(f(std::forward<decltype(x)>(x))); };
 };
 }  // namespace fp::prelude
-#endif  // FP_PRELUDE_LIFT_H
+
+#endif // FP_TYPE_VALUE_VALUE_PRE_LIFT_H

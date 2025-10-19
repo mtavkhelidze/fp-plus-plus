@@ -1,5 +1,5 @@
-#ifndef FP_TYPE_EQ_PRE_EQ_H
-#define FP_TYPE_EQ_PRE_EQ_H
+#ifndef FP_TYPE_EQ_EQ_PRE_EQUALS_H
+#define FP_TYPE_EQ_EQ_PRE_EQUALS_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -17,4 +17,4 @@ constexpr auto equals(const F<A>& lhs, const F<A>& rhs) -> bool {
 
 }  // namespace fp::prelude
 
-#endif  // FP_TYPE_EQ_PRE_EQ_H
+#endif // FP_TYPE_EQ_EQ_PRE_EQUALS_H

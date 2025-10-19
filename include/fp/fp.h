@@ -17,4 +17,5 @@ using namespace data;
 using namespace prelude;
 using namespace type::classes;
 }  // namespace fp
+
 #endif  // FP_FP_H

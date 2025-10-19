@@ -20,4 +20,5 @@ inline constexpr auto fmap = []<typename Fn>(Fn&& f) -> auto {
 };
 
 }  // namespace fp::prelude
+
 #endif  // FP_TYPE_FUNCTOR_FUNCTOR_PRE_FMAP_H

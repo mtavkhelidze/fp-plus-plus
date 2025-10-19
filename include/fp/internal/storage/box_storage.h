@@ -1,5 +1,5 @@
-#ifndef FP_INTERNAL_STOEAGE_BOX_STORAGE_H
-#define FP_INTERNAL_STOEAGE_BOX_STORAGE_H
+#ifndef FP_INTERNAL_STORAGE_BOX_STORAGE_H
+#define FP_INTERNAL_STORAGE_BOX_STORAGE_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -69,4 +69,4 @@ struct StorageBox {
 
 }  // namespace fp::internal::storage
 
-#endif  // FP_INTERNAL_STOEAGE_BOX_STORAGE_H
+#endif  // FP_INTERNAL_STORAGE_BOX_STORAGE_H

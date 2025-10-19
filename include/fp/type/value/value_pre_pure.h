@@ -1,5 +1,5 @@
-#ifndef FP_PRELUDE_PURE_H
-#define FP_PRELUDE_PURE_H
+#ifndef FP_TYPE_VALUE_VALUE_PRE_PURE_H
+#define FP_TYPE_VALUE_VALUE_PRE_PURE_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -33,4 +33,5 @@ constexpr auto pure(T&& value) -> F<tools::cast::fp_cast<T>> {
     return F<A>::apply(std::forward<T>(value));
 }
 }  // namespace fp::prelude
-#endif  // FP_PRELUDE_PURE_H
+
+#endif  // FP_TYPE_VALUE_VALUE_PRE_PURE_H

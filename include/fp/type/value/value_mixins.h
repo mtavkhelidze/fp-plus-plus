@@ -1,5 +1,5 @@
-#ifndef FP_TYPE_VALUE_MIXINS_VALUE_H
-#define FP_TYPE_VALUE_MIXINS_VALUE_H
+#ifndef FP_TYPE_VALUE_VALUE_MIXINS_H
+#define FP_TYPE_VALUE_VALUE_MIXINS_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -63,4 +63,4 @@ struct WithValue : private Backend<F>::type {
 };
 };  // namespace fp::mixins
 
-#endif  // FP_TYPE_VALUE_MIXINS_VALUE_H
+#endif // FP_TYPE_VALUE_VALUE_MIXINS_H

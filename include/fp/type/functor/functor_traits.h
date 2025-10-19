@@ -31,4 +31,5 @@ template <typename TC, typename Fn = prelude::identity_t>
 constexpr bool HasFunctor = HasMap<TC, Fn>;
 
 }  // namespace fp::traits
+
 #endif  // FP_TYPE_FUNCTOR_FUNCTOR_TRAITS_H

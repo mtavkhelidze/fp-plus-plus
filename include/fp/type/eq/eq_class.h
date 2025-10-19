@@ -23,4 +23,5 @@ struct Eq {
 };
 
 }  // namespace fp::type::classes
+
 #endif  // FP_TYPE_EQ_EQ_CLASS_H

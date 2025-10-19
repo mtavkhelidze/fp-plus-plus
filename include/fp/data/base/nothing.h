@@ -1,6 +1,5 @@
 #ifndef FP_DATA_BASE_NOTHING_H
 #define FP_DATA_BASE_NOTHING_H
-
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
