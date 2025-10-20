@@ -12,8 +12,8 @@ using namespace fp;
 using namespace fp::internal::storage;
 
 template <typename A>
-struct TestStruct : StorageBox<TestStruct<A>> {
-    using Base = StorageBox<TestStruct<A>>;
+struct EqStruct : StorageBox<EqStruct<A>> {
+    using Base = StorageBox<EqStruct<A>>;
     using Base::Base;
 
     static auto store(auto&& x) -> auto {
@@ -24,14 +24,13 @@ struct TestStruct : StorageBox<TestStruct<A>> {
 };
 
 TEST(StorageBox, copy_assignment_is_shallow) {
-    auto a = TestStruct<std::string>::store(std::string("foo"));
+    auto a = EqStruct<std::string>::store(std::string("foo"));
     // Get the address of the string data in 'a'
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdangling-gsl"
     auto a_ptr = (uint64_t)(a.value().c_str());
 #pragma clang diagnostic pop
-    TestStruct<std::string> b =
-      TestStruct<std::string>::store(std::string("bar"));
+    EqStruct<std::string> b = EqStruct<std::string>::store(std::string("bar"));
 
     b = a;  // copy assignment
 
@@ -40,30 +39,30 @@ TEST(StorageBox, copy_assignment_is_shallow) {
 }
 
 TEST(StorageBox, copy_constructor_preserves_value) {
-    auto a = TestStruct<std::string>::store("abc");
+    auto a = EqStruct<std::string>::store("abc");
     const auto& b = a;
     EXPECT_EQ(b.value(), "abc");
 }
 
 TEST(StorageBox, const_accessors) {
-    auto box = TestStruct<std::string>::store(std::string("const test"));
+    auto box = EqStruct<std::string>::store(std::string("const test"));
     const auto& const_box = box;
     EXPECT_EQ(const_box.value(), "const test");
 }
 
 TEST(StorageBox, doesnt_allow_move) {
     static_assert(
-      !std::is_move_constructible_v<StorageBox<TestStruct<std::string>>>,
+      !std::is_move_constructible_v<StorageBox<EqStruct<std::string>>>,
       "StorageBox should not be move constructible"
     );
     static_assert(
-      !std::is_move_assignable_v<StorageBox<TestStruct<std::string>>>,
+      !std::is_move_assignable_v<StorageBox<EqStruct<std::string>>>,
       "StorageBox should not be move assignable"
     );
 }
 
 TEST(StorageBox, multiple_copies_share_data) {  // Renamed for clarity
-    auto a = TestStruct<std::string>::store(std::string("copytest"));
+    auto a = EqStruct<std::string>::store(std::string("copytest"));
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdangling-gsl"
     auto a_ptr = (uint64_t)(a.value().c_str());
@@ -90,12 +89,12 @@ TEST(StorageBox, multiple_copies_share_data) {  // Renamed for clarity
 }
 
 TEST(StorageBox, put_and_get_complex_type) {
-    auto box = TestStruct<std::string>::store(std::string("hello"));
+    auto box = EqStruct<std::string>::store(std::string("hello"));
     EXPECT_EQ(box.value(), "hello");
 }
 
 TEST(StorageBox, self_copy_assignment_is_safe) {
-    auto a = TestStruct<std::string>::store(std::string("safe"));
+    auto a = EqStruct<std::string>::store(std::string("safe"));
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wself-assign-overloaded"
     a = a;
@@ -104,7 +103,7 @@ TEST(StorageBox, self_copy_assignment_is_safe) {
 }
 
 TEST(StorageBox, stores_nothing_type_safely) {
-    auto box = TestStruct<Nothing>::store(nothing);
+    auto box = EqStruct<Nothing>::store(nothing);
 }
 
 TEST(StorageBox, works_with_custom_struct) {
@@ -115,7 +114,7 @@ TEST(StorageBox, works_with_custom_struct) {
     };
 
     MyStruct input{.x = 42, .y = "hello"};
-    auto box = TestStruct<MyStruct>::store(input);
+    auto box = EqStruct<MyStruct>::store(input);
     EXPECT_EQ(box.value(), input);
 }
 // NOLINTEND(misc-non-private-member-variables-in-classes,readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers,google-readability-casting,cppcoreguidelines-pro-type-cstyle-cast)

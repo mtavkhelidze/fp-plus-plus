@@ -8,6 +8,8 @@
 
 #include <fp/type/value.h>
 
+#include <concepts>
+
 namespace fp::type::classes {
 /**
  * Eq typeclass for unary type constructors like Id, Option, etc. Provides
@@ -15,10 +17,19 @@ namespace fp::type::classes {
  */
 template <template <typename> typename F>
 struct Eq {
+    // 1. Container WithValue
     template <typename A>
-        requires fp::traits::HasValue<F<A>>
+        requires(traits::HasValue<F<A>>)
     static constexpr auto equals(const F<A>& a1, const F<A>& a2) -> bool {
         return a1.value() == a2.value();
+    }
+
+    // 2. Concrete types with ==
+    template <typename A>
+    static constexpr auto equals(const A& a1, const A& a2) -> bool
+        requires(std::equality_comparable<A>)
+    {
+        return a1 == a2;
     }
 };
 

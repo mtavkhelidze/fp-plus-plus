@@ -11,15 +11,21 @@
 
 namespace fp::traits {
 
-template <template <typename> typename F>
-concept IsEq = requires { typename type::classes::Eq<F>; };
+template <typename T>
+concept IsEqType = requires(T a, T b) {
+    { a == b } -> std::convertible_to<bool>;
+};
 
 template <template <typename> typename F>
-concept HasEquals =
-  IsEq<F> && requires(F<data::Whatever> fa, F<data::Whatever> fb) {
-      { fa.equals(fb) } -> std::same_as<bool>;
-  };
+concept IsEq = requires {  //
+    typename type::classes::Eq<F>;
+};
+
+template <typename FA>
+concept HasEquals = requires(FA fa, FA fb) {
+    { fa.equals(fb) } -> std::same_as<bool>;
+};
 
 }  // namespace fp::traits
 
-#endif // FP_TYPE_EQ_EQ_TRAITS_H
+#endif  // FP_TYPE_EQ_EQ_TRAITS_H

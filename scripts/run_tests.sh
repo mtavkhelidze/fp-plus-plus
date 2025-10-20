@@ -8,7 +8,7 @@ cd "$REPO_ROOT" || { echo "Error: Failed to change to repository root '$REPO_ROO
 
 QUIET_CTEST=false   # Corresponds to ctest's --quiet
 VERBOSE_CTEST=false # Corresponds to ctest's -V (more verbose)
-PRINT_GAP=true      # Print 30 line gap before running tests
+PRINT_GAP=false      # Print 30 line gap before running tests
 
 if command -v nproc &>/dev/null; then
   JOBS=$(nproc) # Linux
@@ -20,11 +20,11 @@ fi
 
 TARGET="all"
 
-while getopts "qsvj:t:" opt; do
+while getopts "qsvgj:t:" opt; do
   case $opt in
     q) QUIET_CTEST=true ;;   # When -q is provided, set ctest to be quiet (--quiet)
     v) VERBOSE_CTEST=true ;; # When -s is provided, set ctest to be short/verbose (-V)
-    g) PRINT_GAP=false ;;    # Changed to an "no-gap" flag for more common UX, or keep original logic
+    g) PRINT_GAP=true ;;    # Changed to an "no-gap" flag for more common UX, or keep original logic
     j) JOBS=$OPTARG ;;
     t) TARGET=$OPTARG ;;
     *) echo "Usage: $0 [-q] [-s] [-g] [-j jobs] [-t target]" >&2; exit 1 ;;

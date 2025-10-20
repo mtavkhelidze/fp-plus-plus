@@ -6,7 +6,10 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/type/eq/eq_class.h>
+#include <fp/tools/all.h>
+#include <fp/type/classes.h>
+
+#include <concepts>
 
 namespace fp::prelude {
 
@@ -15,6 +18,12 @@ constexpr auto equals(const F<A>& lhs, const F<A>& rhs) -> bool {
     return fp::type::classes::Eq<F>::equals(lhs, rhs);
 }
 
+template <typename A>
+    requires(std::equality_comparable<A>)
+constexpr auto equals(const A& lhs, const A& rhs) -> bool {
+    return rhs == lhs;
+}
+
 }  // namespace fp::prelude
 
-#endif // FP_TYPE_EQ_EQ_PRE_EQUALS_H
+#endif  // FP_TYPE_EQ_EQ_PRE_EQUALS_H

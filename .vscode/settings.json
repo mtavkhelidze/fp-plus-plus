@@ -1,18 +1,4 @@
 {
-    "C_Cpp.codeFolding": "enabled",
-    "C_Cpp.dimInactiveRegions": false,
-    "C_Cpp.intelliSenseEngine": "disabled",
-    "clangd.arguments": [
-        "--clang-tidy",
-        "--background-index",
-        "--completion-style=detailed",
-        "--header-insertion=never",
-        "--compile-commands-dir=build"
-    ],
-    "clangd.checkUpdates": true,
-    "clangd.onConfigChanged": "restart",
-    "cmake.automaticReconfigure": false,
-    "editor.formatOnSave": true,
     "files.associations": {
         "__bit_reference": "cpp",
         "__config": "cpp",
@@ -94,5 +80,10 @@
         "utility": "cpp",
         "variant": "cpp",
         "vector": "cpp"
-    }
+    },
+    "sonarlint.connectedMode.project": {
+        "connectionId": "mtavkhelidze",
+        "projectKey": "mtavkhelidze_fp-plus-plus"
+    },
+    "sonarlint.pathToCompileCommands": "${workspaceFolder}/build/compile_commands.json"
 }

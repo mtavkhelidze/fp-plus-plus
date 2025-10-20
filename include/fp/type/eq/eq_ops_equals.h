@@ -12,7 +12,7 @@
 namespace fp::operators {
 
 template <template <typename> typename F, typename A>
-    requires fp::traits::IsEq<F>
+    requires traits::IsEq<F>
 constexpr auto operator==(const F<A>& a, const F<A>& b) noexcept -> bool {
     return prelude::equals(a, b);
 }

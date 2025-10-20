@@ -16,14 +16,14 @@ set(TEST_SRC
     src/prelude/identity.cpp
     src/prelude/pipe.cpp
     src/tools/cast.cpp
-    src/type/eq/eq_class.cpp
-    src/type/eq/eq_equals.cpp
+    src/type/eq/eq_traits.cpp
+    src/type/eq/eq_props.cpp
     src/type/value/value_lift.cpp
     src/type/value/value_pure.cpp
 )
 
 set(TEST_HEADERS
-    src/type/eq/eq_test.h
+    src/type/eq/eq_type.h
     src/type/value/value_test.h
 )
 find_untracked_files("${TEST_SRC}" src "*.cpp")

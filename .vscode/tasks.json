@@ -15,6 +15,7 @@
                 "-x c++",
                 "-DFP_PLUS_PLUS_INCLUDED_FROM_FP_FP",
                 "-std=c++20",
+                "-I${workspaceFolder}",
                 "-I${workspaceFolder}/include"
             ],
             // 6. Define the environment variable (The actual fix for the database)

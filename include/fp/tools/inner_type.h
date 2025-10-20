@@ -14,30 +14,30 @@
 namespace fp::tools::inner_type {
 
 namespace _internal {
-    template <typename T>
+    template <typename F>
     struct _extract_inner_type {};
 
-    template <template <typename> typename TC, typename A>
-    struct _extract_inner_type<TC<A>> {
+    template <template <typename> typename F, typename A>
+    struct _extract_inner_type<F<A>> {
         using type = std::decay_t<A>;
     };
 }  // namespace _internal
 
-/// If given TC<A>, access A
-template <typename TC>
-    requires instance::fp_is_unary_instance<TC>
+/// If given F<A>, access A
+template <typename F>
+    requires instance::fp_is_unary_instance<F>
 using fp_inner_type =
-  typename _internal::_extract_inner_type<std::decay_t<TC>>::type;
+  typename _internal::_extract_inner_type<std::decay_t<F>>::type;
 
-template <typename TC, typename A>
-    requires instance::fp_is_unary_instance<TC>
-inline constexpr bool fp_is_inner_type = std::same_as<fp_inner_type<TC>, A>;
+template <typename F, typename A>
+    requires instance::fp_is_unary_instance<F>
+inline constexpr bool fp_is_inner_type = std::same_as<fp_inner_type<F>, A>;
 
-template <typename TA, typename TB>
-    requires(instance::fp_is_unary_instance<TA>
-             && instance::fp_is_unary_instance<TB>)
+template <typename FA, typename FB>
+    requires(instance::fp_is_unary_instance<FA>
+             && instance::fp_is_unary_instance<FB>)
 inline constexpr bool fp_is_same_inner_type = std::
-  same_as<fp_inner_type<std::decay_t<TA>>, fp_inner_type<std::decay_t<TB>>>;
+  same_as<fp_inner_type<std::decay_t<FA>>, fp_inner_type<std::decay_t<FB>>>;
 
 }  // namespace fp::tools::inner_type
 

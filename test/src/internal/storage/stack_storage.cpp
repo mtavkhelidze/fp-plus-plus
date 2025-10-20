@@ -7,8 +7,8 @@ using namespace fp;
 using namespace fp::internal::storage;
 
 template <typename A>
-struct TestStruct : StorageStack<TestStruct<A>> {
-    using Base = StorageStack<TestStruct<A>>;
+struct EqStruct : StorageStack<EqStruct<A>> {
+    using Base = StorageStack<EqStruct<A>>;
     using Base::Base;  // NOLINT
 
     static auto store(auto&& x) -> auto {
@@ -19,22 +19,22 @@ struct TestStruct : StorageStack<TestStruct<A>> {
 };
 
 TEST(StorageStack, copy_assignment_copies_value) {
-    auto original = TestStruct<int>::store(123);
-    auto copy = TestStruct<int>::store(0);
+    auto original = EqStruct<int>::store(123);
+    auto copy = EqStruct<int>::store(0);
     copy = original;
     EXPECT_EQ(copy.value(), 123);
     EXPECT_EQ(original.value(), 123);
 }
 
 TEST(StorageStack, copy_constructor_copies_value) {
-    auto original = TestStruct<int>::store(99);
+    auto original = EqStruct<int>::store(99);
     const auto& copy = original;
     EXPECT_EQ(copy.value(), 99);
     EXPECT_EQ(original.value(), 99);
 }
 
 TEST(StorageStack, self_assignment_does_nothing) {
-    auto box = TestStruct<int>::store(123);
+    auto box = EqStruct<int>::store(123);
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wself-assign-overloaded"
@@ -45,7 +45,7 @@ TEST(StorageStack, self_assignment_does_nothing) {
 }
 
 TEST(StorageStack, stores_and_returns_value) {
-    auto box = TestStruct<int>::store(42);
+    auto box = EqStruct<int>::store(42);
     EXPECT_EQ(box.value(), 42);
 }
 
