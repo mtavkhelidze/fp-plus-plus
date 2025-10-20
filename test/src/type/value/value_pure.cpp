@@ -1,7 +1,7 @@
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 
-#include "value_test.h"
+#include "value_types.h"
 
 using namespace fp;
 

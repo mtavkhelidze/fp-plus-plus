@@ -1,7 +1,9 @@
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 
-#include "value_test.h"
+#include <string_view>
+
+#include "value_types.h"
 
 using namespace fp;
 
@@ -20,7 +22,7 @@ TEST(Prelude_Lift, lift_identity) {
 
 TEST(Prelude_Lift, lift_string_length) {
     auto lenFn =
-      lift<ValueStruct>([](const std::string& s) { return s.length(); });
+      lift<ValueStruct>([](const std::string_view& s) { return s.length(); });
     auto result = lenFn(std::string("hello"));
     EXPECT_EQ(result.value(), 5);
 }

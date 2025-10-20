@@ -20,11 +20,12 @@ set(TEST_SRC
     src/type/eq/eq_props.cpp
     src/type/value/value_lift.cpp
     src/type/value/value_pure.cpp
+    src/type/value/value_traits.cpp
 )
 
 set(TEST_HEADERS
-    src/type/eq/eq_type.h
-    src/type/value/value_test.h
+    src/type/eq/eq_types.h
+    src/type/value/value_types.h
 )
 find_untracked_files("${TEST_SRC}" src "*.cpp")
 find_untracked_files("${TEST_HEADERS}" src "*.h")

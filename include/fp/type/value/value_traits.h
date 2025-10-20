@@ -14,23 +14,23 @@
 
 namespace fp::traits {
 
-template <typename TC>
-concept HasValue = requires(TC t) {
+template <typename FA>
+concept HasValue = requires(FA t) {
     {
         t.value()
     } -> std::same_as<const fp::tools::cast::fp_cast<
-      fp::tools::inner_type::fp_inner_type<TC>>&>;
+      fp::tools::inner_type::fp_inner_type<FA>>&>;
 };
 
-template <typename TC>
+template <typename FA>
 concept HasApply =
-  HasValue<TC> && requires(fp::tools::inner_type::fp_inner_type<TC> arg) {
+  HasValue<FA> && requires(fp::tools::inner_type::fp_inner_type<FA> arg) {
       {
-          TC::apply(arg)
+          FA::apply(arg)
       } -> std::same_as<fp::tools::rebind::fp_rebind<
-        TC,
-        fp::tools::cast::fp_cast<fp::tools::inner_type::fp_inner_type<TC>>>>;
+        FA,
+        fp::tools::cast::fp_cast<fp::tools::inner_type::fp_inner_type<FA>>>>;
   };
 
 }  // namespace fp::traits
-#endif // FP_TYPE_VALUE_VALUE_TRAITS_H
+#endif  // FP_TYPE_VALUE_VALUE_TRAITS_H
