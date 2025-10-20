@@ -16,11 +16,11 @@ struct Functor {
     template <typename A>
     static constexpr auto map = []<typename Fn>(Fn&& f) {
         return [f = std::forward<Fn>(f)](const F<A>& fa) -> decltype(auto)
-                   requires fp::traits::HasValue<F<A>>
-                         && fp::traits::HasApply<F<A>>
-                         && fp::tools::arrow::fp_is_arrow<Fn, A>
+                   requires traits::HasValue<F<A>>
+                         && traits::HasApply<F<A>>
+                         && tools::arrow::fp_is_arrow<Fn, A>
         {
-            using Result = fp::tools::arrow::fp_arrow_result<Fn, A>;
+            using Result = tools::arrow::fp_arrow_result<Fn, A>;
             return F<Result>::apply(std::invoke(f, fa.value()));
         };
     };

@@ -16,8 +16,9 @@ set(TEST_SRC
     src/prelude/identity.cpp
     src/prelude/pipe.cpp
     src/tools/cast.cpp
-    src/type/eq/eq_traits.cpp
+    src/type/eq/eq_ops.cpp
     src/type/eq/eq_props.cpp
+    src/type/eq/eq_traits.cpp
     src/type/value/value_lift.cpp
     src/type/value/value_pure.cpp
     src/type/value/value_traits.cpp
