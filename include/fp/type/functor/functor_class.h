@@ -1,27 +1,35 @@
 #ifndef FP_TYPE_FUNCTOR_FUNCTOR_CLASS_H
 #define FP_TYPE_FUNCTOR_FUNCTOR_CLASS_H
+#include <functional>
+
+#include "fp/fp.h"
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/tools/arrow.h>
-#include <fp/type/value.h>
+#include <fp/base/traits.h>
+#include <fp/tools/all.h>
+#include <fp/type/classes.h>
+
+#include <type_traits>
 
 namespace fp::type::classes {
 
-template <template <typename> typename F>
 struct Functor {
-    template <typename A>
-    static constexpr auto map = []<typename Fn>(Fn&& f) {
-        return [f = std::forward<Fn>(f)](const F<A>& fa) -> decltype(auto)
-                   requires traits::HasValue<F<A>>
-                         && traits::HasApply<F<A>>
-                         && tools::arrow::fp_is_arrow<Fn, A>
+    static constexpr auto map(auto& fa)
+        requires traits::HasApply<std::decay_t<decltype(fa)>>
+    {
+        using FA = std::decay_t<decltype(fa)>;
+        using A = tools::fp_inner_type<FA>;
+        return [fa]<typename Fn>(const Fn& fn)
+            requires traits::Arrow<Fn, A, tools::fp_arrow_result<Fn, A>>
+                  && traits::HasApply<FA>
         {
-            using Result = tools::arrow::fp_arrow_result<Fn, A>;
-            return F<Result>::apply(std::invoke(f, fa.value()));
+            using B = tools::fp_arrow_result<Fn, A>;
+            using G = tools::fp_rebind<FA, B>;
+            return G::apply(std::invoke(fn, fa.value()));
         };
     };
 };

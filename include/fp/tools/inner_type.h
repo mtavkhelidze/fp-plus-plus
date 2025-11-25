@@ -41,4 +41,22 @@ inline constexpr bool fp_is_same_inner_type = std::
 
 }  // namespace fp::tools::inner_type
 
+namespace fp::tools::outer_type {
+
+template <typename T>
+struct _outer_type_struct {};
+
+template <template <typename...> typename F, typename... A>
+struct _outer_type_struct<F<A...>> {
+    template <typename... Args>
+    using outer_type_struct_alias = F<Args...>;
+};
+
+template <typename FA>
+using fp_outer_type =
+  typename _outer_type_struct<FA>::template outer_type_struct_alias<
+    fp::tools::inner_type::fp_inner_type<FA>>;
+
+}  // namespace fp::tools::outer_type
+
 #endif  // FP_TOOLS_INNER_TYPE_H

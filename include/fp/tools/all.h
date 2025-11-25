@@ -17,6 +17,7 @@ using namespace arrow;
 using namespace cast;
 using namespace inner_type;
 using namespace instance;
+using namespace outer_type;
 using namespace rebind;
 }  // namespace fp::tools
 

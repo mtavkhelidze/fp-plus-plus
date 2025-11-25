@@ -23,7 +23,7 @@ namespace fp::prelude {
  * Example:
  *   auto result = dollar([](int x) { return x + 1; }, 41); // => 42
  */
-template <typename A, traits::Arrow<A> F>
+template <typename A, traits::IsArrow<A> F>
 constexpr auto dollar(F&& f, A&& a) noexcept -> decltype(auto) {
     return std::forward<F>(f)(std::forward<A>(a));
 }

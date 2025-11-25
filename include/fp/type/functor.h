@@ -8,7 +8,7 @@
 
 #include <fp/type/functor/functor_class.h>
 #include <fp/type/functor/functor_mixins.h>
-#include <fp/type/functor/functor_pre_fmap.h>
-#include <fp/type/functor/functor_traits.h>
+// #include <fp/type/functor/functor_pre_fmap.h>
+// #include <fp/type/functor/functor_traits.h>
 
 #endif  // FP_TYPE_FUNCTOR_H

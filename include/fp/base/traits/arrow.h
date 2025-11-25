@@ -9,14 +9,19 @@
 #include <fp/tools/arrow.h>
 
 namespace fp::traits {
-template <typename F, typename A>
-concept Arrow = tools::arrow::fp_is_arrow<F, A>;
+template <typename Fn, typename A, typename B>
+concept Arrow = requires(Fn f, A a) {
+    { f(a) } -> std::convertible_to<B>;
+};
 
-template <typename F, typename A, typename B>
-concept BinaryArrow = tools::arrow::fp_is_binary_arrow<F, A, B>;
+template <typename Fn, typename A>
+concept IsArrow = tools::arrow::fp_is_arrow<Fn, A>;
 
-template <typename F, typename A>
-concept KleisliArrow = tools::arrow::fp_is_kleisli_arrow<F, A>;
+template <typename Fn, typename A, typename B>
+concept IsBinaryArrow = tools::arrow::fp_is_binary_arrow<Fn, A, B>;
+
+template <typename Fn, typename A>
+concept IsKleisliArrow = tools::arrow::fp_is_kleisli_arrow<Fn, A>;
 
 }  // namespace fp::traits
 #endif  // FP_TRAITS_ARROW_H

@@ -7,29 +7,31 @@ target_compile_options(rapidcheck INTERFACE -Wno-deprecated-declarations)
 
 set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
-    src/internal/storage/box_storage.cpp
-    src/internal/storage/box.cpp
-    src/internal/storage/stack_storage.cpp
-    src/prelude/compose.cpp
-    src/prelude/dollar.cpp
-    src/prelude/flip.cpp
-    src/prelude/identity.cpp
-    src/prelude/pipe.cpp
-    src/tools/cast.cpp
-    src/type/eq/eq_ops.cpp
-    src/type/eq/eq_props.cpp
-    src/type/eq/eq_traits.cpp
-    src/type/value/value_lift.cpp
-    src/type/value/value_pure.cpp
-    src/type/value/value_traits.cpp
+    # src/internal/storage/box_storage.cpp
+    # src/internal/storage/box.cpp
+    # src/internal/storage/stack_storage.cpp
+    # src/prelude/compose.cpp
+    # src/prelude/dollar.cpp
+    # src/prelude/flip.cpp
+    # src/prelude/identity.cpp
+    # src/prelude/pipe.cpp
+    # src/tools/cast.cpp
+    # src/type/eq/eq_ops.cpp
+    # src/type/eq/eq_props.cpp
+    # src/type/eq/eq_traits.cpp
+    src/type/functor/functor_props.cpp
+    # src/type/value/value_lift.cpp
+    # src/type/value/value_pure.cpp
+    # src/type/value/value_traits.cpp
 )
 
 set(TEST_HEADERS
     src/type/eq/eq_types.h
+    src/type/functor/functor_types.h
     src/type/value/value_types.h
 )
-find_untracked_files("${TEST_SRC}" src "*.cpp")
-find_untracked_files("${TEST_HEADERS}" src "*.h")
+# find_untracked_files("${TEST_SRC}" src "*.cpp")
+# find_untracked_files("${TEST_HEADERS}" src "*.h")
 
 add_executable(${PROJECT_NAME}_test ${TEST_SRC} ${TEST_HEDERS})
 target_compile_definitions(${PROJECT_NAME}_test PRIVATE FP_PLUS_PLUS_TESTING)

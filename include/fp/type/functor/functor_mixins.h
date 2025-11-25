@@ -17,7 +17,7 @@ struct WithMap {
     template <typename F>
         requires traits::HasValue<DataClass>
               && traits::HasApply<DataClass>
-              && traits::Arrow<F, tools::fp_inner_type<DataClass>>
+              && traits::IsArrow<F, tools::fp_inner_type<DataClass>>
     [[nodiscard]] constexpr auto map(F&& f) const noexcept {
         using Inner = typename DataClass::value_type;
         using Result = tools::arrow::fp_arrow_result<F, Inner>;

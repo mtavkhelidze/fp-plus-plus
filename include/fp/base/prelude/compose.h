@@ -24,8 +24,8 @@ constexpr auto compose(F&& lhs, G&& rhs) noexcept {
              A&& a
            ) constexpr noexcept -> decltype(auto)
                requires(
-                 traits::Arrow<G, A>
-                 && traits::Arrow<F, tools::arrow::fp_arrow_result<G, A>>
+                 traits::IsArrow<G, A>
+                 && traits::IsArrow<F, tools::arrow::fp_arrow_result<G, A>>
                )
     { return lhs(rhs(std::forward<A>(a))); };
 }

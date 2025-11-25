@@ -14,21 +14,21 @@
 namespace fp::traits {
 
 template <template <typename> typename F>
-concept IsFunctor = requires { typename type::classes::Functor<F>; };
+concept IsFunctor = requires { Functor<F>; };
 
-template <typename TC, typename Fn = prelude::identity_t>
+template <typename FA, typename Fn = prelude::identity_t>
 concept HasMap =
-  traits::HasValue<TC>
-  && traits::Arrow<Fn, tools::fp_inner_type<TC>>
-  && requires(TC self, Fn f) {
+  traits::HasValue<FA>
+  && traits::IsArrow<Fn, tools::fp_inner_type<FA>>
+  && requires(FA self, Fn f) {
          {
              self.map(f)
          } -> std::same_as<tools::fp_rebind<
-           TC, tools::fp_arrow_result<Fn, tools::fp_inner_type<TC>>>>;
+           FA, tools::fp_arrow_result<Fn, tools::fp_inner_type<FA>>>>;
      };
 
-template <typename TC, typename Fn = prelude::identity_t>
-constexpr bool HasFunctor = HasMap<TC, Fn>;
+template <typename FA, typename Fn = prelude::identity_t>
+constexpr bool HasFunctor = HasMap<FA, Fn>;
 
 }  // namespace fp::traits
 
