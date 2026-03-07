@@ -21,7 +21,7 @@ template <typename Fn, typename A, typename B>
 concept IsBinaryArrow = tools::arrow::fp_is_binary_arrow<Fn, A, B>;
 
 template <typename Fn, typename A>
-concept IsKleisliArrow = tools::arrow::fp_is_kleisli_arrow<Fn, A>;
+concept IsKleisliArrow = tools::Kleisli::fp_is_kleisli_arrow<Fn, A>;
 
 }  // namespace fp::traits
 #endif  // FP_TRAITS_ARROW_H

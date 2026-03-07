@@ -1,6 +1,5 @@
 #ifndef FP_TOOLS_ARROW_H
 #define FP_TOOLS_ARROW_H
-#include <ratio>
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -41,22 +40,25 @@ using fp_binary_arrow_result_v =
 
 }  // namespace fp::tools::arrow
 
-namespace fp::tools::arrow {
+namespace fp::tools::Kleisli {
 
 template <typename F, typename A>
-    requires fp_is_arrow<F, A>
+    requires arrow::fp_is_arrow<F, A>
 inline constexpr bool fp_is_kleisli_arrow =
-  instance::fp_is_instance<fp_arrow_result<F, A>>;
-
+  instance::fp_is_instance<arrow::fp_arrow_result<F, A>>;
+;
 template <typename F, typename A>
     requires fp_is_kleisli_arrow<F, A>
-using fp_kleisli_arrow_result = fp_arrow_result<F, A>;
+using fp_kleisli_arrow_result = arrow::fp_arrow_result<F, A>;
 
 template <typename F, typename A>
     requires fp_is_kleisli_arrow<F, A>
 using fp_kleisli_arrow_result_value_type =
   inner_type::fp_inner_type<fp_kleisli_arrow_result<F, A>>;
 
-}  // namespace fp::tools::arrow
+template <typename F, typename A, typename B>
+concept Kleisli = fp_is_kleisli_arrow<F, A>
+               && std::same_as<fp_kleisli_arrow_result_value_type<F, A>, B>;
+}  // namespace fp::tools::Kleisli
 
 #endif  // FP_TOOLS_ARROW_H
