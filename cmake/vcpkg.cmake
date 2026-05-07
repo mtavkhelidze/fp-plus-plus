@@ -1,17 +1,14 @@
 function(vcpkg_install package)
-    message(STATUS "vcpkg nstalling ${package}")
     execute_process(
         COMMAND ./vcpkg install ${package}
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/vcpkg
         OUTPUT_FILE /dev/null
         RESULT_VARIABLE res
     )
-    message(STATUS "vcpkg installing ${package} - done")
+    message(STATUS "vcpkg install: ${package}")
 endfunction(vcpkg_install)
 
-function(enable_vcpkg)
-    message(STATUS "Bootstrapping vcpkg")
-    set(VCPKG_MANIFEST_INSTALL OFF)
+function(vcpkg_enable)
     execute_process(
         COMMAND ./bootstrap-vcpkg.sh -disableMetrics
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/vcpkg
@@ -32,5 +29,5 @@ function(enable_vcpkg)
         CACHE FILEPATH "Path to vcpkg toolchain file"
     )
 
-    message(STATUS "Bootstrapping vcpkg - done")
-endfunction(enable_vcpkg)
+    message(STATUS "Enable vcpkg: ${CMAKE_TOOLCHAIN_FILE}")
+endfunction(vcpkg_enable)

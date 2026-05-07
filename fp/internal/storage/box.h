@@ -16,8 +16,8 @@
 
 namespace fp::internal::storage {
 /**
- * Box: mean and possesive data storage. See `fp/internal/storage/readme.md` for
- * details.
+ * Box: mean and possessive data storage. See `fp/internal/storage/readme.md`
+ * for details.
  */
 template <typename T>
 struct FP_ALIGN_PACKED_16 Box {
@@ -29,10 +29,13 @@ struct FP_ALIGN_PACKED_16 Box {
 
     // --- Accessors
     [[nodiscard]]
-    constexpr auto get() const -> const T& {
+    inline auto get() const -> const T& {
         return *data;
     }
-    [[nodiscard]] constexpr auto empty() const -> bool { return !data; }
+    [[nodiscard]]
+    inline auto empty() const -> bool {
+        return !data;
+    }
     // --- constructors
 
     // Value (not pointer)

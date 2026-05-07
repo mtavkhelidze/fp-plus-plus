@@ -14,7 +14,7 @@ using namespace fp::internal::storage;
 
 TEST(Box_Copy, copy_constructor_behavior) {
     Box<std::string> a = Box("hello");
-    const Box<std::string>& b(a);
+    const Box<std::string> b(a);
     ASSERT_EQ(a.get(), b.get());
 }
 
@@ -27,8 +27,8 @@ TEST(Box_Copy, copy_semantics) {
 TEST(Box_Copy, shared_reference_count_behavior) {
     auto shared = std::make_shared<int>(99);
     auto a = Box(shared);
-    const auto& b = a;
-    ASSERT_EQ(&a.get(), &b.get());  // Should point to same shared_ptr
+    const auto b = a;
+    ASSERT_EQ(&a.get(), &b.get());
 }
 
 TEST(Box_Construction, callable_lambda_expression) {
@@ -275,9 +275,39 @@ TEST(Box_Construction, shared_ptr) {
     static_assert(std::is_same_v<MyType, typename decltype(box2)::kind>);
 }
 
+TEST(Box_Construction, unique_ptr_transfer) {
+    auto ptr = std::make_unique<int>(42);
+    auto box = Box(ptr);  // ptr is drained here
+    static_assert(std::is_same_v<int, typename decltype(box)::kind>);
+    ASSERT_EQ(box.get(), 42);
+    ASSERT_EQ(ptr, nullptr);  // ownership transferred
+}
+
+TEST(Box_Construction, unique_ptr_rvalue_deduction) {
+    // rvalue unique_ptr<T> → Box<unique_ptr<T>>, move-only constructor named
+    // unique_ptr<T> → Box<T>, ownership transferred via lvalue ref constructor
+    auto box_of_uptr = Box(std::make_unique<int>(42));
+    static_assert(
+      std::is_same_v<std::unique_ptr<int>, typename decltype(box_of_uptr)::kind>
+    );
+
+    // Named unique_ptr → Box<T> as expected
+    auto ptr = std::make_unique<int>(42);
+    auto box_of_int = Box(ptr);
+    static_assert(std::is_same_v<int, typename decltype(box_of_int)::kind>);
+    ASSERT_EQ(box_of_int.get(), 42);
+    ASSERT_EQ(ptr, nullptr);
+}
+
+TEST(Box_Extra, immutability) {
+    static_assert(
+      std::is_const_v<std::remove_reference_t<decltype(Box<int>(1).get())>>
+    );
+}
+
 TEST(Box_Extra, empty_tuple) {
     // Box<> deduces to std::tuple<>
-    auto box = Box<std::tuple<>>();
+    auto box = Box(std::tuple<>{});
     static_assert(std::is_same_v<std::tuple<>, typename decltype(box)::kind>);
     auto t = box.get();
     static_assert(std::is_same_v<std::tuple<>, decltype(t)>);
