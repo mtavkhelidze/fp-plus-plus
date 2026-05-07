@@ -6,9 +6,9 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/internal/meta/inner_type.h>
+#include <fp/internal/meta/rebind.h>
 #include <fp/internal/storage/box.h>
-#include <fp/tools/inner_type.h>
-#include <fp/tools/rebind.h>
 
 namespace fp::internal::storage {
 /**
@@ -20,15 +20,13 @@ namespace fp::internal::storage {
  * - Always contains a valid boxed value; no empty state.
  */
 template <class Container>
-    requires(
-      !std::is_fundamental_v<fp::tools::inner_type::fp_inner_type<Container>>
-    )
+    requires(!std::is_fundamental_v<meta::inner_type::inner_type<Container>>)
 struct StorageBox {
   private:
-    using A = fp::tools::inner_type::fp_inner_type<Container>;
+    using A = meta::inner_type::inner_type<Container>;
 
     template <typename TC, typename T>
-    using rebind = fp::tools::rebind::fp_rebind<TC, T>;
+    using rebind = meta::rebind::rebind<TC, T>;
 
     using Box = Box<A>;
     Box box;

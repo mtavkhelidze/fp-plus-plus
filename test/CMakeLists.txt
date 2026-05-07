@@ -10,6 +10,7 @@ target_compile_options(
 
 set(TEST_SRC
     src/internal/storage/box.cpp
+    src/internal/storage/stack_storage.cpp
 )
 set(TEST_HEADERS
 )

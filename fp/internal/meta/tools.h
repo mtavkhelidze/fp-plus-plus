@@ -15,14 +15,13 @@ template <typename>
 constexpr bool always_false = false;
 
 template <typename F>
-inline constexpr bool has_no_copy = !std::is_copy_constructible_v<F>;
+constexpr bool has_no_copy = !std::is_copy_constructible_v<F>;
 
 template <typename F>
-inline constexpr bool has_no_move = !std::is_move_constructible_v<F>;
+constexpr bool has_no_move = !std::is_move_constructible_v<F>;
 
 template <typename F, typename A>
-inline constexpr bool has_no_direct_constructor =
-  !std::constructible_from<F, A>;
+constexpr bool has_no_direct_constructor = !std::constructible_from<F, A>;
 
 }  //  namespace fp::internal::meta::tools
 
