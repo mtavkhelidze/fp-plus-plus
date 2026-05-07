@@ -8,7 +8,7 @@ target_compile_options(rapidcheck INTERFACE -Wno-deprecated-declarations)
 set(TEST_LIB fp++ GTest::gtest GTest::gtest_main GTest::gmock rapidcheck_gtest)
 set(TEST_SRC
     # src/internal/storage/box_storage.cpp
-    # src/internal/storage/box.cpp
+    src/internal/storage/box.cpp
     # src/internal/storage/stack_storage.cpp
     # src/prelude/compose.cpp
     # src/prelude/dollar.cpp
@@ -19,7 +19,7 @@ set(TEST_SRC
     # src/type/eq/eq_ops.cpp
     # src/type/eq/eq_props.cpp
     # src/type/eq/eq_traits.cpp
-    src/type/functor/functor_props.cpp
+    # src/type/functor/functor_props.cpp
     # src/type/value/value_lift.cpp
     # src/type/value/value_pure.cpp
     # src/type/value/value_traits.cpp

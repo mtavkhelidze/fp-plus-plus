@@ -30,16 +30,16 @@ enable_clang_tidy()
 
 message(STATUS "PROJECT_BINARY_DIR: ${PROJECT_BINARY_DIR}")
 
-add_library(${PROJECT_NAME} INTERFACE include/fp/fp.h)
+add_library(${PROJECT_NAME} INTERFACE fp/fp.h)
 target_include_directories(
     ${PROJECT_NAME}
-    INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+    INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
               $<INSTALL_INTERFACE:include>
 )
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/fp/ DESTINATION include/fp)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/fp DESTINATION include/fp)
 
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_CXX_FLAGS "-O1 -g -Wall -Wextra -Wpedantic")
+set(CMAKE_CXX_FLAGS "-O1 -g -Wall -Werror Wextra -Wpedantic")
 
 add_executable(fp_main main.cpp)
 target_compile_definitions(fp_main PRIVATE FP_PLUS_PLUS_TESTING)

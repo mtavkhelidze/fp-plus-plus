@@ -15,31 +15,9 @@
 // NOLINTBEGIN(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays)
 
 namespace fp::internal::storage {
-
 /**
- * Generic value holder (`Box`) that wraps a value of type `T`, enforcing
- * shared ownership and idiot-resistant immutability.
- *
- * - The boxed value is heap-allocated and managed via `shared_ptr<const T>`.
- * - Once boxed, the value cannot be modified through any API exposed by `Box`.
- * - This prevents accidental or intentional mutation through normal usage.
- * - True immutability depends on `T` not exposing mutating behavior via
- *   `mutable` fields or internal `const_cast` tricks.
- * - Move construction and move assignment are disallowed to preserve
- *   immutability and clarity of ownership.
- * - Copying is allowed and cheap, as it only increments the reference count of
- *   the underlying `shared_ptr`.
- * - Special constructors handle pointer types, tuples, C-style arrays, and
- *   null.
- * - This approach prioritizes immutability-by-design over absolute enforcement.
- *
- * Note on raw pointers:
- * - When boxing raw pointers (e.g., `T*`), `Box` stores a copy of the pointer
- *   value but does NOT take ownership of the pointee.
- * - The caller remains responsible for managing the lifetime and deleting the
- *   allocated memory if applicable.
- * - To enable automatic lifetime management, prefer boxing `std::shared_ptr`
- *   or `std::unique_ptr` instead of raw pointers.
+ * Box: mean and possesive data storage. See `fp/internal/storage/readme.md` for
+ * details.
  */
 template <typename T>
 struct FP_ALIGN_PACKED_16 Box {
@@ -108,7 +86,7 @@ struct FP_ALIGN_PACKED_16 Box {
     auto operator=(const Box&) -> Box& = default;
     Box(Box&&) noexcept = delete;
     Box(const Box&) = default;
-};  // namespace fp::internal::box
+};
 
 // Anything
 template <typename U>
@@ -126,13 +104,14 @@ Box(const U (&)[N]) -> Box<std::string>;
 
 // c-style arrays, bar char*
 template <typename U, std::size_t N>
-    requires(!std::same_as<std::decay<U>, char>)
+    requires(!std::same_as<std::decay_t<U>, char>)
 Box(const U (&)[N]) -> Box<std::vector<std::decay_t<U>>>;
 
 // varargs
 template <typename U, typename... Us>
     requires(sizeof...(Us) > 0)
 Box(U&&, Us&&...) -> Box<std::tuple<std::decay_t<U>, std::decay_t<Us>...>>;
+
 // NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays)
 }  // namespace fp::internal::storage
 
