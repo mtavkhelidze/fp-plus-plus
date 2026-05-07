@@ -1,25 +1,30 @@
 Checks:
-- "*"
-- -altera-struct-pack-align
-- -clang-analyzer-optin.performance.Padding
-- -fuchsia-*
-- -google-build-using-namespace
-- -google-readability-avoid-underscore-in-googletest-name
-- -llvm-include-order
-- -llvmlibc-*
-- -misc-use-anonymous-namespace
-- -readability-identifier-length
-- -portability-avoid-pragma-once
-- -clang-diagnostic-pragma-once-outside-header
-- bugprone-*
-- clang-analyzer-*
-- llvm-header-guard
-- modernize-*
-- performance-*
-- portability-*
-- readability-*
+    - "*"
+    - -altera-struct-pack-align
+    - -bugprone-reserved-identifier
+    - -cert-dcl51-cpp
+    - - cert-dcl59-cpp
+    - -clang-analyzer-optin.performance.Padding
+    - -clang-diagnostic-pragma-once-outside-header
+    - -fuchsia-*
+    - -google-build-using-namespace
+    - -google-readability-avoid-underscore-in-googletest-name
+    - -llvm-include-order
+    - -llvmlibc-*
+    - -misc-use-anonymous-namespace
+    - -portability-avoid-pragma-once
+    - -readability-identifier-length
+    - -bugprone-reserved-identifier
+    - bugprone-*
+    - clang-analyzer-*
+    - llvm-header-guard
+    - modernize-*
+    - performance-*
+    - portability-*
+    - readability-*
 
 CheckOptions:
+
 - key: llvm-header-guard.HeaderFileExtensions
   value: 'h;hpp'
 - key: readability-identifier-length.MinimumVariableNameLength

@@ -3,13 +3,11 @@
 #pragma once
 
 #define FP_PLUS_PLUS_INCLUDED_FROM_FP_FP 1  // NOLINT
-#include "internal/storage/box.h"
+#include <fp/internal/meta/meta.h>
 #undef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 namespace fp {
-// using namespace data;
-// using namespace prelude;
-// using namespace type::classes;
+using fp::internal::meta::cast::cast;
 }  // namespace fp
 
 #endif  // FP_FP_H

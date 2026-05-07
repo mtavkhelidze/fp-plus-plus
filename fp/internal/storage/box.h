@@ -12,7 +12,7 @@
 #include <memory>
 #include <vector>
 
-// NOLINTBEGIN(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays)
+// NOLINTBEGIN(modernize-avoid-c-arrays,hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays)
 
 namespace fp::internal::storage {
 /**
@@ -29,11 +29,12 @@ struct FP_ALIGN_PACKED_16 Box {
 
     // --- Accessors
     [[nodiscard]]
-    inline auto get() const -> const T& {
+    auto get() const -> const T& {
         return *data;
     }
+
     [[nodiscard]]
-    inline auto empty() const -> bool {
+    auto empty() const -> bool {
         return !data;
     }
     // --- constructors
@@ -115,7 +116,7 @@ template <typename U, typename... Us>
     requires(sizeof...(Us) > 0)
 Box(U&&, Us&&...) -> Box<std::tuple<std::decay_t<U>, std::decay_t<Us>...>>;
 
-// NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays)
+// NOLINTEND(modernize-avoid-c-arrays,hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays)
 }  // namespace fp::internal::storage
 
 #endif  // FP_INTERNAL_STORAGE_BOX_H

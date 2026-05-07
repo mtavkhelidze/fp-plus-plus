@@ -1,18 +1,18 @@
-#ifndef FP_TOOLS_REBIND_H
-#define FP_TOOLS_REBIND_H
+#ifndef __FP_INTERNAL_META_REBIND_H
+#define __FP_INTERNAL_META_REBIND_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/tools/instance.h>
+#include <fp/internal/meta/inner_type.h>
 
 #include <type_traits>
 
-namespace fp::tools::rebind {
+namespace fp::internal::meta::rebind {
 
-namespace _internal {
+namespace {
     template <typename T>
     struct _rebind_instance {};
 
@@ -27,20 +27,19 @@ namespace _internal {
         template <typename C, typename D>
         using type = TC<std::decay_t<C>, std::decay_t<D>>;
     };
-}  // namespace _internal
+}  // namespace
 
 /// Transform TC<A> into TC<B>
 template <typename TC, typename B>
-    requires(instance::fp_is_unary_instance<TC>)
-using fp_rebind =
-  typename _internal::_rebind_instance<std::decay_t<TC>>::template type<B>;
+    requires(instance::is_unary_instance<TC>)
+using rebind = typename _rebind_instance<std::decay_t<TC>>::template type<B>;
 
 /// Transform TC<A, B> into TC<C, D>
 template <typename TC, typename C, typename D>
-    requires(instance::fp_is_binary_instance<TC>)
-using fp_rebind_binary =
-  typename _internal::_rebind_instance<std::decay_t<TC>>::template type<C, D>;
+    requires(instance::is_binary_instance<TC>)
+using rebind_binary =
+  typename _rebind_instance<std::decay_t<TC>>::template type<C, D>;
 
-}  // namespace fp::tools::rebind
+}  // namespace fp::internal::meta::rebind
 
-#endif  // FP_TOOLS_REBIND_H
+#endif  // __FP_INTERNAL_META_REBIND_H

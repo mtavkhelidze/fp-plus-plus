@@ -1,11 +1,10 @@
-#include <fp/fp.h>
+#include <fp/internal/storage/box.h>
 #include <gtest/gtest.h>
 
 #include <cstddef>
 #include <memory>
 #include <string>
 #include <type_traits>
-#include <vector>
 
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes,readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 
@@ -14,7 +13,7 @@ using namespace fp::internal::storage;
 
 TEST(Box_Copy, copy_constructor_behavior) {
     Box<std::string> a = Box("hello");
-    const Box<std::string> b(a);
+    const Box<std::string> b(a);  // NOLINT
     ASSERT_EQ(a.get(), b.get());
 }
 
@@ -27,7 +26,7 @@ TEST(Box_Copy, copy_semantics) {
 TEST(Box_Copy, shared_reference_count_behavior) {
     auto shared = std::make_shared<int>(99);
     auto a = Box(shared);
-    const auto b = a;
+    const auto b = a;  // NOLINT
     ASSERT_EQ(&a.get(), &b.get());
 }
 

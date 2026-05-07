@@ -1,7 +1,12 @@
 Diagnostics:
   UnusedIncludes: Strict
 CompileFlags:
-  Add: [ -DFP_PLUS_PLUS_INCLUDED_FROM_FP_FP=1 ]
+  Add: [
+    -DFP_PLUS_PLUS_INCLUDED_FROM_FP_FP=1,
+    x, c++-header,
+    -isystem/opt/homebrew/opt/llvm/include/c++/v1,
+    -isystem/opt/homebrew/opt/llvm/lib/clang/22/include
+]
   Remove: [ -Wreserved-identifier ]
   Compiler: /opt/homebrew/opt/llvm/bin/clang++
 Index:
