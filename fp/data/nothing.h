@@ -33,19 +33,19 @@ using Nothing = _nothing;
 constexpr Nothing nothing = _nothing{};
 
 /**
- * A placeholder type for use in tests and declarations
- * when the actual type does not matter.
- */
-using Whatever = Nothing;
-constexpr Whatever whatever = nothing;
-
-/**
  * A placeholder type parameterised over A,
  * for use when a type constructor is needed but the value does not matter.
  */
 template <typename... A>
 using Any = Nothing;
 constexpr Nothing any = nothing;
+
+/**
+ * A placeholder type for use in tests and declarations
+ * when the actual type does not matter.
+ */
+using Whatever = Any<>;
+constexpr Whatever whatever = nothing;
 
 }  // namespace fp::data
 
