@@ -40,3 +40,20 @@ TEST(Nothing, is_constexpr) {
     constexpr Nothing n = nothing;
     static_assert(n == nothing);
 }
+
+TEST(Whatever, is_an_alias_for_nothing) {
+    // Whatever is a placeholder when the type does not matter
+    constexpr Whatever w = whatever;
+    static_assert(w == nothing);
+    static_assert(std::is_same_v<Whatever, Nothing>);
+}
+
+TEST(Any, is_a_placeholder_type_constructor) {
+    // Any<A> collapses any type to Nothing
+    // useful in declarations and tests where the type does not matter
+    static_assert(std::is_same_v<Any<int>, Nothing>);
+    static_assert(std::is_same_v<Any<int, std::string>, Nothing>);
+    static_assert(std::is_same_v<Any<>, Nothing>);
+    constexpr Any<int> a = any;
+    static_assert(a == nothing);
+}

@@ -31,6 +31,22 @@ using Nothing = _nothing;
  * A unit instance, like () in Haskell or Scala
  */
 constexpr Nothing nothing = _nothing{};
+
+/**
+ * A placeholder type for use in tests and declarations
+ * when the actual type does not matter.
+ */
+using Whatever = Nothing;
+constexpr Whatever whatever = nothing;
+
+/**
+ * A placeholder type parameterised over A,
+ * for use when a type constructor is needed but the value does not matter.
+ */
+template <typename... A>
+using Any = Nothing;
+constexpr Nothing any = nothing;
+
 }  // namespace fp::data
 
 #endif  // __FP_DATA_NOTHING_H
