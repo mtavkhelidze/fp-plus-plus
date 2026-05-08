@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.0)
+cmake_minimum_required(VERSION 3.21)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(submodules)
@@ -27,4 +27,4 @@ target_include_directories(
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/fp DESTINATION include)
 
 enable_testing()
-subdirs(test)
+add_subdirectory(test)
