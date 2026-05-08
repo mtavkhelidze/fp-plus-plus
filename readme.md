@@ -1,139 +1,49 @@
-## FP++: Functional Programming Header-Only C++20 Library
+FP++: C++20 Functional Library
+---
+FP the hell out of C++
 
-## Table of Contents
+---
 
-## Usage
+FP++ is header-only library: all it needs to do is done at compile time and doesn't involve runtime type resolution, function calls or, God forbid, vtable lookups.
 
-- You only need the `fp` directory from the `include` directory. Just copy it
-  into your project and add to include path.
-- There are no dependencies; it just works.
-- For examples of usage, take a look at the `*.cpp` files in the `test`
-  directory.
-- Use it responsibly and at your own discretion.
+### Usage
 
-## Code Conventions
-
-FP++ is organized to separate its core definitions, typeclasses, mixins, traits,
-prelude, and syntactic sugar.
-
-#### Type Notation
-
-- `T` denotes a raw C++ type, such as `const int&` or `double*`.
-- `A` represents a *normalized* FP type, which is typically a wrapped or adapted
-  version of a raw type.
-- `F` stands for type constructors, which are templates or higher-kinded types
-  that produce types when applied.
-- `Fn` usually indicates a unary arrow (function).
-
-#### Code Structure
-
-The following table summarizes the components involved in defining and using a  
-typeclass `TC` for a datatype `F` and an `operation` on `F[A]`.
-
-| Component      | Location                | Description                                                                           |
-|----------------|-------------------------|---------------------------------------------------------------------------------------|
-| Core Typeclass | `core/types/tc.h`       | Provides `TC<F>::operation`                                                           |
-| Instances      | `data/<type>.h`         | Data types like `Id`, `Option` that implement typeclass instance methods.             |
-| Mixins         | `core/mixins/with_tc.h` | Given `TC<F>`, provides `F<A>.operation` as an instance method                        |
-| Traits         | `traits/has_tc.h`       | Defines concepts `HasTC` (constructible `TC<F>`) and `IsTC` (`F<A>` has `.operation`) |
-| Prelude        | `prelude/operation.h`   | Defines a free function `operation` on `F[_]`                                         |
-| Operators      | `operators/operation.h` | Provides syntactic sugar for the `operation` free function                            |
-
-```mermaid
-flowchart TD
-    Core[Core Typeclass<br/>core/types/tc.h]
-    Data[Instances<br/>data/type.h]
-    Mixin[Mixin<br/>core/mixins/with_tc.h]
-    Traits[Traits<br/>traits/has_tc.h]
-    Prelude[Prelude<br/>prelude/operation.h]
-    Operators[Operators<br/>operators/operation.h]
-    Core -->|provides methods to| Mixin
-    Mixin -->|adds instance methods to| Traits
-    Traits -->|used by free functions| Prelude
-    Prelude -->|used for syntactic sugar| Operators
-    Data -->|requires WithValue| Mixin
-```
-
-#### Special `WithValue`, `WithApply`, and `pure` Case
-
-The mixins `WithValue` and `WithApply`, along with the free function `pure`, are
-special in that they are not tied to a specific typeclass; instead, they must be
-implemented by any datatype to enable storage and manipulation of values.
-
-| Item        | Provides                                               |
-|-------------|--------------------------------------------------------|
-| `WithValue` | Instance method `.value()` to extract the stored value |
-| `WithApply` | Static internal method `::apply(fab)` used by `pure`   |
-| `pure`      | Free function `pure<F>(a)` to wrap a value             |
-
-#### Development Checklist
-
-For typeclass TC and TC::operation
-
-1. `core/types/tc.h`: define `TC<F>` with static `TC::operation`
-2. `core/mixins/with_tc.h`: add instance method `.equals` via mixin
-   `WithOperation` which uses `TC::operation`
-3. `traits/has_tc.h`: define `HasTC` and `IsTC` concepts
-4. `prelude/operation.h`: free function `operation`
-5. `operators/operation.h`: `operator` for `operation`, if it makes sense
-6. `tests/core/types/tc.cpp`: test mixin and laws
-7. `tests/prelude/operation.cpp`: test free `operation` and operators
-
-#### Done so far
-
-| core/types/tc.h | mixins/with_tc.h | traits/has_tc.h       | prelude | Test Core | Test Prelude |
-|-----------------|------------------|-----------------------|---------|-----------|--------------|
-| Eq              | WithEq           | HasEq, IsEq           | equals  | Yes       | Yes          |
-| Functor         | WithMap          | HasFunctor, IsFunctor | fmap    |           |              |
-
-#### Namespacing
-
-```mermaid
-flowchart LR
-    fp[fp]
-    fp -->|using| fp_core
-    fp_core -->|using| fp_core_data
-    fp_core -->|using| fp_core_types
-    subgraph FP
-        direction TB
-        fp_core[fp::core]
-    end
-    subgraph Core
-        direction TB
-        fp_core_data[fp::core::data]
-        fp_core_types[fp::core::types]
-    end
-```
-
-#### Testing
-
-The directory structure under `tests/` mirrors that of `core/`,  
-`traits/`, `prelude/`, and  
-`operators/` under `include/fp`.
-
-| Directory                     | Tests                          |
-|-------------------------------|--------------------------------|
-| `tests/core/types/TC.cpp`     | Mixins, typeclass laws, traits |
-| `tests/prelude/operation.cpp` | Free functions and operators   |
-
-## Installation
-
-1. Clone this repository.
-2. Copy the `fp` directory from `include` into your include path.
-3. Include the library with `#include <fp/fp.h>`.
-4. Compile with a C++20-compliant compiler.
-
-Requires a C++20-compatible compiler (tested with GCC 13 and Clang 16).
+Place `fp` somewhere in your include path and use it with `#include <fp/fp.h>` and `using namespace fp` in your C++ source file. Something like:
 
 ```bash
-g++ -Iinclude -o fp_test main.cpp -std=c++20 -g -O0
+g++ -I/path/to/dir/with/fp/in/it -o main main.cpp -std=c++20 -g
 ```
 
-## Documentation
+### Development
 
-Documentation is _incomplete_. Most of the readme files are totally bogus.
+Documentation is _incomplete_. There are some `readme`-s here and there, but the best way to understand how things work is to read sources `test/src`. Tests as documentation, so to speak.
 
-## Building and Testing
+#### Requirements
+
+FP++ requires a C++20-compliant compiler. It makes heavy use of C++20 features:
+
+- **Concepts** — to constrain template parameters
+- **Template specialisation and CRTP** — for zero-cost polymorphism
+- **Deduction guides** — for ergonomic type inference
+- **`constexpr` and `inline constexpr`** — for compile-time computation
+
+Minimum compiler versions:
+- Clang 14+
+- GCC 12+
+
+#### Library Development
+
+If you are building on top of FP++, the internal meta and storage utilities are
+available via their namespaces:
+
+```cpp
+using namespace fp::internal::meta;
+using namespace fp::internal::storage;
+```
+
+No additional headers needed — `#include <fp/fp.h>` exposes everything.
+
+#### Building and Testing
 
 ```bash
 cmake -B build -S .
@@ -141,12 +51,12 @@ cmake --build build
 ctest --test-dir build
 ```
 
-## License
+### License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 for details.
 
-## Inspired By
+### Inspired By
 
 - [*Functional Programming in Scala, Second
   Edition*](https://www.amazon.com/dp/1617290653) by Paul Chiusano and Rúnar
