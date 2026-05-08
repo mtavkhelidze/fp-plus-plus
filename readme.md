@@ -1,10 +1,17 @@
-FP++: C++20 Functional Library
+`FP++`: C++20 Functional Library
 ---
 FP the hell out of C++
 
 ---
 
-FP++ is header-only library: all it needs to do is done at compile time and doesn't involve runtime type resolution, function calls or, God forbid, vtable lookups.
+`FP++` is header-only library: all it needs to do is done at compile time and doesn't involve runtime type resolution, function calls or, God forbid, vtable lookups.
+
+### Types
+
+`FP++` normalises C++ types automatically — references, const, pointers, arrays,
+and smart pointers are all handled transparently. There are a few cases
+when`FP++` normalises fundamental types into STL containers. The latest complete
+transformation rules are documented as executable tests in `test/src/cast.cpp`.
 
 ### Usage
 
@@ -20,7 +27,7 @@ Documentation is _incomplete_. There are some `readme`-s here and there, but the
 
 #### Requirements
 
-FP++ requires a C++20-compliant compiler. It makes heavy use of C++20 features:
+`FP++` requires a C++20-compliant compiler. It makes heavy use of C++20 features:
 
 - **Concepts** — to constrain template parameters
 - **Template specialisation and CRTP** — for zero-cost polymorphism
@@ -33,7 +40,7 @@ Minimum compiler versions:
 
 #### Library Development
 
-If you are building on top of FP++, the internal meta and storage utilities are
+If you are building on top of `FP++`, the internal meta and storage utilities are
 available via their namespaces:
 
 ```cpp

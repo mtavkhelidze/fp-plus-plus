@@ -9,6 +9,7 @@ target_compile_options(
 )
 
 set(TEST_SRC
+    src/cast.cpp
     src/data/nothing.cpp
     src/internal/storage/box_storage.cpp
     src/internal/storage/box.cpp

@@ -120,7 +120,6 @@ TEST(Box_Construction, literal_initialization_list_to_tuple) {
 
     auto v3 = box3.get();
     static_assert(std::is_same<std::tuple<int, int, int>, decltype(v3)>::value);
-    // consider removing if not testing misha directly
     ASSERT_EQ(std::get<0>(v3), 1);
     ASSERT_EQ(std::get<1>(v3), x);
     ASSERT_EQ(std::get<2>(v3), y);
