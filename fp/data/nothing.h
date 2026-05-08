@@ -38,7 +38,7 @@ constexpr Nothing nothing = _nothing{};
  */
 template <typename... A>
 using Any = Nothing;
-constexpr Nothing any = nothing;
+constexpr Any<> any = nothing;
 
 /**
  * A placeholder type for use in tests and declarations

@@ -9,6 +9,7 @@
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes,readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 
 using ::testing::Test;
+using namespace fp;
 using namespace fp::internal::storage;
 
 TEST(Box_Copy, copy_constructor_behavior) {
@@ -296,6 +297,28 @@ TEST(Box_Construction, unique_ptr_rvalue_deduction) {
     static_assert(std::is_same_v<int, typename decltype(box_of_int)::kind>);
     ASSERT_EQ(box_of_int.get(), 42);
     ASSERT_EQ(ptr, nullptr);
+}
+
+TEST(Box_Construction, whatever_type) {
+    auto box = Box(whatever);
+    static_assert(std::is_same_v<Whatever, typename decltype(box)::kind>);
+    EXPECT_EQ(box.get(), whatever);
+}
+
+TEST(Box_Construction, nothing_type) {
+    auto box = Box(nothing);
+    static_assert(std::is_same_v<Nothing, typename decltype(box)::kind>);
+    EXPECT_EQ(box.get(), nothing);
+}
+
+TEST(Box_Construction, any_type) {
+    auto box = Box(any);
+    static_assert(std::is_same_v<Any<>, typename decltype(box)::kind>);
+    EXPECT_EQ(box.get(), any);
+
+    // Any<A> collapses to Nothing regardless of type parameter
+    static_assert(std::is_same_v<Any<int>, Any<>>);
+    static_assert(std::is_same_v<Any<std::string>, Any<>>);
 }
 
 TEST(Box_Extra, immutability) {
