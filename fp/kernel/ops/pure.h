@@ -28,7 +28,7 @@ namespace fp::kernel::ops {
  */
 template <template <typename> typename F, typename T>
     requires traits::HasApply<F<internal::meta::cast::cast<T>>>
-constexpr auto pure(T&& value) -> F<internal::meta::cast::cast<T>> {
+inline auto pure(T&& value) -> F<internal::meta::cast::cast<T>> {
     return F<internal::meta::cast::cast<T>>::apply(std::forward<T>(value));
 }
 }  // namespace fp::kernel::ops
