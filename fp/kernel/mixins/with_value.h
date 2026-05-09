@@ -13,7 +13,7 @@
 #include <cstring>
 #endif
 
-namespace fp::kernel::mixins::with_value {
+namespace fp::kernel::mixins::value {
 
 namespace {
     template <typename FA>
@@ -70,6 +70,6 @@ struct WithValue : private Backend<FA>::type {
     }
 #endif  // FP_PLUS_PLUS_TESTING
 };
-};  // namespace fp::kernel::mixins::with_value
+};  // namespace fp::kernel::mixins::value
 
 #endif  // __FP_KERNEL_MIXINS_WITH_VALUE_H

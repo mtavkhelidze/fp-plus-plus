@@ -15,6 +15,7 @@ set(TEST_SRC
     src/internal/storage/box.cpp
     src/internal/storage/stack_storage.cpp
     src/kernel/mixins/with_value.cpp
+    src/kernel/ops/pure.cpp
 )
 set(TEST_HEADERS
 )

@@ -16,11 +16,11 @@ struct TestStruct : StorageStack<TestStruct<A>> {
     [[nodiscard]] auto value() const -> auto& { return this->get(); }
 };
 
-TEST(StorageStack, move_is_deleted) {
+TEST(Internal_Storage_StorageStack, move_is_deleted) {
     static_assert(std::is_move_constructible_v<TestStruct<int>>, "isnt");
 }
 
-TEST(StorageStack, copy_assignment_copies_value) {
+TEST(Internal_Storage_StorageStack, copy_assignment_copies_value) {
     auto original = TestStruct<int>::store(123);
     auto copy = TestStruct<int>::store(0);
     copy = original;
@@ -28,14 +28,14 @@ TEST(StorageStack, copy_assignment_copies_value) {
     EXPECT_EQ(original.value(), 123);
 }
 
-TEST(StorageStack, copy_constructor_copies_value) {
+TEST(Internal_Storage_StorageStack, copy_constructor_copies_value) {
     auto original = TestStruct<int>::store(99);
     const auto copy = original;
     EXPECT_EQ(copy.value(), 99);
     EXPECT_EQ(original.value(), 99);
 }
 
-TEST(StorageStack, self_assignment_does_nothing) {
+TEST(Internal_Storage_StorageStack, self_assignment_does_nothing) {
     auto box = TestStruct<int>::store(123);
 
 #pragma clang diagnostic push
@@ -46,7 +46,7 @@ TEST(StorageStack, self_assignment_does_nothing) {
     EXPECT_EQ(box.value(), 123);
 }
 
-TEST(StorageStack, move_assignment_uses_copy) {
+TEST(Internal_Storage_StorageStack, move_assignment_uses_copy) {
     auto original = TestStruct<int>::store(99);
     auto moved = TestStruct<int>::store(0);
     moved = std::move(original);
@@ -54,7 +54,7 @@ TEST(StorageStack, move_assignment_uses_copy) {
     EXPECT_EQ(original.value(), 99);
 }
 
-TEST(StorageStack, stores_double) {
+TEST(Internal_Storage_StorageStack, stores_double) {
     auto box = TestStruct<double>::store(3.14);
     EXPECT_DOUBLE_EQ(box.value(), 3.14);
 }

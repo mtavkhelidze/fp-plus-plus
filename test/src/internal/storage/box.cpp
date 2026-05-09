@@ -12,13 +12,13 @@ using ::testing::Test;
 using namespace fp;
 using namespace fp::internal::storage;
 
-TEST(Box_Copy, copy_constructor_behavior) {
+TEST(Box_Copy, constructor_behavior) {
     Box<std::string> a = Box("hello");
     const Box<std::string> b(a);  // NOLINT
     ASSERT_EQ(a.get(), b.get());
 }
 
-TEST(Box_Copy, copy_semantics) {
+TEST(Box_Copy, semantics) {
     auto a = Box<int>(42);
     const auto& b = a;
     ASSERT_EQ(a.get(), b.get());

@@ -16,14 +16,14 @@
 #include <fp/internal/meta/tools.h>
 
 namespace fp::internal::meta {
-using namespace arrow;
-using namespace cast;
-using namespace inner_type;
-using namespace instance;
-using namespace kleisli;
-using namespace outer_type;
-using namespace rebind;
-using namespace tools;
+using namespace fp::internal::meta::arrow;
+using namespace fp::internal::meta::cast;
+using namespace fp::internal::meta::inner_type;
+using namespace fp::internal::meta::instance;
+using namespace fp::internal::meta::kleisli;
+using namespace fp::internal::meta::outer_type;
+using namespace fp::internal::meta::rebind;
+using namespace fp::internal::meta::tools;
 }  // namespace fp::internal::meta
 
 #endif  // __FP_INTERNAL_META_META_H

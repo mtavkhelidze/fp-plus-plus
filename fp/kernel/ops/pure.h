@@ -1,0 +1,36 @@
+#ifndef FP_TYPE_VALUE_VALUE_PRE_PURE_H
+#define FP_TYPE_VALUE_VALUE_PRE_PURE_H
+#pragma once
+
+#ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
+#error "This file must be included from <fp/fp.h>"
+#endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
+
+#include <fp/internal/meta/meta.h>
+#include <fp/kernel/traits/traits.h>
+
+namespace fp::kernel::ops {
+
+/**
+ * Lift a value into the context of a type constructor `F`.
+ *
+ * `pure<F>(x)` wraps the raw C++ value `x` (type `T`) into the FP-normalized
+ * type `A` and then calls `F<A>::apply(x)`.
+ *
+ * Here:
+ *   - `T` is the original C++ type of the value.
+ *   - `A` is the FP-normalized type used inside the type constructor `F`.
+ *
+ * This corresponds to the `pure` method in Applicative/Monad abstractions.
+ *
+ * Example:
+ *   auto idValue = pure<Id>(42); // Id<int> containing 42
+ */
+template <template <typename> typename F, typename T>
+    requires traits::HasApply<F<internal::meta::cast::cast<T>>>
+constexpr auto pure(T&& value) -> F<internal::meta::cast::cast<T>> {
+    return F<internal::meta::cast::cast<T>>::apply(std::forward<T>(value));
+}
+}  // namespace fp::kernel::ops
+
+#endif  // FP_TYPE_VALUE_VALUE_PRE_PURE_H

@@ -7,10 +7,14 @@
 #include <fp/internal/meta/meta.h>
 #include <fp/internal/storage/storage.h>
 #include <fp/kernel/mixins/mixins.h>
+#include <fp/kernel/ops/ops.h>
+#include <fp/kernel/traits/traits.h>
 #undef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 namespace fp {
 using namespace fp::data;
+using namespace fp::kernel::ops;
+using namespace fp::kernel::traits;
 // C++ type to FP++ type transformation tool
 using fp::internal::meta::cast::cast;
 }  // namespace fp

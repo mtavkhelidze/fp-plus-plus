@@ -18,7 +18,7 @@ struct TestStruct : StorageBox<TestStruct<A>> {
     [[nodiscard]] auto value() const -> auto& { return this->get(); }
 };
 
-TEST(StorageBox, copy_assignment_is_shallow) {
+TEST(Internal_Storage_BoxStorage, copy_assignment_is_shallow) {
     auto a = TestStruct<std::string>::store(std::string("foo"));
     // Get the address of the string data in 'a'
 #pragma clang diagnostic push
@@ -34,19 +34,19 @@ TEST(StorageBox, copy_assignment_is_shallow) {
     EXPECT_EQ((uintptr_t)(b.value().c_str()), a_ptr);
 }
 
-TEST(StorageBox, copy_constructor_preserves_value) {
+TEST(Internal_Storage_BoxStorage, copy_constructor_preserves_value) {
     auto a = TestStruct<std::string>::store("abc");
     const auto b = a;
     EXPECT_EQ(b.value(), "abc");
 }
 
-TEST(StorageBox, const_accessors) {
+TEST(Internal_Storage_BoxStorage, const_accessors) {
     auto box = TestStruct<std::string>::store(std::string("const test"));
     const auto& const_box = box;
     EXPECT_EQ(const_box.value(), "const test");
 }
 
-TEST(StorageBox, doesnt_allow_move) {
+TEST(Internal_Storage_BoxStorage, doesnt_allow_move) {
     static_assert(
       !std::is_move_constructible_v<StorageBox<TestStruct<std::string>>>,
       "StorageBox should not be move constructible"
@@ -57,7 +57,9 @@ TEST(StorageBox, doesnt_allow_move) {
     );
 }
 
-TEST(StorageBox, multiple_copies_share_data) {  // Renamed for clarity
+TEST(
+  Internal_Storage_BoxStorage, multiple_copies_share_data
+) {  // Renamed for clarity
     auto a = TestStruct<std::string>::store(std::string("copytest"));
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdangling-gsl"
@@ -84,12 +86,12 @@ TEST(StorageBox, multiple_copies_share_data) {  // Renamed for clarity
     EXPECT_EQ(a_ptr, c_ptr);
 }
 
-TEST(StorageBox, put_and_get_complex_type) {
+TEST(Internal_Storage_BoxStorage, put_and_get_complex_type) {
     auto box = TestStruct<std::string>::store(std::string("hello"));
     EXPECT_EQ(box.value(), "hello");
 }
 
-TEST(StorageBox, self_copy_assignment_is_safe) {
+TEST(Internal_Storage_BoxStorage, self_copy_assignment_is_safe) {
     auto a = TestStruct<std::string>::store(std::string("safe"));
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wself-assign-overloaded"
@@ -98,11 +100,11 @@ TEST(StorageBox, self_copy_assignment_is_safe) {
     EXPECT_EQ(a.value(), "safe");
 }
 
-TEST(StorageBox, stores_nothing_type_safely) {
+TEST(Internal_Storage_BoxStorage, stores_nothing_type_safely) {
     auto box = TestStruct<Nothing>::store(nothing);
 }
 
-TEST(StorageBox, works_with_custom_struct) {
+TEST(Internal_Storage_BoxStorage, works_with_custom_struct) {
     struct MyStruct {
         int x;
         std::string y;

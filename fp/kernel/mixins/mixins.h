@@ -9,7 +9,7 @@
 #include <fp/kernel/mixins/with_value.h>
 
 namespace fp::kernel::mixins {
-using namespace fp::kernel::mixins::with_value;
+using namespace fp::kernel::mixins::value;
 }  // namespace fp::kernel::mixins
 
 #endif  // __FP_KERNEL_MIXINS_MIXINS_H
