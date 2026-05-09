@@ -12,7 +12,7 @@
 
 namespace fp::internal::storage {
 /**
- * StorageBox: Immutable boxed value storag for non-trivial typese.
+ * StorageBox: Immutable boxed value storage for non-trivial typese.
  *
  * - No move operations allowed.
  * - Copy operations allowed.
@@ -31,8 +31,10 @@ struct StorageBox {
     using Box = Box<A>;
     Box box;
 
+  private:
+    StorageBox(const Box& b) noexcept : box(b) {}
+
   protected:
-    explicit StorageBox(const Box& b) noexcept : box(b) {}
     StorageBox(const StorageBox& other) noexcept = default;
     auto operator=(const StorageBox& other) noexcept -> StorageBox& = default;
     ~StorageBox() noexcept = default;

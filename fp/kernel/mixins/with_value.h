@@ -13,7 +13,7 @@
 #include <cstring>
 #endif
 
-namespace fp::kernel::mixins {
+namespace fp::kernel::mixins::with_value {
 
 namespace {
     template <typename FA>
@@ -45,7 +45,7 @@ struct WithValue : private Backend<FA>::type {
     using Base = typename Backend<FA>::type;
     using Base::Base;
 
-  protected:
+  public:
     /**
      * Constructs an instance of F from a raw C++ value of type T using the
      * backend storage returning F<A>.
@@ -57,6 +57,8 @@ struct WithValue : private Backend<FA>::type {
     static constexpr auto apply(A&& value) -> FA {
         return FA{Base::put(std::forward<A>(value))};
     }
+
+  public:
     constexpr auto value() const noexcept -> auto& { return this->get(); }
 
 #ifdef FP_PLUS_PLUS_TESTING
@@ -68,6 +70,6 @@ struct WithValue : private Backend<FA>::type {
     }
 #endif  // FP_PLUS_PLUS_TESTING
 };
-};  // namespace fp::kernel::mixins
+};  // namespace fp::kernel::mixins::with_value
 
 #endif  // __FP_KERNEL_MIXINS_WITH_VALUE_H

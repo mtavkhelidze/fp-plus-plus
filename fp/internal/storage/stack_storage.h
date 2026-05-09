@@ -24,6 +24,10 @@ struct StorageStack {
     using A = meta::inner_type::inner_type<Container>;
     A value;
 
+  private:
+    constexpr StorageStack(const A& v) noexcept : value(v) {}
+    constexpr StorageStack(A&& v) noexcept : value(v) {}
+
   protected:
     constexpr StorageStack(const StorageStack& other) noexcept
         : value(other.value) {}
@@ -31,12 +35,9 @@ struct StorageStack {
       -> StorageStack& = default;
     constexpr ~StorageStack() noexcept = default;
 
-  private:
-    constexpr explicit StorageStack(A&& v) noexcept : value(v) {}
-
-  protected:
-    explicit StorageStack() noexcept = delete;
-    explicit StorageStack(StorageStack&&) noexcept = delete;
+  public:
+    StorageStack() noexcept = delete;
+    StorageStack(StorageStack&&) noexcept = delete;
     auto operator=(StorageStack&&) noexcept -> StorageStack& = delete;
 
   protected:
