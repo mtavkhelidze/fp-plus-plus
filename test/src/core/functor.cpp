@@ -15,7 +15,7 @@ struct TestStruct : WithValue<TestStruct<A>> {
 // identity: map(fa, id) == fa
 TEST(Core_Functor, law_identity) {
     auto fa = pure<TestStruct>(42);
-    auto result = Functor<TestStruct>::map(fa, [](auto x) { return x; });
+    auto result = Functor<TestStruct>::map(fa, id);
     ASSERT_EQ(result.value(), fa.value());
 }
 
