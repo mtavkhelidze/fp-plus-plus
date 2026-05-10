@@ -9,16 +9,22 @@
 #include <fp/internal/meta/meta.h>
 #include <fp/kernel/traits/traits.h>
 
+#include <utility>
+
 namespace fp::core {
 template <template <typename> typename F>
 struct Functor {
-    template <typename A, typename Fn>
-        requires internal::meta::arrow::is_arrow<Fn, A>
-              && kernel::traits::HasApply<F<A>>
-    static auto map(const F<A>& fa, Fn&& f) -> decltype(auto) {
-        using B = internal::meta::arrow::arrow_result<Fn, A>;
-        using BC = internal::meta::cast::cast<B>;
-        return F<BC>::apply(std::invoke(std::forward<Fn>(f), fa.value()));
+    template <typename Fn>
+    static auto map(Fn&& f) {
+        return [f = std::forward<Fn>(f)]<typename A>(
+                 const F<A>& fa
+               ) -> decltype(auto) {
+            static_assert(internal::meta::arrow::is_arrow<Fn, A>);
+            static_assert(kernel::traits::HasApply<F<A>>);
+            using B = internal::meta::arrow::arrow_result<Fn, A>;
+            using BC = internal::meta::cast::cast<B>;
+            return F<BC>::apply(std::invoke(f, fa.value()));
+        };
     }
 };
 }  // namespace fp::core

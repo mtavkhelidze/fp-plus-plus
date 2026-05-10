@@ -10,12 +10,27 @@ struct TestStruct : WithValue<TestStruct<A>> {
     using Base::Base;
 };
 
+// Functor core
+
+// lift morphism into F
+TEST(Core_Functor, map_lifts_morphism_A_to_B_into_FA_to_FB) {
+    auto fa = pure<TestStruct>(42);
+    auto arrow = Functor<TestStruct>::map([](int x) { return x + 1; });
+    // arrow is F<A> → F<B> — a reusable first-class value
+    auto result1 = arrow(fa);
+    auto result2 = arrow(fa);
+    static_assert(std::same_as<decltype(result1), TestStruct<int>>);
+    ASSERT_EQ(result1.value(), 43);
+    // same arrow, same result — pure
+    ASSERT_EQ(result2.value(), 43);
+}
+
 // Functor Laws
 
 // identity: map(fa, id) == fa
 TEST(Core_Functor, law_identity) {
     auto fa = pure<TestStruct>(42);
-    auto result = Functor<TestStruct>::map(fa, id);
+    auto result = Functor<TestStruct>::map(id)(fa);
     ASSERT_EQ(result.value(), fa.value());
 }
 
@@ -24,8 +39,8 @@ TEST(Core_Functor, law_composition) {
     auto fa = pure<TestStruct>(10);
     auto f = [](int x) { return x * 2; };
     auto g = [](int x) { return x + 3; };
-    auto lhs = Functor<TestStruct>::map(Functor<TestStruct>::map(fa, f), g);
-    auto rhs = Functor<TestStruct>::map(fa, [&](int x) { return g(f(x)); });
+    auto lhs = Functor<TestStruct>::map(g)(Functor<TestStruct>::map(f)(fa));
+    auto rhs = Functor<TestStruct>::map([&](int x) { return g(f(x)); })(fa);
     ASSERT_EQ(lhs.value(), rhs.value());
 }
 
@@ -34,15 +49,15 @@ TEST(Core_Functor, law_composition) {
 TEST(Core_Functor, map_int_to_double) {
     auto fa = pure<TestStruct>(7);
     auto result =
-      Functor<TestStruct>::map(fa, [](int x) -> double { return x * 1.5; });
+      Functor<TestStruct>::map([](int x) -> double { return x * 1.5; })(fa);
     ASSERT_DOUBLE_EQ(result.value(), 10.5);
 }
 
 TEST(Core_Functor, map_string_to_int) {
     auto fa = pure<TestStruct>(std::string{"hello"});
-    auto result = Functor<TestStruct>::map(fa, [](const std::string& s) {
+    auto result = Functor<TestStruct>::map([](const std::string& s) {
         return static_cast<int>(s.size());
-    });
+    })(fa);
     ASSERT_EQ(result.value(), 5);
 }
 
@@ -52,7 +67,7 @@ TEST(Core_Functor, map_string_to_int) {
 TEST(Core_Functor, map_int_to_cstring_normalised_to_string) {
     auto fa = pure<TestStruct>(42);
     auto result =
-      Functor<TestStruct>::map(fa, [](int) -> const char* { return "hello"; });
+      Functor<TestStruct>::map([](int) -> const char* { return "hello"; })(fa);
     // cast<const char*> = std::string — result must be TestStruct<std::string>
     ASSERT_EQ(result.value(), std::string{"hello"});
 }
@@ -63,20 +78,20 @@ int free_plus_one(int x) { return x + 1; }
 
 TEST(Core_Functor, map_function_pointer) {
     auto fa = pure<TestStruct>(9);
-    auto result = Functor<TestStruct>::map(fa, free_plus_one);
+    auto result = Functor<TestStruct>::map(free_plus_one)(fa);
     ASSERT_EQ(result.value(), 10);
 }
 
 TEST(Core_Functor, map_std_function) {
     auto fa = pure<TestStruct>(9);
     std::function<int(int)> f = [](int x) { return x * 3; };
-    auto result = Functor<TestStruct>::map(fa, f);
+    auto result = Functor<TestStruct>::map(f)(fa);
     ASSERT_EQ(result.value(), 27);
 }
 
 TEST(Core_Functor, map_generic_lambda) {
     auto fa = pure<TestStruct>(4);
-    auto result = Functor<TestStruct>::map(fa, [](auto x) { return x * x; });
+    auto result = Functor<TestStruct>::map([](auto x) { return x * x; })(fa);
     ASSERT_EQ(result.value(), 16);
 }
 
@@ -85,8 +100,8 @@ struct Square {
 };
 
 TEST(Core_Functor, map_callable_struct) {
-    auto fn = Square{};
+    auto f = Square{};
     auto fa = pure<TestStruct>(4);
-    auto result = Functor<TestStruct>::map(fa, fn);
+    auto result = Functor<TestStruct>::map(f)(fa);
     ASSERT_EQ(result.value(), 16);
 }
