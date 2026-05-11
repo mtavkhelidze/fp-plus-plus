@@ -18,8 +18,8 @@ TEST(Nothing, all_instances_are_equal) {
 
 TEST(Nothing, is_a_unit_type) {
     // Nothing carries no information — there is only one possible value
-    static_assert(nothing == nothing);
-    static_assert(!(nothing != nothing));
+    static_assert(nothing == nothing);     // NOLINT
+    static_assert(!(nothing != nothing));  // NOLINT
 }
 
 TEST(Nothing, is_ordered) {

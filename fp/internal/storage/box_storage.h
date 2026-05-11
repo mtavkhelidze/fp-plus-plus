@@ -1,5 +1,5 @@
-#ifndef FP_INTERNAL_STORAGE_BOX_STORAGE_H
-#define FP_INTERNAL_STORAGE_BOX_STORAGE_H
+#ifndef __FP_INTERNAL_STORAGE_BOX_STORAGE_H
+#define __FP_INTERNAL_STORAGE_BOX_STORAGE_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -31,8 +31,7 @@ struct StorageBox {
     using Box = Box<A>;
     Box box;
 
-  private:
-    StorageBox(const Box& b) noexcept : box(b) {}
+    StorageBox(const Box& b) noexcept : box(b) {}  // NOLINT
 
   protected:
     StorageBox(const StorageBox& other) noexcept = default;
@@ -69,4 +68,4 @@ struct StorageBox {
 
 }  // namespace fp::internal::storage
 
-#endif  // FP_INTERNAL_STORAGE_BOX_STORAGE_H
+#endif  // __FP_INTERNAL_STORAGE_BOX_STORAGE_H

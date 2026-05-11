@@ -58,7 +58,6 @@ struct WithValue : private Backend<FA>::type {
         return FA{Base::put(std::forward<A>(value))};
     }
 
-  public:
     constexpr auto value() const noexcept -> auto& { return this->get(); }
 
 #ifdef FP_PLUS_PLUS_TESTING

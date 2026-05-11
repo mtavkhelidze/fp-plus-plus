@@ -1,5 +1,6 @@
-#ifndef FP_FP_H
-#define FP_FP_H
+#ifndef __FP_FP_H
+#define __FP_FP_H
+
 #pragma once
 
 #define FP_PLUS_PLUS_INCLUDED_FROM_FP_FP 1
@@ -22,4 +23,4 @@ using namespace fp::kernel::traits;
 using fp::internal::meta::cast::cast;
 }  // namespace fp
 
-#endif  // FP_FP_H
+#endif  // __FP_FP_H

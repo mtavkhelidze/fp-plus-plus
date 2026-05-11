@@ -6,7 +6,7 @@
 #include <type_traits>
 
 using namespace fp;
-
+// NOLINTBEGIN(hicpp-avoid-c-arrays)
 TEST(fp_cast, c_array_becomes_vector) {
     static_assert(std::is_same_v<fp::cast<int[3]>, Vector<int>>);
     static_assert(std::is_same_v<fp::cast<double[10]>, Vector<double>>);
@@ -15,7 +15,7 @@ TEST(fp_cast, c_array_becomes_vector) {
 TEST(fp_cast, char_array_becomes_string) {
     static_assert(std::is_same_v<fp::cast<char[5]>, String>);
 }
-
+// NOLINTEND(hicpp-avoid-c-arrays)
 TEST(fp_cast, unique_ptr_becomes_is_taken_as_is) {
     static_assert(
       std::is_same_v<fp::cast<std::unique_ptr<int>>, std::unique_ptr<int>>

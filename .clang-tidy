@@ -1,35 +1,48 @@
 Checks:
-    - "*"
-    - -altera-struct-pack-align
-    - -bugprone-reserved-identifier
-    - -cert-dcl51-cpp
-    - - cert-dcl59-cpp
-    - -clang-analyzer-optin.performance.Padding
-    - -clang-diagnostic-pragma-once-outside-header
-    - -fuchsia-*
-    - -google-build-using-namespace
-    - -google-readability-avoid-underscore-in-googletest-name
-    - -llvm-include-order
-    - -llvmlibc-*
-    - -misc-use-anonymous-namespace
-    - -portability-avoid-pragma-once
-    - -readability-identifier-length
-    - -bugprone-reserved-identifier
-    - bugprone-*
-    - clang-analyzer-*
-    - llvm-header-guard
-    - modernize-*
-    - performance-*
-    - portability-*
-    - readability-*
+  - "*"
+  - bugprone-*
+  - clang-analyzer-*
+  - llvm-header-guard
+  - modernize-*
+  - performance-*
+  - portability-*
+  - readability-*
+  - readability-identifier-naming
+  - -altera-struct-pack-align
+  - -bugprone-reserved-identifier
+  - -cert-dcl51-cpp
+  - -cert-dcl59-cpp
+  - -clang-analyzer-optin.performance.Padding
+  - -clang-diagnostic-pragma-once-outside-header
+  - -cppcoreguidelines-*,
+  - -fuchsia-*
+  - -google-*,
+  - -llvmlibc-*
+  - -misc-use-anonymous-namespace
+  - -misc-use-internal-linkage
+  - -misc-use-internal-linkage
+  - -portability-avoid-pragma-once
+  - -readability-identifier-length
+  - -llvm-include-order
+  - -readability-magic-numbers
+  - -performance-unnecessary-copy-initialization
+  - -misc-non-private-member-variables-in-classes
 
 CheckOptions:
+  - key: llvm-header-guard.HeaderFileExtensions
+    value: "h,hpp"
 
-- key: llvm-header-guard.HeaderFileExtensions
-  value: 'h;hpp'
-- key: readability-identifier-length.MinimumVariableNameLength
-  value: 1
-- key: readability-identifier-length.MinimumParameterNameLength
-  value: 1
-- key: llvm-header-guard.HeaderCheckIncludePaths
-  value: 'include'
+  - key: llvm-header-guard.IncludeStyle
+    value: LLVM
+
+  - key: readability-identifier-length.MinimumVariableNameLength
+    value: 1
+
+  - key: readability-identifier-length.MinimumParameterNameLength
+    value: 1
+
+  - key: readability-identifier-naming.MacroDefinitionCase
+    value: UPPER_CASE
+
+  - key: readability-identifier-naming.MacroDefinitionPrefix
+    value: FP_

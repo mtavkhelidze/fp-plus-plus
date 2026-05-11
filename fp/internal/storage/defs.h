@@ -1,5 +1,5 @@
-#ifndef FP_INTERNAL_STORAGE_DEFS_H
-#define FP_INTERNAL_STORAGE_DEFS_H
+#ifndef __FP_INTERNAL_STORAGE_DEFS_H
+#define __FP_INTERNAL_STORAGE_DEFS_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -17,4 +17,4 @@ inline constexpr std::size_t fp_align_32 = 32;
 #define FP_ALIGN_PACKED_16 alignas(fp_align_16) FP_PACKED
 #define FP_ALIGN_PACKED_32 alignas(fp_align_32) FP_PACKED
 
-#endif  // FP_INTERNAL_STORAGE_DEFS_H
+#endif  // __FP_INTERNAL_STORAGE_DEFS_H

@@ -1,5 +1,5 @@
-#ifndef FP_TYPE_VALUE_VALUE_PRE_PURE_H
-#define FP_TYPE_VALUE_VALUE_PRE_PURE_H
+#ifndef __FP_TYPE_VALUE_VALUE_PRE_PURE_H
+#define __FP_TYPE_VALUE_VALUE_PRE_PURE_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -33,4 +33,4 @@ inline auto pure(T&& value) -> F<internal::meta::cast::cast<T>> {
 }
 }  // namespace fp::kernel::ops
 
-#endif  // FP_TYPE_VALUE_VALUE_PRE_PURE_H
+#endif  // __FP_TYPE_VALUE_VALUE_PRE_PURE_H

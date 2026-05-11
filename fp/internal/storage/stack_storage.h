@@ -1,5 +1,5 @@
-#ifndef FP_INTERNAL_STORAGE_STACK_STORAGE_H
-#define FP_INTERNAL_STORAGE_STACK_STORAGE_H
+#ifndef __FP_INTERNAL_STORAGE_STACK_STORAGE_H
+#define __FP_INTERNAL_STORAGE_STACK_STORAGE_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -26,9 +26,8 @@ struct StorageStack {
     using A = meta::inner_type::inner_type<Container>;
     A value;
 
-  private:
-    constexpr StorageStack(const A& v) noexcept : value(v) {}
-    constexpr StorageStack(A&& v) noexcept : value(v) {}
+    constexpr StorageStack(const A& v) noexcept : value(v) {}  // NOLINT
+    constexpr StorageStack(A&& v) noexcept : value(v) {}       // NOLINT
 
   protected:
     constexpr StorageStack(const StorageStack& other) noexcept
@@ -66,4 +65,4 @@ struct StorageStack {
 };
 }  // namespace fp::internal::storage
 
-#endif  // FP_INTERNAL_STORAGE_STACK_STORAGE_H
+#endif  // __FP_INTERNAL_STORAGE_STACK_STORAGE_H

@@ -1,5 +1,5 @@
-#ifndef FP_INTERNAL_STORAGE_BOX_H
-#define FP_INTERNAL_STORAGE_BOX_H
+#ifndef __FP_INTERNAL_STORAGE_BOX_H
+#define __FP_INTERNAL_STORAGE_BOX_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -128,4 +128,4 @@ Box(U&&, Us&&...) -> Box<data::Tuple<std::decay_t<U>, std::decay_t<Us>...>>;
 // NOLINTEND(modernize-avoid-c-arrays,hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays)
 }  // namespace fp::internal::storage
 
-#endif  // FP_INTERNAL_STORAGE_BOX_H
+#endif  // __FP_INTERNAL_STORAGE_BOX_H

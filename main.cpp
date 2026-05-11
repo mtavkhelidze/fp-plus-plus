@@ -1,12 +1,14 @@
 #include <fp/fp.h>
 
 #include <iostream>
-#include <ostream>
 
 using namespace fp;
 
+/**
+ * This is here to give clang-tidy something to chew on.
+ */
 auto main() -> int {
-    Nothing n = nothing;
-    std::cout << n << std::endl;
+    auto n = nothing;
+    std::cout << n << '\n';
     return 0;
 }

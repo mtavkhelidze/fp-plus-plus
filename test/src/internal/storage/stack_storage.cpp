@@ -52,7 +52,7 @@ TEST(Internal_Storage_StorageStack, self_assignment_does_nothing) {
 TEST(Internal_Storage_StorageStack, move_assignment_uses_copy) {
     auto original = TestStruct<int>::store(99);
     auto moved = TestStruct<int>::store(0);
-    moved = std::move(original);
+    moved = std::move(original);  // NOLINT
     EXPECT_EQ(moved.value(), 99);
     EXPECT_EQ(original.value(), 99);
 }
