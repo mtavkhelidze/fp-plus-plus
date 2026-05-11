@@ -6,11 +6,13 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/data/types.h>
 #include <fp/internal/storage/defs.h>
 
+#include <concepts>
 #include <cstddef>
 #include <memory>
-#include <vector>
+#include <type_traits>
 
 // NOLINTBEGIN(modernize-avoid-c-arrays,hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays)
 
@@ -37,7 +39,14 @@ struct FP_ALIGN_PACKED_16 Box {
     auto empty() const -> bool {
         return !data;
     }
+
     // --- constructors
+
+    // // tuple
+    // template <typename... Ts>
+    // explicit Box(data::Tuple<Ts...> t) {
+
+    // };
 
     // Value (not pointer)
     explicit Box(const T& t)
@@ -78,7 +87,7 @@ struct FP_ALIGN_PACKED_16 Box {
     // tuple
     template <typename U, typename... Us>
         requires(
-          std::is_same_v<T, std::tuple<std::decay_t<U>, std::decay_t<Us>...>>
+          std::is_same_v<T, data::Tuple<std::decay_t<U>, std::decay_t<Us>...>>
         )
     explicit Box(U&& u, Us&&... us) {
         T t(std::forward<U>(u), std::forward<Us>(us)...);
@@ -100,21 +109,21 @@ Box(const U&) -> Box<std::decay_t<U>>;
 
 // Literal strings (Box b = "str" or Box("str")), converted automatically to
 // string
-Box(const char*) -> Box<std::string>;
+Box(const char*) -> Box<data::String>;
 
 template <typename U, std::size_t N>
     requires(std::same_as<std::decay_t<U>, char>)
-Box(const U (&)[N]) -> Box<std::string>;
+Box(const U (&)[N]) -> Box<data::String>;
 
 // c-style arrays, bar char*
 template <typename U, std::size_t N>
     requires(!std::same_as<std::decay_t<U>, char>)
-Box(const U (&)[N]) -> Box<std::vector<std::decay_t<U>>>;
+Box(const U (&)[N]) -> Box<data::Vector<std::decay_t<U>>>;
 
 // varargs
 template <typename U, typename... Us>
     requires(sizeof...(Us) > 0)
-Box(U&&, Us&&...) -> Box<std::tuple<std::decay_t<U>, std::decay_t<Us>...>>;
+Box(U&&, Us&&...) -> Box<data::Tuple<std::decay_t<U>, std::decay_t<Us>...>>;
 
 // NOLINTEND(modernize-avoid-c-arrays,hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays)
 }  // namespace fp::internal::storage

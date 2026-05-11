@@ -9,6 +9,8 @@
 #include <fp/internal/meta/inner_type.h>
 #include <fp/internal/meta/rebind.h>
 
+#include <type_traits>
+
 namespace fp::internal::storage {
 
 /**

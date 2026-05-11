@@ -1,6 +1,9 @@
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 
+#include <concepts>
+#include <functional>
+
 using namespace fp;
 using namespace fp::kernel::mixins;
 
@@ -12,7 +15,7 @@ struct TestStruct : WithValue<TestStruct<A>> {
 
 // Functor core
 
-// lift morphism into F
+// lift morphisms into F
 TEST(Core_Functor, map_lifts_morphism_A_to_B_into_FA_to_FB) {
     auto fa = pure<TestStruct>(42);
     auto arrow = Functor<TestStruct>::map([](int x) { return x + 1; });
@@ -54,8 +57,8 @@ TEST(Core_Functor, map_int_to_double) {
 }
 
 TEST(Core_Functor, map_string_to_int) {
-    auto fa = pure<TestStruct>(std::string{"hello"});
-    auto result = Functor<TestStruct>::map([](const std::string& s) {
+    auto fa = pure<TestStruct>(String{"hello"});
+    auto result = Functor<TestStruct>::map([](const String& s) {
         return static_cast<int>(s.size());
     })(fa);
     ASSERT_EQ(result.value(), 5);
@@ -63,13 +66,13 @@ TEST(Core_Functor, map_string_to_int) {
 
 // Casted types
 
-// cast: const char* normalised to std::string
+// cast: const char* normalised to String
 TEST(Core_Functor, map_int_to_cstring_normalised_to_string) {
     auto fa = pure<TestStruct>(42);
     auto result =
       Functor<TestStruct>::map([](int) -> const char* { return "hello"; })(fa);
-    // cast<const char*> = std::string — result must be TestStruct<std::string>
-    ASSERT_EQ(result.value(), std::string{"hello"});
+    // cast<const char*> = String — result must be TestStruct<String>
+    ASSERT_EQ(result.value(), String{"hello"});
 }
 
 // Callable types

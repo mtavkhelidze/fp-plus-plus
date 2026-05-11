@@ -4,18 +4,35 @@ FP the hell out of C++
 
 ---
 
-`FP++` is header-only library: all it needs to do is done at compile time and doesn't involve runtime type resolution, function calls or, God forbid, vtable lookups.
+`FP++` is header-only library: all it needs to do is done at compile time and
+doesn't involve runtime type resolution, function calls or, God forbid, vtable
+lookups.
 
 ### Types
 
-`FP++` normalises C++ types automatically — references, const, pointers, arrays,
-and smart pointers are all handled transparently. There are a few cases
-when`FP++` normalises fundamental types into STL containers. The latest complete
+`FP++` owns the types that appear **inside `F<A>`** — both the type constructor
+`F` and the inner type `A` are `FP++` types. Everything else is normal C++.
+
+In practice this means:
+
+- `String` instead of `std::string`
+- `Vector<A>` instead of `std::vector<A>`
+- `Tuple<A, B>` instead of `std::tuple<A, B>`
+- ...
+
+Outside of `F<A>` — function signatures, local variables, interop boundaries —
+normal C++ types apply. There are no wrappers, no boxing, no conversion cost:
+`String` is `std::string`, `Vector<A>` is `std::vector<A>`. The aliases exist for
+consistency and readability, not for abstraction.
+
+`FP++` also normalises C++ types automatically — references, const, pointers,
+arrays, and smart pointers are all handled transparently. The complete
 transformation rules are documented as executable tests in `test/src/cast.cpp`.
 
 ### Usage
 
-Place `fp` somewhere in your include path and use it with `#include <fp/fp.h>` and `using namespace fp` in your C++ source file. Something like:
+Place `fp` somewhere in your include path and use it with `#include <fp/fp.h>`
+and `using namespace fp` in your C++ source file. Something like:
 
 ```bash
 g++ -I/path/to/dir/with/fp/in/it -o main main.cpp -std=c++20 -g
@@ -23,7 +40,9 @@ g++ -I/path/to/dir/with/fp/in/it -o main main.cpp -std=c++20 -g
 
 ### Development
 
-Documentation is _incomplete_. There are some `readme`-s here and there, but the best way to understand how things work is to read sources `test/src`. Tests as documentation, so to speak.
+Documentation is _incomplete_. There are some `readme`-s here and there, but the
+best way to understand how things work is to read sources in `test/src`. Tests as
+documentation, so to speak.
 
 #### Requirements
 

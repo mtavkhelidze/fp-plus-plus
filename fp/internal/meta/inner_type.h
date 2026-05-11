@@ -8,6 +8,7 @@
 
 #include <fp/internal/meta/instance.h>
 
+#include <concepts>
 #include <type_traits>
 
 namespace fp::internal::meta::inner_type {

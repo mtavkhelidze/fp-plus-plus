@@ -17,14 +17,14 @@ TEST(Kernel_Ops_Pure, trivial_int) {
 }
 
 TEST(Kernel_Ops_Pure, trivial_string) {
-    std::string s = "hello";
+    String s = "hello";
     auto b = pure<TestStruct>(s);
-    static_assert(std::is_same_v<decltype(b), TestStruct<std::string>>);
+    static_assert(std::is_same_v<decltype(b), TestStruct<String>>);
     EXPECT_EQ(b.value(), "hello");
 }
 
 TEST(Kernel_Ops_Pure, temp_string) {
-    auto b = pure<TestStruct>(std::string("world"));
+    auto b = pure<TestStruct>(String("world"));
     EXPECT_EQ(b.value(), "world");
 }
 TEST(Kernel_Ops_Pure, const_ref) {
@@ -49,6 +49,6 @@ TEST(Kernel_Ops_Pure, any) {
 
 TEST(Kernel_Ops_Pure, string_literal) {
     auto b = pure<TestStruct>("hello");
-    static_assert(std::is_same_v<decltype(b), TestStruct<std::string>>);
+    static_assert(std::is_same_v<decltype(b), TestStruct<String>>);
     EXPECT_EQ(b.value(), "hello");
 }

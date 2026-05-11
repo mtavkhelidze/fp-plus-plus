@@ -6,9 +6,10 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/data/types.h>
+
 #include <compare>
 #include <ostream>
-#include <string>
 
 namespace fp::data {
 struct _nothing {
@@ -16,7 +17,7 @@ struct _nothing {
     constexpr auto operator<=>(const _nothing&) const
       -> std::strong_ordering = default;
 
-    [[nodiscard]] auto to_string() const -> std::string { return {"Nothing"}; }
+    [[nodiscard]] auto to_string() const -> String { return {"Nothing"}; }
 
     friend auto operator<<(std::ostream& os, const _nothing& n)
       -> std::ostream& {

@@ -2,8 +2,9 @@
 #include <gtest/gtest.h>
 
 #include <cstddef>
+#include <functional>
 #include <memory>
-#include <string>
+#include <tuple>
 #include <type_traits>
 
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes,readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
@@ -13,8 +14,8 @@ using namespace fp;
 using namespace fp::internal::storage;
 
 TEST(Box_Copy, constructor_behavior) {
-    Box<std::string> a = Box("hello");
-    const Box<std::string> b(a);  // NOLINT
+    Box<String> a = Box("hello");
+    const Box<String> b(a);  // NOLINT
     ASSERT_EQ(a.get(), b.get());
 }
 
@@ -68,24 +69,22 @@ TEST(Box_Construction, function_pointer) {
 TEST(Box_Construction, literal_c_arrays) {
     int arr1[] = {1, 2, 3};  // NOLINT
     auto box1 = Box(arr1);
-    static_assert(
-      std::is_same_v<std::vector<int>, typename decltype(box1)::kind>
-    );
+    static_assert(std::is_same_v<Vector<int>, typename decltype(box1)::kind>);
 
     auto v1 = box1.get();
-    static_assert(std::is_same_v<std::vector<int>, decltype(v1)>);
+    static_assert(std::is_same_v<Vector<int>, decltype(v1)>);
     ASSERT_EQ(v1[0], 1);
     ASSERT_EQ(v1[1], 2);
     ASSERT_EQ(v1[2], 3);
 
-    std::string arr2[] = {"one", "two", "three"};  // NOLINT
+    String arr2[] = {"one", "two", "three"};  // NOLINT
     auto box2 = Box(arr2);
     static_assert(
-      std::is_same_v<std::vector<std::string>, typename decltype(box2)::kind>
+      std::is_same_v<Vector<String>, typename decltype(box2)::kind>
     );
 
     auto v2 = box2.get();
-    static_assert(std::is_same_v<std::vector<std::string>, decltype(v2)>);
+    static_assert(std::is_same_v<Vector<String>, decltype(v2)>);
     ASSERT_EQ(v2[0], "one");
     ASSERT_EQ(v2[1], "two");
     ASSERT_EQ(v2[2], "three");
@@ -110,16 +109,16 @@ TEST(Box_Construction, literal_fundamental) {
 
 TEST(Box_Construction, literal_initialization_list_to_tuple) {
     // If multiple arguments are provided and their types are heterogeneous, Box
-    // will deduce a std::tuple<Ts...>
+    // will deduce a Tuple<Ts...>
     const int x = 10;
     const int& y = x;
     auto box3 = Box{1, x, y};
     static_assert(
-      std::is_same_v<std::tuple<int, int, int>, typename decltype(box3)::kind>
+      std::is_same_v<Tuple<int, int, int>, typename decltype(box3)::kind>
     );
 
     auto v3 = box3.get();
-    static_assert(std::is_same<std::tuple<int, int, int>, decltype(v3)>::value);
+    static_assert(std::is_same<Tuple<int, int, int>, decltype(v3)>::value);
     ASSERT_EQ(std::get<0>(v3), 1);
     ASSERT_EQ(std::get<1>(v3), x);
     ASSERT_EQ(std::get<2>(v3), y);
@@ -134,13 +133,13 @@ TEST(Box_Construction, literal_initialization_list_to_tuple) {
 
 TEST(Box_Construction, literal_string) {
     Box box1("hello");
-    static_assert(std::is_same_v<std::string, typename decltype(box1)::kind>);
+    static_assert(std::is_same_v<String, typename decltype(box1)::kind>);
     ASSERT_EQ(box1.get(), "hello");
 
     const auto* str = "hello";
     auto& str_ref = str;
     auto box2 = Box(str_ref);
-    static_assert(std::is_same_v<Box<std::string>, decltype(box2)>);
+    static_assert(std::is_same_v<Box<String>, decltype(box2)>);
     ASSERT_EQ(box2.get(), "hello");
 }
 
@@ -153,7 +152,7 @@ TEST(Box_Construction, literal_varargs) {
     auto box1 = Box(x, y, z, a);
     static_assert(
       std::is_same_v<
-        std::tuple<int, int*, int, const char*>, typename decltype(box1)::kind>
+        Tuple<int, int*, int, const char*>, typename decltype(box1)::kind>
     );
     auto t1 = box1.get();
     ASSERT_EQ(std::get<0>(t1), x);
@@ -164,7 +163,7 @@ TEST(Box_Construction, literal_varargs) {
     auto box2 = Box{x, y, z, a};
     static_assert(
       std::is_same_v<
-        std::tuple<int, int*, int, const char*>, typename decltype(box2)::kind>
+        Tuple<int, int*, int, const char*>, typename decltype(box2)::kind>
     );
     auto t2 = box2.get();
     ASSERT_EQ(std::get<0>(t2), x);
@@ -173,9 +172,9 @@ TEST(Box_Construction, literal_varargs) {
     ASSERT_EQ(std::get<3>(t2), a);
 
     auto box3 = Box{a};
-    static_assert(std::is_same_v<std::string, typename decltype(box3)::kind>);
+    static_assert(std::is_same_v<String, typename decltype(box3)::kind>);
     auto t3 = box3.get();
-    ASSERT_EQ(t3, std::string(a));
+    ASSERT_EQ(t3, String(a));
 }
 
 TEST(Box_Construction, move_only_rvalue_and_smart_ptr) {
@@ -265,9 +264,9 @@ TEST(Box_Construction, reference_collapsing_behavior) {
 
 TEST(Box_Construction, shared_ptr) {
     // shared_ptr and rvalue shared_ptr
-    auto ptr = std::make_shared<std::string>("hello");
+    auto ptr = std::make_shared<String>("hello");
     auto box1 = Box(ptr);
-    static_assert(std::is_same_v<std::string, typename decltype(box1)::kind>);
+    static_assert(std::is_same_v<String, typename decltype(box1)::kind>);
 
     struct MyType {};
     auto box2 = Box(std::make_shared<MyType>());
@@ -317,7 +316,7 @@ TEST(Box_Construction, any_type) {
 
     // Any<A> collapses to Nothing regardless of type parameter
     static_assert(std::is_same_v<Any<int>, Any<>>);
-    static_assert(std::is_same_v<Any<std::string>, Any<>>);
+    static_assert(std::is_same_v<Any<String>, Any<>>);
 }
 
 TEST(Box_Extra, immutability) {
@@ -327,11 +326,11 @@ TEST(Box_Extra, immutability) {
 }
 
 TEST(Box_Extra, empty_tuple) {
-    // Box<> deduces to std::tuple<>
-    auto box = Box(std::tuple<>{});
-    static_assert(std::is_same_v<std::tuple<>, typename decltype(box)::kind>);
+    // Box<> deduces to Tuple<>
+    auto box = Box(Tuple<>{});
+    static_assert(std::is_same_v<Tuple<>, typename decltype(box)::kind>);
     auto t = box.get();
-    static_assert(std::is_same_v<std::tuple<>, decltype(t)>);
+    static_assert(std::is_same_v<Tuple<>, decltype(t)>);
     ASSERT_EQ(std::tuple_size<decltype(t)>::value, 0);
 }
 
@@ -343,9 +342,7 @@ TEST(Box_Extra, large_c_array_to_vector) {
         arr[i] = static_cast<int>(i * i);  // NOLINT
     }
     auto box = Box(arr);
-    static_assert(
-      std::is_same_v<std::vector<int>, typename decltype(box)::kind>
-    );
+    static_assert(std::is_same_v<Vector<int>, typename decltype(box)::kind>);
     auto v = box.get();
     ASSERT_EQ(v.size(), N);
 #pragma unroll 10

@@ -1,5 +1,6 @@
 Diagnostics:
   UnusedIncludes: Strict
+  MissingIncludes: Strict
 CompileFlags:
   Add: [
     -DFP_PLUS_PLUS_INCLUDED_FROM_FP_FP=1,

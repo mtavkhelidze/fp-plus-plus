@@ -6,8 +6,11 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/data/types.h>
 #include <fp/internal/storage/box.h>
 
+#include <concepts>
+#include <cstddef>
 #include <type_traits>
 
 namespace fp::internal::meta::cast {
@@ -25,14 +28,14 @@ namespace {
     template <typename U, std::size_t N>
         requires(std::same_as<std::decay_t<U>, char>)
     struct _cast<U[N]> {
-        using type = std::string;
+        using type = data::String;
     };
 
     // non-char array → vector
     template <typename U, std::size_t N>
         requires(!std::same_as<std::decay_t<U>, char>)
     struct _cast<U[N]> {
-        using type = std::vector<std::decay_t<U>>;
+        using type = data::Vector<std::decay_t<U>>;
     };
 }  // namespace
 

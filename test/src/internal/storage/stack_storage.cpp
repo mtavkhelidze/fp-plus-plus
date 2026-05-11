@@ -1,6 +1,9 @@
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 
+#include <type_traits>
+#include <utility>
+
 using namespace fp;
 using namespace fp::internal::storage;
 

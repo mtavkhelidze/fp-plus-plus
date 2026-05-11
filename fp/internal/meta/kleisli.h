@@ -10,6 +10,8 @@
 #include <fp/internal/meta/inner_type.h>
 #include <fp/internal/meta/instance.h>
 
+#include <concepts>
+
 namespace fp::internal::meta::kleisli {
 
 template <typename F, typename A>

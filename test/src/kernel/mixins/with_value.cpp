@@ -1,6 +1,7 @@
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 
+using namespace fp;
 using namespace fp::kernel::mixins;
 
 template <typename A>
@@ -21,8 +22,8 @@ TEST(Kernal_Mixins_WithValue, uses_stack_for_trivial_type_const_int) {
 }
 
 TEST(Kernal_Mixins_WithValue, usses_box_for_non_trivial_type_const_string) {
-    const auto str = std::string("string");
-    auto val = TestStruct<std::string>::create(str);
+    const auto str = String("string");
+    auto val = TestStruct<String>::create(str);
     ASSERT_EQ(val.value(), "string");
     ASSERT_TRUE(val.is_box());
 }
@@ -47,20 +48,20 @@ TEST(Kernal_Mixins_WithValue, strips_const_ref_to_fundamental) {
 }
 
 TEST(Kernal_Mixins_WithValue, uses_box_for_string_literal) {
-    auto val = TestStruct<std::string>::create("hello");
+    auto val = TestStruct<String>::create("hello");
     ASSERT_EQ(val.value(), "hello");
     ASSERT_TRUE(val.is_box());
 }
 
 TEST(Kernal_Mixins_WithValue, uses_box_for_vector) {
-    std::vector<int> v = {1, 2, 3};
-    auto val = TestStruct<std::vector<int>>::create(v);
+    Vector<int> v = {1, 2, 3};
+    auto val = TestStruct<Vector<int>>::create(v);
     ASSERT_EQ(val.value(), v);
     ASSERT_TRUE(val.is_box());
 }
 
 TEST(Kernal_Mixins_WithValue, copy_shares_data) {
-    auto a = TestStruct<std::string>::create(std::string("shared"));
+    auto a = TestStruct<String>::create(String("shared"));
     auto b = a;
     ASSERT_EQ(a.value(), b.value());
     ASSERT_EQ(&a.value(), &b.value());  // same underlying data

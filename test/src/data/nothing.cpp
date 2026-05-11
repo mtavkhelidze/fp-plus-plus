@@ -1,7 +1,10 @@
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 
+#include <compare>
 #include <sstream>
+#include <type_traits>
+
 using namespace fp;
 
 TEST(Nothing, all_instances_are_equal) {
@@ -52,7 +55,7 @@ TEST(Any, is_a_placeholder_type_constructor) {
     // Any<A> collapses any type to Nothing
     // useful in declarations and tests where the type does not matter
     static_assert(std::is_same_v<Any<int>, Nothing>);
-    static_assert(std::is_same_v<Any<int, std::string>, Nothing>);
+    static_assert(std::is_same_v<Any<int, String>, Nothing>);
     static_assert(std::is_same_v<Any<>, Nothing>);
     constexpr Any<int> a = any;
     static_assert(a == nothing);
