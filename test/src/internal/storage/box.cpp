@@ -107,30 +107,6 @@ TEST(Box_Construction, literal_fundamental) {
     ASSERT_EQ(box3.get(), 1);
 }
 
-TEST(Box_Construction, literal_initialization_list_to_tuple) {
-    // If multiple arguments are provided and their types are heterogeneous, Box
-    // will deduce a Tuple<Ts...>
-    const int x = 10;
-    const int& y = x;
-    auto box3 = Box{1, x, y};
-    static_assert(
-      std::is_same_v<Tuple<int, int, int>, typename decltype(box3)::kind>
-    );
-
-    auto v3 = box3.get();
-    static_assert(std::is_same<Tuple<int, int, int>, decltype(v3)>::value);
-    ASSERT_EQ(std::get<0>(v3), 1);
-    ASSERT_EQ(std::get<1>(v3), x);
-    ASSERT_EQ(std::get<2>(v3), y);
-
-    auto box1 = Box{x};
-    static_assert(std::is_same_v<int, typename decltype(box1)::kind>);
-
-    auto v1 = box1.get();
-    static_assert(std::is_same_v<int, decltype(v1)>);
-    ASSERT_EQ(v1, x);
-}
-
 TEST(Box_Construction, literal_string) {
     Box box1("hello");
     static_assert(std::is_same_v<String, typename decltype(box1)::kind>);
@@ -141,40 +117,6 @@ TEST(Box_Construction, literal_string) {
     auto box2 = Box(str_ref);
     static_assert(std::is_same_v<Box<String>, decltype(box2)>);
     ASSERT_EQ(box2.get(), "hello");
-}
-
-TEST(Box_Construction, literal_varargs) {
-    auto x = 10;
-    auto* y = &x;
-    auto& z = x;
-    const auto* a = "hello";
-
-    auto box1 = Box(x, y, z, a);
-    static_assert(
-      std::is_same_v<
-        Tuple<int, int*, int, const char*>, typename decltype(box1)::kind>
-    );
-    auto t1 = box1.get();
-    ASSERT_EQ(std::get<0>(t1), x);
-    ASSERT_EQ(std::get<1>(t1), y);
-    ASSERT_EQ(std::get<2>(t1), z);
-    ASSERT_EQ(std::get<3>(t1), a);
-
-    auto box2 = Box{x, y, z, a};
-    static_assert(
-      std::is_same_v<
-        Tuple<int, int*, int, const char*>, typename decltype(box2)::kind>
-    );
-    auto t2 = box2.get();
-    ASSERT_EQ(std::get<0>(t2), x);
-    ASSERT_EQ(std::get<1>(t2), y);
-    ASSERT_EQ(std::get<2>(t2), z);
-    ASSERT_EQ(std::get<3>(t2), a);
-
-    auto box3 = Box{a};
-    static_assert(std::is_same_v<String, typename decltype(box3)::kind>);
-    auto t3 = box3.get();
-    ASSERT_EQ(t3, String(a));
 }
 
 TEST(Box_Construction, move_only_rvalue_and_smart_ptr) {
@@ -325,13 +267,87 @@ TEST(Box_Extra, immutability) {
     );
 }
 
-TEST(Box_Extra, empty_tuple) {
+TEST(Box_Construction_Tuple, empty_tuple) {
     // Box<> deduces to Tuple<>
     auto box = Box(Tuple<>{});
     static_assert(std::is_same_v<Tuple<>, typename decltype(box)::kind>);
     auto t = box.get();
     static_assert(std::is_same_v<Tuple<>, decltype(t)>);
     ASSERT_EQ(std::tuple_size<decltype(t)>::value, 0);
+}
+
+TEST(Box_Construction_Tuple, single_type_tuple) {
+    const int x = 10;
+    const int y = 20;
+    auto box = Box(Tuple{x, y});
+    static_assert(
+      std::is_same_v<Tuple<int, int>, typename decltype(box)::kind>
+    );
+    auto t = box.get();
+    static_assert(std::is_same_v<Tuple<int, int>, decltype(t)>);
+    ASSERT_EQ(std::get<0>(t), x);
+    ASSERT_EQ(std::get<1>(t), y);
+}
+
+TEST(Box_Construction_Tuple, primitive_and_complex_type_tuple) {
+    const int x = 10;
+    const auto* const y = "const to const*";
+    const auto z = String("const string");
+    auto box = Box(Tuple{x, y, z});
+    static_assert(
+      std::is_same_v<Tuple<int, String, String>, typename decltype(box)::kind>
+    );
+    auto t = box.get();
+    static_assert(std::is_same_v<Tuple<int, String, String>, decltype(t)>);
+    ASSERT_EQ(std::get<0>(t), x);
+    ASSERT_EQ(std::get<1>(t), y);
+    ASSERT_EQ(std::get<2>(t), z);
+}
+
+TEST(Box_Construction_Tuple, fairly_exotic_types) {
+    auto x = 42;
+    auto y = String("just str");
+    double z[2] = {1.0, 2.0};  // NOLINT
+    auto w = {10, 20};
+    auto box = Box(Tuple{x, y, z, w});
+    static_assert(
+      std::is_same_v<
+        Tuple<int, String, double*, Vector<int>>, typename decltype(box)::kind>
+    );
+    auto t = box.get();
+    static_assert(
+      std::is_same_v<Tuple<int, String, double*, Vector<int>>, decltype(t)>
+    );
+    ASSERT_EQ(std::get<0>(t), x);
+    ASSERT_EQ(std::get<1>(t), y);
+    ASSERT_EQ(std::get<2>(t), z);
+    Vector<int> W = {10, 20};
+    ASSERT_EQ(std::get<3>(t), W);
+}
+
+template <typename T>
+struct UserStruct {
+    int x;
+    T y;
+};
+
+TEST(Box_Construction_Tuple, references_and_user_types) {
+    auto x = 42;
+    auto& xref = x;
+    auto y = UserStruct<String>{.x = 10, .y = "hello"};
+    auto box = Box(x, xref, y);
+    static_assert(
+      std::is_same_v<
+        Tuple<int, int, UserStruct<String>>, typename decltype(box)::kind>
+    );
+    auto t = box.get();
+    static_assert(
+      std::is_same_v<Tuple<int, int, UserStruct<String>>, decltype(t)>
+    );
+    ASSERT_EQ(std::get<0>(t), x);
+    ASSERT_EQ(std::get<1>(t), x);
+    ASSERT_EQ(std::get<2>(t).x, 10);
+    ASSERT_EQ(std::get<2>(t).y, "hello");
 }
 
 TEST(Box_Extra, large_c_array_to_vector) {

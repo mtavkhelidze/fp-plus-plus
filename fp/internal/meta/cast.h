@@ -1,5 +1,6 @@
 #ifndef __FP_INTERNAL_META_CAST_H
 #define __FP_INTERNAL_META_CAST_H
+#include <initializer_list>
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -15,6 +16,7 @@
 
 namespace fp::internal::meta::cast {
 
+// NOLINTBEGIN(hicpp-avoid-c-arrays)
 namespace {
     template <typename A>
     auto _deduce(A&& a) -> decltype(storage::Box(std::forward<A>(a)));
@@ -37,10 +39,17 @@ namespace {
     struct _cast<U[N]> {
         using type = data::Vector<std::decay_t<U>>;
     };
+
+    template <typename U>
+    struct _cast<std::initializer_list<U>> {
+        using type = data::Vector<std::decay_t<U>>;
+    };
 }  // namespace
 
 template <typename A>
 using cast = typename _cast<A>::type;
+
+// NOLINTEND(hicpp-avoid-c-arrays)
 }  // namespace fp::internal::meta::cast
 
 #endif  // __FP_INTERNAL_META_CAST_H

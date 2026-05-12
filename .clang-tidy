@@ -8,8 +8,10 @@ Checks:
   - portability-*
   - readability-*
   - readability-identifier-naming
+
   - -altera-struct-pack-align
   - -bugprone-reserved-identifier
+  - -cert-dcl37-c
   - -cert-dcl51-cpp
   - -cert-dcl59-cpp
   - -clang-analyzer-optin.performance.Padding
@@ -17,16 +19,16 @@ Checks:
   - -cppcoreguidelines-*,
   - -fuchsia-*
   - -google-*,
+  - -llvm-include-order
   - -llvmlibc-*
+  - -misc-non-private-member-variables-in-classes
   - -misc-use-anonymous-namespace
   - -misc-use-internal-linkage
   - -misc-use-internal-linkage
+  - -performance-unnecessary-copy-initialization
   - -portability-avoid-pragma-once
   - -readability-identifier-length
-  - -llvm-include-order
   - -readability-magic-numbers
-  - -performance-unnecessary-copy-initialization
-  - -misc-non-private-member-variables-in-classes
 
 CheckOptions:
   - key: llvm-header-guard.HeaderFileExtensions

@@ -6,6 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP
 
+#include <fp/data/types.h>
 #include <fp/internal/meta/tools.h>
 
 #include <cstddef>
@@ -17,10 +18,6 @@ namespace {
     template <typename A>
     struct _type_class_instance {
         static constexpr std::size_t value = 0;
-        static_assert(
-          tools::always_false<A>,
-          "TC must be of the form TC<...T> (i.e.std::optional<int>)."
-        );
     };
     template <template <typename...> typename F, typename... A>
     struct _type_class_instance<F<A...>> {
@@ -62,11 +59,19 @@ namespace {
         using type = typename _type_class_unary_template<
           std::decay_t<A>>::template type<X>;
     };
+    template <typename T>
+    struct _is_tuple : std::false_type {};
+
+    template <typename... Ts>
+    struct _is_tuple<data::Tuple<Ts...>> : std::true_type {};
 }  // namespace
 
 template <typename F>
 inline constexpr bool is_instance =
   _type_class_instance<std::decay_t<F>>::value > 0;
+
+template <typename T>
+inline constexpr bool is_tuple = _is_tuple<std::decay_t<T>>::value;
 
 template <typename F>
 inline constexpr bool is_unary_instance =

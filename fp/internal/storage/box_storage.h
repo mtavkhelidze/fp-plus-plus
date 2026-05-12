@@ -55,7 +55,7 @@ struct StorageBox {
      */
     template <typename T>
     static auto put(T&& value) {
-        auto box = Box{std::forward<T>(value)};
+        auto box = Box(std::forward<T>(value));
         using U = typename decltype(box)::kind;
         using Derived = rebind<Container, U>;
         return Derived{box};
