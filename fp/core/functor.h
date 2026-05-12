@@ -6,12 +6,14 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  //  FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/internal/meta/meta.h>
-#include <fp/kernel/traits/traits.h>
+#include <fp/internal/meta/arrow.h>
+#include <fp/internal/meta/cast.h>
+#include <fp/kernel/traits/has_apply.h>
 
 #include <utility>
 
 namespace fp::core {
+
 template <template <typename> typename F>
 struct Functor {
     template <typename Fn>

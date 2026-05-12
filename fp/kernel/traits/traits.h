@@ -8,10 +8,6 @@
 
 #include <fp/kernel/traits/has_apply.h>
 #include <fp/kernel/traits/has_value.h>
-
-namespace fp::kernel::traits {
-using fp::kernel::traits::apply::HasApply;
-using fp::kernel::traits::value::HasValue;
-}  // namespace fp::kernel::traits
+#include <fp/kernel/traits/is_functor.h>
 
 #endif  // __FP_KERNEL_TRAITS_TRAITS_H

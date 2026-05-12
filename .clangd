@@ -4,10 +4,10 @@ Diagnostics:
   Includes:
     IgnoreHeader:
       - "build/.*"
+      - "vcpkg/.*"
 CompileFlags:
   Add: [
     -DFP_PLUS_PLUS_INCLUDED_FROM_FP_FP=1,
-    x, c++-header,
     -isystem/opt/homebrew/opt/llvm/include/c++/v1,
     -isystem/opt/homebrew/opt/llvm/lib/clang/22/include
 ]

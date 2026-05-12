@@ -10,7 +10,7 @@
 
 #include <concepts>
 
-namespace fp::kernel::traits::value {
+namespace fp::kernel::traits {
 
 template <typename FA>
 concept HasValue = requires(FA t) {
@@ -19,5 +19,5 @@ concept HasValue = requires(FA t) {
     } -> std::same_as<const internal::meta::cast::cast<
       internal::meta::inner_type::inner_type<FA>>&>;
 };
-}  // namespace fp::kernel::traits::value
+}  // namespace fp::kernel::traits
 #endif  // __FP_KERNEL_TRAITS_HAS_VALUE_H

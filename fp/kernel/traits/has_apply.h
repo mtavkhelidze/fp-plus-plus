@@ -11,18 +11,17 @@
 
 #include <concepts>
 
-namespace fp::kernel::traits::apply {
+namespace fp::kernel::traits {
 
 template <typename FA>
 concept HasApply =
-  value::HasValue<FA>
-  && requires(internal::meta::inner_type::inner_type<FA> arg) {
-         {
-             FA::apply(arg)
-         } -> std::same_as<fp::internal::meta::rebind::rebind<
-           FA, fp::internal::meta::cast::cast<
-                 fp::internal::meta::inner_type::inner_type<FA>>>>;
-     };
+  HasValue<FA> && requires(internal::meta::inner_type::inner_type<FA> arg) {
+      {
+          FA::apply(arg)
+      } -> std::same_as<fp::internal::meta::rebind::rebind<
+        FA, fp::internal::meta::cast::cast<
+              fp::internal::meta::inner_type::inner_type<FA>>>>;
+  };
 
-}  // namespace fp::kernel::traits::apply
+}  // namespace fp::kernel::traits
 #endif  // __FP_KERNEL_TRAITS_HAS_APPLY_H

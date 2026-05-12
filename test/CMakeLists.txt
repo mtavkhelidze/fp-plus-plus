@@ -16,6 +16,7 @@ set(TEST_SRC
     src/internal/storage/box.cpp
     src/internal/storage/stack_storage.cpp
     src/kernel/mixins/with_value.cpp
+    src/kernel/ops/always.cpp
     src/kernel/ops/lift.cpp
     src/kernel/ops/pure.cpp
 )
@@ -46,7 +47,6 @@ target_compile_options(
 target_link_libraries(
     ${PROJECT_NAME}_test
     ${PROJECT_NAME}
-    GTest::gtest
     GTest::gtest_main
     GTest::gmock
     rapidcheck_gtest

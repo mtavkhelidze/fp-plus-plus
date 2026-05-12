@@ -6,6 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  //  FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/kernel/ops/always.h>
 #include <fp/kernel/ops/fmap.h>
 #include <fp/kernel/ops/id.h>
 #include <fp/kernel/ops/lift.h>
