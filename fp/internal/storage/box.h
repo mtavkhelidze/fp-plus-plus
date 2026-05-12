@@ -7,7 +7,6 @@
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/data/types.h>
-#include <fp/internal/storage/defs.h>
 
 #include <concepts>
 #include <cstddef>
@@ -22,7 +21,7 @@ namespace fp::internal::storage {
  * for details.
  */
 template <typename T>
-struct FP_ALIGN_PACKED_16 Box {
+struct alignas(16) [[gnu::packed]] Box {
   private:
     std::shared_ptr<const T> data;
 

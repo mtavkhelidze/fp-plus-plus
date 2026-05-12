@@ -8,7 +8,6 @@
 
 #include <fp/internal/storage/box.h>
 #include <fp/internal/storage/box_storage.h>
-#include <fp/internal/storage/defs.h>
 #include <fp/internal/storage/stack_storage.h>
 
 #endif  // __FP_INTERNAL_STORAGE_STORAGE_H
