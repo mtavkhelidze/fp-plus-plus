@@ -267,6 +267,26 @@ TEST(Box_Extra, immutability) {
     );
 }
 
+TEST(Box_Construction_Tuple, nested_recuriseve_tuple) {
+    auto x = Tuple("const char*", 10);
+    auto y = Tuple(x, 'c');
+    auto box = Box(y);
+    static_assert(
+      std::is_same_v<
+        Tuple<Tuple<String, int>, char>, typename decltype(box)::kind>
+    );
+    auto t = box.get();
+    static_assert(std::is_same_v<Tuple<Tuple<String, int>, char>, decltype(t)>);
+
+    // inner tuple
+    auto inner = std::get<0>(t);
+    ASSERT_EQ(std::get<0>(inner), String("const char*"));
+    ASSERT_EQ(std::get<1>(inner), 10);
+
+    // outer tuple
+    ASSERT_EQ(std::get<1>(t), 'c');
+}
+
 TEST(Box_Construction_Tuple, empty_tuple) {
     // Box<> deduces to Tuple<>
     auto box = Box(Tuple<>{});
