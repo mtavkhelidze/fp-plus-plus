@@ -2,11 +2,28 @@
 #include <gtest/gtest.h>
 
 #include <functional>
+#include <initializer_list>
 #include <memory>
 #include <type_traits>
 
 using namespace fp;
 // NOLINTBEGIN(hicpp-avoid-c-arrays)
+
+TEST(fp_cast, tuple_normalisation) {
+    // each element normalised independently
+    static_assert(std::is_same_v<
+                  fp::cast<Tuple<const char*, int, std::initializer_list<int>>>,
+                  Tuple<String, int, Vector<int>>>);
+
+    // nested — cast recurses into inner tuple
+    static_assert(std::is_same_v<
+                  fp::cast<Tuple<const char*, Tuple<const char*, int>>>,
+                  Tuple<String, Tuple<String, int>>>);
+
+    // empty tuple
+    static_assert(std::is_same_v<fp::cast<Tuple<>>, Tuple<>>);
+}
+
 TEST(fp_cast, c_array_becomes_vector) {
     static_assert(std::is_same_v<fp::cast<int[3]>, Vector<int>>);
     static_assert(std::is_same_v<fp::cast<double[10]>, Vector<double>>);

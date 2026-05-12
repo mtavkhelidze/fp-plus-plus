@@ -17,8 +17,8 @@ In practice this means:
 
 - `String` instead of `std::string`
 - `Vector<A>` instead of `std::vector<A>`
-- `Tuple<A, B>` instead of `std::tuple<A, B>`
-- ...
+- `Tuple<A, B, ...>` instead of `std::tuple<A, B, ...>`
+- `Nothing` — a proper unit type, carrying no information. `()` in Haskell, `Unit` in Scala
 
 Outside of `F<A>` — function signatures, local variables, interop boundaries —
 normal C++ types apply. There are no wrappers, no boxing, no conversion cost:
@@ -26,8 +26,33 @@ normal C++ types apply. There are no wrappers, no boxing, no conversion cost:
 consistency and readability, not for abstraction.
 
 `FP++` also normalises C++ types automatically — references, const, pointers,
-arrays, and smart pointers are all handled transparently. The complete
-transformation rules are documented as executable tests in `test/src/cast.cpp`.
+arrays, and smart pointers are all handled transparently. Normalisation happens
+at the storage boundary: whatever you put in, an `FP++` type comes out.
+
+The complete transformation rules are:
+
+| Input type | Normalised to |
+|---|---|
+| `const T`, `T&`, `T&&` | `T` |
+| `const char*`, `char[N]` | `String` |
+| `T[N]` | `Vector<T>` |
+| `std::initializer_list<T>` | `Vector<T>` |
+| `std::tuple<Ts...>`, `Tuple{a, b, ...}` | `Tuple<cast<Ts>...>` — each element normalised recursively |
+| `Box(a, b, ...)` varargs | `Tuple<cast<A>, cast<B>, ...>` — each argument normalised independently |
+
+The last two rows are particularly powerful — tuple elements are each normalised
+independently before the tuple is assembled:
+
+```cpp
+Box(Tuple{42, "hello", {1, 2, 3}})
+// → Box<Tuple<int, String, Vector<int>>>
+//          int   ↑       ↑
+//        const char* → String
+//        initializer_list<int> → Vector<int>
+```
+
+The complete transformation rules are documented as executable tests in
+`test/src/internal/storage/box.cpp` and `test/src/cast.cpp`.
 
 ### Usage
 
