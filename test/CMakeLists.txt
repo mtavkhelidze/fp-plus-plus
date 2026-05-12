@@ -21,8 +21,8 @@ set(TEST_SRC
 )
 set(TEST_HEADERS
 )
-# # find_untracked_files("${TEST_SRC}" src "*.cpp")
-# # find_untracked_files("${TEST_HEADERS}" src "*.h")
+# find_untracked_files("${TEST_SRC}" src "*.cpp")
+# find_untracked_files("${TEST_HEADERS}" src "*.h")
 add_executable(
     ${PROJECT_NAME}_test
     ${TEST_SRC} ${TEST_HEADERS}
