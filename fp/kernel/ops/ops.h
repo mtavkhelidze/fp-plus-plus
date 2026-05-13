@@ -7,8 +7,9 @@
 #endif  //  FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/kernel/ops/always.h>
+#include <fp/kernel/ops/as.h>
 #include <fp/kernel/ops/fmap.h>
-#include <fp/kernel/ops/id.h>
+#include <fp/kernel/ops/id.h>  // no tests, just works
 #include <fp/kernel/ops/lift.h>
 #include <fp/kernel/ops/pure.h>
 

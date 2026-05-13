@@ -20,4 +20,5 @@ concept HasValue = requires(FA t) {
       internal::meta::inner_type::inner_type<FA>>&>;
 };
 }  // namespace fp::kernel::traits
+
 #endif  // __FP_KERNEL_TRAITS_HAS_VALUE_H

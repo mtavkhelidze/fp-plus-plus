@@ -9,16 +9,17 @@
 #include <fp/kernel/ops/fmap.h>
 #include <fp/kernel/traits/traits.h>
 
-namespace fp::kernel::mixins {
+namespace fp::kernel::mixins::functor {
 
 template <typename FA>
-    requires kernel::traits::HasApply<FA>
 struct WithFunctor {
-    auto map(auto&& f) const -> auto {
+    auto map(auto&& f) const -> auto
+        requires kernel::traits::HasApply<FA>
+    {
         return kernel::ops::fmap(std::forward<decltype(f)>(f))(
           static_cast<FA const&>(*this)
         );
     }
 };
-}  // namespace fp::kernel::mixins
+}  // namespace fp::kernel::mixins::functor
 #endif  // __FP_KERNEL_WITH_FUNCTOR_H

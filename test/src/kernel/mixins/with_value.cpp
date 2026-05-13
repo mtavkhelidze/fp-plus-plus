@@ -7,12 +7,26 @@ using namespace fp::kernel::mixins;
 template <typename A>
 struct TestStruct : WithValue<TestStruct<A>> {
     using Base = WithValue<TestStruct<A>>;
+    using Base::Base;
 
     template <typename T>
     static auto create(T&& v) -> TestStruct<fp::cast<T>> {
         return TestStruct<fp::cast<T>>::apply(std::forward<T>(v));
     }
 };
+
+static_assert(
+  HasApply<TestStruct<int>>, "TestStruct<int> must have a apply method"
+);
+static_assert(
+  HasApply<TestStruct<String>>, "TestStruct<String> must have a apply method"
+);
+static_assert(
+  HasApply<TestStruct<int>>, "TestStruct<int> must have a value method"
+);
+static_assert(
+  HasApply<TestStruct<String>>, "TestStruct<String> must have a value method"
+);
 
 TEST(Kernal_Mixins_WithValue, uses_stack_for_trivial_type_const_int) {
     const int x = 42;

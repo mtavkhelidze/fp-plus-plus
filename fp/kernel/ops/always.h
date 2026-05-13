@@ -12,7 +12,7 @@ namespace fp::kernel::ops {
 struct __always {
     template <typename A>
     constexpr auto operator()(A&& a) const noexcept {
-        return [a = std::forward<A>(a)](auto&&) noexcept { return a; };
+        return [a = std::forward<A>(a)](auto&&) noexcept -> auto { return a; };
     }
 };
 
