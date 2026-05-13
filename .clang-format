@@ -4,6 +4,7 @@ AlignArrayOfStructures: Left
 AlignEscapedNewlines: LeftWithLastLine
 AlignOperands: AlignAfterOperator
 AllowAllParametersOfDeclarationOnNextLine: true
+AlwaysBreakTemplateDeclarations: Yes
 BasedOnStyle: Google
 BinPackParameters: false
 BreakBeforeBinaryOperators: NonAssignment
@@ -11,9 +12,10 @@ BreakBeforeTernaryOperators: true
 BreakBinaryOperations: OnePerLine
 BreakConstructorInitializers: BeforeComma
 BreakInheritanceList: BeforeComma
+BreakTemplateDeclarations: Yes
 ColumnLimit: 80
 ContinuationIndentWidth: 2
-IncludeBlocks: Regroup 
+IncludeBlocks: Regroup
 IndentAccessModifiers: false
 IndentWidth: 4
 MaxEmptyLinesToKeep: 1

@@ -1,0 +1,71 @@
+#ifndef __FP_INTERNAL_STORAGE_BOX_STORAGE_H
+#define __FP_INTERNAL_STORAGE_BOX_STORAGE_H
+#pragma once
+
+#ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
+#error "This file must be included from <fp/fp.h>"
+#endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
+
+#include <fp/internal/meta/inner_type.h>
+#include <fp/internal/meta/rebind.h>
+#include <fp/internal/storage/box.h>
+
+namespace fp::internal::storage {
+/**
+ * StorageBox: Immutable boxed value storage for non-trivial typese.
+ *
+ * - No move operations allowed.
+ * - Copy operations allowed.
+ * - Constructed only via static put().
+ * - Always contains a valid boxed value; no empty state.
+ */
+template <class Container>
+    requires(!std::is_fundamental_v<meta::inner_type::inner_type<Container>>)
+struct StorageBox {
+  private:
+    using A = meta::inner_type::inner_type<Container>;
+
+    template <typename TC, typename T>
+    using rebind = meta::rebind::rebind<TC, T>;
+
+    using Box = Box<A>;
+    Box box;
+
+    StorageBox(const Box& b) noexcept : box(b) {}  // NOLINT
+
+  protected:
+    StorageBox(const StorageBox& other) noexcept = default;
+    auto operator=(const StorageBox& other) noexcept -> StorageBox& = default;
+    ~StorageBox() noexcept = default;
+
+  public:
+    StorageBox() noexcept = delete;
+    StorageBox(StorageBox&&) noexcept = delete;
+    auto operator=(StorageBox&&) noexcept -> StorageBox& = delete;
+
+  protected:
+    constexpr auto get() const noexcept -> const A& { return box.get(); }
+
+    /**
+     * Boxes a raw value of type T, normalizing it to the FP type U (A),
+     *        rebinds the container to U, and returns the derived container.
+     *
+     * T - raw C++ type of the value to be boxed.
+     * U (A) - normalized FP type stored inside the Box.
+     */
+    template <typename T>
+    static auto put(T&& value) {
+        auto box = Box(std::forward<T>(value));
+        using U = typename decltype(box)::kind;
+        using Derived = rebind<Container, U>;
+        return Derived{box};
+    }
+
+#ifdef FP_PLUS_PLUS_TESTING
+    static constexpr const char* _tag = "StorageBox";
+#endif
+};
+
+}  // namespace fp::internal::storage
+
+#endif  // __FP_INTERNAL_STORAGE_BOX_STORAGE_H

@@ -1,16 +1,17 @@
-build/
-third_party/
-.DS_Store
-CMakeCache.txt
-vcpkg_installed/
-stash/
-scratch.cpp
-.cache/
-* copy*
-.idea/
-cmake-build-debug/
-*~
-todo.org
-*.log
 ./Testing/
+.cache/
+.DS_Store
+.idea/
+* copy*
+*.log
+*~
+build/
+cmake-build-debug/
+CMakeCache.txt
+scratch.cpp
+stash/
+third_party/
 todo.md
+todo.org
+vcpkg_installed/
+ignore/

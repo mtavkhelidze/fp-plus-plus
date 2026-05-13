@@ -1,5 +1,5 @@
 function(update_submodules)
-    message(STATUS "Updating submodules")
+    message(STATUS "Updating submodules ...")
     execute_process(
         COMMAND git submodule update --remote --merge
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
