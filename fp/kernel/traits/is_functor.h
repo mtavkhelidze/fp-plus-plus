@@ -31,10 +31,6 @@ concept HasMap =
            FA, internal::meta::cast::cast<internal::meta::arrow::arrow_result<
                  Fn, internal::meta::inner_type::inner_type<FA>>>>>;
      };
-
-template <typename FA>
-concept HasFunctor = HasMap<FA>;
-
 }  // namespace fp::kernel::traits
 
 #endif  // __FP_KERNEL_TRAITS_IS_FUNCTOR_H

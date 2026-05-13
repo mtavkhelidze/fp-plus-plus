@@ -93,6 +93,24 @@ flowchart LR
 | derivative free functions | `fp/kernel/ops/`    | built from core free, never touch typeclass directly |
 | instance methods          | `fp/kernel/mixins/` | sugar, delegate to free functions                    |
 
+### Concepts
+
+`FP++` exposes two levels of concepts per typeclass:
+
+- `Is<TypeClass><F>` — type constructor level. Checks that the typeclass static
+  method exists for `F`. Example: `IsFunctor<Option>`, `IsMonad<Either>`.
+
+- `Has<Method><FA>` — instance level. Checks that `F<A>` has the corresponding
+  instance method. Example: `HasMap<Option<int>>`, `HasFlatMap<Either<int>>`.
+
+Derived instance methods (`as`, `void_`, `fproduct`, `flatten`, ...) have no
+concept — their presence is guaranteed by the innate method concept. If
+`HasMap<FA>` holds, `as`, `void_`, and `fproduct` are available.
+
+The two levels serve different purposes: `Is<TypeClass>` constrains generic
+code operating over type constructors; `Has<Method>` constrains code operating
+over concrete instances and pushes constraint errors to the call site.
+
 ### Usage
 
 Place `fp` somewhere in your include path and use it with `#include <fp/fp.h>`

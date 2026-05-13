@@ -14,7 +14,7 @@
 
 namespace fp::kernel::ops {
 template <typename FA>
-    requires kernel::traits::HasFunctor<FA>
+    requires kernel::traits::HasMap<FA>
 auto as(const FA& fa) {
     return [fa]<typename B>(B&& b) -> decltype(auto) {
         return fmap(always(std::forward<B>(b)))(fa);
