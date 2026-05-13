@@ -102,12 +102,11 @@ and `using namespace fp` in your C++ source file. Something like:
 g++ -I/path/to/dir/with/fp/in/it -o main main.cpp -std=c++20 -g
 ```
 
-### Development
+### Documentation
 
-Documentation is _incomplete_. There are some `readme`-s here and there, but the
-best way to understand how things work is to read sources in `test/src`. Tests
-as
-documentation, so to speak.
+Documentation is _incomplete_. Several directories contain specialised  `readme`
+files, but the best way to understand how things work is to read sources in
+`test/src`. Tests as documentation, so to speak.
 
 #### Requirements
 
