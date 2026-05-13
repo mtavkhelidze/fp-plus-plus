@@ -16,9 +16,7 @@ inline constexpr auto fmap = []<typename Fn>(Fn&& f) -> auto {
     return
       [f = std::forward<Fn>(f)]<template <typename> typename F, typename A>(
         const F<A>& fa
-      ) -> decltype(auto) {
-          return fp::core::Functor<F>::template map<A>(fa, f);
-      };
+      ) -> decltype(auto) { return fp::core::Functor<F>::map(f)(fa); };
 };
 
 }  // namespace fp::kernel::ops
