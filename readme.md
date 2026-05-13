@@ -17,12 +17,14 @@ In practice this means:
 
 - `String` instead of `std::string`
 - `Vector<A>` instead of `std::vector<A>`
-- `Tuple<A, B, ...>` instead of `std::tuple<A, B, ...>`
-- `Nothing` — a proper unit type, carrying no information. `()` in Haskell, `Unit` in Scala
+- `Tuple<A, B>` instead of `std::tuple<A, B>`
+- `Nothing` — a proper unit type, carrying no information. `()` in Haskell,
+  `Unit` in Scala
 
 Outside of `F<A>` — function signatures, local variables, interop boundaries —
 normal C++ types apply. There are no wrappers, no boxing, no conversion cost:
-`String` is `std::string`, `Vector<A>` is `std::vector<A>`. The aliases exist for
+`String` is `std::string`, `Vector<A>` is `std::vector<A>`. The aliases exist
+for
 consistency and readability, not for abstraction.
 
 `FP++` also normalises C++ types automatically — references, const, pointers,
@@ -31,14 +33,14 @@ at the storage boundary: whatever you put in, an `FP++` type comes out.
 
 The complete transformation rules are:
 
-| Input type | Normalised to |
-|---|---|
-| `const T`, `T&`, `T&&` | `T` |
-| `const char*`, `char[N]` | `String` |
-| `T[N]` | `Vector<T>` |
-| `std::initializer_list<T>` | `Vector<T>` |
-| `std::tuple<Ts...>`, `Tuple{a, b, ...}` | `Tuple<cast<Ts>...>` — each element normalised recursively |
-| `Box(a, b, ...)` varargs | `Tuple<cast<A>, cast<B>, ...>` — each argument normalised independently |
+| Input type                         | Normalised to                                                      |
+|------------------------------------|--------------------------------------------------------------------|
+| `const T`, `T&`, `T&&`             | `T`                                                                |
+| `const char*`, `char[N]`           | `String`                                                           |
+| `T[N]`                             | `Vector<T>`                                                        |
+| `std::initializer_list<T>`         | `Vector<T>`                                                        |
+| `std::tuple<Ts...>`, `Tuple{a, b}` | `Tuple<cast<Ts>...>` — each element normalised recursively         |
+| `Box(a, b)` varargs                | `Tuple<cast<A>, cast<B>>` — each argument normalised independently |
 
 The last two rows are particularly powerful — tuple elements are each normalised
 independently before the tuple is assembled:
@@ -54,6 +56,43 @@ Box(Tuple{42, "hello", {1, 2, 3}})
 The complete transformation rules are documented as executable tests in
 `test/src/internal/storage/box.cpp` and `test/src/cast.cpp`.
 
+### Architecture
+
+Legend:
+
+| Item            | I.e.                                                |
+|-----------------|-----------------------------------------------------|
+| TypeClass       | `Functor<F>`, `Applicative<F>`, `Monad<F>`          |
+| Static Method   | `Functor::map`, `Applicative::ap`, `Monad::flatMap` |
+| Free Function   | `fmap`, `pure`, `flatMap`                           |
+| Free Derivative | `as`, `void_`, `fproduct`                           |
+| Instance Method | `fa.map`, `fa.as`, `fa.flatMap`                     |
+
+```mermaid
+flowchart LR
+    TC["TypeClass"]
+    SM["Static Method"]
+    FF["Free Function"]
+    D["Free Derivative"]
+    IM["instance Method"]
+    TC -->|" specialisation point "| SM
+    SM -->|" static dispatch "| FF
+    D -->|" uses "| FF
+    subgraph " "
+        IM -->|" delegates to "| FF
+        IM -->|" delegates to "| D
+    end
+```
+
+**The rule**: every layer is happy to delegate. Nothing is reimplemented.
+
+| Layer                     | Lives in            | Role                                                 |
+|---------------------------|---------------------|------------------------------------------------------|
+| typeclass                 | `fp/core/`          | ground truth, static, specialisable                  |
+| core free function        | `fp/kernel/ops/`    | curried, `F` deduced, composable                     |
+| derivative free functions | `fp/kernel/ops/`    | built from core free, never touch typeclass directly |
+| instance methods          | `fp/kernel/mixins/` | sugar, delegate to free functions                    |
+
 ### Usage
 
 Place `fp` somewhere in your include path and use it with `#include <fp/fp.h>`
@@ -66,12 +105,14 @@ g++ -I/path/to/dir/with/fp/in/it -o main main.cpp -std=c++20 -g
 ### Development
 
 Documentation is _incomplete_. There are some `readme`-s here and there, but the
-best way to understand how things work is to read sources in `test/src`. Tests as
+best way to understand how things work is to read sources in `test/src`. Tests
+as
 documentation, so to speak.
 
 #### Requirements
 
-`FP++` requires a C++20-compliant compiler. It makes heavy use of C++20 features:
+`FP++` requires a C++20-compliant compiler. It makes heavy use of C++20
+features:
 
 - **Concepts** — to constrain template parameters
 - **Template specialisation and CRTP** — for zero-cost polymorphism
@@ -79,12 +120,14 @@ documentation, so to speak.
 - **`constexpr` and `inline constexpr`** — for compile-time computation
 
 Minimum compiler versions:
+
 - Clang 14+
 - GCC 12+
 
 #### Library Development
 
-If you are building on top of `FP++`, the internal meta and storage utilities are
+If you are building on top of `FP++`, the internal meta and storage utilities
+are
 available via their namespaces:
 
 ```cpp
