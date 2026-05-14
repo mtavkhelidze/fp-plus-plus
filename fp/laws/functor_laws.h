@@ -12,7 +12,7 @@
 #include <fp/kernel/traits/traits.h>
 
 namespace fp::laws {
-// fp/laws/functor.h
+
 template <template <typename> typename F>
     requires kernel::traits::IsFunctor<F>
 struct FunctorLaws {

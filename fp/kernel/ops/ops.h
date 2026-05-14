@@ -8,6 +8,7 @@
 
 #include <fp/kernel/ops/always.h>
 #include <fp/kernel/ops/as.h>
+#include <fp/kernel/ops/compose.h>
 #include <fp/kernel/ops/discard.h>
 #include <fp/kernel/ops/fmap.h>
 #include <fp/kernel/ops/fproduct.h>
