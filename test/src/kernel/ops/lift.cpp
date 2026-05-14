@@ -9,10 +9,7 @@ using namespace fp;
 using namespace fp::kernel::mixins;
 
 template <typename A>
-struct TestStruct : WithValue<TestStruct<A>> {
-    using Base = WithValue<TestStruct<A>>;
-    using Base::Base;
-};
+struct TestStruct : WithApply<TestStruct<A>> {};
 
 TEST(Kernel_Ops_Lift, simple_lambda) {
     auto doubleFn = lift<TestStruct>([](int x) { return x * 2; });

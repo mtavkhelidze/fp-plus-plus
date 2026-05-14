@@ -5,10 +5,7 @@ using namespace fp;
 using namespace fp::kernel::mixins;
 
 template <typename A>
-struct TestStruct : WithValue<TestStruct<A>> {
-    using Base = WithValue<TestStruct<A>>;
-    using Base::Base;
-
+struct TestStruct : WithApply<TestStruct<A>> {
     template <typename T>
     static auto create(T&& v) -> TestStruct<fp::cast<T>> {
         return TestStruct<fp::cast<T>>::apply(std::forward<T>(v));

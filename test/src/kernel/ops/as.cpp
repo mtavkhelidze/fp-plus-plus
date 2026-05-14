@@ -8,7 +8,7 @@ using namespace fp::kernel::mixins;
 
 template <typename A>
 struct TestStruct
-    : WithValue<TestStruct<A>>
+    : WithApply<TestStruct<A>>
     , WithFunctor<TestStruct<A>> {
     //
 };

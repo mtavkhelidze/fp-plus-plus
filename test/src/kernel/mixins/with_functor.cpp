@@ -6,10 +6,8 @@ using namespace fp::kernel::mixins;
 
 template <typename A>
 struct TestStruct
-    : WithValue<TestStruct<A>>
-    , WithFunctor<TestStruct<A>> {
-    //
-};
+    : WithApply<TestStruct<A>>
+    , WithFunctor<TestStruct<A>> {};
 
 static_assert(HasMap<TestStruct<int>>, "TestStruct must have map method");
 

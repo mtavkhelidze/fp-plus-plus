@@ -7,7 +7,6 @@
 #endif  //  FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/kernel/traits/has_apply.h>
-#include <fp/kernel/traits/has_value.h>
 #include <fp/kernel/traits/is_functor.h>
 
 #endif  // __FP_KERNEL_TRAITS_TRAITS_H

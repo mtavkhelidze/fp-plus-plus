@@ -7,10 +7,7 @@ using namespace fp;
 using namespace fp::kernel::mixins;
 
 template <typename A>
-struct TestStruct : WithValue<TestStruct<A>> {
-    using Base = WithValue<TestStruct<A>>;
-    using Base::Base;
-};
+struct TestStruct : WithApply<TestStruct<A>> {};
 
 // lift morphisms into F
 TEST(Core_Functor, map_lifts_morphism_A_to_B_into_FA_to_FB) {

@@ -1,5 +1,5 @@
-#ifndef __FP_KERNEL_MIXINS_WITH_VALUE_H
-#define __FP_KERNEL_MIXINS_WITH_VALUE_H
+#ifndef __FP_KERNEL_MIXINS_WITH_APPLY_H
+#define __FP_KERNEL_MIXINS_WITH_APPLY_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -13,7 +13,7 @@
 #include <cstring>
 #endif
 
-namespace fp::kernel::mixins::value {
+namespace fp::kernel::mixins::apply {
 
 namespace {
     template <typename FA>
@@ -40,7 +40,7 @@ namespace {
  * Mixin for objects with storage backend and ::apply.
  */
 template <typename FA>
-struct WithValue : private Backend<FA>::type {
+struct WithApply : private Backend<FA>::type {
   private:
     using Base = typename Backend<FA>::type;
     using Base::Base;
@@ -69,6 +69,6 @@ struct WithValue : private Backend<FA>::type {
     }
 #endif  // FP_PLUS_PLUS_TESTING
 };
-};  // namespace fp::kernel::mixins::value
+};  // namespace fp::kernel::mixins::apply
 
-#endif  // __FP_KERNEL_MIXINS_WITH_VALUE_H
+#endif  // __FP_KERNEL_MIXINS_WITH_APPLY_H
