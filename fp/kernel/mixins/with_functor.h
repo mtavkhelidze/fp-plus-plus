@@ -6,7 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  //  FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/kernel/ops/fmap.h>
+#include <fp/kernel/ops/ops.h>
 #include <fp/kernel/traits/traits.h>
 
 namespace fp::kernel::mixins::functor {
@@ -19,6 +19,19 @@ struct WithFunctor {
         return kernel::ops::fmap(std::forward<decltype(f)>(f))(
           static_cast<FA const&>(*this)
         );
+    }
+    auto as(auto&& b) const -> decltype(auto)
+        requires kernel::traits::HasMap<FA>
+    {
+        return ops::as(std::forward<decltype(b)>(b))(
+          static_cast<FA const&>(*this)
+        );
+    }
+
+    auto discard() const -> decltype(auto)
+        requires kernel::traits::HasMap<FA>
+    {
+        return ops::discard(static_cast<FA const&>(*this));
     }
 };
 }  // namespace fp::kernel::mixins::functor
