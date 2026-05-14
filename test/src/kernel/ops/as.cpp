@@ -7,9 +7,7 @@ using namespace fp;
 using namespace fp::kernel::mixins;
 
 template <typename A>
-struct TestStruct
-    : WithApply<TestStruct<A>>
-    , WithFunctor<TestStruct<A>> {};
+struct TestStruct : WithApply<TestStruct<A>> {};
 
 // as returns a reusable arrow over any F<A>
 TEST(Kernel_Ops_As, returns_arrow_over_functor) {

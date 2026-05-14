@@ -20,18 +20,22 @@ struct WithFunctor {
           static_cast<FA const&>(*this)
         );
     }
-    auto as(auto&& b) const -> decltype(auto)
-        requires kernel::traits::HasMap<FA>
-    {
+
+    // derivatives
+    auto as(auto&& b) const -> decltype(auto) {
         return ops::as(std::forward<decltype(b)>(b))(
           static_cast<FA const&>(*this)
         );
     }
 
-    auto discard() const -> decltype(auto)
-        requires kernel::traits::HasMap<FA>
-    {
+    auto discard() const -> decltype(auto) {
         return ops::discard(static_cast<FA const&>(*this));
+    }
+
+    auto fproduct(auto&& f) const -> decltype(auto) {
+        return ops::fproduct(std::forward<decltype(f)>(f))(
+          static_cast<FA const&>(*this)
+        );
     }
 };
 }  // namespace fp::kernel::mixins::functor

@@ -32,9 +32,10 @@ TEST(Core_Functor, law_identity) {
 // composition law: map(map(fa, f), g) == map(fa, g ∘ f)
 TEST(Core_Functor, law_composition) {
     auto fa = pure<TestStruct>(10);
-    auto f = [](int x) { return x * 2; };
-    auto g = [](int x) { return x + 3; };
+    auto f = [](int x) -> int { return x * 2; };
+    auto g = [](int x) -> int { return x + 3; };
     auto lhs = Functor<TestStruct>::map(g)(Functor<TestStruct>::map(f)(fa));
-    auto rhs = Functor<TestStruct>::map([&](int x) { return g(f(x)); })(fa);
+    auto rhs =
+      Functor<TestStruct>::map([&](int x) -> int { return g(f(x)); })(fa);
     ASSERT_EQ(lhs.value(), rhs.value());
 }

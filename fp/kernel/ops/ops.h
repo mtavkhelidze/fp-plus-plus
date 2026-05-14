@@ -10,6 +10,7 @@
 #include <fp/kernel/ops/as.h>
 #include <fp/kernel/ops/discard.h>
 #include <fp/kernel/ops/fmap.h>
+#include <fp/kernel/ops/fproduct.h>
 #include <fp/kernel/ops/id.h>  // no tests, just works
 #include <fp/kernel/ops/lift.h>
 #include <fp/kernel/ops/pure.h>

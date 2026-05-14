@@ -1,6 +1,8 @@
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 
+#include <concepts>
+
 using namespace fp;
 using namespace fp::kernel::mixins;
 
@@ -25,4 +27,12 @@ TEST(Kernel_Mixins_WithFunctor, as_is_callable) {
 TEST(Kernel_Mixins_WithFunctor, discard_is_callable) {
     auto val = pure<TestStruct>(42);
     ASSERT_EQ(val.discard().value(), nothing);
+}
+
+TEST(Kernel_Mixins_WithFunctor, fproduct_is_callable) {
+    auto val = pure<TestStruct>(42);
+    auto result = val.fproduct([](int x) -> int { return x * 2; });
+    static_assert(std::same_as<decltype(result), TestStruct<Tuple<int, int>>>);
+    ASSERT_EQ(std::get<0>(result.value()), 42);
+    ASSERT_EQ(std::get<1>(result.value()), 84);
 }

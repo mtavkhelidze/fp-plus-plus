@@ -7,9 +7,7 @@ using namespace fp;
 using namespace fp::kernel::mixins;
 
 template <typename A>
-struct TestStruct
-    : WithApply<TestStruct<A>>
-    , WithFunctor<TestStruct<A>> {};
+struct TestStruct : WithApply<TestStruct<A>> {};
 
 // discard replaces value with nothing, preserves structure
 TEST(Kernel_Ops_Discard, replaces_value_with_nothing) {
