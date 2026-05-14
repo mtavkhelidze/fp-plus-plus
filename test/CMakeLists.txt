@@ -53,7 +53,6 @@ target_link_libraries(
     ${PROJECT_NAME}_test
     ${PROJECT_NAME}
     GTest::gtest_main
-    GTest::gmock
     rapidcheck_gtest
 )
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME}_test)

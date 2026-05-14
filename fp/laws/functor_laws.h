@@ -7,6 +7,7 @@
 #endif  //  FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/data/data.h>
+#include <fp/internal/meta/meta.h>
 #include <fp/kernel/ops/ops.h>
 #include <fp/kernel/traits/traits.h>
 
@@ -15,15 +16,24 @@ namespace fp::laws {
 template <template <typename> typename F>
     requires kernel::traits::IsFunctor<F>
 struct FunctorLaws {
-    static auto identity(const F<int>& fa) -> bool {
+    template <typename A>
+    static auto identity(const F<A>& fa) -> bool {
         return kernel::ops::fmap(kernel::ops::id)(fa).value() == fa.value();
     }
 
-    static auto composition(const F<int>& fa) -> bool {
-        auto f = [](int x) -> auto { return x * 2; };
-        auto g = [](int x) -> auto { return x + 3; };
-        return kernel::ops::fmap(g)(fmap(f)(fa)).value()
-            == kernel::ops::fmap([&](int x) -> auto { return g(f(x)); })(fa)
+    template <typename A>
+    static auto composition(const F<A>& fa, auto& f, auto& g)
+        requires(
+          internal::meta::arrow::is_arrow<decltype(f), A>
+          && internal::meta::arrow::is_arrow<
+            decltype(g),
+            internal::meta::arrow::arrow_result<decltype(f), A>>
+        )
+    {
+        return kernel::ops::fmap(g)(kernel::ops::fmap(f)(fa)).value()
+            == kernel::ops::fmap([&](const A& x) -> auto {
+                   return g(f(x));
+               })(fa)
                  .value();
     }
 };

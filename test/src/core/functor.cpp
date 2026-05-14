@@ -1,7 +1,10 @@
 #include <fp/fp.h>
 #include <gtest/gtest.h>
+#include <rapidcheck/gtest.h>
 
 #include <concepts>
+#include <cstddef>
+#include <string>
 
 using namespace fp;
 using namespace fp::kernel::mixins;
@@ -22,20 +25,38 @@ TEST(Core_Functor, map_lifts_morphism_A_to_B_into_FA_to_FB) {
     ASSERT_EQ(result2.value(), 43);
 }
 
-// identity law: map(fa, id) == fa
-TEST(Core_Functor, law_identity) {
-    auto fa = pure<TestStruct>(42);
-    auto result = Functor<TestStruct>::map(id)(fa);
-    ASSERT_EQ(result.value(), fa.value());
+RC_GTEST_PROP(Core_Functor_Laws, identity_stack_storage, ()) {
+    auto a = *rc::gen::arbitrary<int>();
+    auto fa = pure<TestStruct>(a);
+    RC_ASSERT(fp::laws::FunctorLaws<TestStruct>::identity(fa));
 }
 
-// composition law: map(map(fa, f), g) == map(fa, g ∘ f)
-TEST(Core_Functor, law_composition) {
-    auto fa = pure<TestStruct>(10);
-    auto f = [](int x) -> int { return x * 2; };
-    auto g = [](int x) -> int { return x + 3; };
-    auto lhs = Functor<TestStruct>::map(g)(Functor<TestStruct>::map(f)(fa));
-    auto rhs =
-      Functor<TestStruct>::map([&](int x) -> int { return g(f(x)); })(fa);
-    ASSERT_EQ(lhs.value(), rhs.value());
+RC_GTEST_PROP(Core_Functor_Laws, identity_box_storage, ()) {
+    auto a = *rc::gen::arbitrary<String>();
+    auto fa = pure<TestStruct>(a);
+    RC_ASSERT(fp::laws::FunctorLaws<TestStruct>::identity(fa));
+}
+
+RC_GTEST_PROP(Core_Functor_Laws, composition_stack_storage, ()) {
+    auto a = *rc::gen::arbitrary<int>();
+    auto fa = pure<TestStruct>(a);
+    auto f = [](int x) -> int { return x + 1; };
+    auto g = [](int x) -> int { return x * 2; };
+    RC_ASSERT(fp::laws::FunctorLaws<TestStruct>::composition(fa, f, g));
+}
+
+RC_GTEST_PROP(Core_Functor_Laws, composition_box_storage, ()) {
+    auto a = *rc::gen::arbitrary<String>();
+    auto fa = pure<TestStruct>(a);
+    auto f = [](const String& x) -> String { return x + "1"; };
+    auto g = [](const String& x) -> String { return x + "2"; };
+    RC_ASSERT(fp::laws::FunctorLaws<TestStruct>::composition(fa, f, g));
+}
+
+// composition with type change — A → B → C, not A → A → A
+RC_GTEST_PROP(Core_Functor_Laws, composition_type_change, ()) {
+    auto fa = pure<TestStruct>(*rc::gen::arbitrary<int>());
+    auto f = [](int x) -> String { return std::to_string(x); };
+    auto g = [](const String& s) -> std::size_t { return s.size(); };
+    RC_ASSERT(fp::laws::FunctorLaws<TestStruct>::composition(fa, f, g));
 }
