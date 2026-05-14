@@ -11,6 +11,11 @@
 #include <fp/kernel/mixins/mixins.h>
 #include <fp/kernel/ops/ops.h>
 #include <fp/kernel/traits/traits.h>
+
+#ifdef FP_PLUS_PLUS_TESTING
+#include <fp/laws/laws.h>
+#endif  // FP_PLUS_PLUS_TESTING
+
 #undef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 namespace fp {
