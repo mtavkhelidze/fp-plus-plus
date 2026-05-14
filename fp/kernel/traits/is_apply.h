@@ -1,11 +1,12 @@
-#ifndef __FP_KERNEL_TRAITS_HAS_APPLY_H
-#define __FP_KERNEL_TRAITS_HAS_APPLY_H
+#ifndef __FP_KERNEL_TRAITS_IS_APPLY_H
+#define __FP_KERNEL_TRAITS_IS_APPLY_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/data/data.h>
 #include <fp/internal/meta/meta.h>
 
 #include <concepts>
@@ -23,6 +24,9 @@ namespace __internal {
 
 }  // namespace __internal
 
+template <template <typename> typename F>
+concept IsApply = requires(data::Any<> a) { F<data::Any<>>::apply(a); };
+
 template <typename FA>
 concept HasApply =
   __internal::HasValue<FA>
@@ -34,4 +38,4 @@ concept HasApply =
                  fp::internal::meta::inner_type::inner_type<FA>>>>;
      };
 }  // namespace fp::kernel::traits
-#endif  // __FP_KERNEL_TRAITS_HAS_APPLY_H
+#endif  // __FP_KERNEL_TRAITS_IS_APPLY_H

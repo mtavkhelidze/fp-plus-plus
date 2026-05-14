@@ -9,20 +9,23 @@ using namespace fp::kernel::mixins;
 template <typename A>
 struct TestStruct
     : WithApply<TestStruct<A>>
-    , WithFunctor<TestStruct<A>> {
-    //
-};
-// as returns a callable
-TEST(Kernel_Ops_As, returns_callable) {
+    , WithFunctor<TestStruct<A>> {};
+
+// as returns a reusable arrow over any F<A>
+TEST(Kernel_Ops_As, returns_arrow_over_functor) {
+    auto asMisha = as(String("misha"));
     auto fa = pure<TestStruct>(42);
-    auto arrow = as(fa);
-    ASSERT_EQ(arrow(10).value(), 10);
+    auto fb = pure<TestStruct>(String("hello"));
+    static_assert(std::same_as<decltype(asMisha(fa)), TestStruct<String>>);
+    static_assert(std::same_as<decltype(asMisha(fb)), TestStruct<String>>);
+    ASSERT_EQ(asMisha(fa).value(), "misha");
+    ASSERT_EQ(asMisha(fb).value(), "misha");
 }
 
-// preserves structure, replaces value
-TEST(Kernel_Ops_As, preserves_structure_replaces_value) {
+// cast normalisation
+TEST(Kernel_Ops_As, cstring_normalised_to_string) {
+    auto asMisha = as("misha");
     auto fa = pure<TestStruct>(42);
-    auto result = as(fa)(String("hello"));
-    static_assert(std::same_as<decltype(result), TestStruct<String>>);
-    ASSERT_EQ(result.value(), "hello");
+    static_assert(std::same_as<decltype(asMisha(fa)), TestStruct<String>>);
+    ASSERT_EQ(asMisha(fa).value(), String("misha"));
 }

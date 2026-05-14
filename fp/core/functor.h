@@ -8,7 +8,7 @@
 
 #include <fp/internal/meta/arrow.h>
 #include <fp/internal/meta/cast.h>
-#include <fp/kernel/traits/has_apply.h>
+#include <fp/kernel/traits/is_apply.h>
 
 #include <utility>
 
@@ -22,6 +22,7 @@ struct Functor {
                  const F<A>& fa
                ) -> decltype(auto) {
             static_assert(internal::meta::arrow::is_arrow<Fn, A>);
+            static_assert(kernel::traits::IsApply<F>);
             static_assert(kernel::traits::HasApply<F<A>>);
             using B = internal::meta::arrow::arrow_result<Fn, A>;
             using BC = internal::meta::cast::cast<B>;

@@ -9,6 +9,7 @@ struct TestStruct
     : WithApply<TestStruct<A>>
     , WithFunctor<TestStruct<A>> {};
 
+static_assert(IsFunctor<TestStruct>, "TestStruct must be a functor");
 static_assert(HasMap<TestStruct<int>>, "TestStruct must have map method");
 
 TEST(Kernal_Mixins_WithFunctor, map_is_callable) {
