@@ -19,6 +19,7 @@ set(TEST_SRC
     src/kernel/mixins/with_functor.cpp
     src/kernel/ops/always.cpp
     src/kernel/ops/as.cpp
+    src/kernel/ops/discard.cpp
     src/kernel/ops/fmap.cpp
     src/kernel/ops/lift.cpp
     src/kernel/ops/pure.cpp

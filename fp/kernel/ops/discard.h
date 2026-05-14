@@ -7,12 +7,11 @@
 #endif  //  FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/data/data.h>
-#include <fp/kernel/ops/always.h>
-#include <fp/kernel/ops/fmap.h>
+#include <fp/kernel/ops/as.h>
 
 namespace fp::kernel::ops {
 
-inline constexpr auto discard = fmap(always(data::nothing));
+inline auto discard = as(data::nothing);
 
 }  // namespace fp::kernel::ops
 #endif  // __FP_KERNEL_OPS_DISCARD_H
