@@ -7,31 +7,37 @@
 
 using namespace fp;
 using namespace fp::laws;
+using namespace fp::test;
 
-static auto intToStr = [](const int& d) -> String {
-    return std::to_string(d) + "1";
-};
-static auto intSquared = [](const int& x) -> int { return x * x; };
-static auto toTuple = [](const int& d) {
-    return [&](const String& s) -> Tuple<int, String> { return Tuple{d, s}; };
-};
+TEST(Kernel_Ops_Pipe_Laws, usage) {
+    auto liftedSquare = lift<StructFunctor>(square);
+    auto program = pipe(
+      identity,      // start with the value as-is
+      liftedSquare,  // get value and uses ordinary square to lift result into F
+      fmap(triple),  // transform inside F
+      extract        // unwrap back to value
+    );
+
+    auto result = program(42);
+    ASSERT_EQ(result, square(42) * 3);
+}
 
 RC_GTEST_PROP(Kernel_Ops_Pipe_Laws, left_identity, ()) {
     auto a = *rc::gen::arbitrary<int>();
-    RC_ASSERT(PipeLaws::left_identity(intToStr, a));
+    RC_ASSERT(PipeLaws::left_identity(square, a * a));
 }
 
 RC_GTEST_PROP(Kernel_Ops_Pipe_Laws, right_identity, ()) {
     auto a = *rc::gen::arbitrary<int>();
-    RC_ASSERT(PipeLaws::right_identity(intSquared, a));
+    RC_ASSERT(PipeLaws::right_identity(square, a * a));
 }
 
 RC_GTEST_PROP(Kernel_Ops_Pipe_Laws, associativity, ()) {
     auto i = *rc::gen::arbitrary<int>();
-    RC_ASSERT(PipeLaws::associativity(intSquared, intToStr, toTuple(42), i));
+    RC_ASSERT(PipeLaws::associativity(square, triple, halve, i));
 }
 
 RC_GTEST_PROP(Kernel_Ops_Pipe_Laws, variadic_consistency, ()) {
     auto i = *rc::gen::arbitrary<int>();
-    RC_ASSERT(PipeLaws::variadic(intSquared, intToStr, toTuple(42), i));
+    RC_ASSERT(PipeLaws::variadic(triple, halve, square, i));
 }
