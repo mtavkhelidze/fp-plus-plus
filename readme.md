@@ -8,6 +8,15 @@ FP the hell out of C++
 doesn't involve runtime type resolution, function calls or, God forbid, vtable
 lookups.
 
+### What is it?
+
+For a TLDR of what `FP++` can do, have a look at:
+
+- `test/src/syntax/operators.cpp` — `|`, `*`, `&=` operators in action
+- `test/src/kernel/ops/compose.cpp` — right-to-left function composition
+- `test/src/kernel/ops/pipe.cpp` — left-to-right function pipelines
+- `test/src/core/functor.cpp` — lifting morphisms into type constructors
+
 ### Types
 
 `FP++` owns the types that appear **inside `F<A>`** — both the type constructor

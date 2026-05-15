@@ -12,51 +12,31 @@ using namespace fp::test;
 
 // individual operators
 
-TEST(Syntax_Operators, pipe_left_to_right) {
-    auto f = [](int x) -> int { return x + 1; };
-    auto g = [](int x) -> int { return x * 2; };
-    auto h = pipe(f, g);
-    ASSERT_EQ((f | g) &= 42, h &= 42);  // (42+1)*2 = 86
-    ASSERT_EQ((f | g) &= 42, 86);
+TEST(Syntax_Operators_Dollar, usage) {
+    auto applied = square &= 10;
+    auto expected = square(10);
+    ASSERT_EQ(applied, expected);
 }
 
-TEST(Syntax_Operators, compose_right_to_left) {
-    auto f = [](int x) -> int { return x + 1; };
-    auto g = [](int x) -> int { return x * 2; };
-    ASSERT_EQ((f * g) &= 42, 85);  // f(g(42)) = (42*2)+1 = 85
+TEST(Syntax_Operators_Pipe, usage) {
+    auto piped = square | triple | halve;
+    auto expected = pipe(square, triple, halve);
+    ASSERT_EQ(piped(42), expected(42));
 }
 
-TEST(Syntax_Operators, apply_feeds_value) {
-    auto f = [](int x) -> int { return x * 3; };
-    ASSERT_EQ(f &= 10, 30);
+TEST(Syntax_Operators_Pipe, usage_with_dollar) {
+    auto piped = square | triple | halve &= 42;
+    auto expected = pipe(always(42), square, triple, halve)(any);
+    ASSERT_EQ(piped, expected);
+}
+TEST(Syntax_Operators_Compose, usage) {
+    auto composed = halve * triple * square;
+    auto expected = compose(halve, triple, square);
+    ASSERT_EQ(composed(42), expected(42));
 }
 
-// precedence — &= binds looser than | and *
-
-TEST(Syntax_Operators, pipe_chain_then_apply) {
-    auto f = [](int x) -> String { return std::to_string(x); };
-    auto g = [](const String& s) -> String { return s + "!"; };
-    auto h = [](const String& s) -> std::size_t { return s.size(); };
-    ASSERT_EQ(f | g | h &= 42, 3);  // "42" + "!" = "42!" → size 3
-}
-
-TEST(Syntax_Operators, compose_chain_then_apply) {
-    auto f = [](std::size_t x) -> std::size_t { return x * 2; };
-    auto g = [](const String& s) -> std::size_t { return s.size(); };
-    auto h = [](int x) -> String { return std::to_string(x); };
-    ASSERT_EQ(f* g* h &= 42, 4);  // h(42)="42" → g="2" → f=4
-}
-
-// with functor ops
-
-TEST(Syntax_Operators, fmap_in_pipeline) {
-    auto fa = pure<StructFunctor>(42);
-    auto result = fmap([](int x) -> int { return x + 1; }) &= fa;
-    ASSERT_EQ(result.value(), 43);
-}
-
-TEST(Syntax_Operators, functor_pipeline) {
-    auto result = pure<StructFunctor, int> | as("hello") | discard;
-    static_assert(std::same_as<decltype(result(10)), StructFunctor<Nothing>>);
-    ASSERT_EQ(result(10).value(), nothing);
+TEST(Syntax_Operators_Compose, usage_with_dollar) {
+    auto result = halve* triple* square &= 42;
+    auto expected = compose(halve, triple, square)(42);
+    ASSERT_EQ(result, expected);
 }
