@@ -14,8 +14,8 @@ TEST(Kernel_Ops_Compose, usage) {
     auto program = compose(
       fmap(
         withId(42)
-      ),   // F<Tuple<int, String>> -> F<Tuple<int,Tuple<int, String>>>
-      id,  // F<Tuple<int, String>> -> F<Tuple<int, String>>
+      ),         // F<Tuple<int, String>> -> F<Tuple<int,Tuple<int, String>>>
+      identity,  // F<Tuple<int, String>> -> F<Tuple<int, String>>
       fproduct(formatPrice),  // F<int> -> F<Tuple<int, String>>
       fmap(square),           // F<int> -> F<int>
       pure<StructApply, int>  // int -> F<int>

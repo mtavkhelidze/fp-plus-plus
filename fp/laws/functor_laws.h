@@ -18,7 +18,8 @@ template <template <typename> typename F>
 struct FunctorLaws {
     template <typename A>
     static auto identity(const F<A>& fa) -> bool {
-        return kernel::ops::fmap(kernel::ops::id)(fa).value() == fa.value();
+        return kernel::ops::fmap(kernel::ops::identity)(fa).value()
+            == fa.value();
     }
 
     template <typename A>

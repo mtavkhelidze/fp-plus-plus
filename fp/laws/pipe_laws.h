@@ -17,18 +17,20 @@ struct PipeLaws {
     // Law 1: left identity — id | f == f
     template <typename Fn, typename A>
     static auto left_identity(Fn&& f, A&& a) -> bool {
-        return fp::kernel::ops::pipe(fp::kernel::ops::id, std::forward<Fn>(f))(
-                 std::forward<A>(a)
-               )
+        return fp::kernel::ops::
+                 pipe(fp::kernel::ops::identity, std::forward<Fn>(f))(
+                   std::forward<A>(a)
+                 )
             == std::forward<Fn>(f)(std::forward<A>(a));
     }
 
     // Law 2: right identity — f | id == f
     template <typename Fn, typename A>
     static auto right_identity(Fn&& f, A&& a) -> bool {
-        return fp::kernel::ops::pipe(std::forward<Fn>(f), fp::kernel::ops::id)(
-                 std::forward<A>(a)
-               )
+        return fp::kernel::ops::
+                 pipe(std::forward<Fn>(f), fp::kernel::ops::identity)(
+                   std::forward<A>(a)
+                 )
             == std::forward<Fn>(f)(std::forward<A>(a));
     }
 

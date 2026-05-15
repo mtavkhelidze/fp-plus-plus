@@ -16,7 +16,7 @@ static_assert(HasMap<TestStruct<int>>, "TestStruct must have map method");
 
 TEST(Kernal_Mixins_WithFunctor, map_is_callable) {
     auto val = pure<TestStruct>(42);
-    EXPECT_EQ(42, val.map(id).value());
+    EXPECT_EQ(42, val.map(identity).value());
 }
 
 TEST(Kernel_Mixins_WithFunctor, as_is_callable) {

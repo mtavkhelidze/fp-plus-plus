@@ -19,7 +19,7 @@ struct ComposeLaws {
     template <typename Fn, typename A>
     static auto left_identity(Fn&& f, A&& a) -> bool {
         return fp::kernel::ops::
-                 compose(fp::kernel::ops::id, std::forward<Fn>(f))(
+                 compose(fp::kernel::ops::identity, std::forward<Fn>(f))(
                    std::forward<A>(a)
                  )
             == std::forward<Fn>(f)(std::forward<A>(a));
@@ -29,7 +29,7 @@ struct ComposeLaws {
     template <typename Fn, typename A>
     static auto right_identity(Fn&& f, A&& a) -> bool {
         return fp::kernel::ops::
-                 compose(std::forward<Fn>(f), fp::kernel::ops::id)(
+                 compose(std::forward<Fn>(f), fp::kernel::ops::identity)(
                    std::forward<A>(a)
                  )
             == std::forward<Fn>(f)(std::forward<A>(a));

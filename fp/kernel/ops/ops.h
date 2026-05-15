@@ -13,7 +13,7 @@
 #include <fp/kernel/ops/dollar.h>
 #include <fp/kernel/ops/fmap.h>
 #include <fp/kernel/ops/fproduct.h>
-#include <fp/kernel/ops/id.h>  // no tests, just works
+#include <fp/kernel/ops/identity.h>  // no tests, just works
 #include <fp/kernel/ops/lift.h>
 #include <fp/kernel/ops/pipe.h>
 #include <fp/kernel/ops/pure.h>

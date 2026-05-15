@@ -9,16 +9,16 @@
 #include <fp/core/core.h>
 #include <fp/data/data.h>
 #include <fp/internal/meta/meta.h>
-#include <fp/kernel/ops/id.h>
 
 #include <concepts>
 
 namespace fp::kernel::traits {
 template <template <typename> typename F>
-concept IsFunctor =
-  requires(F<data::Any<>> fa) { core::Functor<F>::map(ops::id)(fa); };
+concept IsFunctor = requires(F<data::Any<>> fa) {
+    core::Functor<F>::map([](auto x) -> auto { return x; })(fa);
+};
 
-template <typename FA, typename Fn = decltype(ops::id)>
+template <typename FA, typename Fn = decltype([](auto x) -> auto { return x; })>
 concept HasMap =
   internal::meta::instance::is_instance<FA>
   && HasApply<FA>
