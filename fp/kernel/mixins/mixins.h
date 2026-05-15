@@ -10,7 +10,7 @@
 #include <fp/kernel/mixins/with_pure.h>
 
 namespace fp::kernel::mixins {
-using namespace fp::kernel::mixins::apply;
+using namespace fp::kernel::mixins::pure;
 using namespace fp::kernel::mixins::functor;
 }  // namespace fp::kernel::mixins
 

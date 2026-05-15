@@ -13,7 +13,7 @@
 #include <cstring>
 #endif
 
-namespace fp::kernel::mixins::apply {
+namespace fp::kernel::mixins::pure {
 
 namespace {
     template <typename FA>
@@ -37,7 +37,7 @@ namespace {
 }  // namespace
 
 /**
- * Mixin for objects with storage backend and ::apply.
+ * Mixin for objects with storage backend and ::pure and .value.
  */
 template <typename FA>
 struct WithPure : private Backend<FA>::type {
@@ -51,7 +51,7 @@ struct WithPure : private Backend<FA>::type {
      * backend storage returning F<A>.
      *
      * Example:
-     *   auto val = F::apply(42);  // Constructs F<int> from int 42
+     *   auto val = F::pure(42);  // Constructs F<int> from int 42
      */
     template <typename A>
     static constexpr auto pure(A&& value) -> FA {
@@ -69,6 +69,6 @@ struct WithPure : private Backend<FA>::type {
     }
 #endif  // FP_PLUS_PLUS_TESTING
 };
-};  // namespace fp::kernel::mixins::apply
+};  // namespace fp::kernel::mixins::pure
 
 #endif  // __FP_KERNEL_MIXINS_WITH_APPLY_H

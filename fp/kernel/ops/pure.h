@@ -15,7 +15,7 @@ namespace fp::kernel::ops {
  * Lift a value into the context of a type constructor `F`.
  *
  * `pure<F>(x)` wraps the raw C++ value `x` (type `T`) into the FP-normalized
- * type `A` and then calls `F<A>::apply(x)`.
+ * type `A` and then calls `F<A>::pure(x)`.
  *
  * Here:
  *   - `T` is the original C++ type of the value.

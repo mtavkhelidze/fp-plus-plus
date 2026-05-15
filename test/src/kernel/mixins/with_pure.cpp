@@ -5,15 +5,13 @@
 using namespace fp;
 using namespace fp::test;
 
+static_assert(IsWithPure<StructWithPure>, "StructWithPure must hapre ::pure");
 static_assert(
-  IsApply<StructWithPure>, "StructWithPure must be an applyable object"
-);
-static_assert(
-  HasPure<StructWithPure<int>>, "StructWithPure<int> must have a apply method"
+  HasPure<StructWithPure<int>>, "StructWithPure<int> must have ::pure method"
 );
 static_assert(
   HasPure<StructWithPure<String>>,
-  "StructWithPure<String> must have a apply method"
+  "StructWithPure<String> must have a ::pure method"
 );
 
 TEST(Kernel_Mixins_WithValue, uses_stack_for_trivial_type_const_int) {

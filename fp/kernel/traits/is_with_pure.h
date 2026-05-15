@@ -25,7 +25,7 @@ namespace __internal {
 }  // namespace __internal
 
 template <template <typename> typename F>
-concept IsApply = requires(data::Any<> a) { F<data::Any<>>::pure(a); };
+concept IsWithPure = requires(data::Any<> a) { F<data::Any<>>::pure(a); };
 
 template <typename FA>
 concept HasPure = __internal::HasValue<FA>

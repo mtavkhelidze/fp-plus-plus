@@ -8,7 +8,7 @@
 
 #include <fp/internal/meta/arrow.h>
 #include <fp/internal/meta/cast.h>
-#include <fp/kernel/traits/is_apply.h>
+#include <fp/kernel/traits/is_with_pure.h>
 
 #include <utility>
 
@@ -22,7 +22,7 @@ struct Functor {
                  const F<A>& fa
                ) -> decltype(auto) {
             static_assert(internal::meta::arrow::is_arrow<Fn, A>);
-            static_assert(kernel::traits::IsApply<F>);
+            static_assert(kernel::traits::IsWithPure<F>);
             static_assert(kernel::traits::HasPure<F<A>>);
             using B = internal::meta::arrow::arrow_result<Fn, A>;
             using BC = internal::meta::cast::cast<B>;
