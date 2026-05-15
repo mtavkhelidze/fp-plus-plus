@@ -1,16 +1,14 @@
 #include <fp/fp.h>
+#include <fp_test.h>
 #include <gtest/gtest.h>
 
 using namespace fp;
-using namespace fp::kernel::mixins;
-
-template <typename A>
-struct TestStruct : WithApply<TestStruct<A>> {};
+using namespace fp::test;
 
 TEST(Kernel_Ops_Always, composes_with_fmap) {
-    auto fa = pure<TestStruct>(42);
+    auto fa = pure<StructApply>(42);
     auto result = fmap(always(String("hello")))(fa);
-    //    static_assert(std::is_same_v<decltype(result), TestStruct<String>>);
+    //    static_assert(std::is_same_v<decltype(result), StructApply<String>>);
     ASSERT_EQ(result.value(), "hello");
 }
 

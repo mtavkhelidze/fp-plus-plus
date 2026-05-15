@@ -2,6 +2,10 @@
 #define __TEST_INCLUDE_FP_TEST_H
 #pragma once
 
+#ifndef FP_PLUS_PLUS_TESTING
+#error "This file is for testing only. You most probably don't need it."
+#endif  // FP_PLUS_PLUS_TESTING
+
 #include <fp/fp.h>
 
 #include <string>

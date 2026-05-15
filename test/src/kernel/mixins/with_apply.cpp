@@ -1,79 +1,72 @@
 #include <fp/fp.h>
+#include <fp_test.h>
 #include <gtest/gtest.h>
 
 using namespace fp;
-using namespace fp::kernel::mixins;
+using namespace fp::test;
 
-template <typename A>
-struct TestStruct : WithApply<TestStruct<A>> {
-    template <typename T>
-    static auto create(T&& v) -> TestStruct<fp::cast<T>> {
-        return TestStruct<fp::cast<T>>::apply(std::forward<T>(v));
-    }
-};
-
-static_assert(IsApply<TestStruct>, "TestStruct must be an applyable object");
+static_assert(IsApply<StructApply>, "StructApply must be an applyable object");
 static_assert(
-  HasApply<TestStruct<int>>, "TestStruct<int> must have a apply method"
+  HasApply<StructApply<int>>, "StructApply<int> must have a apply method"
 );
 static_assert(
-  HasApply<TestStruct<String>>, "TestStruct<String> must have a apply method"
+  HasApply<StructApply<String>>, "StructApply<String> must have a apply method"
 );
 
 TEST(Kernel_Mixins_WithValue, uses_stack_for_trivial_type_const_int) {
     const int x = 42;
-    auto val = TestStruct<int>::create(x);
+    auto val = StructApply<int>::apply(x);
     ASSERT_EQ(val.value(), 42);
     ASSERT_TRUE(val.is_stack());
 }
 
 TEST(Kernel_Mixins_WithValue, uses_box_for_non_trivial_type_const_string) {
     const auto str = String("string");
-    auto val = TestStruct<String>::create(str);
+    auto val = StructApply<String>::apply(str);
     ASSERT_EQ(val.value(), "string");
     ASSERT_TRUE(val.is_box());
 }
 
 TEST(Kernel_Mixins_WithValue, uses_stack_for_trivial_type_int_rvalue) {
-    auto val = TestStruct<int>::create(42);
+    auto val = StructApply<int>::apply(42);
     ASSERT_EQ(val.value(), 42);
     ASSERT_TRUE(val.is_stack());
 }
 
 TEST(Kernel_Mixins_WithValue, uses_stack_for_trivial_type_double) {
-    auto val = TestStruct<double>::create(3.14);
+    auto val = StructApply<double>::apply(3.14);
     ASSERT_DOUBLE_EQ(val.value(), 3.14);
     ASSERT_TRUE(val.is_stack());
 }
 
 TEST(Kernel_Mixins_WithValue, strips_const_ref_to_fundamental) {
     const int& x = 42;
-    auto val = TestStruct<int>::create(x);
+    auto val = StructApply<int>::apply(x);
     ASSERT_EQ(val.value(), 42);
     ASSERT_TRUE(val.is_stack());
 }
 
 TEST(Kernel_Mixins_WithValue, uses_box_for_string_literal) {
-    auto val = TestStruct<String>::create("hello");
+    auto val = StructApply<String>::apply("hello");
     ASSERT_EQ(val.value(), "hello");
     ASSERT_TRUE(val.is_box());
 }
 
 TEST(Kernel_Mixins_WithValue, uses_box_for_vector) {
     Vector<int> v = {1, 2, 3};
-    auto val = TestStruct<Vector<int>>::create(v);
+    auto val = StructApply<Vector<int>>::apply(v);
     ASSERT_EQ(val.value(), v);
     ASSERT_TRUE(val.is_box());
 }
 
 TEST(Kernel_Mixins_WithValue, copy_shares_data) {
-    auto a = TestStruct<String>::create(String("shared"));
+    auto a = StructApply<String>::apply(String("shared"));
     auto b = a;
     ASSERT_EQ(a.value(), b.value());
     ASSERT_EQ(&a.value(), &b.value());  // same underlying data
 }
 
 TEST(Kernel_Mixins_WithValue, nothing_uses_box) {
-    auto val = TestStruct<fp::Nothing>::create(fp::nothing);
+    auto val = StructApply<fp::Nothing>::apply(fp::nothing);
     ASSERT_TRUE(val.is_box());
 }

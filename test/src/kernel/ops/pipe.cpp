@@ -1,4 +1,5 @@
 #include <fp/fp.h>
+#include <fp_test.h>
 #include <gtest/gtest.h>
 #include <rapidcheck/gtest.h>
 

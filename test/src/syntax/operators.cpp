@@ -1,4 +1,5 @@
 #include <fp/fp.h>
+#include <fp_test.h>
 #include <gtest/gtest.h>
 
 #include <concepts>
@@ -7,12 +8,7 @@
 
 using namespace fp;
 using namespace fp::syntax;
-using namespace fp::kernel::mixins;
-
-template <typename A>
-struct TestStruct
-    : WithApply<TestStruct<A>>
-    , WithFunctor<TestStruct<A>> {};
+using namespace fp::test;
 
 // individual operators
 
@@ -54,13 +50,13 @@ TEST(Syntax_Operators, compose_chain_then_apply) {
 // with functor ops
 
 TEST(Syntax_Operators, fmap_in_pipeline) {
-    auto fa = pure<TestStruct>(42);
+    auto fa = pure<StructFunctor>(42);
     auto result = fmap([](int x) -> int { return x + 1; }) &= fa;
     ASSERT_EQ(result.value(), 43);
 }
 
 TEST(Syntax_Operators, functor_pipeline) {
-    auto result = pure<TestStruct, int> | as("hello") | discard;
-    static_assert(std::same_as<decltype(result(10)), TestStruct<Nothing>>);
+    auto result = pure<StructFunctor, int> | as("hello") | discard;
+    static_assert(std::same_as<decltype(result(10)), StructFunctor<Nothing>>);
     ASSERT_EQ(result(10).value(), nothing);
 }

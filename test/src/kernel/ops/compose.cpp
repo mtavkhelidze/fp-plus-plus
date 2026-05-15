@@ -3,7 +3,6 @@
 #include <gtest/gtest.h>
 #include <rapidcheck/gtest.h>
 
-#include <iostream>
 #include <string>
 
 using namespace fp;
