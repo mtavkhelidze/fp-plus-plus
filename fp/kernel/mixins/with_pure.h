@@ -54,7 +54,7 @@ struct WithPure : private Backend<FA>::type {
      *   auto val = F::apply(42);  // Constructs F<int> from int 42
      */
     template <typename A>
-    static constexpr auto apply(A&& value) -> FA {
+    static constexpr auto pure(A&& value) -> FA {
         return FA{Base::put(std::forward<A>(value))};
     }
 

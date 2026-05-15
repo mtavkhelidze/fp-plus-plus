@@ -27,9 +27,9 @@ namespace fp::kernel::ops {
  *   auto idValue = pure<Id>(42); // Id<int> containing 42
  */
 template <template <typename> typename F, typename T>
-    requires traits::HasApply<F<internal::meta::cast::cast<T>>>
+    requires traits::HasPure<F<internal::meta::cast::cast<T>>>
 inline auto pure(T&& value) -> F<internal::meta::cast::cast<T>> {
-    return F<internal::meta::cast::cast<T>>::apply(std::forward<T>(value));
+    return F<internal::meta::cast::cast<T>>::pure(std::forward<T>(value));
 }
 }  // namespace fp::kernel::ops
 

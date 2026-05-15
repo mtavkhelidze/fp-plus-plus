@@ -23,10 +23,10 @@ struct Functor {
                ) -> decltype(auto) {
             static_assert(internal::meta::arrow::is_arrow<Fn, A>);
             static_assert(kernel::traits::IsApply<F>);
-            static_assert(kernel::traits::HasApply<F<A>>);
+            static_assert(kernel::traits::HasPure<F<A>>);
             using B = internal::meta::arrow::arrow_result<Fn, A>;
             using BC = internal::meta::cast::cast<B>;
-            return F<BC>::apply(std::invoke(f, fa.value()));
+            return F<BC>::pure(std::invoke(f, fa.value()));
         };
     }
 };

@@ -21,7 +21,7 @@ concept IsFunctor = requires(F<data::Any<>> fa) {
 template <typename FA, typename Fn = decltype([](auto x) -> auto { return x; })>
 concept HasMap =
   internal::meta::instance::is_instance<FA>
-  && HasApply<FA>
+  && HasPure<FA>
   && internal::meta::arrow::
     is_arrow<Fn, internal::meta::inner_type::inner_type<FA>>
   && requires(FA fa, Fn fn) {

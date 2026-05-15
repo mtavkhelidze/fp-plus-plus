@@ -11,7 +11,7 @@
 namespace fp::kernel::ops {
 
 inline constexpr auto extract = []<typename FA>(const FA& fa) -> decltype(auto)
-    requires traits::HasApply<FA>
+    requires traits::HasPure<FA>
 { return fa.value(); };
 
 }  // namespace fp::kernel::ops

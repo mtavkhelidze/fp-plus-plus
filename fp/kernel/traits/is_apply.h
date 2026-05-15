@@ -25,17 +25,16 @@ namespace __internal {
 }  // namespace __internal
 
 template <template <typename> typename F>
-concept IsApply = requires(data::Any<> a) { F<data::Any<>>::apply(a); };
+concept IsApply = requires(data::Any<> a) { F<data::Any<>>::pure(a); };
 
 template <typename FA>
-concept HasApply =
-  __internal::HasValue<FA>
-  && requires(internal::meta::inner_type::inner_type<FA> arg) {
-         {
-             FA::apply(arg)
-         } -> std::same_as<fp::internal::meta::rebind::rebind<
-           FA, fp::internal::meta::cast::cast<
-                 fp::internal::meta::inner_type::inner_type<FA>>>>;
-     };
+concept HasPure = __internal::HasValue<FA>
+               && requires(internal::meta::inner_type::inner_type<FA> arg) {
+                      {
+                          FA::pure(arg)
+                      } -> std::same_as<fp::internal::meta::rebind::rebind<
+                        FA, fp::internal::meta::cast::cast<
+                              fp::internal::meta::inner_type::inner_type<FA>>>>;
+                  };
 }  // namespace fp::kernel::traits
 #endif  // __FP_KERNEL_TRAITS_IS_APPLY_H

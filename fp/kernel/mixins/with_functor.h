@@ -14,7 +14,7 @@ namespace fp::kernel::mixins::functor {
 template <typename FA>
 struct WithFunctor {
     auto map(auto&& f) const -> auto
-        requires kernel::traits::HasApply<FA>
+        requires kernel::traits::HasPure<FA>
     {
         return kernel::ops::fmap(std::forward<decltype(f)>(f))(
           static_cast<FA const&>(*this)
