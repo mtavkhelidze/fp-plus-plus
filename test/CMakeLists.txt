@@ -52,6 +52,11 @@ target_compile_options(
     -Wextra
     -Wpedantic
 )
+target_include_directories(
+    ${PROJECT_NAME}_test
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 target_link_libraries(
     ${PROJECT_NAME}_test
     ${PROJECT_NAME}
