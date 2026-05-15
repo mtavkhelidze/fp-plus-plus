@@ -6,7 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  //  FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
-#include <fp/core/core.h>
+#include <fp/core/functor.h>
 #include <fp/data/data.h>
 #include <fp/internal/meta/meta.h>
 
@@ -14,7 +14,7 @@
 
 namespace fp::kernel::traits {
 template <template <typename> typename F>
-concept IsFunctor = requires(F<data::Any<>> fa) {
+concept IsFunctor = IsWithPure<F> && requires(F<data::Any<>> fa) {
     core::Functor<F>::map([](auto x) -> auto { return x; })(fa);
 };
 

@@ -8,6 +8,7 @@
 #include <string>
 
 using namespace fp;
+using namespace fp::laws;
 using namespace fp::test;
 
 // lift morphisms into F
@@ -26,13 +27,13 @@ TEST(Core_Functor, map_lifts_morphism_A_to_B_into_FA_to_FB) {
 RC_GTEST_PROP(Core_Functor_Laws, identity_stack_storage, ()) {
     auto a = *rc::gen::arbitrary<int>();
     auto fa = pure<StructWithPure>(a);
-    RC_ASSERT(fp::laws::FunctorLaws<StructWithPure>::identity(fa));
+    RC_ASSERT(FunctorLaws<StructWithPure>::identity(fa));
 }
 
 RC_GTEST_PROP(Core_Functor_Laws, identity_box_storage, ()) {
     auto a = *rc::gen::arbitrary<String>();
     auto fa = pure<StructWithPure>(a);
-    RC_ASSERT(fp::laws::FunctorLaws<StructWithPure>::identity(fa));
+    RC_ASSERT(FunctorLaws<StructWithPure>::identity(fa));
 }
 
 RC_GTEST_PROP(Core_Functor_Laws, composition_stack_storage, ()) {
@@ -40,7 +41,7 @@ RC_GTEST_PROP(Core_Functor_Laws, composition_stack_storage, ()) {
     auto fa = pure<StructWithPure>(a);
     auto f = [](int x) -> int { return x + 1; };
     auto g = [](int x) -> int { return x * 2; };
-    RC_ASSERT(fp::laws::FunctorLaws<StructWithPure>::composition(fa, f, g));
+    RC_ASSERT(FunctorLaws<StructWithPure>::composition(fa, f, g));
 }
 
 RC_GTEST_PROP(Core_Functor_Laws, composition_box_storage, ()) {
@@ -48,7 +49,7 @@ RC_GTEST_PROP(Core_Functor_Laws, composition_box_storage, ()) {
     auto fa = pure<StructWithPure>(a);
     auto f = [](const String& x) -> String { return x + "1"; };
     auto g = [](const String& x) -> String { return x + "2"; };
-    RC_ASSERT(fp::laws::FunctorLaws<StructWithPure>::composition(fa, f, g));
+    RC_ASSERT(FunctorLaws<StructWithPure>::composition(fa, f, g));
 }
 
 // composition with type change — A → B → C, not A → A → A
@@ -56,5 +57,5 @@ RC_GTEST_PROP(Core_Functor_Laws, composition_type_change, ()) {
     auto fa = pure<StructWithPure>(*rc::gen::arbitrary<int>());
     auto f = [](int x) -> String { return std::to_string(x); };
     auto g = [](const String& s) -> std::size_t { return s.size(); };
-    RC_ASSERT(fp::laws::FunctorLaws<StructWithPure>::composition(fa, f, g));
+    RC_ASSERT(FunctorLaws<StructWithPure>::composition(fa, f, g));
 }

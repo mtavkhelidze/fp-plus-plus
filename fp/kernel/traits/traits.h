@@ -6,7 +6,8 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  //  FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/kernel/traits/is_applicative.h>
 #include <fp/kernel/traits/is_functor.h>
-#include <fp/kernel/traits/is_with_pure.h>
+#include <fp/kernel/traits/is_pure.h>
 
 #endif  // __FP_KERNEL_TRAITS_TRAITS_H

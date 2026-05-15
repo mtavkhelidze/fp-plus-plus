@@ -8,7 +8,7 @@
 
 #include <fp/internal/meta/arrow.h>
 #include <fp/internal/meta/cast.h>
-#include <fp/kernel/traits/is_with_pure.h>
+#include <fp/kernel/traits/is_pure.h>
 
 #include <utility>
 

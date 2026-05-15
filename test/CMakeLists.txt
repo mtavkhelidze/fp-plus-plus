@@ -10,6 +10,7 @@ target_compile_options(
 
 set(TEST_SRC
     src/cast.cpp
+    src/core/applicative.cpp
     src/core/functor.cpp
     src/data/nothing.cpp
     src/internal/storage/box_storage.cpp
