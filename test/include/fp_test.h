@@ -13,11 +13,11 @@
 namespace fp::test {
 
 template <typename A>
-struct StructApply : fp::kernel::mixins::WithApply<StructApply<A>> {};
+struct StructApply : fp::kernel::mixins::WithPure<StructApply<A>> {};
 
 template <typename A>
 struct StructFunctor
-    : fp::kernel::mixins::WithApply<StructFunctor<A>>
+    : fp::kernel::mixins::WithPure<StructFunctor<A>>
     , fp::kernel::mixins::WithFunctor<StructFunctor<A>> {};
 }  // namespace fp::test
 

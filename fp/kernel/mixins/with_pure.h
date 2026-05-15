@@ -40,7 +40,7 @@ namespace {
  * Mixin for objects with storage backend and ::apply.
  */
 template <typename FA>
-struct WithApply : private Backend<FA>::type {
+struct WithPure : private Backend<FA>::type {
   private:
     using Base = typename Backend<FA>::type;
     using Base::Base;

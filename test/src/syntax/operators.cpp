@@ -2,7 +2,6 @@
 #include <fp_test.h>
 #include <gtest/gtest.h>
 
-#include <concepts>
 #include <cstddef>
 #include <string>
 

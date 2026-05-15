@@ -26,5 +26,6 @@ target_include_directories(
 )
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/fp DESTINATION include)
 
+
 enable_testing()
 add_subdirectory(test)
