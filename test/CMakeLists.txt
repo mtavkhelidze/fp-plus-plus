@@ -15,8 +15,8 @@ set(TEST_SRC
     src/internal/storage/box_storage.cpp
     src/internal/storage/box.cpp
     src/internal/storage/stack_storage.cpp
-    src/kernel/mixins/with_apply.cpp
     src/kernel/mixins/with_functor.cpp
+    src/kernel/mixins/with_pure.cpp
     src/kernel/ops/always.cpp
     src/kernel/ops/as.cpp
     src/kernel/ops/compose.cpp

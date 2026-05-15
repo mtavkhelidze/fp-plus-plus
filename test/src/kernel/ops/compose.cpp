@@ -15,9 +15,9 @@ TEST(Kernel_Ops_Compose, usage) {
         withId(42)
       ),         // F<Tuple<int, String>> -> F<Tuple<int,Tuple<int, String>>>
       identity,  // F<Tuple<int, String>> -> F<Tuple<int, String>>
-      fproduct(formatPrice),  // F<int> -> F<Tuple<int, String>>
-      fmap(square),           // F<int> -> F<int>
-      pure<StructApply, int>  // int -> F<int>
+      fproduct(formatPrice),     // F<int> -> F<Tuple<int, String>>
+      fmap(square),              // F<int> -> F<int>
+      pure<StructWithPure, int>  // int -> F<int>
     );
 
     auto result = program(200);  // run N cents

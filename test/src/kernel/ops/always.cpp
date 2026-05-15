@@ -6,9 +6,10 @@ using namespace fp;
 using namespace fp::test;
 
 TEST(Kernel_Ops_Always, composes_with_fmap) {
-    auto fa = pure<StructApply>(42);
+    auto fa = pure<StructWithPure>(42);
     auto result = fmap(always(String("hello")))(fa);
-    //    static_assert(std::is_same_v<decltype(result), StructApply<String>>);
+    //    static_assert(std::is_same_v<decltype(result),
+    //    StructWithPure<String>>);
     ASSERT_EQ(result.value(), "hello");
 }
 
