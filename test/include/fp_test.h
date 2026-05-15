@@ -31,8 +31,10 @@ constexpr auto formatPrice = [](const int& cents) -> String {
 constexpr auto square = [](const int& x) -> int { return x * x; };
 
 // curry: int → (String → Tuple<int, String>) — tag a string with an id
-constexpr auto withId = [](const int& id) {
-    return [&](const auto& s) -> auto { return Tuple{id, s}; };
+constexpr auto withId = [](const int& id) -> auto {
+    return [&](const auto& s) -> Tuple<int, fp::cast<decltype(s)>> {
+        return Tuple{id, s};
+    };
 };
 }  // namespace fp::test
 #endif  // __TEST_INCLUDE_FP_TEST_H
