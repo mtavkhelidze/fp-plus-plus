@@ -8,5 +8,6 @@
 
 #include <fp/laws/compose_laws.h>
 #include <fp/laws/functor_laws.h>
+#include <fp/laws/pipe_laws.h>
 
 #endif  // __FP_LAWS_LAWS_H

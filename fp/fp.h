@@ -4,6 +4,7 @@
 #pragma once
 
 #define FP_PLUS_PLUS_INCLUDED_FROM_FP_FP 1
+
 #include <fp/core/core.h>
 #include <fp/data/data.h>
 #include <fp/internal/meta/meta.h>
@@ -11,6 +12,7 @@
 #include <fp/kernel/mixins/mixins.h>
 #include <fp/kernel/ops/ops.h>
 #include <fp/kernel/traits/traits.h>
+#include <fp/syntax/syntax.h>
 
 #ifdef FP_PLUS_PLUS_TESTING
 #include <fp/laws/laws.h>
@@ -18,6 +20,7 @@
 
 #undef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+// hoist those into the fp namespace
 namespace fp {
 using namespace fp::core;
 using namespace fp::data;

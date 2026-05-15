@@ -1,5 +1,5 @@
-#ifndef __FP_SYNTAX_COMPOSE_DOT_H
-#define __FP_SYNTAX_COMPOSE_DOT_H
+#ifndef __FP_SYNTAX_PIPE_OP_H
+#define __FP_SYNTAX_PIPE_OP_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -8,12 +8,14 @@
 
 #include <fp/kernel/ops/ops.h>
 
+#include <utility>
+
 namespace fp::syntax {
-constexpr auto operator*(auto&& f, auto&& g) noexcept {
-    return kernel::ops::compose(
+constexpr auto operator|(auto&& f, auto&& g) {
+    return kernel::ops::pipe(
       std::forward<decltype(f)>(f), std::forward<decltype(g)>(g)
     );
 }
-}  // namespace fp::syntax
 
-#endif  // __FP_SYNTAX_COMPOSE_DOT_H
+}  // namespace fp::syntax
+#endif  // __FP_SYNTAX_PIPE_OP_H

@@ -15,22 +15,22 @@ static auto toTuple = [](const int& d) {
     return [&](const String& s) -> Tuple<int, String> { return Tuple{d, s}; };
 };
 
-RC_GTEST_PROP(Kernel_Ops_Compose_Laws, left_identity, ()) {
+RC_GTEST_PROP(Kernel_Ops_Pipe_Laws, left_identity, ()) {
     auto a = *rc::gen::arbitrary<int>();
-    RC_ASSERT(ComposeLaws::left_identity(intToStr, a));
+    RC_ASSERT(PipeLaws::left_identity(intToStr, a));
 }
 
-RC_GTEST_PROP(Kernel_Ops_Compose_Laws, right_identity, ()) {
+RC_GTEST_PROP(Kernel_Ops_Pipe_Laws, right_identity, ()) {
     auto a = *rc::gen::arbitrary<int>();
-    RC_ASSERT(ComposeLaws::right_identity(intSquared, a));
+    RC_ASSERT(PipeLaws::right_identity(intSquared, a));
 }
 
-RC_GTEST_PROP(Kernel_Ops_Compose_Laws, associativity, ()) {
+RC_GTEST_PROP(Kernel_Ops_Pipe_Laws, associativity, ()) {
     auto i = *rc::gen::arbitrary<int>();
-    RC_ASSERT(ComposeLaws::associativity(toTuple(42), intToStr, intSquared, i));
+    RC_ASSERT(PipeLaws::associativity(intSquared, intToStr, toTuple(42), i));
 }
 
-RC_GTEST_PROP(Kernel_Ops_Compose_Laws, variadic_consistency, ()) {
+RC_GTEST_PROP(Kernel_Ops_Pipe_Laws, variadic_consistency, ()) {
     auto i = *rc::gen::arbitrary<int>();
-    RC_ASSERT(ComposeLaws::variadic(toTuple(42), intToStr, intSquared, i));
+    RC_ASSERT(PipeLaws::variadic(intSquared, intToStr, toTuple(42), i));
 }
