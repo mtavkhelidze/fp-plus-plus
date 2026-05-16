@@ -13,33 +13,42 @@
 namespace fp::internal::meta::rebind {
 
 namespace {
-    template <typename T>
-    struct _rebind_instance {};
+    template <typename F>
+    struct __rebind_instance {};
 
-    template <template <typename> typename TC, typename A>
-    struct _rebind_instance<TC<A>> {
+    template <template <typename> typename F, typename A>
+    struct __rebind_instance<F<A>> {
         template <typename B>
-        using type = TC<std::decay_t<B>>;
+        using type = F<std::decay_t<B>>;
     };
 
-    template <template <typename, typename> typename TC, typename A, typename B>
-    struct _rebind_instance<TC<A, B>> {
+    template <template <typename, typename> typename F, typename A, typename B>
+    struct __rebind_instance<F<A, B>> {
         template <typename C, typename D>
-        using type = TC<std::decay_t<C>, std::decay_t<D>>;
+        using type = F<std::decay_t<C>, std::decay_t<D>>;
     };
+
+    template <typename FA, typename FB>
+    struct __is_same_f : std::false_type {};
+
+    template <template <typename> typename F, typename A, typename B>
+    struct __is_same_f<F<A>, F<B>> : std::true_type {};
 }  // namespace
 
-/// Transform TC<A> into TC<B>
-template <typename TC, typename B>
-    requires(instance::is_unary_instance<TC>)
-using rebind = typename _rebind_instance<std::decay_t<TC>>::template type<B>;
+/// Transform F<A> into F<B>
+template <typename F, typename B>
+    requires(instance::is_unary_instance<F>)
+using rebind = typename __rebind_instance<std::decay_t<F>>::template type<B>;
 
-/// Transform TC<A, B> into TC<C, D>
-template <typename TC, typename C, typename D>
-    requires(instance::is_binary_instance<TC>)
+/// Transform F<A, B> into F<C, D>
+template <typename F, typename C, typename D>
+    requires(instance::is_binary_instance<F>)
 using rebind_binary =
-  typename _rebind_instance<std::decay_t<TC>>::template type<C, D>;
+  typename __rebind_instance<std::decay_t<F>>::template type<C, D>;
 
+template <typename FA, typename FB>
+inline constexpr bool is_same_f =
+  __is_same_f<std::decay_t<FA>, std::decay_t<FB>>::value;
 }  // namespace fp::internal::meta::rebind
 
 #endif  // __FP_INTERNAL_META_REBIND_H

@@ -12,18 +12,18 @@ namespace fp::internal::meta::outer_type {
 
 namespace {
     template <typename T>
-    struct _outer_type_struct {};
+    struct __outer_type_struct {};
 
     template <template <typename...> typename F, typename... A>
-    struct _outer_type_struct<F<A...>> {
+    struct __outer_type_struct<F<A...>> {
         template <typename... Args>
-        using outer_type_struct_alias = F<Args...>;
+        using f_alias = F<Args...>;
     };
 }  // namespace
 
 template <typename FA>
-using outer_type = typename _outer_type_struct<
-  FA>::template outer_type_struct_alias<inner_type::inner_type<FA>>;
+using outer_type = typename __outer_type_struct<FA>::template f_alias<
+  inner_type::inner_type<FA>>;
 
 }  // namespace fp::internal::meta::outer_type
 

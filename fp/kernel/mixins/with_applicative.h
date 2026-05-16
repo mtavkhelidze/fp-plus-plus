@@ -17,9 +17,10 @@ struct WithApplicative {
     template <typename FFn>
     auto ap(FFn&& ff) -> auto
         requires kernel::traits::HasPure<FA>
+              && internal::meta::rebind::is_same_f<FA, FFn>
               && internal::meta::arrow::is_arrow<
                    internal::meta::inner_type::inner_type<FFn>,
-                   internal::meta::inner_type::inner_type<FA> >
+                   internal::meta::inner_type::inner_type<FA>>
 
     {
         return kernel::ops::ap(std::forward<FFn>(ff))(

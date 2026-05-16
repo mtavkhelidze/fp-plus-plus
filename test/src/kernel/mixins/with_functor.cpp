@@ -7,10 +7,14 @@
 using namespace fp;
 using namespace fp::test;
 
-static_assert(IsFunctor<StructFunctor>, "StructFunctor must be a functor");
-static_assert(HasMap<StructFunctor<int>>, "StructFunctor must have map method");
+TEST(Kernel_Mixins_WithFunctor, makes_functor_with_map) {
+    static_assert(IsFunctor<StructFunctor>, "StructFunctor must be a functor");
+    static_assert(
+      HasMap<StructFunctor<int>>, "StructFunctor must have map method"
+    );
+}
 
-TEST(Kernal_Mixins_WithFunctor, map_is_callable) {
+TEST(Kernel_Mixins_WithFunctor, map_is_callable) {
     auto val = pure<StructFunctor>(42);
     EXPECT_EQ(42, val.map(identity).value());
 }

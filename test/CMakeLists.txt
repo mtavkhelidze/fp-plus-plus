@@ -9,13 +9,15 @@ target_compile_options(
 )
 
 set(TEST_SRC
-    src/cast.cpp
     src/core/applicative.cpp
     src/core/functor.cpp
     src/data/nothing.cpp
+    src/internal/meta/cast.cpp
+    src/internal/meta/rebind.cpp
     src/internal/storage/box_storage.cpp
     src/internal/storage/box.cpp
     src/internal/storage/stack_storage.cpp
+    src/kernel/mixins/with_applicative.cpp
     src/kernel/mixins/with_functor.cpp
     src/kernel/mixins/with_pure.cpp
     src/kernel/ops/always.cpp
