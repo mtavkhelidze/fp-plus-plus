@@ -15,6 +15,7 @@
 namespace fp::core {
 
 template <template <typename> typename F>
+    requires kernel::traits::IsWithPure<F>
 struct Functor {
     template <typename Fn>
     static auto map(Fn&& f) {
@@ -22,8 +23,6 @@ struct Functor {
                  const F<A>& fa
                ) -> decltype(auto) {
             static_assert(internal::meta::arrow::is_arrow<Fn, A>);
-            static_assert(kernel::traits::IsWithPure<F>);
-            static_assert(kernel::traits::HasPure<F<A>>);
             using B = internal::meta::arrow::arrow_result<Fn, A>;
             using BC = internal::meta::cast::cast<B>;
             return F<BC>::pure(std::invoke(f, fa.value()));

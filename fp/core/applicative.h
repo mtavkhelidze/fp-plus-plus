@@ -11,14 +11,12 @@
 
 namespace fp::core {
 template <template <typename> typename F>
+    requires kernel::traits::IsWithPure<F>
 struct Applicative {
     template <typename Fn>
     static auto ap(const F<Fn>& ff) {
         return [ff]<typename A>(const F<A>& fa) -> decltype(auto)
-                   requires(
-                     internal::meta::arrow::is_arrow<Fn, A>
-                     && kernel::traits::HasPure<F<A>>
-                   )
+                   requires(internal::meta::arrow::is_arrow<Fn, A>)
         {
             using B = internal::meta::arrow::arrow_result<Fn, A>;
             using BC = internal::meta::cast::cast<B>;

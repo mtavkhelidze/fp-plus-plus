@@ -7,6 +7,7 @@
 #endif  //  FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/kernel/ops/always.h>
+#include <fp/kernel/ops/ap.h>
 #include <fp/kernel/ops/as.h>
 #include <fp/kernel/ops/compose.h>
 #include <fp/kernel/ops/discard.h>

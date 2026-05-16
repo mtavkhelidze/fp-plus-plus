@@ -8,12 +8,12 @@
 
 #include <fp/core/applicative.h>
 #include <fp/data/data.h>
-#include <fp/kernel/traits/is_functor.h>
+#include <fp/kernel/traits/is_pure.h>
 
 namespace fp::kernel::traits {
 template <template <typename> typename F>
 concept IsApplicative =
-  IsFunctor<F>
+  IsWithPure<F>
   && requires(
     F<data::Any<>> fa, F<decltype([](data::Any<> a) -> auto { return a; })> ff
   ) { core::Applicative<F>::ap(ff)(fa); };

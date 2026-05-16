@@ -1,5 +1,5 @@
-#ifndef __FP_KERNEL_TRAITS_IS_APPLY_H
-#define __FP_KERNEL_TRAITS_IS_APPLY_H
+#ifndef __FP_KERNEL_TRAITS_IS_PURE_H
+#define __FP_KERNEL_TRAITS_IS_PURE_H
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -37,4 +37,4 @@ concept HasPure = __internal::HasValue<FA>
                               fp::internal::meta::inner_type::inner_type<FA>>>>;
                   };
 }  // namespace fp::kernel::traits
-#endif  // __FP_KERNEL_TRAITS_IS_APPLY_H
+#endif  // __FP_KERNEL_TRAITS_IS_PURE_H

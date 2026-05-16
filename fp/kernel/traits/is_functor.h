@@ -9,6 +9,7 @@
 #include <fp/core/functor.h>
 #include <fp/data/data.h>
 #include <fp/internal/meta/meta.h>
+#include <fp/kernel/traits/is_pure.h>
 
 #include <concepts>
 
