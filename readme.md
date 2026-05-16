@@ -8,9 +8,12 @@ FP the hell out of C++
 doesn't involve runtime type resolution, function calls or, God forbid, vtable
 lookups.
 
-### What is it?
+`FP++` allows you to use existing or build your own typeclasses as lego pieces
+like there is no tomorrow. Think of Scala Cats but in C++.
 
-For a TLDR of what `FP++` can do, have a look at:
+### TL;DR
+
+Have a look at:
 
 - `test/src/syntax/operators.cpp` — `|`, `*`, `&=` operators in action
 - `test/src/kernel/ops/compose.cpp` — right-to-left function composition
@@ -33,8 +36,7 @@ In practice this means:
 Outside of `F<A>` — function signatures, local variables, interop boundaries —
 normal C++ types apply. There are no wrappers, no boxing, no conversion cost:
 `String` is `std::string`, `Vector<A>` is `std::vector<A>`. The aliases exist
-for
-consistency and readability, not for abstraction.
+for consistency and readability, not for abstraction.
 
 `FP++` also normalises C++ types automatically — references, const, pointers,
 arrays, and smart pointers are all handled transparently. Normalisation happens
@@ -74,7 +76,7 @@ Legend:
 | TypeClass       | `Functor<F>`, `Applicative<F>`, `Monad<F>`          |
 | Static Method   | `Functor::map`, `Applicative::ap`, `Monad::flatMap` |
 | Free Function   | `fmap`, `pure`, `flatMap`                           |
-| Free Derivative | `as`, `void_`, `fproduct`                           |
+| Free Derivative | `as`, `discard`, `fproduct`                         |
 | Instance Method | `fa.map`, `fa.as`, `fa.flatMap`                     |
 
 ```mermaid
@@ -102,23 +104,47 @@ flowchart LR
 | derivative free functions | `fp/kernel/ops/`    | built from core free, never touch typeclass directly |
 | instance methods          | `fp/kernel/mixins/` | sugar, delegate to free functions                    |
 
-### Concepts
+### Typeclass HOWTO
 
-`FP++` exposes two levels of concepts per typeclass:
+`FP++` typeclasses are assembled from independent lego pieces. To add a new
+typeclass `TC` to the hierarchy:
 
-- `Is<TypeClass><F>` — type constructor level. Checks that the typeclass static
-  method exists for `F`. Example: `IsFunctor<Option>`, `IsMonad<Either>`.
+| Piece                     | Location                     | Role                                                                   |
+|---------------------------|------------------------------|------------------------------------------------------------------------|
+| `TC<F>::method`           | `fp/core/tc.h`               | Ground truth. Static, specialisable per concrete type.                 |
+| `TCLaws`                  | `fp/laws/tc_laws.h`          | Reusable law definitions, property-tested with RapidCheck.             |
+| `IsTC<F>`                 | `fp/kernel/traits/is_tc.h`   | Type constructor concept. Does `TC<F>::method` work?                   |
+| `HasMethod<FA>`           | `fp/kernel/traits/is_tc.h`   | Instance concept. Does `fa.method()` exist?                            |
+| `method` free function    | `fp/kernel/ops/method.h`     | Curried, `F` deduced from `fa`. Delegates to `TC<F>::method`.          |
+| derivative free functions | `fp/kernel/ops/`             | Built from the core free function. Never touch the typeclass directly. |
+| `WithTC<FA>`              | `fp/kernel/mixins/with_tc.h` | CRTP mixin. Wires instance methods, delegates to free functions.       |
 
-- `Has<Method><FA>` — instance level. Checks that `F<A>` has the corresponding
-  instance method. Example: `HasMap<Option<int>>`, `HasFlatMap<Either<int>>`.
+Each piece is independent — a concrete type opts into each mixin explicitly:
 
-Derived instance methods (`as`, `void_`, `fproduct`, `flatten`, ...) have no
-concept — their presence is guaranteed by the innate method concept. If
-`HasMap<FA>` holds, `as`, `void_`, and `fproduct` are available.
+```cpp
+template <typename A>
+struct Option
+    : WithPure<Option<A>>        // ::pure and .value()
+    , WithFunctor<Option<A>>     // .map(), .as(), .discard(), .fproduct()
+    , WithApplicative<Option<A>> // .ap()
+    , WithMonad<Option<A>> {};   // .flatMap(), .flatten()
+```
 
-The two levels serve different purposes: `Is<TypeClass>` constrains generic
-code operating over type constructors; `Has<Method>` constrains code operating
-over concrete instances and pushes constraint errors to the call site.
+The typeclass (`TC<F>::method`) and the mixin (`WithTC`) are separate by
+design — free functions work on any type satisfying `IsTC<F>`, regardless of
+whether
+`WithTC` is mixed in.
+
+Each typeclass exposes two concept levels:
+
+- `Is<TC><F>` — type constructor level: `IsFunctor<Option>`,
+  `IsApplicative<Either>`
+- `Has<Method><FA>` — instance level: `HasMap<Option<int>>`,
+  `HasAp<Either<int>>`
+
+Derived instance methods (`as`, `discard`, `fproduct`, ...) have no concept —
+their presence is guaranteed by `Has<Method>`. If `HasMap<FA>` holds, `as`,
+`discard`, and `fproduct` are available without additional checks.
 
 ### Usage
 
@@ -131,7 +157,7 @@ g++ -I/path/to/dir/with/fp/in/it -o main main.cpp -std=c++20 -g
 
 ### Documentation
 
-Documentation is _incomplete_. Several directories contain specialised  `readme`
+Documentation is _incomplete_. Several directories contain specialised `readme`
 files, but the best way to understand how things work is to read sources in
 `test/src`. Tests as documentation, so to speak.
 
@@ -153,8 +179,7 @@ Minimum compiler versions:
 #### Library Development
 
 If you are building on top of `FP++`, the internal meta and storage utilities
-are
-available via their namespaces:
+are available via their namespaces:
 
 ```cpp
 using namespace fp::internal::meta;
