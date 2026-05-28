@@ -17,6 +17,7 @@
 #include <fp/kernel/ops/fproduct.h>
 #include <fp/kernel/ops/identity.h>  // no tests, just works
 #include <fp/kernel/ops/lift.h>
+#include <fp/kernel/ops/map2.h>
 #include <fp/kernel/ops/pipe.h>
 #include <fp/kernel/ops/pure.h>
 

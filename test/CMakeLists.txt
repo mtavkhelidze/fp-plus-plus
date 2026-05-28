@@ -28,6 +28,7 @@ set(TEST_SRC
     src/kernel/ops/fmap.cpp
     src/kernel/ops/fproduct.cpp
     src/kernel/ops/lift.cpp
+    src/kernel/ops/map2.cpp
     src/kernel/ops/pipe.cpp
     src/kernel/ops/pure.cpp
     src/syntax/operators.cpp
