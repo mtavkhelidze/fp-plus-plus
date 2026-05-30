@@ -2,8 +2,6 @@
 #include <fp_test.h>
 #include <gtest/gtest.h>
 
-#include <concepts>
-
 using namespace fp;
 using namespace fp::test;
 

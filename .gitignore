@@ -8,11 +8,12 @@
 build/
 cmake-build-debug/
 CMakeCache.txt
+fp++.h
+ignore/
 scratch.cpp
 stash/
 third_party/
 todo.md
 todo.org
+todo.org
 vcpkg_installed/
-ignore/
-fp++.h
