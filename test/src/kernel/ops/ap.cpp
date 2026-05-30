@@ -10,12 +10,14 @@ using namespace fp::test;
 
 // core behaviour — apply wrapped function to wrapped value
 TEST(Kernel_Ops_Ap, applies_wrapped_function_to_wrapped_value) {
-    auto ff = pure<StructWithPure>([](int x) -> int { return x * 2; });
+    auto f = [](int x) -> int { return x * 2; };
+    auto ff = pure<StructWithPure>(f);
     auto fa = pure<StructWithPure>(21);
     auto result = ap(ff)(fa);
     static_assert(std::same_as<decltype(result), StructWithPure<int>>);
     ASSERT_EQ(result.value(), 42);
 }
+
 // wrapped function is reusable — same ff, different fa
 TEST(Kernel_Ops_Ap, wrapped_function_is_reusable) {
     auto f_double = pure<StructWithPure>([](int x) { return x * 2; });
@@ -44,14 +46,15 @@ TEST(Kernel_Ops_Ap, cstring_normalised_to_string) {
 
 // ap(validateAge)(validateName) — both must succeed
 TEST(Kernel_Ops_Ap, combining_two_computations) {
-    auto addAge = pure<StructWithPure>([](int age) -> auto {
+    auto age_name_entry = [](int age) -> auto {
         return [age](const String& name) -> String {
-            return name + " age:" + std::to_string(age);
+            return name + " age: " + std::to_string(age);
         };
-    });
-    auto fa = pure<StructWithPure>(42);
-    auto step1 = ap(addAge)(fa);  // StructWithPure<String→String>
-    auto fb = pure<StructWithPure>(String("Alice"));
-    auto result = ap(step1)(fb);
-    ASSERT_EQ(result.value(), "Alice age:42");
+    };
+    auto lisfted_f = pure<StructWithPure>(age_name_entry);
+    auto age = pure<StructWithPure>(42);
+    auto with_age = ap(lisfted_f)(age);  // StructWithPure<String→String>
+    auto name = pure<StructWithPure>(String("Alice"));
+    auto result = ap(with_age)(name);
+    ASSERT_EQ(result.value(), "Alice age: 42");
 }

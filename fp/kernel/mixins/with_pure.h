@@ -47,7 +47,7 @@ struct WithPure : private Backend<FA>::type {
 
   public:
     /**
-     * Constructs an instance of F from a raw C++ value of type T using the
+     * Constructs an instance of F from a raw C++ value of type A using the
      * backend storage returning F<A>.
      *
      * Example:
@@ -58,7 +58,10 @@ struct WithPure : private Backend<FA>::type {
         return FA{Base::put(std::forward<A>(value))};
     }
 
-    constexpr auto value() const noexcept -> auto& { return this->get(); }
+    [[nodiscard]]
+    constexpr auto value() const& noexcept -> const auto& {
+        return this->get();
+    }
 
 #ifdef FP_PLUS_PLUS_TESTING
     [[nodiscard]] constexpr auto is_box() const -> bool {

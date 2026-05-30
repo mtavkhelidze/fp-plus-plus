@@ -6,6 +6,7 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  // FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/internal/meta/cast.h>
 #include <fp/internal/meta/inner_type.h>
 #include <fp/internal/meta/rebind.h>
 
@@ -54,7 +55,7 @@ struct StorageStack {
      */
     template <typename T>
     static auto put(T&& value) noexcept {
-        using U = std::decay_t<T>;
+        using U = meta::cast::cast<T>;
         using Derived = meta::rebind::rebind<Container, U>;
         return Derived{std::forward<T>(value)};
     }
