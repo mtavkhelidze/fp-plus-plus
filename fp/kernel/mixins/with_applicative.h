@@ -14,9 +14,10 @@ namespace fp::kernel::mixins::applicative {
 
 template <typename FA>
 struct WithApplicative {
+    // F<A>.ap :: F<A -> B> -> F<B>
     template <typename FFn>
     auto ap(FFn&& ff) -> auto
-        requires kernel::traits::HasPure<FA>
+        requires kernel::traits::HasMap<FA>
               && internal::meta::rebind::is_same_f<FA, FFn>
               && internal::meta::arrow::is_arrow<
                    internal::meta::inner_type::inner_type<FFn>,
@@ -27,6 +28,15 @@ struct WithApplicative {
           static_cast<FA const&>(*this)
         );
     }
+
+    // F<A>.map2 :: (A -> B -> C) -> F<B> -> F<C>
+    template <typename FFn>
+    auto map2(FFn&& ff) const -> auto {
+        return kernel::ops::map2(std::forward<FFn>(ff))(
+          static_cast<FA const&>(*this)
+        );
+    };
 };
+
 }  // namespace fp::kernel::mixins::applicative
 #endif  // __FP_KERNEL_MIXINS_WITH_APPLICATIVE_H

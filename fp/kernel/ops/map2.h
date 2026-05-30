@@ -13,6 +13,7 @@
 
 namespace fp::kernel::ops {
 
+// map2 :: (A -> B -> C) -> F<A> -> F<B> -> F<C>
 template <typename Fn>
 constexpr auto map2(Fn&& f) -> auto {
     return

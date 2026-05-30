@@ -7,11 +7,10 @@ using namespace fp::test;
 
 static_assert(IsWithPure<StructWithPure>, "StructWithPure must hapre ::pure");
 static_assert(
-  HasPure<StructWithPure<int>>, "StructWithPure<int> must have ::pure method"
+  HasPure<StructWithPure<Whatever>>, "StructWithPure<int> must have ::pure"
 );
 static_assert(
-  HasPure<StructWithPure<String>>,
-  "StructWithPure<String> must have a ::pure method"
+  HasPure<StructWithPure<String>>, "StructWithPure<String> must have a ::pure"
 );
 
 TEST(Kernel_Mixins_WithValue, uses_stack_for_trivial_type_const_int) {

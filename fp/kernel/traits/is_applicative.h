@@ -30,5 +30,16 @@ concept HasAp =
           return a;
       })> ff
   ) { fa.ap(ff); };
+
+template <typename FA>
+concept HasMap2 =
+  HasAp<FA>
+  && requires(
+    FA fa, decltype([](internal::meta::inner_type::inner_type<FA> a) -> auto {
+        return [a](internal::meta::inner_type::inner_type<FA> /*_*/) -> auto {
+            return a;
+        };
+    }) f
+  ) { fa.map2(f); };
 }  // namespace fp::kernel::traits
 #endif  // __FP_KERNEL_TRAITS_IS_APPLICATIVE_H
