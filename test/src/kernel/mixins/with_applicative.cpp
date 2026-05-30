@@ -29,10 +29,10 @@ TEST(Kernel_Mixins_WithApplicative_Ap, is_callable) {
 TEST(Kernel_Mixins_WithApplicative_Map2, combines_two_containers) {
     auto fa = pure<StructApplicative>(10);
     auto fb = pure<StructApplicative>(32);
-    auto result = fa.map2([](int a) -> auto {
+    auto adder = fa.map2([](int a) -> auto {
         return [a](int b) -> auto { return a + b; };
-    })(fb);
-    ASSERT_EQ(result.value(), 42);
+    });
+    ASSERT_EQ(adder(fb).value(), 42);
 }
 
 TEST(Kernel_Mixins_WithApplicative_Map2, partial_application_is_reusable) {

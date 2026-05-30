@@ -19,6 +19,7 @@
 #include <fp/kernel/ops/lift.h>
 #include <fp/kernel/ops/map2.h>
 #include <fp/kernel/ops/pipe.h>
+#include <fp/kernel/ops/product.h>
 #include <fp/kernel/ops/pure.h>
 
 #endif  // __FP_KERNEL_OPS_OPS_H
