@@ -6,12 +6,14 @@
 #error "This file must be included from <fp/fp.h>"
 #endif  //  FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
+#include <fp/core/functor.h>
 #include <fp/internal/meta/meta.h>
-#include <fp/kernel/traits/is_pure.h>
+#include <fp/kernel/traits/is_functor.h>
 
 namespace fp::core {
+
 template <template <typename> typename F>
-    requires kernel::traits::IsWithPure<F>
+    requires kernel::traits::IsFunctor<F>
 struct Applicative {
     template <typename Fn>
     static auto ap(const F<Fn>& ff) {
@@ -20,9 +22,12 @@ struct Applicative {
         {
             using B = internal::meta::arrow::arrow_result<Fn, A>;
             using BC = internal::meta::cast::cast<B>;
-            return F<BC>::pure(std::invoke(ff.value(), fa.value()));
+            return Functor<F>::map([&f = ff.value()](const A& a) -> BC {
+                return std::invoke(f, a);
+            })(fa);
         };
     }
 };
+
 }  // namespace fp::core
 #endif  // __FP_CORE_APPLICATIVE_H
