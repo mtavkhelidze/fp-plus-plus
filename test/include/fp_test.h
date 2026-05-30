@@ -23,6 +23,7 @@ struct StructFunctor
 template <typename A>
 struct StructApplicative
     : fp::kernel::mixins::WithPure<StructApplicative<A>>
+    , fp::kernel::mixins::WithFunctor<StructApplicative<A>>
     , fp::kernel::mixins::WithApplicative<StructApplicative<A>> {};
 }  // namespace fp::test
 

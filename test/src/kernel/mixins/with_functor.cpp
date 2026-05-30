@@ -8,10 +8,8 @@ using namespace fp;
 using namespace fp::test;
 
 TEST(Kernel_Mixins_WithFunctor, makes_functor_with_map) {
-    static_assert(IsFunctor<StructFunctor>, "StructFunctor must be a functor");
-    static_assert(
-      HasMap<StructFunctor<int>>, "StructFunctor must have map method"
-    );
+    static_assert(IsFunctor<StructFunctor>, "StructFunctor must be functor");
+    static_assert(HasMap<StructFunctor<int>>, "StructFunctor<A> must have map");
 }
 
 TEST(Kernel_Mixins_WithFunctor, map_is_callable) {
