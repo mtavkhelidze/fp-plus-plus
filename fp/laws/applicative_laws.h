@@ -19,7 +19,7 @@ struct ApplicativeLaws {
     template <typename A>
     static auto identity(const F<A>& fa) -> bool {
         auto ff = kernel::ops::pure<F>(kernel::ops::identity);
-        return core::Applicative<F>::ap(ff)(fa).value() == fa.value();
+        return kernel::ops::ap(ff)(fa).value() == fa.value();
     }
 
     // Law 2: Homomorphism — ap(pure(f), pure(a)) == pure(f(a))
@@ -28,7 +28,7 @@ struct ApplicativeLaws {
     static auto homomorphism(Fn&& f, const A& a) -> bool {
         auto ff = kernel::ops::pure<F>(f);
         auto fa = kernel::ops::pure<F>(a);
-        return core::Applicative<F>::ap(ff)(fa).value()
+        return kernel::ops::ap(ff)(fa).value()
             == kernel::ops::pure<F>(f(a)).value();
     }
 
@@ -37,10 +37,9 @@ struct ApplicativeLaws {
         requires internal::meta::arrow::is_arrow<Fn, A>
     static auto interchange(const F<Fn>& ff, const A& a) -> bool {
         auto fa = kernel::ops::pure<F>(a);
-        auto lhs = core::Applicative<F>::ap(ff)(fa).value();
+        auto lhs = kernel::ops::ap(ff)(fa).value();
         auto applyA = [a](const Fn& f) -> auto { return f(a); };
-        auto rhs =
-          core::Applicative<F>::ap(kernel::ops::pure<F>(applyA))(ff).value();
+        auto rhs = kernel::ops::ap(kernel::ops::pure<F>(applyA))(ff).value();
         return lhs == rhs;
     }
 
@@ -55,15 +54,10 @@ struct ApplicativeLaws {
         auto composeFn = [](const Fn& f) {
             return [f](const Gn& g) { return kernel::ops::compose(f, g); };
         };
-        auto lhs =
-          core::Applicative<F>::
-            ap(core::Applicative<F>::ap(core::Applicative<F>::ap(kernel::ops::pure<F>(composeFn))(ff))(fg))(
-              fa
-            )
-              .value();
-        auto rhs =
-          core::Applicative<F>::ap(ff)(core::Applicative<F>::ap(fg)(fa))
-            .value();
+        auto ff_composed = kernel::ops::ap(kernel::ops::pure<F>(composeFn))(ff);
+        auto fg_composed = kernel::ops::ap(ff_composed)(fg);
+        auto lhs = kernel::ops::ap(fg_composed)(fa).value();
+        auto rhs = kernel::ops::ap(ff)(kernel::ops::ap(fg)(fa)).value();
         return lhs == rhs;
     }
 };
