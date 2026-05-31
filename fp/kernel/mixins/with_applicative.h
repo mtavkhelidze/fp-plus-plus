@@ -42,7 +42,18 @@ struct WithApplicative {
     auto product(const B& b) const -> auto {
         return kernel::ops::product(static_cast<FA const&>(*this))(b);
     }
-};
 
+    // F<A>.zip :: F<B> -> F<Tuple<A, B>>
+    template <typename FB>
+    auto zip(const FB& fb) const -> auto {
+        return this->product(fb);
+    }
+
+    // F<A>.zipWith :: (A -> B -> C) -> F<B> -> F<C>
+    template <typename Fn>
+    auto zipWith(Fn&& ff) const -> auto {
+        return this->map2(ff);
+    }
+};
 }  // namespace fp::kernel::mixins::applicative
 #endif  // __FP_KERNEL_MIXINS_WITH_APPLICATIVE_H

@@ -15,17 +15,16 @@
 namespace fp::internal::meta::arrow {
 
 template <typename Fn, typename A>
-constexpr bool is_arrow = std::invocable<std::decay_t<Fn>, A>
-                       && !std::is_void_v<std::invoke_result_t<Fn, A>>;
+concept is_arrow = std::invocable<std::decay_t<Fn>, A>
+                && !std::is_void_v<std::invoke_result_t<Fn, A>>;
 
 template <typename Fn, typename A>
     requires is_arrow<Fn, A>
 using arrow_result = std::decay_t<std::invoke_result_t<Fn, std::decay_t<A>>>;
 
 template <typename Fn, typename A, typename B>
-constexpr bool is_binary_arrow = requires(Fn f, A a, B b) {
-    std::invoke(f, a, b);
-} && !std::is_void_v<std::invoke_result_t<Fn, A, B>>;
+concept is_binary_arrow = requires(Fn f, A a, B b) { std::invoke(f, a, b); }
+                       && !std::is_void_v<std::invoke_result_t<Fn, A, B>>;
 
 template <typename Fn, typename A, typename B>
     requires is_binary_arrow<Fn, A, B>

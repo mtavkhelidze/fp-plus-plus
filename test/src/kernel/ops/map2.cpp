@@ -19,10 +19,12 @@ TEST(Kernel_Ops_Map2, combines_two_containers) {
 }
 
 // map2(f)(fa) is a reusable arrow F<B> → F<C>
+// zipWith is and alias
 TEST(Kernel_Ops_Map2, partial_application_is_reusable) {
     auto fa = pure<StructWithPure>(10);
-    auto adder =
-      map2([](int a) -> auto { return [a](int b) -> auto { return a + b; }; });
+    auto adder = zipWith([](int a) -> auto {
+        return [a](int b) -> auto { return a + b; };
+    });
     auto fa_adder = adder(fa);
     ASSERT_EQ(fa_adder(pure<StructWithPure>(1)).value(), 11);
     ASSERT_EQ(fa_adder(pure<StructWithPure>(2)).value(), 12);

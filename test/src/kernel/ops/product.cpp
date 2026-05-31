@@ -19,10 +19,11 @@ TEST(Kernel_Ops_Product, same_primitive_type) {
 }
 
 // different types
+// zip is an alias
 TEST(Kernel_Ops_Product, mixed_primitive_and_complex_types) {
     auto fa = pure<StructApplicative>("nine");
     auto fb = pure<StructApplicative>(5);
-    auto pfa = product(fa);
+    auto pfa = zip(fa);
 
     const Tuple<String, int> actual = pfa(fb).value();
     auto expected = pure<StructApplicative>(Tuple{"nine", 5}).value();

@@ -7,7 +7,7 @@
 #endif  //  FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
 
 #include <fp/data/data.h>
-#include <fp/kernel/ops/ops.h>
+#include <fp/kernel/ops/map2.h>
 
 namespace fp::kernel::ops {
 

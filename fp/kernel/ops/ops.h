@@ -21,5 +21,6 @@
 #include <fp/kernel/ops/pipe.h>
 #include <fp/kernel/ops/product.h>
 #include <fp/kernel/ops/pure.h>
+#include <fp/kernel/ops/zip.h>
 
 #endif  // __FP_KERNEL_OPS_OPS_H
