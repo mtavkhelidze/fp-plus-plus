@@ -2,6 +2,9 @@
 #include <fp_test.h>
 #include <gtest/gtest.h>
 
+#include <cstddef>
+#include <string>
+
 using namespace fp;
 using namespace fp::test;
 
@@ -35,12 +38,3 @@ TEST(Kernel_Ops_Flip, flipped_always_is_identity) {
     const auto result = flipped_always(241);
     EXPECT_EQ(result("forty-two"), "forty-two");
 }
-
-// TEST(Kernel_Ops_Flip, flipped_map2) {
-//     auto fa = pure<StructApplicative>(12);
-//     auto fb = pure<StructApplicative>(21);
-//     auto fn1 = map2(always(identity));
-//     auto fn2 = fn1(fa);
-//     auto r = fn2(fb);
-//     EXPECT_EQ(r.value(), 21);
-// }
