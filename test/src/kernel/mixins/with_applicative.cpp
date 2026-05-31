@@ -51,3 +51,27 @@ TEST(Kernel_Mixins_WithApplicative_Map2, combines_different_types) {
     static_assert(std::same_as<decltype(result), StructApplicative<String>>);
     ASSERT_EQ(result.value(), "hello42");
 }
+
+TEST(Kernel_Mixins_WithApplicative_AndThen, returns_second) {
+    auto fa = pure<StructApplicative>(42);
+    auto fb = pure<StructApplicative>(String("hello"));
+    ASSERT_EQ(extract(fa.andThen(fb)), "hello");
+}
+
+TEST(Kernel_Mixins_WithApplicative_AndThen, is_reusable) {
+    auto fa = pure<StructApplicative>(42);
+    ASSERT_EQ(fa.andThen(pure<StructApplicative>(1)).value(), 1);
+    ASSERT_EQ(fa.andThen(pure<StructApplicative>(2)).value(), 2);
+}
+
+TEST(Kernel_Mixins_WithApplicative_Before, returns_first) {
+    auto fa = pure<StructApplicative>(42);
+    auto fb = pure<StructApplicative>(String("hello"));
+    ASSERT_EQ(extract(fa.before(fb)), 42);
+}
+
+TEST(Kernel_Mixins_WithApplicative_Before, is_reusable) {
+    auto fa = pure<StructApplicative>(42);
+    ASSERT_EQ(fa.before(pure<StructApplicative>(1)).value(), 42);
+    ASSERT_EQ(fa.before(pure<StructApplicative>(2)).value(), 42);
+}
