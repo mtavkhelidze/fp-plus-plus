@@ -1,5 +1,7 @@
 #ifndef __FP_DATA_TYPES_H
 #define __FP_DATA_TYPES_H
+#include <optional>
+#include <variant>
 #pragma once
 
 #ifndef FP_PLUS_PLUS_INCLUDED_FROM_FP_FP
@@ -13,6 +15,12 @@
 #include <vector>
 
 namespace fp::data {
+
+using Null = std::nullopt_t;
+
+using Unit = std::monostate;
+const Unit whatever = Unit{};
+
 template <typename... Ts>
 using Tuple = std::tuple<Ts...>;
 

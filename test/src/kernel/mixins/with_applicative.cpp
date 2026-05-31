@@ -13,10 +13,10 @@ TEST(Kernel_Mixins_WithApplicative, makes_applicative_with_ap) {
       IsApplicative<StructApplicative>, "WithApplicative must be applicative"
     );
     static_assert(
-      HasAp<StructApplicative<Whatever>>, "WithApplicative<A> must have .ap"
+      HasAp<StructApplicative<Unit>>, "WithApplicative<A> must have .ap"
     );
     static_assert(
-      HasMap2<StructApplicative<Whatever>>, "WithApplicative<A> must have .map2"
+      HasMap2<StructApplicative<Unit>>, "WithApplicative<A> must have .map2"
     );
 }
 

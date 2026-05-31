@@ -11,7 +11,7 @@
 
 namespace fp::kernel::ops {
 
-inline auto discard = as(data::nothing);
+inline auto discard = as(data::whatever);
 
 }  // namespace fp::kernel::ops
 #endif  // __FP_KERNEL_OPS_DISCARD_H

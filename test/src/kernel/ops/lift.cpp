@@ -39,11 +39,11 @@ TEST(Kernel_Ops_Lift, type_change) {
     EXPECT_EQ(result.value(), "42");
 }
 
-TEST(Kernel_Ops_Lift, nothing_result) {
-    auto toNothing = lift<StructWithPure>([](int) { return nothing; });
+TEST(Kernel_Ops_Lift, unit_result) {
+    auto toNothing = lift<StructWithPure>([](int) -> Unit { return whatever; });
     auto result = toNothing(42);
-    static_assert(std::is_same_v<decltype(result), StructWithPure<Nothing>>);
-    EXPECT_EQ(result.value(), nothing);
+    static_assert(std::is_same_v<decltype(result), StructWithPure<Unit>>);
+    EXPECT_EQ(result.value(), whatever);
 }
 
 TEST(Kernel_Ops_Lift, lift_is_reusable) {

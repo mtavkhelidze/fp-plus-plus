@@ -15,7 +15,7 @@
 
 namespace fp::kernel::traits {
 template <template <typename> typename F>
-concept IsFunctor = IsWithPure<F> && requires(F<data::Any<>> fa) {
+concept IsFunctor = IsWithPure<F> && requires(F<data::Unit> fa) {
     core::Functor<F>::map([](auto x) -> auto { return x; })(fa);
 };
 

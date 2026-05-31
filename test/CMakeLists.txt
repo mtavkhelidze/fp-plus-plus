@@ -11,7 +11,6 @@ target_compile_options(
 set(TEST_SRC
     src/core/applicative.cpp
     src/core/functor.cpp
-    src/data/nothing.cpp
     src/internal/meta/cast.cpp
     src/internal/meta/rebind.cpp
     src/internal/storage/box_storage.cpp

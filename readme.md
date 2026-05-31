@@ -30,22 +30,27 @@ In practice this means:
 - `String` instead of `std::string`
 - `Vector<A>` instead of `std::vector<A>`
 - `Tuple<A, B>` instead of `std::tuple<A, B>`
-- `Nothing` — a proper unit type, carrying no information. `()` in Haskell,
-  `Unit` in Scala
+- `Unit` — the single-inhabitant type, carrying no information.
+  `()` in both Haskell and Scala. The singleton value is
+  `whatever` — a convenience alias for `Unit{}`. Any two
+  `Unit` values are always equal.
 
-Outside of `F<A>` — function signatures, local variables, interop boundaries —
-normal C++ types apply. There are no wrappers, no boxing, no conversion cost:
-`String` is `std::string`, `Vector<A>` is `std::vector<A>`. The aliases exist
-for consistency and readability, not for abstraction.
+Outside of
+`F<A>` — function signatures, local variables, interop boundaries — normal C++
+types apply. There are no wrappers, no boxing, no conversion cost:
+`String` is `std::string`, `Vector<A>` is
+`std::vector<A>`. The aliases exist for consistency and readability, not for
+abstraction.
 
 `FP++` also normalises C++ types automatically — references, const, pointers,
 arrays, and smart pointers are all handled transparently. Normalisation happens
-at the storage boundary: whatever you put in, an `FP++` type comes out.
+at the storage boundary: whatever you put in, an
+`FP++` type comes out.
 
 The complete transformation rules are:
 
 | Input type                         | Normalised to                                                      |
-|------------------------------------|--------------------------------------------------------------------|
+| ---------------------------------- | ------------------------------------------------------------------ |
 | `const T`, `T&`, `T&&`             | `T`                                                                |
 | `const char*`, `char[N]`           | `String`                                                           |
 | `T[N]`                             | `Vector<T>`                                                        |
@@ -72,7 +77,7 @@ The complete transformation rules are documented as executable tests in
 Legend:
 
 | Item            | I.e.                                                |
-|-----------------|-----------------------------------------------------|
+| --------------- | --------------------------------------------------- |
 | TypeClass       | `Functor<F>`, `Applicative<F>`, `Monad<F>`          |
 | Static Method   | `Functor::map`, `Applicative::ap`, `Monad::flatMap` |
 | Free Function   | `fmap`, `pure`, `flatMap`                           |
@@ -98,7 +103,7 @@ flowchart LR
 **The rule**: every layer is happy to delegate. Nothing is reimplemented.
 
 | Layer                     | Lives in            | Role                                                 |
-|---------------------------|---------------------|------------------------------------------------------|
+| ------------------------- | ------------------- | ---------------------------------------------------- |
 | typeclass                 | `fp/core/`          | ground truth, static, specialisable                  |
 | core free function        | `fp/kernel/ops/`    | curried, `F` deduced, composable                     |
 | derivative free functions | `fp/kernel/ops/`    | built from core free, never touch typeclass directly |
@@ -107,10 +112,11 @@ flowchart LR
 ### Typeclass HOWTO
 
 `FP++` typeclasses are assembled from independent lego pieces. To add a new
-typeclass `TC` to the hierarchy:
+typeclass
+`TC` to the hierarchy:
 
 | Piece                     | Location                     | Role                                                                   |
-|---------------------------|------------------------------|------------------------------------------------------------------------|
+| ------------------------- | ---------------------------- | ---------------------------------------------------------------------- |
 | `TC<F>::method`           | `fp/core/tc.h`               | Ground truth. Static, specialisable per concrete type.                 |
 | `TCLaws`                  | `fp/laws/tc_laws.h`          | Reusable law definitions, property-tested with RapidCheck.             |
 | `IsTC<F>`                 | `fp/kernel/traits/is_tc.h`   | Type constructor concept. Does `TC<F>::method` work?                   |
@@ -142,8 +148,9 @@ Each typeclass exposes two concept levels:
 - `Has<Method><FA>` — instance level: `HasMap<Option<int>>`,
   `HasAp<Either<int>>`
 
-Derived instance methods (`as`, `discard`, `fproduct`, ...) have no concept —
-their presence is guaranteed by `Has<Method>`. If `HasMap<FA>` holds, `as`,
+Derived instance methods (`as`, `discard`,
+`fproduct`, ...) have no concept — their presence is guaranteed by
+`Has<Method>`. If `HasMap<FA>` holds, `as`,
 `discard`, and `fproduct` are available without additional checks.
 
 ### Usage
@@ -178,8 +185,9 @@ Minimum compiler versions:
 
 #### Library Development
 
-If you are building on top of `FP++`, the internal meta and storage utilities
-are available via their namespaces:
+If you are building on top of
+`FP++`, the internal meta and storage utilities are available via their
+namespaces:
 
 ```cpp
 using namespace fp::internal::meta;

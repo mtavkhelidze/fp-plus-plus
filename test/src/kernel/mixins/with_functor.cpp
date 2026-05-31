@@ -10,7 +10,7 @@ using namespace fp::test;
 TEST(Kernel_Mixins_WithFunctor, makes_functor_with_map) {
     static_assert(IsFunctor<StructFunctor>, "StructFunctor must be functor");
     static_assert(
-      HasMap<StructFunctor<Whatever>>, "StructFunctor<A> must have map"
+      HasMap<StructFunctor<Unit>>, "StructFunctor<A> must have map"
     );
 }
 
@@ -26,7 +26,7 @@ TEST(Kernel_Mixins_WithFunctor, as_is_callable) {
 
 TEST(Kernel_Mixins_WithFunctor, discard_is_callable) {
     auto val = pure<StructFunctor>(42);
-    ASSERT_EQ(val.discard().value(), nothing);
+    ASSERT_EQ(val.discard().value(), whatever);
 }
 
 TEST(Kernel_Mixins_WithFunctor, fproduct_is_callable) {

@@ -7,7 +7,7 @@ using namespace fp::test;
 
 static_assert(IsWithPure<StructWithPure>, "StructWithPure must hapre ::pure");
 static_assert(
-  HasPure<StructWithPure<Whatever>>, "StructWithPure<int> must have ::pure"
+  HasPure<StructWithPure<Unit>>, "StructWithPure<int> must have ::pure"
 );
 static_assert(
   HasPure<StructWithPure<String>>, "StructWithPure<String> must have a ::pure"
@@ -66,7 +66,7 @@ TEST(Kernel_Mixins_WithValue, copy_shares_data) {
     ASSERT_EQ(&a.value(), &b.value());  // same underlying data
 }
 
-TEST(Kernel_Mixins_WithValue, nothing_uses_box) {
-    auto val = StructWithPure<fp::Nothing>::pure(fp::nothing);
+TEST(Kernel_Mixins_WithValue, unit_value_uses_box) {
+    auto val = StructWithPure<fp::Unit>::pure(fp::whatever);
     ASSERT_TRUE(val.is_box());
 }

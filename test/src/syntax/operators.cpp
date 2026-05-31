@@ -25,7 +25,7 @@ TEST(Syntax_Operators_Pipe, usage) {
 
 TEST(Syntax_Operators_Pipe, usage_with_dollar) {
     auto piped = square | triple | halve &= 42;
-    auto expected = pipe(always(42), square, triple, halve)(any);
+    auto expected = pipe(always(42), square, triple, halve)(whatever);
     ASSERT_EQ(piped, expected);
 }
 TEST(Syntax_Operators_Compose, usage) {

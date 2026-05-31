@@ -10,8 +10,6 @@
 #include <fp/internal/meta/cast.h>
 #include <fp/kernel/traits/is_pure.h>
 
-#include <utility>
-
 namespace fp::core {
 
 template <template <typename> typename F>

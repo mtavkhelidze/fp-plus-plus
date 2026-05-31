@@ -31,17 +31,10 @@ TEST(Kernel_Ops_Pure, const_ref) {
     EXPECT_EQ(b.value(), 42);
 }
 
-TEST(Kernel_Ops_Pure, nothing) {
-    auto b = pure<StructWithPure>(nothing);
-    static_assert(std::is_same_v<decltype(b), StructWithPure<Nothing>>);
-    EXPECT_EQ(b.value(), nothing);
-}
-
-TEST(Kernel_Ops_Pure, any) {
-    Any<int> a = any;
-    auto b = pure<StructWithPure>(a);
-    static_assert(std::is_same_v<decltype(b), StructWithPure<Any<int>>>);
-    EXPECT_EQ(b.value(), any);
+TEST(Kernel_Ops_Pure, unit_whatever) {
+    auto b = pure<StructWithPure>(whatever);
+    static_assert(std::is_same_v<decltype(b), StructWithPure<Unit>>);
+    EXPECT_EQ(b.value(), whatever);
 }
 
 TEST(Kernel_Ops_Pure, string_literal) {

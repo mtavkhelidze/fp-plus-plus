@@ -100,8 +100,8 @@ TEST(Internal_Storage_BoxStorage, self_copy_assignment_is_safe) {
     EXPECT_EQ(a.value(), "safe");
 }
 
-TEST(Internal_Storage_BoxStorage, stores_nothing_type_safely) {
-    auto box = TestStruct<Nothing>::store(nothing);
+TEST(Internal_Storage_BoxStorage, stores_unit) {
+    auto box = TestStruct<Unit>::store(whatever);
 }
 
 TEST(Internal_Storage_BoxStorage, works_with_custom_struct) {

@@ -36,6 +36,12 @@ struct WithApplicative {
           static_cast<FA const&>(*this)
         );
     };
+
+    // F<A>.product :: F<B> -> F<Tuple<A, B>>
+    template <typename B>
+    auto product(const B& b) const -> auto {
+        return kernel::ops::product(static_cast<FA const&>(*this))(b);
+    }
 };
 
 }  // namespace fp::kernel::mixins::applicative

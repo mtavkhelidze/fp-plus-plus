@@ -239,26 +239,10 @@ TEST(Box_Construction, unique_ptr_rvalue_deduction) {
     ASSERT_EQ(ptr, nullptr);
 }
 
-TEST(Box_Construction, whatever_type) {
+TEST(Box_Construction, unit_type) {
     auto box = Box(whatever);
-    static_assert(std::is_same_v<Whatever, typename decltype(box)::kind>);
+    static_assert(std::is_same_v<Unit, typename decltype(box)::kind>);
     EXPECT_EQ(box.get(), whatever);
-}
-
-TEST(Box_Construction, nothing_type) {
-    auto box = Box(nothing);
-    static_assert(std::is_same_v<Nothing, typename decltype(box)::kind>);
-    EXPECT_EQ(box.get(), nothing);
-}
-
-TEST(Box_Construction, any_type) {
-    auto box = Box(any);
-    static_assert(std::is_same_v<Any<>, typename decltype(box)::kind>);
-    EXPECT_EQ(box.get(), any);
-
-    // Any<A> collapses to Nothing regardless of type parameter
-    static_assert(std::is_same_v<Any<int>, Any<>>);
-    static_assert(std::is_same_v<Any<String>, Any<>>);
 }
 
 TEST(Box_Extra, immutability) {
