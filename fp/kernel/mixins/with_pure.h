@@ -58,8 +58,8 @@ struct WithPure : private Backend<FA>::type {
         return FA{Base::put(std::forward<A>(value))};
     }
 
-    [[nodiscard]]
-    constexpr auto value() const& noexcept -> const auto& {
+    // F<A>.value :: A
+    [[nodiscard]] constexpr auto value() const& noexcept -> const auto& {
         return this->get();
     }
 

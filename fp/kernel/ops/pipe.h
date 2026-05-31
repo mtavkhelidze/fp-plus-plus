@@ -11,7 +11,7 @@
 #include <utility>
 
 namespace fp::kernel::ops {
-
+// pipe :: (A -> B) -> (B -> C) -> A -> C
 template <typename F, typename G>
 constexpr auto pipe(F&& lhs, G&& rhs) -> decltype(auto) {
     return [lhs = std::forward<F>(lhs), rhs = std::forward<G>(rhs)]<typename A>(
@@ -24,12 +24,12 @@ constexpr auto pipe(F&& lhs, G&& rhs) -> decltype(auto) {
                )
     { return rhs(lhs(std::forward<A>(a))); };
 }
-
+// pipe :: (A -> B) -> (A -> B)
 template <typename F>
 constexpr auto pipe(F&& f) {
     return std::forward<F>(f);
 }
-
+// pipe :: (A -> B) -> (B -> C) -> ... -> (Y -> Z) -> A -> Z
 template <typename F, typename G, typename... Rest>
 constexpr auto pipe(F&& f, G&& g, Rest&&... rest) {
     return fp::kernel::ops::pipe(

@@ -14,18 +14,17 @@ namespace fp::kernel::ops {
 /**
  * Lift a value into the context of a type constructor `F`.
  *
- * `pure<F>(x)` wraps the raw C++ value `x` (type `T`) into the FP-normalized
- * type `A` and then calls `F<A>::pure(x)`.
+ * `pure<F>(x)` wraps the raw C++ value `x` (type `T`) into the
+ * FP-normalized (fp::cast-ed) type `A` and then calls `F<A>::pure(x)`.
  *
  * Here:
  *   - `T` is the original C++ type of the value.
  *   - `A` is the FP-normalized type used inside the type constructor `F`.
  *
- * This corresponds to the `pure` method in Applicative/Monad abstractions.
- *
  * Example:
  *   auto idValue = pure<Id>(42); // Id<int> containing 42
  */
+// pure :: WithPure F, A = fp::cast<T> => T -> F<A>
 template <template <typename> typename F, typename T>
     requires traits::HasPure<F<internal::meta::cast::cast<T>>>
 inline auto pure(T&& value) -> F<internal::meta::cast::cast<T>> {

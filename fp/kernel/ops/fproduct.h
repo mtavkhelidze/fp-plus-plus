@@ -13,6 +13,7 @@
 
 namespace fp::kernel::ops {
 
+// fproduct :: Functor F => (A -> B) -> F<A> -> F<Tuple<A, B>>
 template <typename Fn>
 constexpr auto fproduct(Fn&& f) {
     return fmap([f = std::forward<Fn>(f)](auto&& a) -> decltype(auto) {

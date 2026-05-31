@@ -11,13 +11,16 @@
 
 namespace fp::kernel::ops {
 
-// zip :: F<A> -> F<B> -> F<Tuple<A, B>>
-constexpr auto zip = product;
-
-// zipWith :: (A -> B -> C) -> F<A> -> F<B> -> F<C>
+// zipWith :: Applicative F => (A -> B -> C) -> F<A> -> F<B> -> F<C>
+// alias for map2
 template <typename Fn>
 constexpr auto zipWith(Fn&& f) -> auto {
     return map2(std::forward<Fn>(f));
 }
+
+// zip :: Applicative F => F<A> -> F<B> -> F<Tuple<A, B>>
+// alias for product
+constexpr auto zip = product;
+
 }  // namespace fp::kernel::ops
 #endif  // __FP_KERNEL_OPS_ZIP_H

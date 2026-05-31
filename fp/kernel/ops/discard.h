@@ -11,6 +11,7 @@
 
 namespace fp::kernel::ops {
 
+// discard :: Functor F => F<A> -> F<Unit>
 inline auto discard = as(data::whatever);
 
 }  // namespace fp::kernel::ops

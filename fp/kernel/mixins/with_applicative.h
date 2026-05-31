@@ -46,7 +46,7 @@ struct WithApplicative {
     // F<A>.zip :: F<B> -> F<Tuple<A, B>>
     template <typename FB>
     auto zip(const FB& fb) const -> auto {
-        return this->product(fb);
+        return kernel::ops::zip(static_cast<FA const&>(*this))(fb);
     }
 
     // F<A>.zipWith :: (A -> B -> C) -> F<B> -> F<C>

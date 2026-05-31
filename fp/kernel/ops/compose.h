@@ -11,7 +11,7 @@
 #include <utility>
 
 namespace fp::kernel::ops {
-
+// compose :: (B -> C) -> (A -> B) -> A -> C
 template <typename F, typename G>
 constexpr auto compose(F&& lhs, G&& rhs) -> decltype(auto) {
     return [lhs = std::forward<F>(lhs), rhs = std::forward<G>(rhs)]<typename A>(
@@ -25,11 +25,13 @@ constexpr auto compose(F&& lhs, G&& rhs) -> decltype(auto) {
     { return lhs(rhs(std::forward<A>(a))); };
 }
 
+// compose :: (A -> B) -> (A -> B)
 template <typename F>
 constexpr auto compose(F&& f) {
     return std::forward<F>(f);
 }
 
+// compose :: (C -> D) -> (B -> C) -> ... -> (A -> B) -> A -> D
 template <typename F, typename G, typename... Rest>
 constexpr auto compose(F&& f, G&& g, Rest&&... rest) {
     return fp::kernel::ops::compose(

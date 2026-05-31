@@ -19,6 +19,7 @@ namespace {
     };
 }  // namespace
 
+// identity :: a -> a
 inline constexpr __identity identity{};
 
 }  // namespace fp::kernel::ops

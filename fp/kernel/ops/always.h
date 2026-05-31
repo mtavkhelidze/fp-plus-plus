@@ -9,14 +9,18 @@
 #include <utility>
 
 namespace fp::kernel::ops {
-struct __always {
-    template <typename A>
-    constexpr auto operator()(A&& a) const noexcept {
-        return [a = std::forward<A>(a)](auto&&) noexcept -> auto { return a; };
-    }
-};
-
-inline constexpr auto always = __always{};
+namespace {
+    struct __always {
+        template <typename A>
+        constexpr auto operator()(A&& a) const noexcept {
+            return [a = std::forward<A>(a)](auto&& /*b*/) noexcept -> auto {
+                return a;
+            };
+        }
+    };
+}  // namespace
+// always :: A -> (B -> A)
+constexpr auto always = __always{};
 
 }  // namespace fp::kernel::ops
 #endif  // __FP_KERNEL_OPS_ALWAYS_H

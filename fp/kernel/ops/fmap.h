@@ -12,7 +12,8 @@
 #include <utility>
 
 namespace fp::kernel::ops {
-inline constexpr auto fmap = []<typename Fn>(Fn&& f) -> auto {
+// fmap :: WithPure F => (A -> B) -> F<A>-> F<B>
+constexpr auto fmap = []<typename Fn>(Fn&& f) -> auto {
     return
       [f = std::forward<Fn>(f)]<template <typename> typename F, typename A>(
         const F<A>& fa

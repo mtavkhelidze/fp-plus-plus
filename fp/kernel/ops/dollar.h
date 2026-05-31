@@ -12,6 +12,8 @@
 
 namespace fp::kernel::ops {
 
+// $ :: (A -> B) -> A -> B
+// i.e. dollar(f, a) => f(a)
 template <typename Fn, typename A>
     requires internal::meta::arrow::is_arrow<Fn, A>
 constexpr auto dollar(Fn&& f, A&& a) -> decltype(auto) {

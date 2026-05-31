@@ -12,7 +12,7 @@
 #include <utility>
 
 namespace fp::kernel::ops {
-// ap :: F<A -> B> -> F<A> -> F<B>
+// ap :: Applicative F => F<A -> B> -> F<A> -> F<B>
 template <typename FFn>
 inline auto ap(FFn&& ff) -> auto {
     return

@@ -22,12 +22,13 @@ namespace fp::kernel::ops {
  *   auto lifted = lift<Id>([](int x) { return x + 1; });
  *   auto result = lifted(5); // result is Id<int> containing 6
  */
+// lift :: WithPure F => (A -> B) -> A -> F<B>
 template <template <typename> typename F, typename Fn>
 inline auto lift(Fn&& f) {
     return [f = std::forward<Fn>(f)](auto&& x) noexcept(
              noexcept(pure<F>(f(std::forward<decltype(x)>(x))))
            ) -> decltype(auto) {
-        using B = decltype(x);
+        using B = internal::meta::cast::cast<decltype(x)>;
         static_assert(
           internal::meta::arrow::is_arrow<Fn, B>,
           "lift argument must be an arrow"
