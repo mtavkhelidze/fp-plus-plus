@@ -16,7 +16,7 @@ template <typename FA>
 struct WithApplicative {
     // F<A>.ap :: F<A -> B> -> F<B>
     template <typename FFn>
-    auto ap(FFn&& ff) -> auto
+    auto ap(const FFn& ff) -> auto
         requires kernel::traits::HasMap<FA>
               && internal::meta::rebind::is_same_f<FA, FFn>
               && internal::meta::arrow::is_arrow<
@@ -24,9 +24,7 @@ struct WithApplicative {
                    internal::meta::inner_type::inner_type<FA>>
 
     {
-        return kernel::ops::ap(std::forward<FFn>(ff))(
-          static_cast<FA const&>(*this)
-        );
+        return kernel::ops::ap(ff)(static_cast<FA const&>(*this));
     }
 
     // F<A>.map2 :: (A -> B -> C) -> F<B> -> F<C>
@@ -52,7 +50,19 @@ struct WithApplicative {
     // F<A>.zipWith :: (A -> B -> C) -> F<B> -> F<C>
     template <typename Fn>
     auto zipWith(Fn&& ff) const -> auto {
-        return this->map2(ff);
+        return kernel::ops::zipWith(std::forward<Fn>(ff))(
+          static_cast<FA const&>(*this)
+        );
+    }
+    // F<A>.andThen :: F<B> -> F<B>
+    template <typename FB>
+    auto andThen(const FB& fb) const -> auto {
+        return kernel::ops::andThen(static_cast<FA const&>(*this))(fb);
+    }
+    // F<A>.before :: F<B> -> F<A>
+    template <typename FB>
+    auto before(const FB& fb) const -> auto {
+        return kernel::ops::before(static_cast<FA const&>(*this))(fb);
     }
 };
 }  // namespace fp::kernel::mixins::applicative

@@ -13,7 +13,7 @@
 
 namespace fp::kernel::ops {
 
-/// andThen :: Applicative F => F<A> -> F<B> -> F<B>
+// andThen :: Applicative F => F<A> -> F<B> -> F<B>
 constexpr auto andThen = map2(always(identity));
 
 // before :: Applicative F => F<A> -> F<B> -> F<A>
