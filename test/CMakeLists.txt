@@ -24,6 +24,7 @@ set(TEST_SRC
     src/kernel/ops/as.cpp
     src/kernel/ops/compose.cpp
     src/kernel/ops/discard.cpp
+    src/kernel/ops/flip.cpp
     src/kernel/ops/fmap.cpp
     src/kernel/ops/fproduct.cpp
     src/kernel/ops/lift.cpp

@@ -13,6 +13,7 @@
 #include <fp/kernel/ops/discard.h>
 #include <fp/kernel/ops/dollar.h>
 #include <fp/kernel/ops/extract.h>
+#include <fp/kernel/ops/flip.h>
 #include <fp/kernel/ops/fmap.h>
 #include <fp/kernel/ops/fproduct.h>
 #include <fp/kernel/ops/identity.h>  // no tests, just works

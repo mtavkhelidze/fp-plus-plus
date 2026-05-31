@@ -19,7 +19,7 @@ namespace {
         }
     };
 }  // namespace
-// always :: A -> (B -> A)
+// always :: A-> B -> A
 constexpr auto always = __always{};
 
 }  // namespace fp::kernel::ops
