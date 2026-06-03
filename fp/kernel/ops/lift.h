@@ -24,17 +24,10 @@ namespace fp::kernel::ops {
  */
 // lift :: WithPure F => (A -> B) -> A -> F<B>
 template <template <typename> typename F, typename Fn>
-inline auto lift(Fn&& f) {
-    return [f = std::forward<Fn>(f)](auto&& x) noexcept(
-             noexcept(pure<F>(f(std::forward<decltype(x)>(x))))
-           ) -> decltype(auto) {
-        using B = internal::meta::cast::cast<decltype(x)>;
-        static_assert(
-          internal::meta::arrow::is_arrow<Fn, B>,
-          "lift argument must be an arrow"
-        );
-        return pure<F>(f(std::forward<B>(x)));
-    };
+inline auto lift(Fn&& ff) {
+    return [ff = std::forward<Fn>(ff)]<typename A>(A&& a) -> decltype(auto)
+               requires internal::meta::arrow::is_arrow<Fn, A>
+    { return pure<F>(ff(std::forward<A>(a))); };
 }
 }  // namespace fp::kernel::ops
 
