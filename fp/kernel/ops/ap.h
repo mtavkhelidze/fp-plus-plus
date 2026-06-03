@@ -14,7 +14,7 @@
 namespace fp::kernel::ops {
 // ap :: Applicative F => F<A -> B> -> F<A> -> F<B>
 template <typename FFn>
-inline auto ap(FFn&& ff) -> auto {
+constexpr auto ap(FFn&& ff) -> auto {
     return
       [ff = std::forward<FFn>(ff)]<template <typename> typename F, typename A>(
         const F<A>& fa
