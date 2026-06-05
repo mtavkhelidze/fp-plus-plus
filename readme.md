@@ -1,3 +1,8 @@
+<!--
+ Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+ SPDX-License-Identifier: MIT
+-->
+
 `FP++`: C++20 Functional Library
 ---
 FP the hell out of C++

@@ -1,3 +1,8 @@
+/**
+ * Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+ * SPDX-License-Identifier: MIT
+ */
+
 #ifndef __FP_LAWS_PIPE_LAWS_H
 #define __FP_LAWS_PIPE_LAWS_H
 #pragma once

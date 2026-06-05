@@ -1,3 +1,8 @@
+/**
+ * Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+ * SPDX-License-Identifier: MIT
+ */
+
 #include <fp/fp.h>
 #include <gtest/gtest.h>
 

@@ -1,3 +1,8 @@
+/**
+ * Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+ * SPDX-License-Identifier: MIT
+ */
+
 #ifndef __FP_FP_H
 #define __FP_FP_H
 

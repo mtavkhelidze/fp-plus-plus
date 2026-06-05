@@ -1,3 +1,8 @@
+/**
+ * Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+ * SPDX-License-Identifier: MIT
+ */
+
 #ifndef __FP_INTERNAL_META_CAST_H
 #define __FP_INTERNAL_META_CAST_H
 #include <initializer_list>

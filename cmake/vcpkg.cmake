@@ -1,3 +1,6 @@
+# Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+# SPDX-License-Identifier: MIT
+
 function(vcpkg_install package)
     execute_process(
         COMMAND ./vcpkg install ${package}

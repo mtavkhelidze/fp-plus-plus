@@ -1,3 +1,8 @@
+/**
+ * Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+ * SPDX-License-Identifier: MIT
+ */
+
 #ifndef __FP_KERNEL_MIXINS_WITH_APPLICATIVE_H
 #define __FP_KERNEL_MIXINS_WITH_APPLICATIVE_H
 #pragma once

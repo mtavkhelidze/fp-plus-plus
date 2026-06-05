@@ -1,3 +1,8 @@
+<!--
+ Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+ SPDX-License-Identifier: MIT
+-->
+
 ### Storage
 
 Internal storage layer for FP++. Not part of the public API.
