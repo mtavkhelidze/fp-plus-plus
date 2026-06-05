@@ -1,3 +1,6 @@
+# Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+# SPDX-License-Identifier: MIT
+
 cmake_minimum_required(VERSION 3.21)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")

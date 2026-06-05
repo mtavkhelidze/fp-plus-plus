@@ -1,3 +1,8 @@
+/**
+ * Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+ * SPDX-License-Identifier: MIT
+ */
+
 #ifndef __FP__INTERNAL_META_INSTANCE_H
 #define __FP__INTERNAL_META_INSTANCE_H
 #pragma once

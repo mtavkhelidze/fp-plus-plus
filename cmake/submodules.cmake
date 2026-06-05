@@ -1,3 +1,6 @@
+# Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+# SPDX-License-Identifier: MIT
+
 function(update_submodules)
     message(STATUS "Updating submodules ...")
     execute_process(

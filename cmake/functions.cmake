@@ -1,3 +1,6 @@
+# Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+# SPDX-License-Identifier: MIT
+
 function(find_untracked_files src_list dir pattern)
     message(
         STATUS

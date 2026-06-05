@@ -1,3 +1,8 @@
+/**
+ * Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+ * SPDX-License-Identifier: MIT
+ */
+
 #ifndef __FP_KERNEL_TRAITS_IS_APPLICATIVE_H
 #define __FP_KERNEL_TRAITS_IS_APPLICATIVE_H
 #pragma once

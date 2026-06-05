@@ -1,3 +1,6 @@
+# Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+# SPDX-License-Identifier: MIT
+
 function(enable_clang_tidy)
     # Add the custom target
     add_custom_target(

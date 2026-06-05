@@ -1,3 +1,8 @@
+/**
+ * Copyright 2026 Misha Tavkhelidze <misha.tavkhelidze@gmail.com>.
+ * SPDX-License-Identifier: MIT
+ */
+
 #ifndef __TEST_INCLUDE_FP_TEST_H
 #define __TEST_INCLUDE_FP_TEST_H
 #pragma once
