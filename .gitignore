@@ -8,7 +8,10 @@
 build/
 cmake-build-debug/
 CMakeCache.txt
+context.md
+fp++.cpp
 fp++.h
+history/
 ignore/
 scratch.cpp
 stash/
@@ -17,6 +20,3 @@ todo.md
 todo.org
 todo.org
 vcpkg_installed/
-history/
-fp++.cpp
-monad-context.md
