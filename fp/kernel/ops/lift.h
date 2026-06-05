@@ -8,6 +8,7 @@
 
 #include <fp/internal/meta/meta.h>
 #include <fp/kernel/ops/pure.h>
+#include <fp/kernel/traits/is_pure.h>
 
 #include <utility>
 
@@ -19,11 +20,13 @@ namespace fp::kernel::ops {
  * `A -> F<B>` by composing `fn` with `pure<F>`.
  *
  * Example:
- *   auto lifted = lift<Id>([](int x) { return x + 1; });
- *   auto result = lifted(5); // result is Id<int> containing 6
+ *   aut    o lifted = lift<Id>([](int x) { return x + 1; });
+ *   auto result = lifted(5); // result is Id<int> containing
+ * Lift
  */
 // lift :: WithPure F => (A -> B) -> A -> F<B>
 template <template <typename> typename F, typename Fn>
+    requires traits::IsWithPure<F>
 inline auto lift(Fn&& ff) {
     return [ff = std::forward<Fn>(ff)]<typename A>(A&& a) -> decltype(auto)
                requires internal::meta::arrow::is_arrow<Fn, A>
