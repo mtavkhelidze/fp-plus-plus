@@ -18,13 +18,13 @@ struct StructA {};
 template <typename B>
 struct StructB {};
 
-TEST(Internal_Meta_rebind, is_same_f_generic_struct) {
+TEST(Internal_Meta_Rebind, is_same_f_generic_struct) {
     static_assert(is_same_f<StructA<int>, StructA<String>>);
     static_assert(!is_same_f<StructA<int>, StructB<int>>);
     static_assert(is_same_f<StructA<int>, StructA<int>>);  // trivially same
 }
 
-TEST(Internal_Meta_rebind, is_same_f_mixedin_struct) {
+TEST(Internal_Meta_Rebind, is_same_f_mixedin_struct) {
     static_assert(is_same_f<StructWithPure<int>, StructWithPure<String>>);
     static_assert(!is_same_f<StructWithPure<int>, StructFunctor<int>>);
 }

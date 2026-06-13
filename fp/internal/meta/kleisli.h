@@ -14,28 +14,16 @@
 #include <fp/internal/meta/arrow.h>
 #include <fp/internal/meta/inner_type.h>
 #include <fp/internal/meta/instance.h>
+#include <fp/internal/meta/outer_type.h>
 
 #include <concepts>
 
 namespace fp::internal::meta::kleisli {
 
-template <typename F, typename A>
-    requires arrow::is_arrow<F, A>
+template <template <typename> typename F, typename Fn, typename A>
+    requires arrow::is_arrow<Fn, A>
 inline constexpr bool is_kleisli_arrow =
-  instance::is_instance<arrow::arrow_result<F, A>>;
-
-template <typename F, typename A>
-    requires is_kleisli_arrow<F, A>
-using fp_kleisli_arrow_result = arrow::arrow_result<F, A>;
-
-template <typename F, typename A>
-    requires is_kleisli_arrow<F, A>
-using fp_kleisli_arrow_result_value_type =
-  inner_type::inner_type<fp_kleisli_arrow_result<F, A>>;
-
-template <typename F, typename A, typename B>
-concept Kleisli = is_kleisli_arrow<F, A>
-               && std::same_as<fp_kleisli_arrow_result_value_type<F, A>, B>;
+  std::same_as<outer_type::outer_type<arrow::arrow_result<Fn, A>>, F<A>>;
 
 }  // namespace fp::internal::meta::kleisli
 

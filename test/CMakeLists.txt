@@ -14,6 +14,7 @@ target_compile_options(
 set(TEST_SRC
     src/core/applicative.cpp
     src/core/functor.cpp
+    src/internal/meta/arrow.cpp
     src/internal/meta/cast.cpp
     src/internal/meta/rebind.cpp
     src/internal/storage/box_storage.cpp
@@ -28,6 +29,7 @@ set(TEST_SRC
     src/kernel/ops/as.cpp
     src/kernel/ops/compose.cpp
     src/kernel/ops/discard.cpp
+    src/kernel/ops/fish.cpp
     src/kernel/ops/flip.cpp
     src/kernel/ops/fmap.cpp
     src/kernel/ops/fproduct.cpp
