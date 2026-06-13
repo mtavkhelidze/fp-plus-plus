@@ -19,7 +19,7 @@ namespace fp::kernel::mixins::applicative {
 
 template <typename FA>
 struct WithApplicative {
-    // F<A>.ap :: F<A -> B> -> F<B>
+    // @sig: F<A>.ap :: F<A -> B> -> F<B>
     template <typename FFn>
     auto ap(const FFn& ff) -> auto
         requires kernel::traits::HasMap<FA>
@@ -32,7 +32,7 @@ struct WithApplicative {
         return kernel::ops::ap(ff)(static_cast<FA const&>(*this));
     }
 
-    // F<A>.map2 :: (A -> B -> C) -> F<B> -> F<C>
+    // @sig: F<A>.map2 :: (A -> B -> C) -> F<B> -> F<C>
     template <typename FFn>
     auto map2(FFn&& ff) const -> auto {
         return kernel::ops::map2(std::forward<FFn>(ff))(
@@ -40,31 +40,31 @@ struct WithApplicative {
         );
     };
 
-    // F<A>.product :: F<B> -> F<Tuple<A, B>>
+    // @sig: F<A>.product :: F<B> -> F<Tuple<A, B>>
     template <typename B>
     auto product(const B& b) const -> auto {
         return kernel::ops::product(static_cast<FA const&>(*this))(b);
     }
 
-    // F<A>.zip :: F<B> -> F<Tuple<A, B>>
+    // @sig: F<A>.zip :: F<B> -> F<Tuple<A, B>>
     template <typename FB>
     auto zip(const FB& fb) const -> auto {
         return kernel::ops::zip(static_cast<FA const&>(*this))(fb);
     }
 
-    // F<A>.zipWith :: (A -> B -> C) -> F<B> -> F<C>
+    // @sig: F<A>.zipWith :: (A -> B -> C) -> F<B> -> F<C>
     template <typename Fn>
     auto zipWith(Fn&& ff) const -> auto {
         return kernel::ops::zipWith(std::forward<Fn>(ff))(
           static_cast<FA const&>(*this)
         );
     }
-    // F<A>.andThen :: F<B> -> F<B>
+    // @sig: F<A>.andThen :: F<B> -> F<B>
     template <typename FB>
     auto andThen(const FB& fb) const -> auto {
         return kernel::ops::andThen(static_cast<FA const&>(*this))(fb);
     }
-    // F<A>.before :: F<B> -> F<A>
+    // @sig: F<A>.before :: F<B> -> F<A>
     template <typename FB>
     auto before(const FB& fb) const -> auto {
         return kernel::ops::before(static_cast<FA const&>(*this))(fb);

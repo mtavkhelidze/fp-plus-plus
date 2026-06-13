@@ -18,7 +18,7 @@ namespace fp::kernel::mixins::functor {
 
 template <typename FA>
 struct WithFunctor {
-    // F<A>.map :: (A -> B) -> F<B>
+    // @sig: F<A>.map :: (A -> B) -> F<B>
     auto map(auto&& f) const -> auto
         requires kernel::traits::HasPure<FA>
     {
@@ -29,19 +29,19 @@ struct WithFunctor {
 
     // derivatives
 
-    // F<A>.as :: B -> F<B>
+    // @sig: F<A>.as :: B -> F<B>
     auto as(auto&& b) const -> decltype(auto) {
         return ops::as(std::forward<decltype(b)>(b))(
           static_cast<FA const&>(*this)
         );
     }
 
-    // F<A>.discard :: F<Unit>
+    // @sig: F<A>.discard :: F<Unit>
     auto discard() const -> decltype(auto) {
         return ops::discard(static_cast<FA const&>(*this));
     }
 
-    // F<A>.fproduct :: (A -> B) -> F<Tuple<A, B>>
+    // @sig: F<A>.fproduct :: (A -> B) -> F<Tuple<A, B>>
     auto fproduct(auto&& f) const -> decltype(auto) {
         return ops::fproduct(std::forward<decltype(f)>(f))(
           static_cast<FA const&>(*this)

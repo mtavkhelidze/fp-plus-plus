@@ -16,14 +16,14 @@
 
 namespace fp::kernel::ops {
 
-// zipWith :: Applicative F => (A -> B -> C) -> F<A> -> F<B> -> F<C>
+// @sig: zipWith :: Applicative F => (A -> B -> C) -> F<A> -> F<B> -> F<C>
 // alias for map2
 template <typename Fn>
 constexpr auto zipWith(Fn&& f) -> auto {
     return map2(std::forward<Fn>(f));
 }
 
-// zip :: Applicative F => F<A> -> F<B> -> F<Tuple<A, B>>
+// @sig: zip :: Applicative F => F<A> -> F<B> -> F<Tuple<A, B>>
 // alias for product
 constexpr auto zip = product;
 

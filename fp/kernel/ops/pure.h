@@ -29,7 +29,7 @@ namespace fp::kernel::ops {
  * Example:
  *   auto idValue = pure<Id>(42); // Id<int> containing 42
  */
-// pure :: WithPure F, A = fp::cast<T> => T -> F<A>
+// @sig: pure :: WithPure F, A = fp::cast<T> => T -> F<A>
 template <template <typename> typename F, typename T>
     requires traits::HasPure<F<internal::meta::cast::cast<T>>>
 inline auto pure(T&& value) -> F<internal::meta::cast::cast<T>> {

@@ -20,7 +20,7 @@ namespace fp::core {
 template <template <typename> typename F>
     requires kernel::traits::IsWithPure<F>
 struct Functor {
-    // map :: WithPure F => (A -> B)-> F<B>
+    // @sig: map :: WithPure F => (A -> B)-> F<B>
     template <typename Fn>
     static auto map(Fn&& f) {
         return [f = std::forward<Fn>(f)]<typename A>(

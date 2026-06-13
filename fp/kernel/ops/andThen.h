@@ -18,10 +18,10 @@
 
 namespace fp::kernel::ops {
 
-// andThen :: Applicative F => F<A> -> F<B> -> F<B>
+// @sig: andThen :: Applicative F => F<A> -> F<B> -> F<B>
 constexpr auto andThen = map2(always(identity));
 
-// before :: Applicative F => F<A> -> F<B> -> F<A>
+// @sig: before :: Applicative F => F<A> -> F<B> -> F<A>
 constexpr auto before = flip(andThen);
 
 }  // namespace fp::kernel::ops

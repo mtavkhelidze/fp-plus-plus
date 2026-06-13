@@ -19,7 +19,7 @@
 
 namespace fp::kernel::ops {
 
-// as :: Functor F => A -> F<B> -> F<A>
+// @sig: as :: Functor F => A -> F<B> -> F<A>
 template <typename A>
 inline auto as(A&& a) -> decltype(auto) {
     return fmap(always(std::forward<A>(a)));

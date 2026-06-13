@@ -17,7 +17,7 @@
 #include <utility>
 
 namespace fp::kernel::ops {
-// ap :: Applicative F => F<A -> B> -> F<A> -> F<B>
+// @sig: ap :: Applicative F => F<A -> B> -> F<A> -> F<B>
 template <typename FFn>
 constexpr auto ap(FFn&& ff) -> auto {
     return

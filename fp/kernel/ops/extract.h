@@ -15,7 +15,7 @@
 
 namespace fp::kernel::ops {
 
-// extract :: WithPure F => F<A> -> A
+// @sig: extract :: WithPure F => F<A> -> A
 constexpr auto extract = []<typename FA>(const FA& fa) -> decltype(auto)
     requires traits::HasPure<FA>
 { return fa.value(); };

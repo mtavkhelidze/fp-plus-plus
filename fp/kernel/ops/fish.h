@@ -16,7 +16,7 @@
 
 namespace fp::kernel::ops {
 
-// fish :: (A -> F<B>) -> (B -> F<C>) -> A -> F<C>
+// @sig: fish :: (A -> F<B>) -> (B -> F<C>) -> A -> F<C>
 template <typename FFn>
 constexpr auto fish(FFn&& ffn) {
     return

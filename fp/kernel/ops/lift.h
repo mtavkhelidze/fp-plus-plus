@@ -29,7 +29,7 @@ namespace fp::kernel::ops {
  *   auto result = lifted(5); // result is Id<int> containing
  * Lift
  */
-// lift :: WithPure F => (A -> B) -> A -> F<B>
+// @sig: lift :: WithPure F => (A -> B) -> A -> F<B>
 template <template <typename> typename F, typename Fn>
     requires traits::IsWithPure<F>
 inline auto lift(Fn&& ff) {

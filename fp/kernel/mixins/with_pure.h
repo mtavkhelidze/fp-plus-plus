@@ -63,7 +63,7 @@ struct WithPure : private Backend<FA>::type {
         return FA{Base::put(std::forward<A>(value))};
     }
 
-    // F<A>.value :: A
+    // @sig: F<A>.value :: A
     [[nodiscard]] constexpr auto value() const& noexcept -> const auto& {
         return this->get();
     }
@@ -77,6 +77,7 @@ struct WithPure : private Backend<FA>::type {
     }
 #endif  // FP_PLUS_PLUS_TESTING
 };
+
 };  // namespace fp::kernel::mixins::pure
 
 #endif  // __FP_KERNEL_MIXINS_WITH_APPLY_H
