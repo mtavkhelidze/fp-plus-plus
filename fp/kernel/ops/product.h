@@ -16,7 +16,7 @@
 
 namespace fp::kernel::ops {
 
-// @sig: product ::Applicative F => F<A> -> F<B> -> F<Tuple<A, B>>
+// @sig: product :: Applicative F => F<A> -> F<B> -> F<Tuple<A, B>>
 constexpr auto product = kernel::ops::map2([]<typename A>(const A& a) -> auto {
     return [a]<typename B>(const B& b) -> data::Tuple<A, B> {
         return data::Tuple{a, b};
